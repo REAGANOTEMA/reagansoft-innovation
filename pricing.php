@@ -28,7 +28,7 @@ public_head([
 <section class="page-hero">
   <div class="container">
     <span class="eyebrow">Pricing</span>
-    <h1>Clear starting prices. No hidden surprises.</h1>
+    <h1>Straightforward pricing, stated up front.</h1>
     <p class="lead">Every engagement begins at an honest starting point and scales to your scope. Websites move from under <?= money(1000000, $currency) ?> up to <?= money(10000000, $currency) ?> — business systems from a few million up to <?= money(20000000, $currency) ?>. The final figure is always approved by you before work begins.</p>
   </div>
 </section>

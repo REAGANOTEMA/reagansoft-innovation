@@ -1,14 +1,41 @@
 -- ============================================================
 -- Reagan Soft Innovation Limited
--- Seed Data  (run AFTER schema.sql)
+-- SEED DATA
+-- ============================================================
+-- Run AFTER  database/schema.sql  (which drops & recreates tables).
+--
+-- Contents
+--   01. SERVICES            the sellable catalogue
+--   02. SETTINGS            brand, contact & payment configuration
+--   03. ADMIN & STAFF       portal accounts (admin@reagansoft.com,
+--                           staff@reagansoft.com)
+--   04. CLIENTS             client portal accounts
+--   05. PROJECTS            sample client work (RSI-2026-00001 …)
+--   06. TASKS               delivery tasks on the projects
+--   07. MESSAGES            project conversations
+--   08. QUOTATIONS + ITEMS  one sent quotation with line items
+--   09. INVOICES + ITEMS    issued & paid invoices
+--   10. PAYMENTS            confirmed payment history
+--   11. NOTIFICATIONS       in-portal alerts for the demo users
+--
+-- Password for EVERY demo account below:   Reagan@2026
+--   admin@reagansoft.com   (Administrator)
+--   staff@reagansoft.com   (Staff)
+--   amara@kirekafarms.com, grace@pearlholdings.com,
+--   david@mulumbasons.com, agnesnakato@gmail.com   (Clients)
+-- Change these passwords after logging in, then delete anything
+-- you no longer need from this file.
 -- ============================================================
 USE reagan_soft_innovation;
 
--- Services catalogue -----------------------------------------
--- price        = honest starting point (the entry-level figure)
--- price_max    = realistic upper bound for that service in UGX
---                * websites / e-commerce  up to UGX 10,000,000
---                * systems / software     up to UGX 20,000,000
+-- ============================================================
+-- 01 · SERVICES
+-- ============================================================
+-- price       = honest entry-level figure (UGX)
+-- price_max   = realistic upper bound for that service in UGX
+--               · websites / e-commerce  up to 10,000,000
+--               · systems / software     up to 20,000,000
+-- ============================================================
 INSERT INTO services (name, slug, description, price, price_max, price_note, features, delivery_days, icon, status, sort_order) VALUES
 ('Business Website Development', 'business-website', 'A professional, responsive company website with clear structure, contact integration, SEO foundations and a design that represents your brand.', 800000, 10000000, 'From',
  'Custom responsive design for mobile, tablet and desktop
@@ -73,48 +100,54 @@ Priority technical support
 Uptime reporting',
   1, 'shield', 'active', 7);
 
--- Default settings --------------------------------------------
+-- ============================================================
+-- 02 · SETTINGS
+-- ============================================================
 INSERT INTO settings (setting_key, setting_value) VALUES
-('company_name',      'Reagan Soft Innovation Limited'),
-('company_tagline',   'Digital Solutions That Move Your Business Forward'),
-('company_founder',   'Reagan Otema'),
-('company_phone',     '+256730314979'),
-('company_email',     'info@reagansoft.com'),
-('company_address',   'Jinja, Uganda'),
-('company_whatsapp',  ''),
-('company_fb',        ''),
-('company_x',         ''),
-('company_linkedin',  ''),
-('company_about',     'Reagan Soft Innovation Limited is a software development company based in Jinja, Uganda. We design and build websites, business systems, e-commerce platforms and custom software that help organisations operate more effectively.'),
-('currency',          'UGX'),
-('tax_percent',       '0'),
-('invoices_due_days', '14'),
+('company_name',            'Reagan Soft Innovation Limited'),
+('company_tagline',         'Digital Solutions That Move Your Business Forward'),
+('company_founder',         'Reagan Otema'),
+('company_phone',           '+256730314979'),
+('company_email',           'info@reagansoft.com'),
+('company_address',         'Jinja, Uganda'),
+('company_whatsapp',        ''),
+('company_fb',              ''),
+('company_x',               ''),
+('company_linkedin',        ''),
+('company_about',           'Reagan Soft Innovation Limited is a software company based in Jinja, Uganda. We design and build websites, business systems, e-commerce stores and custom software for businesses across the country — and we stay around to look after them after launch.'),
+('currency',                'UGX'),
+('tax_percent',             '0'),
+('invoices_due_days',       '14'),
 ('payment_mtn_number',      ''),
 ('payment_airtel_number',   ''),
 ('payment_bank_details',    ''),
 ('payment_gateway_status',  'not_configured'),
-('registration_open', '1');
+('registration_open',       '1');
 
 -- ============================================================
--- Demo / sample accounts and data
--- ------------------------------------------------------------
--- ALL demo accounts use the same password:  Reagan@2026
---   admin@reagansoft.com  (Administrator)
---   staff@reagansoft.com  (Staff)
---   amara@kirekafarms.com, grace@pearlholdings.com,
---   david@mulumbasons.com, agnesnakato@gmail.com  (Clients)
--- Change these passwords after logging in (Profile > change password)
--- and delete the demo records you no longer need.
+-- 03 · ADMIN & STAFF
 -- ============================================================
-
+-- The administrator manages the whole portal. Staff serve clients
+-- (requests, projects, quotations, invoices, files, messages).
+-- ============================================================
 INSERT INTO users (full_name, email, phone, password_hash, role, company, address, active) VALUES
-('Reagan Otema',       'admin@reagansoft.com',     '+256730314979', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'admin',  'Reagan Soft Innovation Limited', 'Jinja, Uganda', 1),
-('Sarah Namukasa',     'staff@reagansoft.com',     '+256771234567', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'staff',  NULL, NULL, 1),
-('Amara Kaggwa',       'amara@kirekafarms.com',    '+256702456789', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Kireka Farm Supplies Ltd', 'Kireka, Kampala', 1),
-('Grace Ayebare',      'grace@pearlholdings.com',  '+256778987654', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Pearl Holdings Ltd', 'Jinja, Uganda', 1),
-('David Mulumba',      'david@mulumbasons.com',    '+256703246810', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Mulumba & Sons Traders', 'Iganga, Uganda', 1),
-('Agnes Nakato',       'agnesnakato@gmail.com',    '+256759135790', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', NULL, 'Jinja, Uganda', 1);
+('Reagan Otema',   'admin@reagansoft.com', '+256730314979', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'admin', 'Reagan Soft Innovation Limited', 'Jinja, Uganda', 1),
+('Sarah Namukasa', 'staff@reagansoft.com', '+256771234567', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'staff', NULL, NULL, 1);
 
+-- ============================================================
+-- 04 · CLIENTS
+-- ============================================================
+INSERT INTO users (full_name, email, phone, password_hash, role, company, address, active) VALUES
+('Amara Kaggwa',  'amara@kirekafarms.com',   '+256702456789', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Kireka Farm Supplies Ltd', 'Kireka, Kampala', 1),
+('Grace Ayebare', 'grace@pearlholdings.com', '+256778987654', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Pearl Holdings Ltd', 'Jinja, Uganda', 1),
+('David Mulumba', 'david@mulumbasons.com',   '+256703246810', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Mulumba & Sons Traders', 'Iganga, Uganda', 1),
+('Agnes Nakato',  'agnesnakato@gmail.com',   '+256759135790', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', NULL, 'Jinja, Uganda', 1);
+
+-- ============================================================
+-- 05 · PROJECTS
+-- ============================================================
+-- user ids:  1 admin · 2 staff · 3 Kireka · 4 Pearl · 5 Mulumba · 6 Nakato
+-- ============================================================
 INSERT INTO projects (ref_no, client_id, service_id, assigned_to, title, description, requirements, budget, priority, status, progress, deadline, started_at, completed_at, submitted_at) VALUES
 ('RSI-2026-00001', 3, 1, 1, 'Company Website – Kireka Farm Supplies Ltd',
  'A responsive company website to present the farm supply catalogue, company story and contact details, with a lead-capture enquiry form and SEO foundations.',
@@ -137,6 +170,9 @@ INSERT INTO projects (ref_no, client_id, service_id, assigned_to, title, descrip
  'Two logo options, brand colours and typography, business cards, letterheads.',
  650000, 'normal', 'REVIEWING', 15, NULL, NULL, NULL, '2026-09-18');
 
+-- ============================================================
+-- 06 · TASKS
+-- ============================================================
 INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by) VALUES
 (1, 1, 'Design and structure', 'Plan sitemap, wireframes and page structure for the Kireka site.', 'COMPLETED', 100, 'high', '2026-03-02', '2026-03-08', 1),
 (1, 2, 'Home page build', 'Build the responsive home page and header.', 'COMPLETED', 100, 'high', '2026-03-09', '2026-03-16', 1),
@@ -146,6 +182,9 @@ INSERT INTO project_tasks (project_id, assigned_to, title, description, status, 
 (2, 1, 'Reports & exports', 'Daily sales reports and CSV export for management.', 'TODO', 0, 'medium', NULL, '2026-09-25', 1),
 (3, 2, 'Catalogue & cart', 'Product catalogue, search and shopping cart.', 'TODO', 0, 'high', NULL, '2026-10-05', 1);
 
+-- ============================================================
+-- 07 · MESSAGES
+-- ============================================================
 INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_internal, created_at) VALUES
 (1, 3, 'client', 'Thank you for the great work on our website. The team at Kireka Farm Supplies is very happy with it.', 0, '2026-04-20 09:30:00'),
 (1, 1, 'admin', 'Thank you Amara! It was a pleasure working with you. We are available any time for maintenance.', 0, '2026-04-20 11:00:00'),
@@ -153,6 +192,9 @@ INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_in
 (2, 2, 'staff', 'Sharing the dashboard preview this week, and we are on track for the end-of-month review.', 0, '2026-09-02 08:40:00'),
 (2, 1, 'admin', 'Reminder: confirm Pearl Holdings DB backup schedule before go-live.', 1, '2026-09-02 09:00:00');
 
+-- ============================================================
+-- 08 · QUOTATIONS + ITEMS
+-- ============================================================
 INSERT INTO quotations (quotation_no, project_id, client_id, issued_on, expiry_date, subtotal, discount, tax_percent, total, status, notes, terms) VALUES
 ('QT-2026-0001', 3, 5, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY), 9800000, 0, 0, 9800000, 'sent',
  'E-commerce build for Mulumba & Sons Traders.',
@@ -163,8 +205,11 @@ INSERT INTO quotation_items (quotation_id, description, quantity, unit_price) VA
 (1, 'Mobile money & bank payment-ready architecture', 1, 2000000),
 (1, 'Testing, training & launch support', 1, 800000);
 
+-- ============================================================
+-- 09 · INVOICES + ITEMS
+-- ============================================================
 INSERT INTO invoices (invoice_no, project_id, client_id, quotation_id, due_date, subtotal, discount, tax_percent, total, amount_paid, status, notes) VALUES
-('INV-2026-0001', 3, 5, 1, DATE_ADD(CURDATE(), INTERVAL 14 DAY), 9800000, 0, 0, 9800000, 0, 'sent', 'Deposit invoice for QA-2026-0001.'),
+('INV-2026-0001', 3, 5, 1, DATE_ADD(CURDATE(), INTERVAL 14 DAY), 9800000, 0, 0, 9800000, 0, 'sent', 'Deposit invoice for QT-2026-0001.'),
 ('INV-2026-0002', 1, 3, NULL, '2026-04-24', 8500000, 0, 0, 8500000, 8500000, 'paid', 'Final payment for the Kireka Farm Supplies website.');
 
 INSERT INTO invoice_items (invoice_id, description, quantity, unit_price) VALUES
@@ -172,14 +217,17 @@ INSERT INTO invoice_items (invoice_id, description, quantity, unit_price) VALUES
 (1, 'Payment architecture setup', 1, 4900000),
 (2, 'Company website development', 1, 8500000);
 
+-- ============================================================
+-- 10 · PAYMENTS
+-- ============================================================
 INSERT INTO payments (invoice_id, amount, method, reference, status, received_by, notes, confirmed_at, created_at) VALUES
 (2, 8500000, 'bank', 'KFS-WEB-0420', 'confirmed', 1, 'Transferred from Kireka Farm Supplies bank account.', '2026-04-24 14:00:00', '2026-04-24 14:00:00');
 
+-- ============================================================
+-- 11 · NOTIFICATIONS
+-- ============================================================
 INSERT INTO notifications (user_id, title, message, type, related_project_id, is_read, created_at) VALUES
 (3, 'Project completed', 'Your website project RSI-2026-00001 was completed and launched. Thank you!', 'success', 1, 0, '2026-04-18 12:00:00'),
-(4, 'New task completed', 'A task in your project RSI-2026-00002 was updated.', 'task', 2, 0, '2026-09-02 09:00:00'),
-(5, 'Quotation ready', 'Your quotation QT-2026-0001 is waiting for your approval.', 'quotation', 3, 0, '2026-09-10 09:30:00'),
+(4, 'Task update', 'A task in your project RSI-2026-00002 was updated.', 'task', 2, 0, '2026-09-02 09:00:00'),
+(5, 'Your quotation is ready', 'Your quotation QT-2026-0001 is waiting for your approval.', 'quotation', 3, 0, '2026-09-10 09:30:00'),
 (1, 'New request received', 'Agnes Nakato submitted a new request for review.', 'info', 4, 0, '2026-09-20 10:00:00');
-
--- Demo password note for documentation:
--- Reagan@2026

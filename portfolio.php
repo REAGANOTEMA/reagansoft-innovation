@@ -35,7 +35,7 @@ public_head([
   <div class="container">
     <span class="eyebrow">Our work</span>
     <h1>Real projects, delivered for real businesses.</h1>
-    <p class="lead">Completed client work appears here as it is delivered and approved for public showcase.</p>
+    <p class="lead">A selection of finished work — added here as clients approve it for public display.</p>
   </div>
 </section>
 

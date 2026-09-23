@@ -12,7 +12,7 @@ public_head([
   <div class="container">
     <span class="eyebrow">About us</span>
     <h1>A software company built on clarity and delivery.</h1>
-    <p class="lead">Reagan Soft Innovation Limited helps organisations in Uganda and beyond turn business processes into practical, reliable digital products.</p>
+    <p class="lead">Reagan Soft Innovation Limited helps organisations in Uganda and beyond turn everyday business processes into practical, reliable digital products.</p>
   </div>
 </section>
 
@@ -33,10 +33,10 @@ public_head([
       <div class="info-card">
         <h3>What we believe</h3>
         <div class="info-list">
-          <div class="info-line"><?= icon('check') ?><span>Software should solve real problems, not look impressive on paper.</span></div>
-          <div class="info-line"><?= icon('check') ?><span>Clients deserve to see progress — honest status, real files, clear next steps.</span></div>
+          <div class="info-line"><?= icon('check') ?><span>Software should solve a real problem, not just look good on a demo.</span></div>
+          <div class="info-line"><?= icon('check') ?><span>Clients deserve honest progress — real status, real files, clear next steps.</span></div>
           <div class="info-line"><?= icon('check') ?><span>Security and maintainability are not optional extras.</span></div>
-          <div class="info-line"><?= icon('check') ?><span>Good pricing is transparent pricing.</span></div>
+          <div class="info-line"><?= icon('check') ?><span>If the price is not clear upfront, neither are we.</span></div>
         </div>
       </div>
     </div>
@@ -44,6 +44,48 @@ public_head([
 </section>
 
 <section class="section section-soft">
+  <div class="container">
+    <div class="section-head">
+      <div><span class="eyebrow">Meet the founder</span><h2>Reagan Otema — the hands behind the code.</h2></div>
+      <p>Reagan started Reagan Soft Innovation to give Uganda's businesses software that is honest, secure and actually maintained.</p>
+    </div>
+    <div class="about-grid">
+      <div class="founder-card">
+        <div class="founder-photo">
+          <img src="<?= app_url('assets/img/founder.webp') ?>" alt="Reagan Otema, founder and lead developer">
+        </div>
+        <div class="founder-info">
+          <span class="founder-role">Founder &amp; Lead Developer</span>
+          <h3>Reagan Otema</h3>
+          <p>“Too many small businesses get burned by software that is built once and abandoned. I built this company around the opposite: clear scope, honest pricing and systems that keep working after launch.”</p>
+          <div class="founder-brand">
+            <img src="<?= app_url('assets/img/reagansoftinnovation-logo.jpeg') ?>" alt="Reagan Soft Innovation logo" width="52" height="52">
+            <span class="brand-text">Reagan Soft <b>Innovation</b></span>
+          </div>
+          <div class="founder-contact">
+            <span><?= icon('phone') ?><?= e(settings('company_phone', '+256730314979')) ?></span>
+            <span><?= icon('mail') ?><?= e(settings('company_email', 'info@reagansoft.com')) ?></span>
+            <span><?= icon('pin') ?><?= e(settings('company_address', 'Jinja, Uganda')) ?></span>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid;align-content:start;gap:16px">
+        <div class="split-media" style="height:100%;min-height:320px">
+          <img src="<?= app_url('assets/img/computer-portrait.webp') ?>" alt="Reagan Soft Innovation development workstation in the Jinja office">
+          <span class="split-shine" aria-hidden="true"></span>
+        </div>
+        <div class="panel" style="margin:0">
+          <h4><?= icon('cpu') ?> Development &amp; design under one roof</h4>
+          <p class="small muted" style="margin:0">
+            From requirements and database design to the final launch, every build is handled in-house — design, code, testing and handover — so there is never a finger-pointing game between separate vendors.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
   <div class="container">
     <div class="section-head"><div><span class="eyebrow">How we work</span><h2>Our promise to every client.</h2></div></div>
     <div class="value-grid">
@@ -57,7 +99,7 @@ public_head([
   </div>
 </section>
 
-<section class="section">
+<section class="section section-soft">
   <div class="container">
     <div class="about-grid">
       <div class="info-card">

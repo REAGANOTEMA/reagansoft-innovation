@@ -2,6 +2,21 @@
 -- Reagan Soft Innovation Limited
 -- Database Schema
 -- PHP >= 8.0  |  MySQL >= 5.7 / 8.0  |  InnoDB  |  utf8mb4
+--
+-- Table contents
+--   users             ADMIN / STAFF / CLIENT portal accounts
+--   services          sellable service catalogue
+--   projects          client work (one per request)
+--   project_tasks     delivery tasks on a project
+--   project_files     private file attachments
+--   project_messages  project conversations (is_internal = staff only)
+--   notifications     in-portal alerts
+--   quotations        + quotation_items  (line items)
+--   invoices          + invoice_items    (line items)
+--   payments          pending/confirmed payment history
+--   contact_messages  contact-form submissions
+--   settings          centralised configuration
+--   activity_logs     full audit trail
 -- ============================================================
 CREATE DATABASE IF NOT EXISTS reagan_soft_innovation
   CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
