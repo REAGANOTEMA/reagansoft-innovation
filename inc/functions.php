@@ -377,6 +377,7 @@ function icon(string $name, string $class = ''): string {
         'send'      => '<path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/>',
         'download'  => '<path d="M12 3v11M7 10l5 5 5-5M4 19h16"/>',
         'upload'    => '<path d="M12 16V5M7 10l5-5 5 5M4 19h16"/>',
+        'close'     => '<path d="M6 6l12 12M18 6 6 18"/>',
     ];
     $path = $paths[$name] ?? $paths['code-s'];
     $cls = $class !== '' ? ' class="' . e($class) . '"' : '';

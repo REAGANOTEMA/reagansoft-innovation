@@ -10,7 +10,7 @@ $requests = $pdo->query(
      JOIN users u ON u.id = p.client_id
      LEFT JOIN services s ON s.id = p.service_id
      WHERE p.status IN ('NEW','REVIEWING')
-     ORDER BY p.created_at ASC"
+     ORDER BY p.submitted_at ASC"
 )->fetchAll();
 
 dashboard_head(['title' => 'Requests Queue', 'active' => 'requests', 'crumb' => 'Requests']);

@@ -35,7 +35,7 @@ $pg = paginate((int)$count->fetch()['c'], $perPage, $page);
 
 $sql = "SELECT p.*, s.name AS service FROM projects p
         LEFT JOIN services s ON s.id = p.service_id
-        WHERE $whereSql ORDER BY p.created_at DESC LIMIT " . $perPage . " OFFSET " . $pg['offset'];
+        WHERE $whereSql ORDER BY p.submitted_at DESC LIMIT " . $perPage . " OFFSET " . $pg['offset'];
 $stm = $pdo->prepare($sql);
 $stm->execute($params);
 $projects = $stm->fetchAll();

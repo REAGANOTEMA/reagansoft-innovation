@@ -9,7 +9,7 @@ $threads = $pdo->prepare(
     "SELECT p.id AS project_id, p.title, p.ref_no,
             (SELECT COUNT(*) FROM project_messages m WHERE m.project_id = p.id AND m.sender_id != ?) AS others,
             (SELECT MAX(m.created_at) FROM project_messages m WHERE m.project_id = p.id) AS last_at
-     FROM projects p WHERE p.client_id = ? ORDER BY last_at DESC, p.created_at DESC"
+     FROM projects p WHERE p.client_id = ? ORDER BY last_at DESC, p.submitted_at DESC"
 );
 $threads->execute([$uid, $uid]);
 $threads = $threads->fetchAll();

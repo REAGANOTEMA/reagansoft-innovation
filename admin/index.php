@@ -19,7 +19,7 @@ $stats['messages_unread']= (int)$pdo->query("SELECT COUNT(*) c FROM contact_mess
 $recentRequests = $pdo->query(
     "SELECT p.*, u.full_name AS client_name, u.company, s.name AS service
      FROM projects p JOIN users u ON u.id = p.client_id LEFT JOIN services s ON s.id = p.service_id
-     ORDER BY p.created_at DESC LIMIT 8"
+     ORDER BY p.submitted_at DESC LIMIT 8"
 )->fetchAll();
 
 $recentLogs = $pdo->query(

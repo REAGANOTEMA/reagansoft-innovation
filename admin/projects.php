@@ -40,7 +40,7 @@ $sql = "SELECT p.*, u.full_name AS client_name, u.company, s.name AS service, a.
         LEFT JOIN services s ON s.id = p.service_id
         LEFT JOIN users a ON a.id = p.assigned_to
         WHERE $whereSql
-        ORDER BY p.created_at DESC
+        ORDER BY p.submitted_at DESC
         LIMIT $perPage OFFSET {$pg['offset']}";
 $stm = $pdo->prepare($sql); $stm->execute($params);
 $projects = $stm->fetchAll();

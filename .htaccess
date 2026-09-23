@@ -20,10 +20,6 @@ RedirectMatch 403 ^/(config|inc|storage)(/|$)
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
 </IfModule>
 
-# Prevent caching of PHP outputs by default is fine to leave.
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^ index.php [L]
-</IfModule>
+# No pretty-URL routing is used — every page is a real file, so unknown
+# paths should produce a genuine 404 rather than a silent fallback.
+ErrorDocument 404 "Page not found."
