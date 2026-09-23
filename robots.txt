@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /client/
+Disallow: /admin/
+Disallow: /uploads/
+Disallow: /storage/
+Disallow: /config/
+Disallow: /inc/
+Disallow: /database/
+Disallow: /login.php
+Disallow: /register.php
+Disallow: /logout.php
+
+Sitemap: http://localhost/reagansoft-innovation/sitemap.xml

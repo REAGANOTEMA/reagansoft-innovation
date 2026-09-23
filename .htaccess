@@ -1,0 +1,29 @@
+Options -Indexes
+
+# Protect sensitive files
+<FilesMatch "\.(sql|md|log|env|json|yaml|yml|ini|txt)$">
+  Require all denied
+</FilesMatch>
+
+<FilesMatch "^(README|composer)\.(md|json)$">
+  Require all denied
+</FilesMatch>
+
+# Block access to configuration and includes from the web
+RedirectMatch 403 ^/(config|inc|storage)(/|$)
+
+# Security headers (also applied in PHP for non-Apache setups)
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+</IfModule>
+
+# Prevent caching of PHP outputs by default is fine to leave.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ index.php [L]
+</IfModule>
