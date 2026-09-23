@@ -9,6 +9,8 @@ client & admin project-management portal for Reagan Soft Innovation Limited (Jin
 - Responsive homepage, services, pricing (UGX ranges up to 10M websites / 20M systems),
   portfolio, about and contact pages
 - Real Reagan Soft Innovation logo across nav, footer, login, favicon and social share image
+- Company motto, "Innovating today for a smarter tomorrow", shown in the header, hero, footer and login pages
+- Full legal pages: Privacy Policy, Terms & Conditions, Refund Policy and Cookie Policy, linked in the footer
 - WhatsApp, phone, email and social links; contact form stored in the database
 - Client registration and secure login with brute-force lockout
 
@@ -38,7 +40,13 @@ client & admin project-management portal for Reagan Soft Innovation Limited (Jin
 
 ## Installation
 
-1. Create the database and import the schema:
+**Easiest way (phpMyAdmin — XAMPP)**
+
+1. Start Apache and MySQL in the XAMPP control panel, then open <http://localhost/phpmyadmin>.
+2. Click the **Import** tab, choose the file `database/install.sql`, scroll to the bottom and click **Go**.
+   The script creates the database, all tables and the demo data in one step — no typing needed.
+
+If you prefer command line, create the database and import the schema:
 
 ```sql
 CREATE DATABASE reagan_soft_innovation CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -99,4 +107,6 @@ logos are all database- and file-driven under `assets/img/`.
 - Schedule regular database and uploads backups.
 - Wire email/SMS/WhatsApp notifications (`inc/functions.php` → `rs_mail()`).
 - Integrate MTN MoMo / Airtel Money only with the company's merchant credentials.
-- Add privacy policy, terms, refund/cancellation policy appropriate to the business.
+- Review the Privacy Policy, Terms, Cookie Policy and Refund Policy under `privacy.php`,
+  `terms.php`, `cookie-policy.php` and `refund-policy.php`, and adjust them to the
+  business before going live.

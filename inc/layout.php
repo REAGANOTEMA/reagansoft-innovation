@@ -54,7 +54,7 @@ function public_head(array $page = []): void {
   <div class="container nav">
     <a class="brand" href="<?= app_url('index.php') ?>" aria-label="Reagan Soft Innovation Limited — Home">
       <img src="<?= app_url('assets/img/reagansoftinnovation-logo.jpeg') ?>" alt="" width="40" height="40">
-      <span class="brand-text">Reagan Soft <b>Innovation</b></span>
+      <span class="brand-text">Reagan Soft <b>Innovation</b><small class="brand-tagline"><?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></small></span>
     </a>
     <button class="menu" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav">
       <span class="menu-icon"></span>
@@ -93,6 +93,7 @@ function public_footer(): void {
 <img src="<?= app_url('assets/img/reagansoftinnovation-logo.jpeg') ?>" alt="Reagan Soft Innovation logo" width="40" height="40">
         <span class="brand-text">Reagan Soft <b>Innovation</b></span>
       </a>
+      <p class="footer-tagline"><?= icon('rocket') ?> <?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></p>
       <p><?= e(settings('company_about', 'Software development company based in Jinja, Uganda.')) ?></p>
       <p class="footer-founder">Founded by <strong><?= e(settings('company_founder', APP_FOUNDER)) ?></strong> · <?= e($address) ?></p>
     </div>
@@ -109,6 +110,13 @@ function public_footer(): void {
       <a href="<?= app_url('pricing.php') ?>">Pricing</a>
       <a href="<?= app_url('contact.php') ?>">Get a quote</a>
       <a href="<?= app_url('register.php') ?>">Client portal</a>
+    </nav>
+    <nav class="footer-col" aria-label="Legal">
+      <b>Legal</b>
+      <a href="<?= app_url('privacy.php') ?>">Privacy Policy</a>
+      <a href="<?= app_url('terms.php') ?>">Terms &amp; Conditions</a>
+      <a href="<?= app_url('refund-policy.php') ?>">Refund Policy</a>
+      <a href="<?= app_url('cookie-policy.php') ?>">Cookie Policy</a>
     </nav>
     <div class="footer-col">
       <b>Contact</b>

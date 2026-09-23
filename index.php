@@ -42,6 +42,7 @@ public_head([
         <img src="<?= app_url('assets/img/founder.webp') ?>" alt="Reagan Otema, founder" width="40" height="40">
         <span>Built by <b>Reagan Otema</b>, founder — Jinja, Uganda</span>
       </div>
+      <p class="hero-motto"><?= icon('rocket') ?> <?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></p>
     </div>
     <div class="hero-visual">
       <div class="hero-stage">

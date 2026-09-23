@@ -105,7 +105,7 @@ Uptime reporting',
 -- ============================================================
 INSERT INTO settings (setting_key, setting_value) VALUES
 ('company_name',            'Reagan Soft Innovation Limited'),
-('company_tagline',         'Digital Solutions That Move Your Business Forward'),
+('company_tagline',         'Innovating today for a smarter tomorrow.'),
 ('company_founder',         'Reagan Otema'),
 ('company_phone',           '+256730314979'),
 ('company_email',           'info@reagansoft.com'),
