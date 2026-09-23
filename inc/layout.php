@@ -80,7 +80,6 @@ function public_footer(): void {
     $phone = settings('company_phone', '+256730314979');
     $email = settings('company_email', '');
     $address = settings('company_address', 'Jinja, Uganda');
-    $whatsapp = settings('company_whatsapp', '');
     $fb = settings('company_fb', '');
     $x = settings('company_x', '');
     $li = settings('company_linkedin', '');
