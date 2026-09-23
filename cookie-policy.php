@@ -12,7 +12,7 @@ public_head([
   <div class="container">
     <span class="eyebrow">Legal</span>
     <h1>Cookie Policy</h1>
-    <p class="lead">A short, honest note on the small files our site uses to keep you signed in and secure.</p>
+    <p class="lead">A short note on the small files our site uses to keep you signed in and secure.</p>
   </div>
 </section>
 

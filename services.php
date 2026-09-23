@@ -14,7 +14,7 @@ public_head([
   <div class="container">
     <span class="eyebrow">Services</span>
     <h1>Everything your business needs to go digital.</h1>
-    <p class="lead">Services are scoped individually after a short conversation. Prices below are honest ranges in <?= e(settings('currency')) ?> — professional websites and e-commerce range from <?= money(PRICE_WEBSITE_MIN, settings('currency')) ?> to <?= money(PRICE_WEBSITE_MAX, settings('currency')) ?>, while custom business systems and software range from <?= money(PRICE_SYSTEM_MIN, settings('currency')) ?> to <?= money(PRICE_SYSTEM_MAX, settings('currency')) ?>.</p>
+    <p class="lead">Services are scoped individually after a short conversation. Prices below are the actual ranges in <?= e(settings('currency')) ?> — professional websites and e-commerce range from <?= money(PRICE_WEBSITE_MIN, settings('currency')) ?> to <?= money(PRICE_WEBSITE_MAX, settings('currency')) ?>, while custom business systems and software range from <?= money(PRICE_SYSTEM_MIN, settings('currency')) ?> to <?= money(PRICE_SYSTEM_MAX, settings('currency')) ?>.</p>
   </div>
 </section>
 

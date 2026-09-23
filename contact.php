@@ -54,7 +54,7 @@ public_head([
   <div class="container">
     <span class="eyebrow">Contact</span>
     <h1>Let's talk about your project.</h1>
-    <p class="lead">Send us a message and we will respond with an honest, practical answer.</p>
+    <p class="lead">Send us a message and we will respond with a clear, practical answer.</p>
   </div>
 </section>
 

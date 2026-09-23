@@ -47,7 +47,7 @@ public_head([
       <div class="hero-trust">
         <span><span class="tick"><?= icon('check') ?></span> You can request work online</span>
         <span><span class="tick"><?= icon('check') ?></span> Tasks &amp; progress you can follow</span>
-        <span><span class="tick"><?= icon('check') ?></span> Honest, upfront pricing</span>
+        <span><span class="tick"><?= icon('check') ?></span> Clear, upfront pricing</span>
       </div>
       <div class="hero-byline">
         <img src="<?= app_url('assets/img/founder.webp') ?>" alt="Reagan Otema, founder" width="40" height="40" loading="eager" fetchpriority="high">
@@ -69,8 +69,8 @@ public_head([
         <div class="code-card" aria-hidden="true">
           <div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="code-name">RSI-2026-00002 · project.php</span></div>
           <pre class="code"><code><span class="t-kw">&lt;?php</span>
-<span class="t-kw">if</span> (<span class="t-fn">review_scope</span>(<span class="t-var">$client</span>)) {
-    <span class="t-fn">send_quotation</span>(<span class="t-var">$project</span>);
+<span class="t-kw">if</span> (<span class="t-fn">reviewScope</span>(<span class="t-var">$client</span>)) {
+    <span class="t-fn">sendQuotation</span>(<span class="t-var">$project</span>);
     <span class="t-var">$project</span>-&gt;<span class="t-var">status</span> = <span class="t-str">'APPROVED'</span>;
 }
 <span class="t-cmt">// scope it, quote it, deliver it</span></code></pre>
@@ -155,7 +155,7 @@ public_head([
       </div>
       <div class="value-card">
         <div class="card-icon"><?= icon('clock') ?></div>
-        <h3>Honest timelines</h3>
+        <h3>Realistic timelines</h3>
         <p>Realistic estimates and early updates if anything changes. We dislike surprise "almost done" emails as much as you do.</p>
       </div>
     </div>
@@ -224,7 +224,7 @@ public_head([
           <div class="founder-info">
             <span class="founder-role">Founder &amp; Lead Developer</span>
             <h3>Reagan Otema</h3>
-            <p>“We build software the way we would want it done for our own business — clear scope, honest pricing and work you can actually see.”</p>
+            <p>Reagan leads the design and development on every project himself, and makes sure each one is built to be looked after, not just launched.</p>
             <div class="founder-brand">
               <img src="<?= app_url('assets/img/reagansoftinnovation-logo.jpeg') ?>" alt="Reagan Soft Innovation logo" width="52" height="52">
               <span class="brand-text">Reagan Soft <b>Innovation</b></span>
