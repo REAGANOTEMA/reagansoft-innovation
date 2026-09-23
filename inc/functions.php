@@ -457,4 +457,38 @@ function rs_mail(string $to, string $subject, string $body): bool {
     return @mail($to, $subject, $body, $headers);
 }
 
+/* ------------------------------------------------------------------
+ * WhatsApp helpers.
+ * Uses the company WhatsApp setting when set, otherwise the phone.
+ * ------------------------------------------------------------------ */
+function whatsapp_number_raw(): string {
+    $num = settings('company_whatsapp', '');
+    if ($num === '') {
+        $num = settings('company_phone', '');
+    }
+    return preg_replace('/\D/', '', $num);
+}
+
+function whatsapp_url(string $text = ''): string {
+    $num = whatsapp_number_raw();
+    if ($num === '') {
+        return '';
+    }
+    $url = 'https://wa.me/' . $num;
+    if ($text !== '') {
+        $url .= '?text=' . urlencode($text);
+    }
+    return $url;
+}
+
+function whatsapp_link(string $label, string $text = '', string $class = '', string $iconClass = ''): string {
+    $url = whatsapp_url($text);
+    if ($url === '') {
+        return '';
+    }
+    $cls = $class !== '' ? ' class="' . e($class) . '"' : '';
+    $ic = $iconClass !== '' ? ' icon="' . e($iconClass) . '"' : '';
+    return '<a href="' . e($url) . '" target="_blank" rel="noopener"' . $cls . $ic . '>' . $label . '</a>';
+}
+
 require_once __DIR__ . '/layout.php';

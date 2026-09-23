@@ -123,8 +123,8 @@ function public_footer(): void {
       <p class="footer-contact"><span><?= icon('pin') ?></span> <?= e($address) ?></p>
       <p class="footer-contact"><span><?= icon('phone') ?></span> <a href="tel:+256<?= preg_replace('/\D/', '', $phone) ?>"><?= e($phone) ?></a></p>
       <p class="footer-contact"><span><?= icon('mail') ?></span> <a href="mailto:<?= e($email) ?>"><?= e($email) ?></a></p>
-      <?php if ($whatsapp): ?>
-        <p class="footer-contact"><span><?= icon('chat') ?></span> <a href="https://wa.me/<?= preg_replace('/\D/', '', $whatsapp) ?>" target="_blank" rel="noopener">WhatsApp</a></p>
+      <?php if (whatsapp_url() !== ''): ?>
+        <p class="footer-contact"><span><?= icon('chat') ?></span> <a href="<?= e(whatsapp_url('Hello Reagan Soft Innovation, I would like to enquire about a project.')) ?>" target="_blank" rel="noopener">WhatsApp</a></p>
       <?php endif; ?>
       <div class="footer-social">
         <?php if ($fb): ?><a href="<?= e($fb) ?>" target="_blank" rel="noopener" aria-label="Facebook"><?= icon_social('fb') ?></a><?php endif; ?>
@@ -140,6 +140,12 @@ function public_footer(): void {
     </div>
   </div>
 </footer>
+<?php $wa = whatsapp_url('Hello Reagan Soft Innovation, I would like to enquire about a project.'); ?>
+<?php if ($wa !== ''): ?>
+<a class="wa-float" href="<?= e($wa) ?>" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp">
+  <?= icon_social('whatsapp') ?><span>Chat with us</span>
+</a>
+<?php endif; ?>
 </body>
 </html>
 <?php
@@ -270,10 +276,46 @@ function dashboard_footer(): void {
  * ------------------------------------------------------------------ */
 function icon_social(string $name): string {
     $svg = [
+        'whatsapp' => '<path d="M12.05 2.6c-5.2 0-9.4 4.2-9.4 9.4 0 1.7.4 3.3 1.2 4.7L2.6 21.4l4.8-1.2c1.4.8 3 1.2 4.7 1.2 5.2 0 9.4-4.2 9.4-9.4s-4.2-9.4-9.4-9.4zm3.4 13.4c-.2.5-1 1-1.5 1-.4 0-1 .2-3.1-.7-2.6-1.1-4.2-3.9-4.3-4.1-.1-.2-1-1.4-1-2.6s.7-1.8.9-2c.2-.2.4-.3.6-.3s.3 0 .4.1c.1.1.3.7.6 1.2.1.2.1.3.1.3v.3c-.2.4-.4.6-.4.7.2.6.7 1.4 1.4 2 .9.9 1.8 1.2 2.2 1.3.2.1.4.1.5-.1l.7-.8c.2-.2.4-.2.6-.1l1.8.9c.2.1.4.2.4.4.1.1.1.6-.1 1z"/>',
         'fb' => '<path d="M14 8h3V5h-3c-2.2 0-4 1.8-4 4v2H7v3h3v6h3v-6h3l1-3h-4V9c0-.6.4-1 1-1z"/>',
         'x-social' => '<path d="M4 4l7.2 9.3L4.4 20h2.2l5.5-5.5L16.8 20H20l-7.5-9.7L18.9 4h-2.2l-5 5.2L8 4z"/>',
         'linkedin' => '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 10v7M7 7.2v.01M11 17v-4a2 2 0 0 1 4 0v4v-7"/><path d="M11 10v7"/>',
     ];
     $path = $svg[$name] ?? $svg['fb'];
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' . $path . '</svg>';
+}
+
+/* ------------------------------------------------------------------
+ * Payment labels + client-facing payment instructions.
+ * ------------------------------------------------------------------ */
+function payment_method_label(string $method): string {
+    return [
+        'mtn_momo'     => 'MTN Mobile Money',
+        'airtel_money' => 'Airtel Money',
+        'bank'         => 'Bank transfer',
+        'cash'         => 'Cash',
+        'other'        => 'Other',
+    ][$method] ?? ucwords(str_replace('_', ' ', $method));
+}
+
+function payment_instructions_html(): string {
+    $mtn = settings('payment_mtn_number', '');
+    $airtel = settings('payment_airtel_number', '');
+    $bank = settings('payment_bank_details', '');
+    if ($mtn === '' && $airtel === '' && $bank === '') {
+        return '';
+    }
+    ob_start();
+    echo '<div class="pay-details">';
+    if ($mtn !== '') {
+        echo '<div class="pay-box"><span class="pbx-icon">' . icon('phone') . '</span><div><b>MTN Mobile Money</b><span class="pbx-num">' . e($mtn) . '</span><p>Send the amount to this number, then submit the payment below with the MoMo transaction reference so we can confirm it quickly.</p></div></div>';
+    }
+    if ($airtel !== '') {
+        echo '<div class="pay-box"><span class="pbx-icon">' . icon('phone') . '</span><div><b>Airtel Money</b><span class="pbx-num">' . e($airtel) . '</span><p>Send the amount to this number, then submit the payment below with the transaction reference.</p></div></div>';
+    }
+    if (trim($bank) !== '') {
+        echo '<div class="pay-box"><span class="pbx-icon">' . icon('money') . '</span><div><b>Bank transfer</b>' . nl2br(e(trim($bank))) . '</div></div>';
+    }
+    echo '</div>';
+    return (string)ob_get_clean();
 }

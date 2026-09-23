@@ -319,6 +319,8 @@ dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' =>
       </div>
       <?php if ($inv['notes']): ?><p class="muted small"><?= nl2br(e($inv['notes'])) ?></p><?php endif; ?>
       <?php if ($outstanding > 0 && !in_array($inv['status'], ['paid', 'cancelled'], true)): ?>
+        <p class="muted small"><strong>How to pay</strong> — send the amount using any option below, then submit the payment form so our team can confirm it.</p>
+        <?= payment_instructions_html() ?>
         <details class="mt-2">
           <summary class="small" style="font-weight:700;cursor:pointer">Submit a payment for confirmation</summary>
           <form method="post" class="mt-2" novalidate>

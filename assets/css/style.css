@@ -1009,3 +1009,33 @@ fieldset { border: 0; padding: 0; margin: 0; }
   .price-band { padding: 24px; }
   .pb-factors { padding: 18px; }
 }
+
+/* ---------- Floating WhatsApp button ---------- */
+.wa-float {
+  position: fixed; right: 20px; bottom: 20px; z-index: 90;
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 13px 18px; border-radius: 99px;
+  background: #25d366; color: #fff; font-weight: 800; font-size: 14.5px;
+  box-shadow: 0 8px 24px rgba(18, 140, 62, .35), 0 2px 6px rgba(18, 140, 62, .2);
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.wa-float:hover { transform: translateY(-2px); background: #1ebe5b; box-shadow: 0 12px 30px rgba(18, 140, 62, .42); }
+.wa-float:active { transform: translateY(0); }
+.wa-float svg { width: 22px; height: 22px; fill: currentColor; stroke: none; }
+@media (max-width: 640px) {
+  .wa-float { right: 14px; bottom: 14px; padding: 13px; }
+  .wa-float span { display: none; }
+}
+
+/* ---------- Payment instructions (client invoice tab) ---------- */
+.pay-details { display: grid; gap: 12px; margin: 0 0 18px; }
+.pay-box {
+  display: flex; gap: 14px; align-items: flex-start;
+  background: var(--sky-50); border: 1px solid var(--line-2); border-radius: var(--radius);
+  padding: 15px 18px;
+}
+.pay-box .pbx-icon { width: 40px; height: 40px; border-radius: 11px; background: #fff; color: var(--blue); display: grid; place-items: center; flex-shrink: 0; }
+.pay-box .pbx-icon svg { width: 19px; height: 19px; }
+.pay-box b { display: block; color: var(--ink); font-size: 14.5px; }
+.pay-box p { margin: 2px 0 0; color: var(--muted); font-size: 13.5px; }
+.pay-box .pbx-num { display: block; font-size: 16px; font-weight: 800; color: var(--navy); }

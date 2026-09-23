@@ -70,6 +70,10 @@ public_head([
             <div><b>Phone</b><span><a href="tel:+256<?= preg_replace('/\D/', '', $phone) ?>"><?= e($phone) ?></a></span></div>
           </div>
           <div class="contact-item">
+            <span class="ci-icon"><?= icon('chat') ?></span>
+            <div><b>WhatsApp</b><span><?= whatsapp_link('Chat with us on WhatsApp', 'Hello Reagan Soft Innovation, I would like to enquire about a project.', '', '') ?></span></div>
+          </div>
+          <div class="contact-item">
             <span class="ci-icon"><?= icon('pin') ?></span>
             <div><b>Location</b><span><?= e(settings('company_address', 'Jinja, Uganda')) ?></span></div>
           </div>
