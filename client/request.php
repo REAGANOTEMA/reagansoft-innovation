@@ -108,7 +108,7 @@ dashboard_head(['title' => 'New Request', 'active' => 'request', 'crumb' => 'New
       <select class="select" id="service_id" name="service_id">
         <option value="0">Select a service (optional)</option>
         <?php foreach ($services as $s): ?>
-          <option value="<?= (int)$s['id'] ?>" <?= $values['service_id'] === (string)$s['id'] || $preselect === (int)$s['id'] ? 'selected' : '' ?>><?= e($s['name']) ?> — from <?= money($s['price'], settings('currency')) ?></option>
+          <option value="<?= (int)$s['id'] ?>" <?= $values['service_id'] === (string)$s['id'] || $preselect === (int)$s['id'] ? 'selected' : '' ?>><?= e($s['name']) ?> — <?= e(service_price_short($s, settings('currency'))) ?></option>
         <?php endforeach; ?>
       </select>
     </div>

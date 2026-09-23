@@ -4,23 +4,13 @@ require __DIR__ . '/config/config.php';
 $services = db()->query("SELECT * FROM services WHERE status='active' ORDER BY sort_order, id")->fetchAll();
 $currency = settings('currency');
 
-$websiteMin = null; $websiteMax = null;
-$systemMin  = null; $systemMax  = null;
-foreach ($services as $s) {
-    $max = (float)$s['price_max'] > 0 ? (float)$s['price_max'] : (float)$s['price'];
-    $min = (float)$s['price'];
-    if ($max <= 10000000 && $s['slug'] !== 'custom-solutions') {
-        $websiteMin = $websiteMin === null ? $min : min($websiteMin, $min);
-        $websiteMax = $websiteMax === null ? $max : max($websiteMax, $max);
-    } else {
-        $systemMin = $systemMin === null ? $min : min($systemMin, $min);
-        $systemMax = $systemMax === null ? $max : max($systemMax, $max);
-    }
-}
+$requestUrl = is_logged_in() && user_role() === 'client'
+    ? 'client/request.php?service=' . (int)($services[0]['id'] ?? 0)
+    : 'register.php';
 
 public_head([
     'title'     => 'Pricing | Reagan Soft Innovation Limited',
-    'desc'      => 'Transparent starting prices and ranges for websites (up to 10M UGX), business systems and software (up to 20M UGX), e-commerce and branding in Jinja, Uganda.',
+    'desc'      => 'Honest pricing in Jinja, Uganda: professional websites from UGX 500,000 to UGX 10,000,000 and custom business systems from UGX 20,000,000 to UGX 40,000,000. Final quotes approved before work begins.',
     'active'    => 'pricing',
     'canonical' => 'pricing.php',
 ]);
@@ -28,47 +18,75 @@ public_head([
 <section class="page-hero">
   <div class="container">
     <span class="eyebrow">Pricing</span>
-    <h1>Straightforward pricing, stated up front.</h1>
-    <p class="lead">Every engagement begins at an honest starting point and scales to your scope. Websites move from under <?= money(1000000, $currency) ?> up to <?= money(10000000, $currency) ?> — business systems from a few million up to <?= money(20000000, $currency) ?>. The final figure is always approved by you before work begins.</p>
+    <h1>Honest ranges, agreed before we start.</h1>
+    <p class="lead">We work in two clear pricing ranges. The final figure depends entirely on your requirements — and it is always written into a quotation that you approve before any development begins.</p>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <div class="price-ranges">
-      <div class="range-card">
-        <div class="card-icon"><?= icon('globe') ?></div>
-        <div>
-          <h3>Websites & E-Commerce</h3>
+    <div class="price-bands">
+
+      <article class="price-band" id="websites">
+        <div class="pb-body">
+          <span class="eyebrow">Web Development</span>
+          <h2>Professional websites &amp; e-commerce</h2>
           <p>Company websites, online stores, portfolios and web platforms — designed, built and launched for real results.</p>
+          <div class="pb-amount"><?= money(PRICE_WEBSITE_MIN, $currency) ?> <span class="pb-to">to</span> <?= money(PRICE_WEBSITE_MAX, $currency) ?></div>
+          <a class="btn btn-primary" href="<?= app_url($requestUrl) ?>">Start a website project <?= icon('arrow') ?></a>
         </div>
-        <div class="range-amount">
-          <span class="rp-from">From</span>
-          <strong><?= money(($websiteMin ?? 800000), $currency) ?></strong>
-          <span class="rp-to">up to <?= money(($websiteMax ?? 10000000), $currency) ?></span>
+        <div class="pb-factors">
+          <b>The final website price depends on:</b>
+          <ul class="feature-list">
+            <li>Number of pages</li>
+            <li>Design complexity</li>
+            <li>Functionality</li>
+            <li>Integrations</li>
+            <li>E-commerce requirements</li>
+            <li>Custom features</li>
+            <li>Content requirements</li>
+            <li>Hosting &amp; domain requirements</li>
+            <li>Maintenance requirements</li>
+          </ul>
         </div>
-      </div>
-      <div class="range-card">
-        <div class="card-icon"><?= icon('cpu') ?></div>
-        <div>
-          <h3>Business Systems & Software</h3>
-          <p>Client portals, management systems, school systems, dashboards and automation built around your real processes.</p>
+      </article>
+
+      <article class="price-band alt" id="systems">
+        <div class="pb-body">
+          <span class="eyebrow">Custom Business Systems</span>
+          <h2>Systems, software &amp; automation</h2>
+          <p>Client portals, management systems, dashboards and workflow automation — built around your real business processes.</p>
+          <div class="pb-amount"><?= money(PRICE_SYSTEM_MIN, $currency) ?> <span class="pb-to">to</span> <?= money(PRICE_SYSTEM_MAX, $currency) ?></div>
+          <a class="btn btn-light" href="<?= app_url($requestUrl) ?>">Start a systems project <?= icon('arrow') ?></a>
         </div>
-        <div class="range-amount">
-          <span class="rp-from">From</span>
-          <strong><?= money(($systemMin ?? 1500000), $currency) ?></strong>
-          <span class="rp-to">up to <?= money(($systemMax ?? 20000000), $currency) ?></span>
+        <div class="pb-factors">
+          <b>Business-system pricing depends on:</b>
+          <ul class="feature-list">
+            <li>Business requirements</li>
+            <li>Number of modules</li>
+            <li>User roles</li>
+            <li>Workflow complexity</li>
+            <li>Integrations</li>
+            <li>Reporting</li>
+            <li>Automation</li>
+            <li>Security requirements</li>
+            <li>Deployment requirements</li>
+            <li>Support requirements</li>
+          </ul>
         </div>
-      </div>
+      </article>
+
     </div>
 
-    <div class="pricing-grid" style="margin-top:56px">
+    <p class="center muted mt-2">We do not promise a fixed final price before reviewing your requirements. Every project receives a detailed written quotation for approval.</p>
+
+    <div class="pricing-grid mt-3">
       <?php foreach ($services as $s): $features = array_filter(array_map('trim', preg_split('/\r?\n/', (string)$s['features']))); ?>
         <div class="price-card">
           <div class="card-icon"><?= icon($s['icon']) ?></div>
           <h3><?= e($s['name']) ?></h3>
-          <p class="price-note" style="margin:2px 0 0"><?= e($s['price_note']) ?> <?= money($s['price'], $currency) ?></p>
-          <div class="amount small"><?= (float)$s['price_max'] > (float)$s['price'] ? 'up to ' . money($s['price_max'], $currency) : money($s['price'], $currency) ?></div>
+          <?php if ($s['price_note'] !== ''): ?><p class="price-note" style="margin:8px 0 0"><?= e($s['price_note']) ?></p><?php endif; ?>
+          <div class="amount"><?= e(service_price_display($s, $currency)) ?></div>
           <?php if ($s['delivery_days']): ?>
             <div class="deliver"><?= icon('clock') ?><span><?= (int)$s['delivery_days'] ?> day<?= (int)$s['delivery_days'] === 1 ? '' : 's' ?>+ delivery estimate</span></div>
           <?php endif; ?>

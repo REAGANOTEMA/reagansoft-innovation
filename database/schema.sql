@@ -71,9 +71,11 @@ CREATE TABLE services (
   name VARCHAR(150) NOT NULL,
   slug VARCHAR(160) NOT NULL UNIQUE,
   description TEXT NOT NULL,
-  price DECIMAL(14,2) NOT NULL DEFAULT 0,
-  price_max DECIMAL(14,2) NULL,        -- upper bound of range (NULL = quote-based)
-  price_note VARCHAR(120) NOT NULL DEFAULT 'Starting from',
+  price_min DECIMAL(14,2) NOT NULL DEFAULT 0,   -- lower bound of the price
+  price_max DECIMAL(14,2) NULL,                  -- upper bound (NULL = no range)
+  currency VARCHAR(8) NOT NULL DEFAULT 'UGX',
+  pricing_type ENUM('range','starting_from','contact_for_quote') NOT NULL DEFAULT 'starting_from',
+  price_note VARCHAR(120) NOT NULL DEFAULT '',   -- short label, e.g. "Professional websites"
   features TEXT NULL,                 -- one feature per line
   delivery_days INT UNSIGNED NULL,    -- estimated delivery time
   icon VARCHAR(60) NOT NULL DEFAULT 'code-s',   -- icon key from icon set

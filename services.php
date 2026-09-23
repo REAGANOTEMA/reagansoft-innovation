@@ -14,7 +14,7 @@ public_head([
   <div class="container">
     <span class="eyebrow">Services</span>
     <h1>Everything your business needs to go digital.</h1>
-    <p class="lead">Services are scoped individually after a short conversation. Ranges below are honest starting points in <?= e(settings('currency')) ?> — websites and e-commerce move up to <?= money(10000000, settings('currency')) ?>, while business systems and software grow up to <?= money(20000000, settings('currency')) ?>.</p>
+    <p class="lead">Services are scoped individually after a short conversation. Prices below are honest ranges in <?= e(settings('currency')) ?> — professional websites and e-commerce range from <?= money(PRICE_WEBSITE_MIN, settings('currency')) ?> to <?= money(PRICE_WEBSITE_MAX, settings('currency')) ?>, while custom business systems and software range from <?= money(PRICE_SYSTEM_MIN, settings('currency')) ?> to <?= money(PRICE_SYSTEM_MAX, settings('currency')) ?>.</p>
   </div>
 </section>
 
@@ -34,9 +34,9 @@ public_head([
           <?php endif; ?>
         </div>
       </div>
-      <div class="price-card" style="<?= $i % 2 === 0 ? '' : 'border-color:var(--line);box-shadow:var(--shadow-sm)' ?>">
-        <span class="price-note"><?= e($s['price_note']) ?> <?= money($s['price'], settings('currency')) ?></span>
-        <div class="amount"><?= (float)$s['price_max'] > (float)$s['price'] ? 'up to ' . money($s['price_max'], settings('currency')) : money($s['price'], settings('currency')) ?></div>
+      <div class="price-card svc-card" style="<?= $i % 2 === 0 ? '' : 'border-color:var(--line);box-shadow:var(--shadow-sm)' ?>">
+        <?php if ($s['price_note'] !== ''): ?><span class="price-note"><?= e($s['price_note']) ?></span><?php endif; ?>
+        <div class="amount"><?= e(service_price_display($s, settings('currency'))) ?></div>
         <?php if ($s['delivery_days']): ?>
           <div class="deliver"><?= icon('clock') ?><span>Estimated delivery: <?= (int)$s['delivery_days'] ?> day<?= (int)$s['delivery_days'] === 1 ? '' : 's' ?>+</span></div>
         <?php endif; ?>

@@ -46,6 +46,65 @@ function price_range(mixed $min, mixed $max, string $currency = 'UGX'): string {
     return money($min, $currency);
 }
 
+/* ------------------------------------------------------------------
+ * Authoritative service pricing architecture.
+ * These two ranges are the company's official pricing buckets. Every
+ * price shown in the UI comes from this model (or the services table).
+ * ------------------------------------------------------------------ */
+const PRICE_WEBSITE_MIN = 500000;        // professional websites & e-commerce
+const PRICE_WEBSITE_MAX = 10000000;
+const PRICE_SYSTEM_MIN  = 20000000;      // custom business systems & software
+const PRICE_SYSTEM_MAX  = 40000000;
+
+function money_compact(float $amount): string {
+    $abs = abs($amount);
+    if ($abs >= 1000000) return rtrim(rtrim(number_format($amount / 1000000, 1), '0'), '.') . 'M';
+    if ($abs >= 1000)    return rtrim(rtrim(number_format($amount / 1000, 1), '0'), '.') . 'K';
+    return number_format($amount, 0);
+}
+
+function pricing_type_label(string $type): string {
+    return [
+        'range'             => 'Range',
+        'starting_from'     => 'Starting from',
+        'contact_for_quote' => 'Contact for a quote',
+    ][$type] ?? 'Starting from';
+}
+
+/**
+ * Full, readable price for a service row, driven by the services table:
+ *  range            -> "UGX 500,000 – UGX 10,000,000"
+ *  starting_from    -> "From UGX 250,000"
+ *  contact_for_quote -> "Contact for a quote"
+ */
+function service_price_display(array $s, string $currency = ''): string {
+    $currency = $currency !== '' ? $currency : settings('currency');
+    $type = (string)($s['pricing_type'] ?? 'starting_from');
+    $min = (float)($s['price_min'] ?? 0);
+    $max = (float)($s['price_max'] ?? 0);
+    if ($type === 'contact_for_quote') return 'Contact for a quote';
+    if ($type === 'range') {
+        return $max > $min ? money($min, $currency) . ' – ' . money($max, $currency) : money($min, $currency);
+    }
+    return 'From ' . money($min, $currency);
+}
+
+/**
+ * Compact, short price for tight spaces (chips, selects, small cards):
+ *  range -> "UGX 500K – 10M"   starting_from -> "From UGX 250K"
+ */
+function service_price_short(array $s, string $currency = ''): string {
+    $currency = $currency !== '' ? $currency : settings('currency');
+    $type = (string)($s['pricing_type'] ?? 'starting_from');
+    $min = (float)($s['price_min'] ?? 0);
+    $max = (float)($s['price_max'] ?? 0);
+    if ($type === 'contact_for_quote') return 'Contact for a quote';
+    if ($type === 'range') {
+        return $max > $min ? $currency . ' ' . money_compact($min) . ' – ' . money_compact($max) : $currency . ' ' . money_compact($min);
+    }
+    return 'From ' . $currency . ' ' . money_compact($min);
+}
+
 function fmt_date(?string $date, string $format = 'd M Y'): string {
     if (!$date) {
         return '—';

@@ -15,9 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $name = trim($_POST['name'] ?? '');
         $slug = trim($_POST['slug'] ?? '');
         $description = trim($_POST['description'] ?? '');
-        $price = (float)($_POST['price'] ?? 0);
+        $priceMin = (float)($_POST['price_min'] ?? 0);
         $priceMax = ($_POST['price_max'] ?? '') !== '' ? (float)$_POST['price_max'] : null;
-        $priceNote = trim($_POST['price_note'] ?? 'From') ?: 'From';
+        $currency = trim($_POST['currency'] ?? 'UGX') ?: 'UGX';
+        $pricingType = $_POST['pricing_type'] ?? 'starting_from';
+        if (!in_array($pricingType, ['range', 'starting_from', 'contact_for_quote'], true)) $pricingType = 'starting_from';
+        $priceNote = trim($_POST['price_note'] ?? '') ?: '';
         $features = trim($_POST['features'] ?? '');
         $delivery = (int)($_POST['delivery_days'] ?? 0) ?: null;
         $icon = trim($_POST['icon'] ?? 'code-s');
@@ -27,20 +30,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($slug === '') { $slug = $slugify = trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($name)), '-'); }
         if ($name === '' || mb_strlen($name) > 150) $errors[] = 'Enter a service name.';
         if ($slug === '' || mb_strlen($slug) > 160) $errors[] = 'A valid slug is required.';
-        if ($price < 0) $errors[] = 'Starting price cannot be negative.';
-        if ($priceMax !== null && $priceMax < $price) $errors[] = 'The upper range must be at least the starting price.';
+        if ($currency === '' || mb_strlen($currency) > 8) $errors[] = 'Enter a currency code (e.g. UGX).';
+        if ($pricingType === 'range') {
+            if ($priceMin < 0 || $priceMax === null || $priceMax <= $priceMin) {
+                $errors[] = 'A range needs both a lower and a higher upper value.';
+            }
+        } elseif ($priceMin < 0) {
+            $errors[] = 'Lower price cannot be negative.';
+        }
+        if ($pricingType === 'contact_for_quote') { $priceMin = 0; $priceMax = null; }
         if ($status !== 'active' && $status !== 'inactive') $status = 'active';
 
         if ($errors) { set_errors($errors); redirect(app_url('admin/services.php')); }
 
         if ($id > 0) {
-            $pdo->prepare('UPDATE services SET name=?, slug=?, description=?, price=?, price_max=?, price_note=?, features=?, delivery_days=?, icon=?, status=?, sort_order=? WHERE id=?')
-                ->execute([$name, $slug, $description, $price, $priceMax, $priceNote, $features, $delivery, $icon, $status, $sortOrder, $id]);
+            $pdo->prepare('UPDATE services SET name=?, slug=?, description=?, price_min=?, price_max=?, currency=?, pricing_type=?, price_note=?, features=?, delivery_days=?, icon=?, status=?, sort_order=? WHERE id=?')
+                ->execute([$name, $slug, $description, $priceMin, $priceMax, $currency, $pricingType, $priceNote, $features, $delivery, $icon, $status, $sortOrder, $id]);
             audit('service_updated', 'services', $id, 'Updated "' . $name . '"');
             flash('success', 'Service updated.');
         } else {
-            $pdo->prepare('INSERT INTO services (name, slug, description, price, price_max, price_note, features, delivery_days, icon, status, sort_order) VALUES (?,?,?,?,?,?,?,?,?,?,?)')
-                ->execute([$name, $slug, $description, $price, $priceMax, $priceNote, $features, $delivery, $icon, $status, $sortOrder]);
+            $pdo->prepare('INSERT INTO services (name, slug, description, price_min, price_max, currency, pricing_type, price_note, features, delivery_days, icon, status, sort_order) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)')
+                ->execute([$name, $slug, $description, $priceMin, $priceMax, $currency, $pricingType, $priceNote, $features, $delivery, $icon, $status, $sortOrder]);
             audit('service_created', 'services', (int)$pdo->lastInsertId(), 'Created "' . $name . '"');
             flash('success', 'Service created.');
         }
@@ -94,11 +104,21 @@ dashboard_head(['title' => 'Services', 'active' => 'services', 'crumb' => 'Servi
       </div>
       <div class="field"><label for="description">Description *</label><textarea class="textarea" id="description" name="description" required rows="3"><?= e($edit['description'] ?? '') ?></textarea></div>
       <div class="form-row">
-        <div class="field"><label for="price">Starting price (<?= e($currency) ?>) *</label><input class="input" id="price" name="price" type="number" min="0" step="100" required value="<?= e($edit ? (string)$edit['price'] : '') ?>"></div>
-        <div class="field"><label for="price_max">Upper range (<?= e($currency) ?>)</label><input class="input" id="price_max" name="price_max" type="number" min="0" step="100" value="<?= e($edit && $edit['price_max'] !== null ? (string)$edit['price_max'] : '') ?>" placeholder="Optional — up to figure"></div>
+        <div class="field"><label for="pricing_type">Pricing type</label>
+          <select class="select" id="pricing_type" name="pricing_type">
+            <?php foreach (['range' => 'Range (min – max)', 'starting_from' => 'Starting from (min only)', 'contact_for_quote' => 'Contact for a quote'] as $k => $v): ?>
+              <option value="<?= $k ?>" <?= ($edit['pricing_type'] ?? 'range') === $k ? 'selected' : '' ?>><?= $v ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+        <div class="field"><label for="currency">Currency</label><input class="input" id="currency" name="currency" maxlength="8" value="<?= e($edit['currency'] ?? $currency) ?>"></div>
       </div>
       <div class="form-row">
-        <div class="field"><label for="price_note">Price label</label><input class="input" id="price_note" name="price_note" maxlength="120" value="<?= e($edit['price_note'] ?? 'From') ?>"></div>
+        <div class="field"><label for="price_min">Lower price (<?= e($currency) ?>) *</label><input class="input" id="price_min" name="price_min" type="number" min="0" step="100" required value="<?= e($edit ? (string)$edit['price_min'] : '') ?>"></div>
+        <div class="field"><label for="price_max">Upper price (<?= e($currency) ?>)</label><input class="input" id="price_max" name="price_max" type="number" min="0" step="100" value="<?= e($edit && $edit['price_max'] !== null ? (string)$edit['price_max'] : '') ?>" placeholder="Required for ranges"></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label for="price_note">Short price label</label><input class="input" id="price_note" name="price_note" maxlength="120" value="<?= e($edit['price_note'] ?? '') ?>" placeholder="e.g. Professional websites"></div>
         <div class="field"><label for="delivery_days">Delivery estimate (days)</label><input class="input" id="delivery_days" name="delivery_days" type="number" min="0" value="<?= e($edit && $edit['delivery_days'] !== null ? (string)$edit['delivery_days'] : '') ?>"></div>
       </div>
       <div class="form-row">
@@ -129,8 +149,8 @@ dashboard_head(['title' => 'Services', 'active' => 'services', 'crumb' => 'Servi
         <tbody>
           <?php foreach ($services as $s): ?>
             <tr>
-              <td><span class="row-title"><?= e($s['name']) ?></span><div class="row-sub"><?= e($s['slug']) ?></div></td>
-              <td><b><?= money($s['price'], $currency) ?></b><?= $s['price_max'] !== null && (float)$s['price_max'] > (float)$s['price'] ? ' <span class="muted small">up to ' . money($s['price_max'], $currency) . '</span>' : '' ?></td>
+              <td><span class="row-title"><?= e($s['name']) ?></span><div class="row-sub"><?= e($s['slug']) ?> · <span class="badge gray"><?= e(pricing_type_label($s['pricing_type'])) ?></span></div></td>
+              <td><b><?= e(service_price_display($s, $currency)) ?></b></td>
               <td class="small"><?= $s['delivery_days'] ? (int)$s['delivery_days'] . ' days+' : '—' ?></td>
               <td class="small"><?= (int)$s['sort_order'] ?></td>
               <td><?= status_badge($s['status']) ?></td>

@@ -31,13 +31,14 @@ USE reagan_soft_innovation;
 -- ============================================================
 -- 01 · SERVICES
 -- ============================================================
--- price       = honest entry-level figure (UGX)
--- price_max   = realistic upper bound for that service in UGX
---               · websites / e-commerce  up to 10,000,000
---               · systems / software     up to 20,000,000
+-- price_min / price_max = the authoritative service ranges (UGX)
+--               · websites / e-commerce        500,000 – 10,000,000
+--               · business systems / software  20,000,000 – 40,000,000
+--               · branding / maintenance       starting price only
+--               · custom solutions             contact for a quote
 -- ============================================================
-INSERT INTO services (name, slug, description, price, price_max, price_note, features, delivery_days, icon, status, sort_order) VALUES
-('Business Website Development', 'business-website', 'A professional, responsive company website with clear structure, contact integration, SEO foundations and a design that represents your brand.', 800000, 10000000, 'From',
+INSERT INTO services (name, slug, description, price_min, price_max, currency, pricing_type, price_note, features, delivery_days, icon, status, sort_order) VALUES
+('Business Website Development', 'business-website', 'A professional, responsive company website with clear structure, contact integration, SEO foundations and a design that represents your brand.', 500000, 10000000, 'UGX', 'range', 'Professional websites',
  'Custom responsive design for mobile, tablet and desktop
 Contact & enquiry form
 WhatsApp and phone integration
@@ -46,7 +47,7 @@ Google Map & business details
 Training on how to manage content',
   14, 'globe', 'active', 1),
 
-('E-Commerce Development', 'ecommerce', 'Online stores with product catalogues, order management and a payment architecture ready for mobile money and bank integration.', 3000000, 10000000, 'From',
+('E-Commerce Development', 'ecommerce', 'Online stores with product catalogues, order management and a payment architecture ready for mobile money and bank integration.', 500000, 10000000, 'UGX', 'range', 'Websites & online stores',
  'Product catalogue and categories
 Shopping cart and checkout
 Order management dashboard
@@ -55,7 +56,7 @@ Inventory management
 Delivery and order tracking',
   30, 'cart', 'active', 2),
 
-('Custom Business Systems', 'business-systems', 'Client portals, internal management systems, dashboards, workflow automation and database-driven tools built around your real business processes.', 4000000, 20000000, 'From',
+('Custom Business Systems', 'business-systems', 'Client portals, internal management systems, dashboards, workflow automation and database-driven tools built around your real business processes.', 20000000, 40000000, 'UGX', 'range', 'Custom business systems',
  'Role-based user access
 Dashboards and reports
 Form and data management
@@ -64,7 +65,7 @@ Database design and optimisation
 User training and handover',
   30, 'cpu', 'active', 3),
 
-('Software Development', 'software-dev', 'Custom web applications and internal business systems built with modern PHP/MySQL technology, secure by default and tailored to you.', 2500000, 20000000, 'From',
+('Software Development', 'software-dev', 'Custom web applications and internal business systems built with modern PHP/MySQL technology, secure by default and tailored to you.', 20000000, 40000000, 'UGX', 'range', 'Custom software & business systems',
  'Requirements analysis
 Custom database design
 Secure authentication
@@ -73,7 +74,7 @@ API-ready architecture
 Deployment and support',
   30, 'code-s', 'active', 4),
 
-('Custom Digital Solutions', 'custom-solutions', 'A specific business problem that does not fit an off-the-shelf package? We design and build the right digital solution for it.', 1500000, 20000000, 'From',
+('Custom Digital Solutions', 'custom-solutions', 'A specific business problem that does not fit an off-the-shelf package? We design and build the right digital solution for it.', 0, NULL, 'UGX', 'contact_for_quote', 'Contact for a quote',
  'Consultation and scoping
 Feasibility recommendation
 Bespoke design and build
@@ -82,7 +83,7 @@ Deployment
 Ongoing support',
   21, 'layers', 'active', 5),
 
-('Graphic & Branding Design', 'branding', 'Logos, brand guidelines, business cards, posters and digital design that give your company a consistent and professional identity.', 250000, 1000000, 'From',
+('Graphic & Branding Design', 'branding', 'Logos, brand guidelines, business cards, posters and digital design that give your company a consistent and professional identity.', 250000, NULL, 'UGX', 'starting_from', 'From',
  'Logo design options
 Brand colour and typography
 Business cards and letterheads
@@ -91,7 +92,7 @@ Print-ready file delivery
 Usage guideline document',
   7, 'palette', 'active', 6),
 
-('Website Maintenance', 'maintenance', 'Security updates, backups, content changes and technical support so your website stays fast, safe and up to date.', 150000, 800000, 'From',
+('Website Maintenance', 'maintenance', 'Security updates, backups, content changes and technical support so your website stays fast, safe and up to date.', 150000, NULL, 'UGX', 'starting_from', 'From',
  'Monthly security checks
 Regular backups
 Content and image updates

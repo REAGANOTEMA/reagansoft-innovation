@@ -9,7 +9,6 @@ try {
     log_error('home services query: ' . $e->getMessage());
 }
 
-$featured = array_slice($services, 0, 3);
 $completed = 0;
 try {
     $s = $pdo->query("SELECT COUNT(*) c FROM projects WHERE status='COMPLETED'")->fetch();
@@ -27,11 +26,23 @@ public_head([
   <div class="container hero-inner">
     <div>
       <span class="hero-tag"><span class="dot" aria-hidden="true"></span> Software · Websites · Business Systems — Jinja, Uganda</span>
-      <h1>We build digital tools that <span class="accent">move your business forward.</span></h1>
-      <p class="lead">Reagan Soft Innovation is the small team in Jinja that builds websites, business systems and custom software for businesses like yours — and keeps you in the loop through a simple client portal. No jargon, no guessing.</p>
+      <h1>Building digital solutions that <span class="accent">move your business forward.</span></h1>
+      <p class="lead">Reagan Soft Innovation Limited creates professional websites, custom business systems, e-commerce platforms, software, branding and digital solutions — and keeps you in the loop through a simple client portal. No jargon, no guessing.</p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="<?= app_url('register.php') ?>"><?= icon('arrow') ?> Start a Project</a>
-        <a class="btn btn-ghost" href="<?= app_url('services.php') ?>">See What We Build</a>
+        <a class="btn btn-ghost" href="<?= app_url('services.php') ?>">View Our Services</a>
+      </div>
+      <div class="hero-pricing">
+        <div class="hero-price-item">
+          <span class="hp-label">Web Development</span>
+          <span class="hp-value"><?= e(settings('currency')) ?> <?= money_compact(PRICE_WEBSITE_MIN) ?> – <?= money_compact(PRICE_WEBSITE_MAX) ?></span>
+          <span class="hp-sub">Professional websites &amp; online stores</span>
+        </div>
+        <div class="hero-price-item">
+          <span class="hp-label">Business Systems</span>
+          <span class="hp-value"><?= e(settings('currency')) ?> <?= money_compact(PRICE_SYSTEM_MIN) ?> – <?= money_compact(PRICE_SYSTEM_MAX) ?></span>
+          <span class="hp-sub">Custom systems &amp; software</span>
+        </div>
       </div>
       <div class="hero-trust">
         <span><span class="tick"><?= icon('check') ?></span> You can request work online</span>
@@ -39,14 +50,19 @@ public_head([
         <span><span class="tick"><?= icon('check') ?></span> Honest, upfront pricing</span>
       </div>
       <div class="hero-byline">
-        <img src="<?= app_url('assets/img/founder.webp') ?>" alt="Reagan Otema, founder" width="40" height="40">
+        <img src="<?= app_url('assets/img/founder.webp') ?>" alt="Reagan Otema, founder" width="40" height="40" loading="eager" fetchpriority="high">
         <span>Built by <b>Reagan Otema</b>, founder — Jinja, Uganda</span>
       </div>
       <p class="hero-motto"><?= icon('rocket') ?> <?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></p>
     </div>
     <div class="hero-visual">
       <div class="hero-stage">
-        <img class="hero-shot" src="<?= app_url('assets/img/computer-setup1.webp') ?>" alt="Reagan Soft Innovation at work on a client build in Jinja">
+        <img class="hero-shot" src="<?= app_url('assets/img/cover.png') ?>"
+             srcset="<?= app_url('assets/img/cover-640.webp') ?> 640w, <?= app_url('assets/img/cover-960.webp') ?> 960w, <?= app_url('assets/img/cover-1600.webp') ?> 1600w"
+             sizes="(max-width: 900px) 100vw, 600px"
+             width="1672" height="941"
+             alt="Reagan Soft Innovation Limited — digital solutions, websites and business systems built in Jinja, Uganda"
+             loading="eager" fetchpriority="high" decoding="async">
         <span class="hero-wash" aria-hidden="true"></span>
         <span class="hero-chip chip-top"><span class="live-dot"></span> Online — Jinja, Uganda</span>
         <span class="hero-chip chip-mid"><?= icon('folder') ?><b><?= max(1, $completed) ?>+</b> projects delivered</span>
@@ -79,7 +95,7 @@ public_head([
           <?php if ($s['delivery_days']): ?>
             <div class="deliver" style="margin-top:12px"><?= icon('clock') ?><span>Delivery from <?= (int)$s['delivery_days'] ?> days</span></div>
           <?php endif; ?>
-          <div class="price"><?= e($s['price_note']) ?> <strong><?= money($s['price'], settings('currency')) ?></strong></div>
+          <div class="price"><?= $s['price_note'] !== '' ? e($s['price_note']) . ' ' : '' ?><strong><?= e(service_price_display($s, settings('currency'))) ?></strong></div>
           <a class="btn btn-ghost btn-sm mt-2" href="<?= app_url('services.php#' . $s['slug']) ?>">Request service <?= icon('arrow') ?></a>
         </article>
       <?php endforeach; ?>
@@ -162,29 +178,30 @@ public_head([
   </div>
 </section>
 
-<?php if ($featured): ?>
 <section class="section" id="pricing-home">
   <div class="container">
     <div class="section-head">
-      <div><span class="eyebrow">Transparent pricing</span><h2>Starting prices, clearly stated.</h2></div>
-      <p>Every project is scoped individually — websites build up to <?= money(10000000, settings('currency')) ?> and business systems up to <?= money(20000000, settings('currency')) ?>.</p>
+      <div><span class="eyebrow">Transparent pricing</span><h2>Two clear ranges. No surprises.</h2></div>
+      <p>As a custom studio we never promise a fixed price before we review your requirements — a written quotation is always approved by you first.</p>
     </div>
-    <div class="pricing-grid">
-      <?php foreach ($featured as $i => $s): ?>
-        <div class="price-card <?= $i === 1 ? 'featured' : '' ?>">
-          <div class="card-icon"><?= icon($s['icon']) ?></div>
-          <h3><?= e($s['name']) ?></h3>
-          <p class="price-note"><?= e($s['price_note']) ?> <?= money($s['price'], settings('currency')) ?></p>
-          <div class="amount"><?= (float)$s['price_max'] > (float)$s['price'] ? 'up to ' . money($s['price_max'], settings('currency')) : money($s['price'], settings('currency')) ?></div>
-          <div class="deliver"><?= icon('clock') ?><span><?= (int)$s['delivery_days'] ?> day<?= ((int)$s['delivery_days']) === 1 ? '' : 's' ?>+ delivery estimate</span></div>
-          <a class="btn <?= $i === 1 ? 'btn-primary' : 'btn-ghost' ?>" href="<?= app_url('services.php#' . $s['slug']) ?>">Request this service <?= icon('arrow') ?></a>
-        </div>
-      <?php endforeach; ?>
+    <div class="pricing-band">
+      <div class="pband-card">
+        <span class="card-icon"><?= icon('globe') ?></span>
+        <h3>Professional Websites</h3>
+        <p>Company websites, online stores and web platforms — scoped by pages, design, features and integrations.</p>
+        <div class="pband-amount"><?= money(PRICE_WEBSITE_MIN, settings('currency')) ?><span>–</span><?= money(PRICE_WEBSITE_MAX, settings('currency')) ?></div>
+        <a class="btn btn-primary" href="<?= app_url('pricing.php#websites') ?>">Explore website pricing <?= icon('arrow') ?></a>
+      </div>
+      <div class="pband-card alt">
+        <span class="card-icon"><?= icon('cpu') ?></span>
+        <h3>Custom Business Systems</h3>
+        <p>Portals, management systems, dashboards and automation — scoped by modules, roles, workflows and integrations.</p>
+        <div class="pband-amount"><?= money(PRICE_SYSTEM_MIN, settings('currency')) ?><span>–</span><?= money(PRICE_SYSTEM_MAX, settings('currency')) ?></div>
+        <a class="btn btn-light" href="<?= app_url('pricing.php#systems') ?>">Explore systems pricing <?= icon('arrow') ?></a>
+      </div>
     </div>
-    <p class="center mt-3"><a href="<?= app_url('pricing.php') ?>">View all services &amp; pricing <?= icon('arrow') ?></a></p>
   </div>
 </section>
-<?php endif; ?>
 
 <section class="section section-soft" id="about-home">
   <div class="container">
