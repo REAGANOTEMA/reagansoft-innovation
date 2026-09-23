@@ -227,13 +227,13 @@ public_head([
   <div class="container">
     <div class="cta">
       <div>
-        <span class="eyebrow" style="color:#7fd0ff">Let's build</span>
+        <span class="eyebrow">Let's build</span>
         <h2>Have a project in mind?</h2>
         <p>Register and send your first request through the secure client portal. We will review it and respond with a clear plan.</p>
       </div>
       <div style="display:flex;gap:12px;flex-wrap:wrap">
         <a class="btn btn-light" href="<?= app_url('register.php') ?>">Create client account</a>
-        <a class="btn btn-outline" style="border-color:#7fd0ff;color:#fff" href="<?= app_url('contact.php') ?>">Contact us</a>
+        <a class="btn btn-outline" href="<?= app_url('contact.php') ?>">Contact us</a>
       </div>
     </div>
   </div>

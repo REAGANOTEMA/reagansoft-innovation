@@ -47,7 +47,7 @@ public_head([
     </div>
     <div class="cta" style="margin-top:60px">
       <div>
-        <span class="eyebrow" style="color:#7fd0ff">Still have questions?</span>
+        <span class="eyebrow">Still have questions?</span>
         <h2>Ask us directly.</h2>
         <p>We respond quickly with practical answers — even if the answer is that you do not need our services.</p>
       </div>

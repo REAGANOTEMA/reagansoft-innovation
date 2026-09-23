@@ -73,7 +73,7 @@ dashboard_head(['title' => 'Files', 'active' => 'files', 'crumb' => 'Files']);
     <h2>All project files</h2>
     <p class="sub">Every uploaded file across projects. Files are private and served only to authorised users.</p>
   </div>
-  <div class="stat" style="padding:0;box-shadow:none"><small>Total storage</small><strong><?= human_bytes($totalBytes) ?></strong></div>
+  <div class="stat"><small>Total storage</small><strong><?= human_bytes($totalBytes) ?></strong></div>
 </div>
 
 <?php render_alerts(); ?>
@@ -97,11 +97,11 @@ dashboard_head(['title' => 'Files', 'active' => 'files', 'crumb' => 'Files']);
   <?php if ($files): ?>
     <div class="grid-3">
       <?php foreach ($files as $f): $ext = strtolower(pathinfo($f['original_name'], PATHINFO_EXTENSION)); ?>
-        <article class="file-card" style="display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--radius);padding:16px;gap:8px">
+        <article class="file-card stack">
           <div style="display:flex;gap:12px;align-items:center">
             <span class="fc-icon"><?= icon(in_array($ext, ['pdf'], true) ? 'doc' : 'file') ?></span>
             <div style="min-width:0">
-              <b class="small" style="word-break:break-word"><?= e($f['original_name']) ?></b>
+              <b class="small"><?= e($f['original_name']) ?></b>
               <div class="row-sub"><?= human_bytes((float)$f['size_bytes']) ?> · <?= strtoupper((string)$ext) ?></div>
             </div>
           </div>
@@ -115,7 +115,7 @@ dashboard_head(['title' => 'Files', 'active' => 'files', 'crumb' => 'Files']);
                 <?= csrf_field() ?>
                 <input type="hidden" name="action" value="delete_file">
                 <input type="hidden" name="file_id" value="<?= (int)$f['id'] ?>">
-                <button class="btn btn-ghost btn-sm" type="submit"><?= icon('trash') ?> Delete</button>
+                <button class="btn btn-danger btn-sm" type="submit"><?= icon('trash') ?> Delete</button>
               </form>
             <?php endif; ?>
           </div>

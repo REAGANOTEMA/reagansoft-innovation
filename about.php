@@ -103,7 +103,7 @@ public_head([
   <div class="container">
     <div class="about-grid">
       <div class="info-card">
-        <span class="eyebrow" style="color:#7fd0ff">Get started</span>
+        <span class="eyebrow">Get started</span>
         <h3>Create a client account</h3>
         <p>Sign up free, send a project request and get a written response from our team.</p>
         <a class="btn btn-light mt-2" href="<?= app_url('register.php') ?>">Start a project <?= icon('arrow') ?></a>

@@ -162,7 +162,7 @@ dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' =>
     </section>
     <section class="panel">
       <div class="panel-head"><h3>Progress</h3><strong><?= (int)$project['progress'] ?>%</strong></div>
-      <div class="progress" style="height:12px"><span style="width:<?= max(0, min(100, (int)$project['progress'])) ?>%"></span></div>
+      <div class="progress lg"><span style="width:<?= max(0, min(100, (int)$project['progress'])) ?>%"></span></div>
       <h4 class="mt-3">Project timeline</h4>
       <?php render_milestones($project['status']); ?>
       <?php if ($project['status'] === 'WAITING_FOR_CLIENT'):
@@ -172,7 +172,7 @@ dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' =>
       else:
         $hint = '';
       endif; ?>
-      <?php if ($hint): ?><div class="alert info" style="margin-top:16px"><?= e($hint) ?></div><?php endif; ?>
+      <?php if ($hint): ?><div class="alert info mt-2"><?= e($hint) ?></div><?php endif; ?>
     </section>
   </div>
 <?php elseif ($tab === 'tasks'): ?>

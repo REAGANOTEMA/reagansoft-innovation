@@ -67,6 +67,16 @@ cmd /c "C:\xampp\mysql\bin\mysql.exe -u root reagan_soft_innovation < database\s
 cmd /c "C:\xampp\mysql\bin\mysql.exe -u root reagan_soft_innovation < database\seed.sql"
 ```
 
+Account-only scripts (idempotent, safe to run after any of the above):
+
+```powershell
+cmd /c "C:\xampp\mysql\bin\mysql.exe -u root reagan_soft_innovation < database\admin.sql"
+cmd /c "C:\xampp\mysql\bin\mysql.exe -u root reagan_soft_innovation < database\client.sql"
+```
+
+`admin.sql` (re)creates the admin and staff logins; `client.sql` does the same for the
+client accounts. Both upsert by email, so they never create duplicates.
+
 3. Configuration is read from `config/config.php`; override in production via environment:
 
 | Variable            | Default                          |

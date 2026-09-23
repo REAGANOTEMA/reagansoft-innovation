@@ -85,7 +85,7 @@ public_head([
   <div class="container">
     <div class="cta">
       <div>
-        <span class="eyebrow" style="color:#7fd0ff">Your project could be next</span>
+        <span class="eyebrow">Your project could be next</span>
         <h2>Spotted a problem our software can solve?</h2>
         <p>Send a request and see how we would approach it.</p>
       </div>

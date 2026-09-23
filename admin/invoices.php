@@ -207,7 +207,7 @@ dashboard_head(['title' => 'Invoices', 'active' => 'invoices', 'crumb' => 'Invoi
                       <input type="hidden" name="action" value="inv_status">
                       <input type="hidden" name="invoice_id" value="<?= (int)$i['id'] ?>">
                       <input type="hidden" name="status" value="cancelled">
-                      <button class="btn btn-ghost btn-sm" type="submit">Cancel</button>
+                      <button class="btn btn-danger btn-sm" type="submit">Cancel</button>
                     </form>
                   <?php endif; ?>
                 </div>

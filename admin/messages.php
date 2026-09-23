@@ -83,11 +83,11 @@ dashboard_head(['title' => 'Messages', 'active' => 'messages', 'crumb' => 'Messa
   <?php if ($convs): ?>
     <div class="panel">
       <?php foreach ($convs as $m): ?>
-        <div class="convo-row" style="padding:18px 0;border-bottom:1px solid var(--line);display:flex;gap:16px;justify-content:space-between;align-items:center;flex-wrap:wrap">
+        <div class="convo-row">
           <div style="flex-grow:1;min-width:240px">
             <a class="row-title" href="<?= app_url('admin/project.php?id=' . (int)$m['project_id'] . '&tab=messages') ?>"><?= e($m['project_title']) ?></a>
             <div class="row-sub"><?= e($m['ref_no']) ?> · <?= $m['sender_role'] === 'client' ? '<b class="badge green">Client</b>' : '<span class="badge blue">Staff</span>' ?> <?= e($m['sender_name']) ?> · <?= time_ago($m['created_at']) ?></div>
-            <p class="small mt-1" style="margin-bottom:0"><?= e(truncate($m['message'], 200)) ?></p>
+            <p class="small mt-1 mb-0"><?= e(truncate($m['message'], 200)) ?></p>
             <p class="small muted mt-1" style="margin-bottom:0"><?= (int)$m['client_msgs'] ?> client message<?= (int)$m['client_msgs'] === 1 ? '' : 's' ?> in this thread</p>
           </div>
           <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
@@ -109,7 +109,7 @@ dashboard_head(['title' => 'Messages', 'active' => 'messages', 'crumb' => 'Messa
           </select>
         </div>
         <div class="field"><label for="message">Message *</label><textarea class="textarea" id="message" name="message" required rows="4" placeholder="Write your reply to the client…"></textarea></div>
-        <label class="check" style="display:flex;gap:8px;align-items:center;margin:10px 0">
+        <label class="check" style="margin:10px 0">
           <input type="checkbox" name="is_internal" value="1"><span class="small">Internal note — visible only to staff (the client will not see it)</span>
         </label>
         <button class="btn btn-primary" type="submit"><?= icon('send') ?> Send message</button>
@@ -122,7 +122,7 @@ dashboard_head(['title' => 'Messages', 'active' => 'messages', 'crumb' => 'Messa
 <?php else: ?>
   <?php if ($contacts): ?>
     <?php foreach ($contacts as $c): ?>
-      <section class="panel <?= $c['is_read'] ? '' : 'is-unread' ?>" style="<?= $c['is_read'] ? '' : 'border-left:4px solid var(--blue)' ?>">
+      <section class="panel<?= $c['is_read'] ? '' : ' is-unread' ?>">
         <div style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:flex-start">
           <div>
             <h3 style="margin:0 0 2px"><?= e($c['full_name']) ?><?= $c['is_read'] ? '' : ' <span class="badge blue">New</span>' ?></h3>
@@ -144,11 +144,11 @@ dashboard_head(['title' => 'Messages', 'active' => 'messages', 'crumb' => 'Messa
               <?= csrf_field() ?>
               <input type="hidden" name="action" value="contact_delete">
               <input type="hidden" name="contact_id" value="<?= (int)$c['id'] ?>">
-              <button class="btn btn-ghost btn-sm" type="submit"><?= icon('trash') ?> Delete</button>
+              <button class="btn btn-danger btn-sm" type="submit"><?= icon('trash') ?> Delete</button>
             </form>
           </div>
         </div>
-        <div class="panel-quote mt-2" style="background:var(--sky-50);border-radius:var(--radius);padding:14px 16px;color:var(--ink-2)"><?= nl2br(e($c['message'])) ?></div>
+        <div class="panel-quote mt-2"><?= nl2br(e($c['message'])) ?></div>
       </section>
     <?php endforeach; ?>
   <?php else: ?>

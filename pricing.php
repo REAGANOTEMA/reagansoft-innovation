@@ -84,7 +84,7 @@ public_head([
 
     <div class="cta" style="margin-top:60px">
       <div>
-        <span class="eyebrow" style="color:#7fd0ff">How quotations work</span>
+        <span class="eyebrow">How quotations work</span>
         <h2>What happens after you send a request?</h2>
         <p>The team reviews your requirements, prepares a detailed quotation with line items and agreed terms, and sends it to your client portal for approval.</p>
       </div>

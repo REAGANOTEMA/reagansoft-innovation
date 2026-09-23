@@ -21,7 +21,7 @@ public_head([
 <?php foreach ($services as $i => $s): $features = array_filter(array_map('trim', preg_split('/\r?\n/', (string)$s['features']))); ?>
 <section class="section <?= $i % 2 === 1 ? 'section-soft' : '' ?>" id="<?= e($s['slug']) ?>">
   <div class="container">
-    <div class="service-block" style="display:grid;grid-template-columns:1.1fr .9fr;gap:44px;align-items:center">
+    <div class="service-block">
       <div>
         <div class="card-icon"><?= icon($s['icon']) ?></div>
         <h2><?= e($s['name']) ?></h2>
@@ -56,7 +56,7 @@ public_head([
   <div class="container">
     <div class="cta">
       <div>
-        <span class="eyebrow" style="color:#7fd0ff">Not sure where to start?</span>
+        <span class="eyebrow">Not sure where to start?</span>
         <h2>Tell us about your project.</h2>
         <p>We will review your requirements and recommend the right service — or a simpler, cheaper alternative if one exists.</p>
       </div>

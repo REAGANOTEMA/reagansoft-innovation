@@ -410,7 +410,7 @@ dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' =>
   </div>
   <section class="panel">
     <div class="panel-head"><h3>Timeline &amp; progress</h3><strong><?= (int)$project['progress'] ?>% overall</strong></div>
-    <div class="progress" style="height:12px;margin-bottom:24px"><span style="width:<?= max(0, min(100, (int)$project['progress'])) ?>%"></span></div>
+    <div class="progress lg" style="margin-bottom:24px"><span style="width:<?= max(0, min(100, (int)$project['progress'])) ?>%"></span></div>
     <div class="grid-2">
       <div><?php render_milestones($project['status']); ?></div>
       <div>
@@ -666,7 +666,7 @@ dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' =>
         <?= csrf_field() ?>
         <input type="hidden" name="action" value="create_quotation">
         <div class="line-items">
-          <div class="line-item" style="display:grid;grid-template-columns:1fr 90px 120px 34px;gap:8px;margin-bottom:8px">
+          <div class="line-item">
             <input class="input" name="items[d][description]" placeholder="Description" required>
             <input class="input" name="items[d][qty]" type="number" min="1" step="1" value="1" placeholder="Qty" required>
             <input class="input" name="items[d][price]" type="number" min="0" step="100" placeholder="Unit price" required>
@@ -750,7 +750,7 @@ dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' =>
         <?= csrf_field() ?>
         <input type="hidden" name="action" value="create_invoice">
         <div class="line-items">
-          <div class="line-item" style="display:grid;grid-template-columns:1fr 90px 120px 34px;gap:8px;margin-bottom:8px">
+          <div class="line-item">
             <input class="input" name="items[d][description]" placeholder="Description" required>
             <input class="input" name="items[d][qty]" type="number" min="1" step="1" value="1" placeholder="Qty" required>
             <input class="input" name="items[d][price]" type="number" min="0" step="100" placeholder="Unit price" required>
@@ -795,7 +795,7 @@ dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' =>
 <?php endif; ?>
 
 <template id="line-item-template">
-  <div class="line-item" style="display:grid;grid-template-columns:1fr 90px 120px 34px;gap:8px;margin-bottom:8px">
+  <div class="line-item">
     <input class="input" name="items[n][description]" placeholder="Description" required>
     <input class="input" name="items[n][qty]" type="number" min="1" step="1" value="1" placeholder="Qty" required>
     <input class="input" name="items[n][price]" type="number" min="0" step="100" placeholder="Unit price" required>
