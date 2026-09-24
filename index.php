@@ -15,6 +15,13 @@ try {
     $completed = (int)$s['c'];
 } catch (Throwable $e) { /* not installed yet */ }
 
+$bandService = [
+    'websites' => 1,
+    'receipts' => 9,
+    'apps'     => 8,
+    'systems'  => 3,
+];
+
 public_head([
     'title'     => 'Software Development & Digital Solutions in Jinja, Uganda',
     'desc'      => 'Reagan Soft Innovation Limited builds professional websites, business systems, e-commerce and custom software in Jinja, Uganda. Start your project through our secure client portal.',
@@ -35,8 +42,8 @@ public_head([
     <h1>Building digital solutions that <span class="accent">move your business forward.</span></h1>
     <p class="lead">Reagan Soft Innovation Limited creates professional websites, custom business systems, e-commerce platforms, software, branding and digital solutions — and keeps you in the loop through a simple client portal.</p>
     <div class="hero-actions">
-      <a class="btn btn-primary" href="<?= app_url('register.php') ?>"><?= icon('arrow') ?> Start a Project</a>
-      <a class="btn btn-ghost" href="<?= app_url('services.php') ?>">View Our Services</a>
+      <a class="btn btn-primary" href="<?= app_url('checkout.php') ?>"><?= icon('rocket') ?> Start a Project</a>
+      <a class="btn btn-ghost" href="<?= app_url('pricing.php') ?>">View services &amp; pricing</a>
     </div>
   </div>
 </section>
@@ -90,7 +97,7 @@ public_head([
           <h3><?= e($s['name']) ?></h3>
           <p><?= e($s['description']) ?></p>
           <div class="svc-price"><?php $srvPrice = service_price_display($s, settings('currency')); $srvNote = trim((string)$s['price_note']); if ($srvNote !== '' && mb_stripos($srvPrice, $srvNote) === false): ?><span class="svc-note"><?= e($srvNote) ?></span><?php endif; ?><strong><?= e($srvPrice) ?></strong></div>
-          <a class="svc-btn" href="<?= app_url('services.php#' . $s['slug']) ?>"><span>Request service</span><?= icon('arrow') ?></a>
+          <a class="svc-btn" href="<?= app_url('checkout.php?service=' . (int)$s['id']) ?>"><span>Choose this program</span><?= icon('arrow') ?></a>
         </article>
       <?php endforeach; ?>
     </div>
@@ -164,7 +171,7 @@ public_head([
     </div>
     <div class="steps">
       <div class="step"><span class="step-num">STEP 01</span><h3>Create account</h3><p>Register your name, company, phone and email — takes less than a minute.</p></div>
-      <div class="step"><span class="step-num">STEP 02</span><h3>Send a request</h3><p>Describe what you need, add your budget and attach any supporting files.</p></div>
+      <div class="step"><span class="step-num">STEP 02</span><h3>Choose program &amp; pay</h3><p>Pick the program for your project and secure it with a one-time deposit.</p></div>
       <div class="step"><span class="step-num">STEP 03</span><h3>We review &amp; quote</h3><p>Our team reviews the work, agrees scope and sends a professional quotation.</p></div>
       <div class="step"><span class="step-num">STEP 04</span><h3>Track delivery</h3><p>Follow tasks, progress, messages and completion from your dashboard.</p></div>
     </div>
@@ -176,7 +183,7 @@ public_head([
   <div class="container">
     <div class="section-head">
       <div><span class="eyebrow">Transparent pricing</span><h2>Clear ranges. No surprises.</h2></div>
-      <p>As a custom studio we never promise a fixed price before we review your requirements — a written quotation is always approved by you first.</p>
+      <p>Projects are secured with a fixed one-time deposit of <?= money(deposit_amount(), settings('currency')) ?>, credited against your final quotation. As a custom studio we never promise a fixed price before we review your requirements — a written quotation is always approved by you first.</p>
     </div>
     <div class="pricing-band">
       <div class="pband-card">
@@ -184,28 +191,28 @@ public_head([
         <h3>Professional Websites</h3>
         <p>Company websites, online stores and web platforms — scoped by pages, design, features and integrations.</p>
         <div class="pband-amount"><?= money(PRICE_WEBSITE_MIN, settings('currency')) ?><span>–</span><?= money(PRICE_WEBSITE_MAX, settings('currency')) ?></div>
-        <a class="btn btn-primary" href="<?= app_url('pricing.php#websites') ?>">Explore website pricing <?= icon('arrow') ?></a>
+        <a class="btn btn-primary" href="<?= app_url('checkout.php?service=' . (int)$bandService['websites']) ?>">Choose this program <?= icon('arrow') ?></a>
       </div>
       <div class="pband-card">
         <span class="card-icon"><?= icon('receipt') ?></span>
         <h3>Receipt &amp; Billing Automation</h3>
         <p>Automatic receipt and invoice generation, payment records and simple accounting for shops, schools and service businesses.</p>
         <div class="pband-amount"><?= money(PRICE_RECEIPT_MIN, settings('currency')) ?><span>–</span><?= money(PRICE_RECEIPT_MAX, settings('currency')) ?></div>
-        <a class="btn btn-primary" href="<?= app_url('pricing.php#receipts') ?>">Explore receipt systems <?= icon('arrow') ?></a>
+        <a class="btn btn-primary" href="<?= app_url('checkout.php?service=' . (int)$bandService['receipts']) ?>">Choose this program <?= icon('arrow') ?></a>
       </div>
       <div class="pband-card">
         <span class="card-icon"><?= icon('mobile') ?></span>
         <h3>Web &amp; Mobile Apps</h3>
         <p>Business apps for phone and browser, prepared and published for the Apple App Store and Google Play.</p>
         <div class="pband-amount">From <?= money(PRICE_APP_MIN, settings('currency')) ?></div>
-        <a class="btn btn-primary" href="<?= app_url('pricing.php#apps') ?>">Explore app pricing <?= icon('arrow') ?></a>
+        <a class="btn btn-primary" href="<?= app_url('checkout.php?service=' . (int)$bandService['apps']) ?>">Choose this program <?= icon('arrow') ?></a>
       </div>
       <div class="pband-card alt">
         <span class="card-icon"><?= icon('cpu') ?></span>
         <h3>Custom Business Systems</h3>
         <p>Portals, management systems, dashboards and automation for schools, hospitals, NGOs and companies — scoped by modules, roles and workflows.</p>
         <div class="pband-amount"><?= money(PRICE_SYSTEM_MIN, settings('currency')) ?><span>–</span><?= money(PRICE_SYSTEM_MAX, settings('currency')) ?></div>
-        <a class="btn btn-light" href="<?= app_url('pricing.php#systems') ?>">Explore systems pricing <?= icon('arrow') ?></a>
+        <a class="btn btn-light" href="<?= app_url('checkout.php?service=' . (int)$bandService['systems']) ?>">Choose this program <?= icon('arrow') ?></a>
       </div>
     </div>
   </div>
@@ -254,10 +261,10 @@ public_head([
       <div>
         <span class="eyebrow">Let's build</span>
         <h2>Have a project in mind?</h2>
-        <p>Register and send your first request through the secure client portal. We will review it and respond with a clear plan.</p>
+        <p>Create an account, choose your program and secure it with a one-time deposit. We will review it and respond with a clear plan and quotation.</p>
       </div>
       <div style="display:flex;gap:12px;flex-wrap:wrap">
-        <a class="btn btn-light" href="<?= app_url('register.php') ?>">Create client account</a>
+        <a class="btn btn-light" href="<?= app_url('checkout.php') ?>">Start a project &amp; pay deposit</a>
         <a class="btn btn-outline" href="<?= app_url('contact.php') ?>">Contact us</a>
       </div>
     </div>

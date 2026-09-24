@@ -10,7 +10,7 @@ $ALLOWED = [
     'company_address', 'company_whatsapp', 'company_fb', 'company_x', 'company_linkedin',
     'company_about', 'currency', 'tax_percent', 'invoices_due_days',
     'payment_mtn_number', 'payment_airtel_number', 'payment_bank_details', 'payment_gateway_status',
-    'registration_open',
+    'project_deposit', 'registration_open',
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -21,8 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $up = $pdo->prepare('INSERT INTO settings (setting_key, setting_value) VALUES (?,?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)');
         foreach ($ALLOWED as $key) {
             $val = trim((string)($_POST[$key] ?? ''));
-            if (in_array($key, ['tax_percent', 'invoices_due_days'], true)) {
-                $val = in_array($key, ['invoices_due_days'], true) ? (string)max(1, (int)$val) : (string)max(0, (float)$val);
+            if ($key === 'invoices_due_days') {
+                $val = (string)max(1, (int)$val);
+            } elseif (in_array($key, ['tax_percent', 'project_deposit'], true)) {
+                $val = (string)max(0, (float)$val);
             }
             if ($key === 'registration_open') { $val = isset($_POST['registration_open']) ? '1' : '0'; }
             $up->execute([$key, $val]);
@@ -103,6 +105,9 @@ dashboard_head(['title' => 'Settings', 'active' => 'settings', 'crumb' => 'Setti
       <div class="field"><label for="payment_airtel_number">Airtel Money number</label><input class="input" id="payment_airtel_number" name="payment_airtel_number" maxlength="40" value="<?= e($cfg['payment_airtel_number']) ?>"></div>
     </div>
     <div class="field"><label for="payment_bank_details">Bank details</label><textarea class="textarea" id="payment_bank_details" name="payment_bank_details" rows="3" placeholder="Bank name, account name, account number…"><?= e($cfg['payment_bank_details']) ?></textarea></div>
+    <div class="form-row">
+      <div class="field"><label for="project_deposit">Project deposit (<?= e($cfg['currency']) ?>)</label><input class="input" id="project_deposit" name="project_deposit" type="number" min="0" step="5000" value="<?= e($cfg['project_deposit']) ?>"><div class="form-note">One-time fixed deposit every client pays to start a project. It is credited against the final quotation, not an extra fee. Set to 0 to disable.</div></div>
+    </div>
     <div class="field"><label for="payment_gateway_status">Online payment gateway</label>
       <select class="select" id="payment_gateway_status" name="payment_gateway_status">
         <?php foreach (['not_configured' => 'Not configured (manual confirmation)', 'ready' => 'Configured (active)'] as $k => $v): ?><option value="<?= $k ?>" <?= $cfg['payment_gateway_status'] === $k ? 'selected' : '' ?>><?= $v ?></option><?php endforeach; ?>

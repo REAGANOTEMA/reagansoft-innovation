@@ -106,7 +106,7 @@ public_head([
         <span class="eyebrow">Get started</span>
         <h3>Create a client account</h3>
         <p>Sign up free, send a project request and get a written response from our team.</p>
-        <a class="btn btn-light mt-2" href="<?= app_url('register.php') ?>">Start a project <?= icon('arrow') ?></a>
+        <a class="btn btn-light mt-2" href="<?= app_url('checkout.php') ?>">Start a project <?= icon('arrow') ?></a>
       </div>
       <div>
         <h2>Talk to us before you buy.</h2>

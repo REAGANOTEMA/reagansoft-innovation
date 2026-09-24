@@ -69,13 +69,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]);
             }
 
+            $deposit = deposit_amount();
+            if ($deposit > 0) {
+                $label = '';
+                foreach ($services as $sv) {
+                    if ((int)$sv['id'] === (int)$values['service_id']) { $label = (string)$sv['name']; break; }
+                }
+                $depositInv = issue_deposit_invoice($pdo, $projectId, (int)current_user()['id'], $deposit, $label);
+                notify((int)current_user()['id'], 'Project deposit', 'Your project deposit of ' . money($deposit, settings('currency')) . ' is due. Pay it from the Invoice tab to activate your project.', 'invoice', $projectId);
+            }
+
             audit('request_submitted', 'project', $projectId, 'Request ' . $ref . ' submitted');
-            notify((int)current_user()['id'], 'Request received', 'Your request ' . $ref . ' has been submitted. The RSI team will review it.', 'project', $projectId);
+            notify((int)current_user()['id'], 'Request received', 'Your request ' . $ref . ' has been submitted. Complete your project deposit to activate it.', 'project', $projectId);
             notify_staff('New project request', $values['title'] . ' (' . $ref . ') received from ' . current_user()['full_name'] . '.', 'project', $projectId);
             $pdo->commit();
-            flash('success', 'Your request has been submitted. Reference number: ' . $ref);
+            flash('success', 'Your request has been submitted. Reference number: ' . $ref . '. Complete your project deposit to get it activated.');
             clear_old();
-            redirect(app_url('client/project.php?id=' . $projectId));
+            redirect(app_url('client/project.php?id=' . $projectId . '&tab=invoice'));
         } catch (Throwable $e) {
             $pdo->rollBack();
             log_error('request submission: ' . $e->getMessage());

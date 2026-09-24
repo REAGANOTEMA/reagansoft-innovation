@@ -3,10 +3,14 @@ require __DIR__ . '/config/config.php';
 
 $services = db()->query("SELECT * FROM services WHERE status='active' ORDER BY sort_order, id")->fetchAll();
 $currency = settings('currency');
+$deposit  = deposit_amount();
 
-$requestUrl = is_logged_in() && user_role() === 'client'
-    ? 'client/request.php?service=' . (int)($services[0]['id'] ?? 0)
-    : 'register.php';
+$bandService = [
+    'websites' => 1,
+    'receipts' => 9,
+    'apps'     => 8,
+    'systems'  => 3,
+];
 
 public_head([
     'title'     => 'Pricing | Reagan Soft Innovation Limited',
@@ -19,7 +23,18 @@ public_head([
   <div class="container">
     <span class="eyebrow">Pricing</span>
     <h1>Honest ranges, agreed before we start.</h1>
-    <p class="lead">We work in clear pricing ranges: professional websites and e-commerce, automatic receipt and billing systems, apps for both web and mobile app stores, and larger custom business systems. The final figure depends entirely on your requirements — and it is always written into a quotation that you approve before any development begins.</p>
+    <p class="lead">We work in clear pricing ranges: professional websites and e-commerce, automatic receipt and billing systems, apps for both web and mobile app stores, and larger custom business systems. Every project is secured with a fixed one-time deposit of <strong style="color:var(--navy)"><?= money($deposit, $currency) ?></strong> (credited against your quotation). The final figure depends entirely on your requirements — and it is always written into a quotation that you approve before any development begins.</p>
+  </div>
+</section>
+
+<section class="deposit-ribbon" role="note">
+  <div class="container">
+    <span class="dr-icon"><?= icon('shield') ?></span>
+    <div>
+      <b>How it works: choose a program → create your account → pay the <?= money($deposit, $currency) ?> deposit.</b>
+      <p>Your deposit secures your slot and is credited to your project. You only pay the balance after approving your written quotation — never before.</p>
+    </div>
+    <a class="btn btn-ghost btn-sm" href="<?= app_url('checkout.php') ?>">Start now <?= icon('arrow') ?></a>
   </div>
 </section>
 
@@ -33,7 +48,7 @@ public_head([
           <h2>Professional websites &amp; e-commerce</h2>
           <p>Company websites, online stores, portfolios and web platforms — designed, built and launched for real results.</p>
           <div class="pb-amount"><?= money(PRICE_WEBSITE_MIN, $currency) ?> <span class="pb-to">to</span> <?= money(PRICE_WEBSITE_MAX, $currency) ?></div>
-          <a class="btn btn-primary" href="<?= app_url($requestUrl) ?>">Start a website project <?= icon('arrow') ?></a>
+          <a class="btn btn-primary" href="<?= app_url('checkout.php?service=' . (int)$bandService['websites']) ?>">Start a website project <?= icon('arrow') ?></a>
         </div>
         <div class="pb-factors">
           <b>The final website price depends on:</b>
@@ -57,7 +72,7 @@ public_head([
           <h2>Automatic receipts, invoices &amp; payment records</h2>
           <p>Whenever you make a sale, the system prints or sends a professional receipt automatically — perfectly suited to shops, schools, clinics and service businesses.</p>
           <div class="pb-amount"><?= money(PRICE_RECEIPT_MIN, $currency) ?> <span class="pb-to">to</span> <?= money(PRICE_RECEIPT_MAX, $currency) ?></div>
-          <a class="btn btn-primary" href="<?= app_url($requestUrl) ?>">Start a receipt system project <?= icon('arrow') ?></a>
+          <a class="btn btn-primary" href="<?= app_url('checkout.php?service=' . (int)$bandService['receipts']) ?>">Start a receipt system project <?= icon('arrow') ?></a>
         </div>
         <div class="pb-factors">
           <b>Receipt-system pricing depends on:</b>
@@ -82,7 +97,7 @@ public_head([
           <h2>Apps for the App Store and Google Play</h2>
           <p>Business applications built to work as a website, an Android app and an iOS app — prepared, tested and published to the Apple App Store and Google Play.</p>
           <div class="pb-amount"><span class="pb-to" style="margin-right:6px">from</span><?= money(PRICE_APP_MIN, $currency) ?></div>
-          <a class="btn btn-light" href="<?= app_url($requestUrl) ?>">Start an app project <?= icon('arrow') ?></a>
+          <a class="btn btn-light" href="<?= app_url('checkout.php?service=' . (int)$bandService['apps']) ?>">Start an app project <?= icon('arrow') ?></a>
         </div>
         <div class="pb-factors">
           <b>App pricing depends on:</b>
@@ -107,7 +122,7 @@ public_head([
           <h2>Systems, software &amp; automation</h2>
           <p>Client portals, management systems, dashboards and workflow automation for schools, hospitals, NGOs, government offices and companies — built around your real business processes.</p>
           <div class="pb-amount"><?= money(PRICE_SYSTEM_MIN, $currency) ?> <span class="pb-to">to</span> <?= money(PRICE_SYSTEM_MAX, $currency) ?></div>
-          <a class="btn btn-light" href="<?= app_url($requestUrl) ?>">Start a systems project <?= icon('arrow') ?></a>
+          <a class="btn btn-light" href="<?= app_url('checkout.php?service=' . (int)$bandService['systems']) ?>">Start a systems project <?= icon('arrow') ?></a>
         </div>
         <div class="pb-factors">
           <b>Business-system pricing depends on:</b>
@@ -146,7 +161,7 @@ public_head([
               <?php foreach (array_slice($features, 0, 5) as $f): ?><li><span class="fcheck"><?= icon('check') ?></span><?= e($f) ?></li><?php endforeach; ?>
             </ul>
           <?php endif; ?>
-          <a class="btn btn-ghost" style="margin-top:auto" href="<?= app_url(is_logged_in() && user_role() === 'client' ? 'client/request.php?service=' . (int)$s['id'] : 'register.php') ?>">Request this service</a>
+          <a class="btn btn-primary" style="margin-top:auto" href="<?= app_url('checkout.php?service=' . (int)$s['id']) ?>"><?= icon('lock') ?> Choose &amp; pay deposit</a>
         </div>
       <?php endforeach; ?>
     </div>
@@ -154,10 +169,13 @@ public_head([
     <div class="cta" style="margin-top:60px">
       <div>
         <span class="eyebrow">How quotations work</span>
-        <h2>What happens after you send a request?</h2>
+        <h2>What happens after you pay your deposit?</h2>
         <p>The team reviews your requirements, prepares a detailed quotation with line items and agreed terms, and sends it to your client portal for approval.</p>
       </div>
-      <a class="btn btn-light" href="<?= app_url('process.php') ?>">See our process</a>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn btn-light" href="<?= app_url('checkout.php') ?>">Start a project</a>
+        <a class="btn btn-outline" href="<?= app_url('process.php') ?>">See our process</a>
+      </div>
     </div>
   </div>
 </section>

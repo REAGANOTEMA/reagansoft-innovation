@@ -115,6 +115,9 @@ $invoices->execute([$id]); $invoices = $invoices->fetchAll();
 $activity = $pdo->prepare("SELECT * FROM activity_logs WHERE entity_type = 'project' AND entity_id = ? ORDER BY created_at DESC LIMIT 20");
 $activity->execute([$id]); $activity = $activity->fetchAll();
 
+$depositDue = deposit_balance($pdo, $id);
+$depositInv = deposit_invoice_for($pdo, $id);
+
 $tabQ = urlencode($id);
 
 dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' => 'Project']);
@@ -131,6 +134,17 @@ dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' =>
 </div>
 
 <?php render_alerts(); ?>
+
+<?php if ($depositInv && $depositDue > 0 && !in_array($depositInv['status'], ['paid', 'cancelled'], true)): ?>
+  <div class="deposit-callout">
+    <span class="dc-icon"><?= icon('rocket') ?></span>
+    <div class="dc-body">
+      <b>Complete your <?= money($depositDue, settings('currency')) ?> project deposit to activate this project.</b>
+      <p>Your project stays on hold for the team until the deposit is confirmed. Pay by MTN MoMo, Airtel Money, bank transfer or cash, then submit the payment for confirmation.</p>
+    </div>
+    <a class="btn btn-primary btn-sm" href="<?= app_url('client/project.php?id=' . $id . '&tab=invoice') ?>"><?= icon('money') ?> Pay deposit</a>
+  </div>
+<?php endif; ?>
 
 <div class="tabs" role="tablist">
   <a class="tab <?= $tab === 'overview' ? 'active' : '' ?>" href="project.php?id=<?= $tabQ ?>"><?= icon('dashboard') ?> Overview</a>

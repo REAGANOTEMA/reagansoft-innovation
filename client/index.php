@@ -21,6 +21,11 @@ $invoices->execute([$uid]); $outstanding = $invoices->fetchAll();
 $notifs = $pdo->prepare("SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC LIMIT 5");
 $notifs->execute([$uid]); $notifs = $notifs->fetchAll();
 
+$deps = $pdo->prepare("SELECT i.id, i.invoice_no, i.total, i.amount_paid, p.id AS project_id, p.title
+                       FROM invoices i JOIN projects p ON p.id = i.project_id
+                       WHERE i.client_id = ? AND i.is_deposit = 1 AND i.status IN ('sent','partially_paid','overdue')");
+$deps->execute([$uid]); $depositsDue = $deps->fetchAll();
+
 $unread = unread_notifications($uid);
 $user = current_user();
 
@@ -53,10 +58,25 @@ dashboard_head(['title' => 'Client Dashboard', 'active' => 'dashboard', 'crumb' 
     <div><small>Completed projects</small><strong><?= count($completed) ?></strong></div>
   </div>
   <div class="stat">
+    <span class="stat-icon"><?= icon('rocket') ?></span>
+    <div><small>Deposits due</small><strong><?= count($depositsDue) ?></strong></div>
+  </div>
+  <div class="stat">
     <span class="stat-icon"><?= icon('money') ?></span>
     <div><small>Outstanding invoices</small><strong><?= count($outstanding) ?></strong></div>
   </div>
 </div>
+
+<?php if ($depositsDue): ?>
+  <div class="deposit-callout" style="margin-bottom:22px">
+    <span class="dc-icon"><?= icon('rocket') ?></span>
+    <div class="dc-body">
+      <b><?= count($depositsDue) === 1 ? 'You have 1 project deposit to complete' : 'You have ' . count($depositsDue) . ' project deposits to complete' ?>.</b>
+      <p>Projects remain on hold until your deposit is paid and confirmed.</p>
+    </div>
+    <a class="btn btn-primary btn-sm" href="<?= app_url('client/project.php?id=' . (int)$depositsDue[0]['project_id'] . '&tab=invoice') ?>"><?= icon('money') ?> Pay first deposit</a>
+  </div>
+<?php endif; ?>
 
 <div class="grid-2">
   <section class="panel">
@@ -125,7 +145,8 @@ dashboard_head(['title' => 'Client Dashboard', 'active' => 'dashboard', 'crumb' 
 <section class="panel">
   <div class="panel-head"><h3>Quick actions</h3></div>
   <div class="grid-3">
-    <a class="quick-cta" href="<?= app_url('client/request.php') ?>"><span class="stat-icon"><?= icon('plus') ?></span><div><b>New request</b><small>Submit a project for review</small></div></a>
+    <a class="quick-cta" href="<?= app_url('checkout.php') ?>"><span class="stat-icon"><?= icon('rocket') ?></span><div><b>Start a project</b><small>Choose a program &amp; pay deposit</small></div></a>
+    <a class="quick-cta" href="<?= app_url('client/request.php') ?>"><span class="stat-icon"><?= icon('plus') ?></span><div><b>Send a request</b><small>Describe work for the team</small></div></a>
     <a class="quick-cta" href="<?= app_url('client/projects.php') ?>"><span class="stat-icon"><?= icon('folder') ?></span><div><b>My projects</b><small>Track status &amp; progress</small></div></a>
     <a class="quick-cta" href="<?= app_url('client/messages.php') ?>"><span class="stat-icon"><?= icon('chat') ?></span><div><b>Messages</b><small>Talk to the RSI team</small></div></a>
     <a class="quick-cta" href="<?= app_url('client/files.php') ?>"><span class="stat-icon"><?= icon('file') ?></span><div><b>Files</b><small>View project documents</small></div></a>

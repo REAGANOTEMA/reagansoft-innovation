@@ -128,7 +128,7 @@ dashboard_head(['title' => 'Invoices', 'active' => 'invoices', 'crumb' => 'Invoi
 <?php render_alerts(); ?>
 
 <?php if ($pendingPays): ?>
-  <section class="panel">
+  <section class="panel" id="pending">
     <div class="panel-head"><h3><?= icon('bell') ?> Pending payment confirmations</h3><span class="muted small"><?= count($pendingPays) ?> awaiting action</span></div>
     <div class="table-wrap">
       <table class="table">

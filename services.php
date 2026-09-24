@@ -27,12 +27,9 @@ public_head([
         <h2><?= e($s['name']) ?></h2>
         <p class="lead" style="font-size:16px"><?= nl2br(e($s['description'])) ?></p>
         <div class="hero-actions" style="margin-top:20px">
-          <?php if (is_logged_in() && user_role() === 'client'): ?>
-            <a class="btn btn-primary" href="<?= app_url('client/request.php?service=' . (int)$s['id']) ?>">Request this service <?= icon('arrow') ?></a>
-          <?php else: ?>
-            <a class="btn btn-primary" href="<?= app_url('register.php') ?>">Request this service <?= icon('arrow') ?></a>
-          <?php endif; ?>
+          <a class="btn btn-primary" href="<?= app_url('checkout.php?service=' . (int)$s['id']) ?>">Choose this program <?= icon('arrow') ?></a>
         </div>
+        <p class="small muted" style="margin-top:14px"><?= icon('lock') ?> Secured with a fixed one-time deposit of <?= money(deposit_amount(), settings('currency')) ?> — credited against your final quotation.</p>
       </div>
       <div class="price-card svc-card" style="<?= $i % 2 === 0 ? '' : 'border-color:var(--line);box-shadow:var(--shadow-sm)' ?>">
         <?php $srvPrice = service_price_display($s, settings('currency')); $srvNote = trim((string)$s['price_note']); ?>
@@ -58,10 +55,13 @@ public_head([
     <div class="cta">
       <div>
         <span class="eyebrow">Not sure where to start?</span>
-        <h2>Tell us about your project.</h2>
-        <p>We will review your requirements and recommend the right service — or a simpler, cheaper alternative if one exists.</p>
+        <h2>Choose a program and we will guide you.</h2>
+        <p>Start with a fixed deposit, describe your project, and we will review your requirements and recommend the right approach — or a simpler, cheaper alternative if one exists.</p>
       </div>
-      <a class="btn btn-light" href="<?= app_url('contact.php') ?>">Talk to us <?= icon('arrow') ?></a>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn btn-light" href="<?= app_url('checkout.php') ?>">Start a project <?= icon('arrow') ?></a>
+        <a class="btn btn-outline" href="<?= app_url('contact.php') ?>">Talk to us</a>
+      </div>
     </div>
   </div>
 </section>

@@ -242,6 +242,7 @@ CREATE TABLE invoices (
   total DECIMAL(14,2) NOT NULL DEFAULT 0,
   amount_paid DECIMAL(14,2) NOT NULL DEFAULT 0,
   status ENUM('draft','sent','partially_paid','paid','overdue','cancelled') NOT NULL DEFAULT 'draft',
+  is_deposit TINYINT(1) NOT NULL DEFAULT 0,
   notes TEXT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

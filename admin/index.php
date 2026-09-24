@@ -14,6 +14,7 @@ $stats['completed']      = (int)$pdo->query("SELECT COUNT(*) c FROM projects WHE
 $stats['pending_quotes'] = (int)$pdo->query("SELECT COUNT(*) c FROM quotations WHERE status='sent'")->fetch()['c'];
 $stats['outstanding']    = (array)$pdo->query("SELECT COALESCE(SUM(total - amount_paid),0) s, COUNT(*) c FROM invoices WHERE status IN ('sent','partially_paid','overdue')")->fetch();
 $stats['revenue']        = (float)$pdo->query("SELECT COALESCE(SUM(amount),0) s FROM payments WHERE status='confirmed'")->fetch()['s'];
+$stats['pending_deps']   = (int)$pdo->query("SELECT COUNT(*) c FROM payments pay JOIN invoices i ON i.id = pay.invoice_id WHERE pay.status='pending' AND i.is_deposit=1")->fetch()['c'];
 $stats['messages_unread']= (int)$pdo->query("SELECT COUNT(*) c FROM contact_messages WHERE is_read=0")->fetch()['c'];
 
 $recentRequests = $pdo->query(
@@ -59,6 +60,7 @@ dashboard_head([
 </div>
 <div class="stats">
   <div class="stat"><span class="stat-icon"><?= icon('doc') ?></span><div><small>Quotations awaiting reply</small><strong><?= $stats['pending_quotes'] ?></strong></div></div>
+  <div class="stat"><span class="stat-icon"><?= icon('rocket') ?></span><div><small>Deposit confirmations</small><strong><?= $stats['pending_deps'] ?></strong><a href="<?= app_url('admin/invoices.php#pending') ?>">Open</a></div></div>
   <div class="stat"><span class="stat-icon"><?= icon('money') ?></span><div><small>Outstanding invoice value</small><strong><?= money($stats['outstanding']['s'], settings('currency')) ?><small> · <?= (int)$stats['outstanding']['c'] ?> invoice<?= (int)$stats['outstanding']['c'] === 1 ? '' : 's' ?></small></strong></div></div>
   <div class="stat"><span class="stat-icon"><?= icon('layers') ?></span><div><small>Confirmed revenue</small><strong><?= money($stats['revenue'], settings('currency')) ?></strong></div></div>
   <div class="stat"><span class="stat-icon"><?= icon('mail') ?></span><div><small>Contact messages</small><strong><?= $stats['messages_unread'] ?><?= $stats['messages_unread'] > 0 ? ' unread' : '' ?></strong><a href="<?= app_url('admin/messages.php') ?>">Open</a></div></div>

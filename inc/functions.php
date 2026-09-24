@@ -161,6 +161,61 @@ function next_doc_no(PDO $pdo, string $table, string $column, string $prefix): s
 }
 
 /* ------------------------------------------------------------------
+ * Project deposit (the fixed "choose a program -> create account ->
+ * pay" entry fee). Configurable under Admin -> Settings.
+ * ------------------------------------------------------------------ */
+const DEPOSIT_DEFAULT = 200000;
+
+function deposit_amount(): float {
+    $v = (float)settings('project_deposit', (string)DEPOSIT_DEFAULT);
+    return $v > 0 ? $v : DEPOSIT_DEFAULT;
+}
+
+/**
+ * Creates the project-registration deposit invoice (marked is_deposit)
+ * plus its single line item. Returns the new invoice id.
+ * Must be called inside a transaction.
+ */
+function issue_deposit_invoice(PDO $pdo, int $projectId, int $clientId, float $amount, string $label = ''): int {
+    if ($amount <= 0) {
+        throw new InvalidArgumentException('Deposit amount must be greater than zero.');
+    }
+    $due   = max(1, (int)settings('invoices_due_days', '14'));
+    $no    = next_doc_no($pdo, 'invoices', 'invoice_no', 'INV-' . date('Y') . '-');
+    $desc  = trim($label) !== '' ? 'Project registration & deposit — ' . trim($label) : 'Project registration & initial deposit';
+    $ins = $pdo->prepare(
+        "INSERT INTO invoices (invoice_no, project_id, client_id, due_date, subtotal, discount, tax_percent, total, amount_paid, status, is_deposit, notes)
+         VALUES (?,?,?,DATE_ADD(CURDATE(), INTERVAL ? DAY),?,0,0,?,0,'sent',1,?)"
+    );
+    $ins->execute([$no, $projectId, $clientId, $due, $amount, $amount, 'Project deposit. Secures your project and begins the review.']);
+    $invId = (int)$pdo->lastInsertId();
+    $pdo->prepare('INSERT INTO invoice_items (invoice_id, description, quantity, unit_price) VALUES (?,?,1,?)')
+        ->execute([$invId, $desc, $amount]);
+    return $invId;
+}
+
+/** Returns the deposit invoice for a project, or null if none exists. */
+function deposit_invoice_for(PDO $pdo, int $projectId): ?array {
+    $st = $pdo->prepare('SELECT * FROM invoices WHERE project_id = ? AND is_deposit = 1 ORDER BY id DESC LIMIT 1');
+    $st->execute([$projectId]);
+    $inv = $st->fetch();
+    return $inv ?: null;
+}
+
+/** True when the project's deposit has been fully paid. */
+function deposit_paid(PDO $pdo, int $projectId): bool {
+    $inv = deposit_invoice_for($pdo, $projectId);
+    return $inv === null || (float)$inv['amount_paid'] >= (float)$inv['total'];
+}
+
+/** Deposit-orientated message shown to the client while unpaid. */
+function deposit_balance(PDO $pdo, int $projectId): float {
+    $inv = deposit_invoice_for($pdo, $projectId);
+    if ($inv === null) return 0.0;
+    return max(0.0, (float)$inv['total'] - (float)$inv['amount_paid']);
+}
+
+/* ------------------------------------------------------------------
  * Project status
  * ------------------------------------------------------------------ */
 function project_statuses(): array {

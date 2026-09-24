@@ -68,6 +68,7 @@ function public_head(array $page = []): void {
       <a href="<?= app_url('portfolio.php') ?>" class="<?= $active === 'portfolio' ? 'active' : '' ?>">Work</a>
       <a href="<?= app_url('faq.php') ?>" class="<?= $active === 'faq' ? 'active' : '' ?>">FAQ</a>
       <a href="<?= app_url('contact.php') ?>" class="<?= $active === 'contact' ? 'active' : '' ?>">Contact</a>
+      <a class="nav-start" href="<?= app_url('checkout.php') ?>"><?= icon('rocket') ?> Start a Project</a>
       <a class="nav-login" href="<?= app_url('login.php') ?>"><?= is_logged_in() && current_user()['role'] !== 'admin' ? 'Portal' : 'Client Login' ?></a>
     </nav>
   </div>

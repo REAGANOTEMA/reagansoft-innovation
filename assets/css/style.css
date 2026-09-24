@@ -1086,3 +1086,133 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .pay-box b { display: block; color: var(--ink); font-size: 14.5px; }
 .pay-box p { margin: 2px 0 0; color: var(--muted); font-size: 13.5px; }
 .pay-box .pbx-num { display: block; font-size: 16px; font-weight: 800; color: var(--navy); }
+
+/* ---------- Nav: Start a Project ---------- */
+.nav-start {
+  padding: 9px 16px !important; border-radius: 10px;
+  background: linear-gradient(135deg, var(--blue), var(--blue-700));
+  color: #fff !important; font-weight: 800; font-size: 14px;
+  display: inline-flex; align-items: center; gap: 7px;
+  box-shadow: 0 4px 14px rgba(10, 123, 206, .32);
+  transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
+}
+.nav-start svg { width: 16px; height: 16px; }
+.nav-start:hover { transform: translateY(-1px); filter: brightness(1.07); box-shadow: 0 8px 20px rgba(10, 123, 206, .4); }
+
+/* ---------- Deposit ribbon (pricing page) ---------- */
+.deposit-ribbon {
+  background: linear-gradient(135deg, var(--navy), #0b5a9c);
+  color: #fff; padding: 20px 0;
+}
+.deposit-ribbon .container { display: flex; align-items: center; gap: 18px; }
+.dr-icon { width: 46px; height: 46px; border-radius: 13px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2); display: grid; place-items: center; flex-shrink: 0; }
+.dr-icon svg { width: 22px; height: 22px; }
+.deposit-ribbon b { font-size: 15.5px; display: block; }
+.deposit-ribbon p { margin: 3px 0 0; color: rgba(255,255,255,.82); font-size: 13.5px; }
+.deposit-ribbon .btn-ghost { background: rgba(255,255,255,.14); color: #fff; border-color: rgba(255,255,255,.4); box-shadow: none; margin-left: auto; flex-shrink: 0; }
+.deposit-ribbon .btn-ghost:hover { background: rgba(255,255,255,.25); border-color: #fff; }
+
+/* ---------- Deposit callout (client portal) ---------- */
+.deposit-callout {
+  display: flex; gap: 15px; align-items: center;
+  background: linear-gradient(135deg, #fff7e0, #fffdf6);
+  border: 1px solid #f2c94c; border-left: 4px solid #e6a700;
+  border-radius: var(--radius-lg); padding: 16px 20px; margin-bottom: 22px;
+}
+.dc-icon { width: 46px; height: 46px; border-radius: 13px; background: #ffe9a8; color: #8a6400; display: grid; place-items: center; flex-shrink: 0; }
+.dc-icon svg { width: 23px; height: 23px; }
+.dc-body { flex: 1; min-width: 0; }
+.dc-body b { color: #6b4e00; font-size: 15px; display: block; }
+.dc-body p { margin: 4px 0 0; color: #8a6a1a; font-size: 13.5px; }
+.deposit-callout .btn-primary { flex-shrink: 0; }
+
+/* ---------- Process flow (process page) ---------- */
+.process-flow { max-width: 760px; margin: 0 auto; display: grid; gap: 0; }
+.pf-step { display: flex; gap: 22px; padding: 14px 0 30px; position: relative; }
+.pf-step::before {
+  content: ''; position: absolute; left: 27px; top: 46px; bottom: 0; width: 2px;
+  background: linear-gradient(180deg, var(--sky-100), var(--sky-100));
+}
+.pf-step:last-child::before { display: none; }
+.pf-num {
+  width: 56px; height: 56px; border-radius: 16px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--blue), var(--blue-700));
+  color: #fff; font-weight: 800; font-size: 17px; display: grid; place-items: center;
+  box-shadow: 0 8px 20px rgba(10, 123, 206, .28); z-index: 1;
+}
+.pf-body { padding-top: 4px; }
+.pf-body h3 { margin: 0 0 6px; font-size: 18px; color: var(--navy); }
+.pf-body p { margin: 0; color: var(--muted); font-size: 14.5px; max-width: 560px; }
+
+/* ---------- Checkout page ---------- */
+.checkout-hero { background: linear-gradient(180deg, var(--sky-50) 0%, var(--navy) 260%); }
+.checkout-steps { display: flex; align-items: center; justify-content: center; gap: 0; margin: 0 0 34px; flex-wrap: wrap; }
+.cs-step { display: flex; gap: 10px; align-items: center; }
+.cs-dot {
+  width: 40px; height: 40px; border-radius: 50%; background: #fff; border: 2px solid var(--line);
+  color: var(--faint); display: grid; place-items: center; flex-shrink: 0; transition: all .2s ease;
+}
+.cs-dot svg { width: 18px; height: 18px; }
+.cs-step b { display: block; font-size: 14px; color: var(--ink); }
+.cs-step small { font-size: 12px; color: var(--muted); }
+.cs-step.done .cs-dot { background: var(--green-bg); border-color: var(--green); color: var(--green); }
+.cs-step.current .cs-dot { background: var(--blue); border-color: var(--blue); color: #fff; box-shadow: 0 0 0 5px rgba(10, 123, 206, .15); }
+.cs-step.current b { color: var(--blue); }
+.cs-line { flex: 1; max-width: 64px; min-width: 22px; height: 2px; background: var(--sky-100); margin: 0 14px; }
+.checkout-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 24px; align-items: start; }
+.checkout-col { display: grid; gap: 20px; }
+.program-card { border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 22px; background: #fff; }
+.pc-head { display: flex; gap: 14px; align-items: center; margin-bottom: 12px; }
+.pc-head h3 { margin: 0; font-size: 18px; }
+.pc-tag { font-size: 12px; font-weight: 800; letter-spacing: 1px; color: var(--blue); text-transform: uppercase; }
+.pc-note { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+.pc-desc { color: var(--ink-2); font-size: 14.5px; line-height: 1.6; margin: 0 0 14px; }
+.pc-meta .feature-list { font-size: 14px; }
+.pc-features { margin: 0; }
+.deposit-box {
+  background: linear-gradient(135deg, var(--navy), #0b5a9c); color: #fff;
+  border-radius: var(--radius-lg); padding: 22px;
+  box-shadow: 0 14px 30px rgba(8, 59, 102, .22); overflow: hidden; position: relative;
+}
+.deposit-box::after {
+  content: ''; position: absolute; right: -46px; top: -46px; width: 150px; height: 150px;
+  background: radial-gradient(circle, rgba(255,255,255,.16), transparent 70%);
+}
+.db-label { display: block; font-size: 13px; font-weight: 700; color: rgba(255,255,255,.82); }
+.db-label small { font-weight: 600; opacity: .75; }
+.db-amount { margin-top: 8px; }
+.db-amount strong, .db-value { display: block; margin-top: 4px; font-size: 40px; font-weight: 800; letter-spacing: -.5px; line-height: 1.05; }
+.db-amount small { font-size: 13px; color: rgba(255,255,255,.75); font-weight: 600; }
+.db-note { margin: 14px 0 0; font-size: 13px; color: rgba(255,255,255,.85); display: flex; gap: 7px; align-items: flex-start; }
+.db-note svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 2px; }
+.pay-panel { border-left: 3px solid var(--blue); }
+.checkout-form .panel-head { margin-bottom: 16px; }
+.checkout-total {
+  display: flex; justify-content: space-between; align-items: center; gap: 14px;
+  background: var(--sky-50); border: 1px solid var(--line-2); border-radius: var(--radius);
+  padding: 14px 16px; margin: 4px 0 16px; font-size: 13px; color: var(--muted); flex-wrap: wrap;
+}
+.checkout-total b { color: var(--navy); font-size: 16px; white-space: nowrap; }
+
+/* ---------- Checkout / ribbon / process responsive ---------- */
+@media (max-width: 1024px) {
+  .checkout-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 860px) {
+  .checkout-steps { justify-content: flex-start; }
+  .cs-line { max-width: 34px; }
+}
+@media (max-width: 640px) {
+  .deposit-ribbon .container { flex-wrap: wrap; }
+  .deposit-ribbon .btn-ghost { margin-left: 64px; }
+  .checkout-grid { grid-template-columns: 1fr; }
+  .cs-step b, .cs-step small { display: none; }
+  .cs-line { display: none; }
+  .cs-step { flex-direction: column; text-align: center; }
+  .checkout-total { justify-content: flex-start; flex-direction: column; align-items: flex-start; }
+  .deposit-callout { flex-wrap: wrap; }
+  .deposit-callout .btn-primary { width: 100%; }
+  .pf-step { gap: 16px; }
+  .pf-step::before { left: 21px; }
+  .pf-num { width: 44px; height: 44px; font-size: 14px; border-radius: 12px; }
+}

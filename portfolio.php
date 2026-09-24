@@ -89,7 +89,7 @@ public_head([
         <h2>Spotted a problem our software can solve?</h2>
         <p>Send a request and see how we would approach it.</p>
       </div>
-      <a class="btn btn-light" href="<?= app_url('register.php') ?>">Start a project</a>
+      <a class="btn btn-light" href="<?= app_url('checkout.php') ?>">Start a project</a>
     </div>
   </div>
 </section>

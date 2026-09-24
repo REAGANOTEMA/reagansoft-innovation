@@ -188,6 +188,7 @@ INSERT INTO settings (setting_key, setting_value) VALUES
 ('payment_airtel_number',   '+256771234567'),
 ('payment_bank_details',    ''),
 ('payment_gateway_status',  'not_configured'),
+('project_deposit',         '200000'),
 ('registration_open',       '1');
 
 -- ============================================================
@@ -274,9 +275,9 @@ INSERT INTO quotation_items (quotation_id, description, quantity, unit_price) VA
 -- ============================================================
 -- 09 · INVOICES + ITEMS
 -- ============================================================
-INSERT INTO invoices (invoice_no, project_id, client_id, quotation_id, due_date, subtotal, discount, tax_percent, total, amount_paid, status, notes) VALUES
-('INV-2026-0001', 3, 5, 1, DATE_ADD(CURDATE(), INTERVAL 14 DAY), 9800000, 0, 0, 9800000, 0, 'sent', 'Deposit invoice for QT-2026-0001.'),
-('INV-2026-0002', 1, 3, NULL, '2026-04-24', 8500000, 0, 0, 8500000, 8500000, 'paid', 'Final payment for the Kireka Farm Supplies website.');
+INSERT INTO invoices (invoice_no, project_id, client_id, quotation_id, due_date, subtotal, discount, tax_percent, total, amount_paid, status, is_deposit, notes) VALUES
+('INV-2026-0001', 3, 5, 1, DATE_ADD(CURDATE(), INTERVAL 14 DAY), 9800000, 0, 0, 9800000, 0, 'sent', 1, 'Deposit invoice for QT-2026-0001.'),
+('INV-2026-0002', 1, 3, NULL, '2026-04-24', 8500000, 0, 0, 8500000, 8500000, 'paid', 0, 'Final payment for the Kireka Farm Supplies website.');
 
 INSERT INTO invoice_items (invoice_id, description, quantity, unit_price) VALUES
 (1, 'E-commerce development (first phase)', 1, 4900000),
