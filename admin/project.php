@@ -784,7 +784,7 @@ dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' =>
         <?php foreach ($activity as $log): ?>
           <div class="tl-item done">
             <b><?= e(str_replace('_', ' ', ucfirst($log['action']))) ?></b>
-            <span><?= e($log['full_name'] ?? 'Guest') ?> · <?= fmt_date($log['created_at'], 'd M Y H:i') ?> · <?= $log['details'] ? e($log['details']) : '' ?></span>
+            <span><?= e($log['full_name'] ?? 'Guest') ?> · <?= fmt_date($log['created_at'], 'd M Y H:i') ?> · <?= $log['details'] ? e(str_replace('_', ' ', $log['details'])) : '' ?></span>
           </div>
         <?php endforeach; ?>
       </div>

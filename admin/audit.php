@@ -73,8 +73,8 @@ dashboard_head(['title' => 'Audit Logs', 'active' => 'audit', 'crumb' => 'Audit 
             <tr>
               <td class="small"><?= fmt_date($l['created_at'], 'd M Y H:i') ?></td>
               <td class="small"><?= e($l['user_name'] ?? 'Guest') ?><?= $l['user_role'] ? ' <span class="badge gray">' . e($l['user_role']) . '</span>' : '' ?></td>
-              <td class="small"><?= e($l['action']) ?><div class="row-sub"><?= e(truncate($l['details'] ?? '', 90)) ?></div></td>
-              <td class="small"><?= e($l['entity_type'] ?? '—') ?><?= $l['entity_id'] ? ' #' . (int)$l['entity_id'] : '' ?></td>
+              <td class="small"><?= e(str_replace('_', ' ', $l['action'])) ?><div class="row-sub"><?= e(str_replace('_', ' ', truncate($l['details'] ?? '', 90))) ?></div></td>
+              <td class="small"><?= e(str_replace('_', ' ', $l['entity_type'] ?? '—')) ?><?= $l['entity_id'] ? ' #' . (int)$l['entity_id'] : '' ?></td>
               <td class="small"><?= e($l['ip_address'] ?? '—') ?></td>
             </tr>
           <?php endforeach; ?>

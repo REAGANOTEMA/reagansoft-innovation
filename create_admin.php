@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$blocked) {
 
   <?php if (isset($done)): ?>
     <div class="alert success">Administrator account created. You can now <a href="login.php">sign in</a>.</div>
-    <div class="alert info">Delete <code>create_admin.php</code> from the server before going live.</div>
+    <div class="alert info">Delete this file from the server before going live.</div>
   <?php else: ?>
     <?php if ($blocked): ?>
       <div class="alert info">An administrator account already exists. Delete this file and sign in from <a href="login.php">login.php</a>.</div>

@@ -85,8 +85,9 @@ public_head([
         <div class="price-card">
           <div class="card-icon"><?= icon($s['icon']) ?></div>
           <h3><?= e($s['name']) ?></h3>
-          <?php if ($s['price_note'] !== ''): ?><p class="price-note" style="margin:8px 0 0"><?= e($s['price_note']) ?></p><?php endif; ?>
-          <div class="amount"><?= e(service_price_display($s, $currency)) ?></div>
+          <?php $srvPrice = service_price_display($s, $currency); $srvNote = trim((string)$s['price_note']); ?>
+          <?php if ($srvNote !== '' && mb_stripos($srvPrice, $srvNote) === false): ?><p class="price-note" style="margin:8px 0 0"><?= e($srvNote) ?></p><?php endif; ?>
+          <div class="amount"><?= e($srvPrice) ?></div>
           <?php if ($s['delivery_days']): ?>
             <div class="deliver"><?= icon('clock') ?><span><?= (int)$s['delivery_days'] ?> day<?= (int)$s['delivery_days'] === 1 ? '' : 's' ?>+ delivery estimate</span></div>
           <?php endif; ?>

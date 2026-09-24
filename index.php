@@ -23,60 +23,49 @@ public_head([
 ]);
 ?>
 <section class="hero">
+  <img class="hero-bg" src="<?= app_url('assets/img/cover.png') ?>"
+       srcset="<?= app_url('assets/img/cover-640.webp') ?> 640w, <?= app_url('assets/img/cover-960.webp') ?> 960w, <?= app_url('assets/img/cover-1600.webp') ?> 1600w"
+       sizes="100vw"
+       width="1672" height="941"
+       alt="Reagan Soft Innovation Limited — digital solutions, websites and business systems built in Jinja, Uganda"
+       loading="eager" fetchpriority="high" decoding="async">
+  <div class="hero-overlay" aria-hidden="true"></div>
   <div class="container hero-inner">
-    <div>
-      <span class="hero-tag"><span class="dot" aria-hidden="true"></span> Software · Websites · Business Systems — Jinja, Uganda</span>
-      <h1>Building digital solutions that <span class="accent">move your business forward.</span></h1>
-      <p class="lead">Reagan Soft Innovation Limited creates professional websites, custom business systems, e-commerce platforms, software, branding and digital solutions — and keeps you in the loop through a simple client portal. No jargon, no guessing.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="<?= app_url('register.php') ?>"><?= icon('arrow') ?> Start a Project</a>
-        <a class="btn btn-ghost" href="<?= app_url('services.php') ?>">View Our Services</a>
-      </div>
-      <div class="hero-pricing">
-        <div class="hero-price-item">
-          <span class="hp-label">Web Development</span>
-          <span class="hp-value"><?= e(settings('currency')) ?> <?= money_compact(PRICE_WEBSITE_MIN) ?> – <?= money_compact(PRICE_WEBSITE_MAX) ?></span>
-          <span class="hp-sub">Professional websites &amp; online stores</span>
-        </div>
-        <div class="hero-price-item">
-          <span class="hp-label">Business Systems</span>
-          <span class="hp-value"><?= e(settings('currency')) ?> <?= money_compact(PRICE_SYSTEM_MIN) ?> – <?= money_compact(PRICE_SYSTEM_MAX) ?></span>
-          <span class="hp-sub">Custom systems &amp; software</span>
-        </div>
-      </div>
-      <div class="hero-trust">
-        <span><span class="tick"><?= icon('check') ?></span> You can request work online</span>
-        <span><span class="tick"><?= icon('check') ?></span> Tasks &amp; progress you can follow</span>
-        <span><span class="tick"><?= icon('check') ?></span> Clear, upfront pricing</span>
-      </div>
-      <div class="hero-byline">
-        <img src="<?= app_url('assets/img/founder.webp') ?>" alt="Reagan Otema, founder" width="40" height="40" loading="eager" fetchpriority="high">
-        <span>Built by <b>Reagan Otema</b>, founder — Jinja, Uganda</span>
-      </div>
-      <p class="hero-motto"><?= icon('rocket') ?> <?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></p>
+    <span class="hero-tag"><span class="dot" aria-hidden="true"></span> Software · Websites · Business Systems — Jinja, Uganda</span>
+    <h1>Building digital solutions that <span class="accent">move your business forward.</span></h1>
+    <p class="lead">Reagan Soft Innovation Limited creates professional websites, custom business systems, e-commerce platforms, software, branding and digital solutions — and keeps you in the loop through a simple client portal.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="<?= app_url('register.php') ?>"><?= icon('arrow') ?> Start a Project</a>
+      <a class="btn btn-ghost" href="<?= app_url('services.php') ?>">View Our Services</a>
     </div>
-    <div class="hero-visual">
-      <div class="hero-stage">
-        <img class="hero-shot" src="<?= app_url('assets/img/cover.png') ?>"
-             srcset="<?= app_url('assets/img/cover-640.webp') ?> 640w, <?= app_url('assets/img/cover-960.webp') ?> 960w, <?= app_url('assets/img/cover-1600.webp') ?> 1600w"
-             sizes="(max-width: 900px) 100vw, 600px"
-             width="1672" height="941"
-             alt="Reagan Soft Innovation Limited — digital solutions, websites and business systems built in Jinja, Uganda"
-             loading="eager" fetchpriority="high" decoding="async">
-        <span class="hero-wash" aria-hidden="true"></span>
-        <span class="hero-chip chip-top"><span class="live-dot"></span> Online — Jinja, Uganda</span>
-        <span class="hero-chip chip-mid"><?= icon('folder') ?><b><?= max(1, $completed) ?>+</b> projects delivered</span>
-        <div class="code-card" aria-hidden="true">
-          <div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="code-name">RSI-2026-00002 · project.php</span></div>
-          <pre class="code"><code><span class="t-kw">&lt;?php</span>
-<span class="t-kw">if</span> (<span class="t-fn">reviewScope</span>(<span class="t-var">$client</span>)) {
-    <span class="t-fn">sendQuotation</span>(<span class="t-var">$project</span>);
-    <span class="t-var">$project</span>-&gt;<span class="t-var">status</span> = <span class="t-str">'APPROVED'</span>;
-}
-<span class="t-cmt">// scope it, quote it, deliver it</span></code></pre>
-        </div>
+  </div>
+</section>
+
+<section class="hero-band">
+  <div class="container">
+    <div class="hero-pricing">
+      <div class="hero-price-item">
+        <span class="hp-label">Web Development</span>
+        <span class="hp-value"><?= e(settings('currency')) ?> <?= money_compact(PRICE_WEBSITE_MIN) ?> – <?= money_compact(PRICE_WEBSITE_MAX) ?></span>
+        <span class="hp-sub">Professional websites &amp; online stores</span>
+      </div>
+      <div class="hero-price-item">
+        <span class="hp-label">Business Systems</span>
+        <span class="hp-value"><?= e(settings('currency')) ?> <?= money_compact(PRICE_SYSTEM_MIN) ?> – <?= money_compact(PRICE_SYSTEM_MAX) ?></span>
+        <span class="hp-sub">Custom systems &amp; software</span>
       </div>
     </div>
+    <div class="hero-trust">
+      <span><span class="tick"><?= icon('check') ?></span> You can request work online</span>
+      <span><span class="tick"><?= icon('check') ?></span> Tasks &amp; progress you can follow</span>
+      <span><span class="tick"><?= icon('check') ?></span> Clear, upfront pricing</span>
+      <span><span class="tick"><?= icon('check') ?></span> <?= max(1, $completed) ?>+ projects delivered</span>
+    </div>
+    <div class="hero-byline">
+      <img src="<?= app_url('assets/img/founder.webp') ?>" alt="Reagan Otema, founder" width="40" height="40" loading="eager" fetchpriority="high">
+      <span>Built by <b>Reagan Otema</b>, founder — Jinja, Uganda</span>
+    </div>
+    <p class="hero-motto"><?= icon('rocket') ?> <?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></p>
   </div>
 </section>
 
@@ -91,11 +80,11 @@ public_head([
         <article class="card">
           <div class="card-icon"><?= icon($s['icon']) ?></div>
           <h3><?= e($s['name']) ?></h3>
-          <p><?= e(truncate($s['description'], 130)) ?></p>
+          <p><?= e($s['description']) ?></p>
           <?php if ($s['delivery_days']): ?>
-            <div class="deliver" style="margin-top:12px"><?= icon('clock') ?><span>Delivery from <?= (int)$s['delivery_days'] ?> days</span></div>
+            <div class="deliver" style="margin-top:12px"><?= icon('clock') ?><span>Delivery from <?= (int)$s['delivery_days'] ?> day<?= (int)$s['delivery_days'] === 1 ? '' : 's' ?></span></div>
           <?php endif; ?>
-          <div class="price"><?= $s['price_note'] !== '' ? e($s['price_note']) . ' ' : '' ?><strong><?= e(service_price_display($s, settings('currency'))) ?></strong></div>
+          <div class="price"><?php $srvPrice = service_price_display($s, settings('currency')); $srvNote = trim((string)$s['price_note']); if ($srvNote !== '' && mb_stripos($srvPrice, $srvNote) === false): ?><span class="price-note"><?= e($srvNote) ?></span><?php endif; ?><strong><?= e($srvPrice) ?></strong></div>
           <a class="btn btn-ghost btn-sm mt-2" href="<?= app_url('services.php#' . $s['slug']) ?>">Request service <?= icon('arrow') ?></a>
         </article>
       <?php endforeach; ?>

@@ -106,8 +106,8 @@ dashboard_head(['title' => 'Client Dashboard', 'active' => 'dashboard', 'crumb' 
         <div class="notif-item <?= $n['is_read'] ? '' : 'unread' ?>">
           <span class="notif-icon"><?= icon('bell') ?></span>
           <div>
-            <b><?= e($n['title']) ?></b>
-            <p class="small muted mb-0" style="margin:2px 0 4px"><?= e(truncate($n['message'], 120)) ?></p>
+            <b><?= e(str_replace('_', ' ', $n['title'])) ?></b>
+            <p class="small muted mb-0" style="margin:2px 0 4px"><?= e(str_replace('_', ' ', truncate($n['message'], 120))) ?></p>
             <span class="small muted"><?= time_ago($n['created_at']) ?></span>
           </div>
         </div>

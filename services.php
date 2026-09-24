@@ -35,8 +35,9 @@ public_head([
         </div>
       </div>
       <div class="price-card svc-card" style="<?= $i % 2 === 0 ? '' : 'border-color:var(--line);box-shadow:var(--shadow-sm)' ?>">
-        <?php if ($s['price_note'] !== ''): ?><span class="price-note"><?= e($s['price_note']) ?></span><?php endif; ?>
-        <div class="amount"><?= e(service_price_display($s, settings('currency'))) ?></div>
+        <?php $srvPrice = service_price_display($s, settings('currency')); $srvNote = trim((string)$s['price_note']); ?>
+        <?php if ($srvNote !== '' && mb_stripos($srvPrice, $srvNote) === false): ?><span class="price-note"><?= e($srvNote) ?></span><?php endif; ?>
+        <div class="amount"><?= e($srvPrice) ?></div>
         <?php if ($s['delivery_days']): ?>
           <div class="deliver"><?= icon('clock') ?><span>Estimated delivery: <?= (int)$s['delivery_days'] ?> day<?= (int)$s['delivery_days'] === 1 ? '' : 's' ?>+</span></div>
         <?php endif; ?>

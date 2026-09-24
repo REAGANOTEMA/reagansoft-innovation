@@ -53,8 +53,8 @@ dashboard_head(['title' => 'Notifications', 'active' => 'notifications', 'crumb'
       <div class="notif-item <?= $n['is_read'] ? '' : 'unread' ?>">
         <span class="notif-icon"><?= icon('bell') ?></span>
         <div style="flex-grow:1;min-width:0">
-          <b><?= e($n['title']) ?></b>
-          <p class="small muted" style="margin:2px 0 4px"><?= e($n['message']) ?></p>
+          <b><?= e(str_replace('_', ' ', $n['title'])) ?></b>
+          <p class="small muted" style="margin:2px 0 4px"><?= e(str_replace('_', ' ', $n['message'])) ?></p>
           <span class="small muted">
             <?= time_ago($n['created_at']) ?>
             <?php if ($n['project_title']): ?> · <a href="<?= app_url('client/project.php?id=' . (int)$n['related_project_id']) ?>"><?= e($n['project_title']) ?></a><?php endif; ?>

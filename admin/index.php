@@ -133,7 +133,7 @@ dashboard_head([
             <tr>
               <td class="small"><?= e($l['full_name'] ?? 'Guest') ?></td>
               <td><span class="badge gray"><?= e(str_replace('_', ' ', $l['action'])) ?></span></td>
-              <td class="small"><?= e(truncate($l['details'] ?? '', 90)) ?></td>
+              <td class="small"><?= e(str_replace('_', ' ', truncate($l['details'] ?? '', 90))) ?></td>
               <td class="muted small"><?= time_ago($l['created_at']) ?></td>
             </tr>
           <?php endforeach; ?>
