@@ -15,7 +15,7 @@ public_head([
       <h1>Privacy Policy</h1>
       <p class="lead">Your information stays yours. This policy explains, in plain words, what we collect and why.</p>
     </div>
-    <?= page_image('assets/img/hero6.png', 6, 'Your information stays yours'); ?>
+    <?= page_image('assets/img/hero6.webp', 6, 'Your information stays yours'); ?>
   </div>
 </section>
 

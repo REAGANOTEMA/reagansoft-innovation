@@ -23,6 +23,7 @@
 
   --green: #157f5a;
   --green-bg: #e7f7f0;
+  --yellow: #ffd34d;
   --red: #b3403a;
   --red-bg: #fdeeed;
   --amber: #9a6b10;
@@ -1072,6 +1073,9 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .price-band.alt .pb-amount .pb-to { color: #7fd0ff; }
 .price-band.alt .pb-factors { background: rgba(255, 255, 255, .06); border-color: rgba(255, 255, 255, .12); color: #dbeafe; }
 .price-band.alt .pb-factors b { color: #fff; }
+.price-band#apps .pb-factors b { color: var(--yellow); }
+.price-band#apps .pb-factors .feature-list { color: var(--yellow); }
+.price-band#apps .pb-factors .feature-list li { color: var(--yellow); }
 
 .svc-card .amount { font-size: 22px; line-height: 1.35; letter-spacing: -.3px; }
 

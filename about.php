@@ -15,7 +15,7 @@ public_head([
       <h1>A software company built on clarity and delivery.</h1>
       <p class="lead">Reagan Soft Innovation Limited helps organisations in Uganda and beyond turn everyday business processes into practical, reliable digital products.</p>
     </div>
-    <?= page_image('assets/img/hero1.png', 1, 'Software that is built properly and kept working'); ?>
+    <?= page_image('assets/img/hero1.webp', 1, 'Software that is built properly and kept working'); ?>
   </div>
 </section>
 

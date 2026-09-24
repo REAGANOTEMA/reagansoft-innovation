@@ -21,7 +21,7 @@ public_head([
         <a class="btn btn-ghost" href="<?= app_url('pricing.php') ?>">See programs &amp; pricing</a>
       </div>
     </div>
-    <?= page_image('assets/img/hero2.png', 2, 'One lifecycle, tracked from request to handover'); ?>
+    <?= page_image('assets/img/hero2.webp', 2, 'One lifecycle, tracked from request to handover'); ?>
   </div>
 </section>
 

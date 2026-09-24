@@ -15,7 +15,7 @@ public_head([
       <h1>Terms &amp; Conditions</h1>
       <p class="lead">The agreed rules of the road between you and us, written so everyone can understand them.</p>
     </div>
-    <?= page_image('assets/img/hero4.png', 4, 'The agreed rules of the road between you and us'); ?>
+    <?= page_image('assets/img/hero4.webp', 4, 'The agreed rules of the road between you and us'); ?>
   </div>
 </section>
 

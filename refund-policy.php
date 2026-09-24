@@ -15,7 +15,7 @@ public_head([
       <h1>Refund &amp; Cancellation Policy</h1>
       <p class="lead">A fair, written understanding of what happens to money when a project is cancelled.</p>
     </div>
-    <?= page_image('assets/img/hero3.png', 3, 'Fair, written protection for every payment'); ?>
+    <?= page_image('assets/img/hero3.webp', 3, 'Fair, written protection for every payment'); ?>
   </div>
 </section>
 

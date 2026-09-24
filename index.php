@@ -29,27 +29,39 @@ public_head([
     'canonical' => 'index.php',
 ]);
 ?>
-<section class="hero">
-  <img class="hero-bg" src="<?= app_url('assets/img/cover.png') ?>"
-       srcset="<?= app_url('assets/img/cover-640.webp') ?> 640w, <?= app_url('assets/img/cover-960.webp') ?> 960w, <?= app_url('assets/img/cover-1600.webp') ?> 1600w"
-       sizes="100vw"
-       width="1672" height="941"
-       alt="Reagan Soft Innovation Limited, digital solutions, websites and business systems built in Jinja, Uganda"
-       loading="eager" fetchpriority="high" decoding="async">
-  <div class="hero-overlay" aria-hidden="true"></div>
-  <div class="hero-grain" aria-hidden="true"></div>
-  <div class="radar" aria-hidden="true"></div>
-  <div class="orbit-stage" aria-hidden="true">
-    <span class="ring r1"></span><span class="ring r2"></span><span class="ring r3"></span><span class="core"></span>
-  </div>
-  <div class="container hero-inner">
-    <span class="hero-tag"><span class="dot" aria-hidden="true"></span> Software · Websites · Business Systems in Jinja, Uganda</span>
-    <h1>Building digital solutions that <span class="accent">move your business forward.</span></h1>
-    <p class="lead">Reagan Soft Innovation Limited creates professional websites, custom business systems, ecommerce platforms, software, branding and digital solutions, and keeps you in the loop through a simple client portal.</p>
-    <div class="hero-actions">
-      <a class="btn btn-primary" href="<?= app_url('checkout.php') ?>"><?= icon('rocket') ?> Start a Project</a>
-      <a class="btn btn-ghost" href="<?= app_url('pricing.php') ?>">View services &amp; pricing</a>
+<section class="hero" id="home">
+  <div class="hero-slider" id="heroSlider" role="region" aria-roledescription="carousel" aria-label="What we build for you">
+    <div class="hero-slides">
+      <?php $heroSlides = [
+          ['assets/img/hero1.webp', 'Web Development', 'PROFESSIONAL WEBSITES', 'A website built around your business, designed to look right on every phone and computer, and kept working long after launch.', 1],
+          ['assets/img/hero3.webp', 'Web &amp; Mobile Applications', 'APPS FOR YOUR OWNERSHIP', 'Business apps delivered as a website, Android and iOS app together, prepared and published to the App Store and Google Play.', 8],
+          ['assets/img/hero4.webp', 'Receipt &amp; Billing Automation', 'AUTOMATIC RECEIPTS', 'Your shop, school or clinic prints and sends a professional receipt automatically every time a client pays you.', 9],
+          ['assets/img/hero2.webp', 'Custom Business Systems', 'SYSTEMS BUILT AROUND YOUR PROCESSES', 'Client portals, management systems, dashboards and workflow automation, scoped by modules and approved by you first.', 3],
+          ['assets/img/hero5.webp', 'Ecommerce', 'ONLINE STORES THAT SELL', 'Product catalogues, cart, checkout and mobile money payment architecture, built to turn visitors into paying customers.', 1],
+          ['assets/img/hero6.webp', 'Software that keeps working', 'A ONE TIME DEPOSIT', 'Secure your project with a fixed one time deposit of <?= money($deposit, $currency) ?>, credited against your written quotation.', 0],
+      ]; ?>
+      <?php foreach ($heroSlides as $si => $hd): [$hImg, $hTag, $hKicker, $hLead, $hSvc] = $hd; ?>
+        <div class="hero-slide<?= $si === 0 ? ' s-active' : '' ?>" data-slide>
+          <img class="hero-bg" src="<?= app_url($hImg) ?>" width="1200" height="675"
+               alt="<?= e($hKicker) ?> — Reagan Soft Innovation Limited, digital solutions in Jinja, Uganda"
+               loading="<?= $si === 0 ? 'eager' : 'lazy' ?>" fetchpriority="<?= $si === 0 ? 'high' : 'auto' ?>" decoding="async">
+          <div class="hero-overlay" aria-hidden="true"></div>
+          <div class="hero-grain" aria-hidden="true"></div>
+          <div class="container hero-inner">
+            <span class="hero-tag"><span class="dot" aria-hidden="true"></span> <?= e($hTag) ?></span>
+            <h1><?= icon('rocket') ?> Build the <span class="accent"><?= e($hKicker) ?></span></h1>
+            <p class="lead"><?= e($hLead) ?></p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="<?= app_url('checkout.php' . ($hSvc > 0 ? '?service=' . (int)$hSvc : '')) ?>"><?= icon('rocket') ?> Get Now</a>
+              <a class="btn btn-ghost" href="<?= app_url('pricing.php') ?>">View services &amp; pricing</a>
+            </div>
+          </div>
+        </div>
+      <?php endforeach; ?>
     </div>
+    <button class="hero-arrow hero-prev" type="button" data-prev aria-label="Previous slide"><?= icon('prev') ?></button>
+    <button class="hero-arrow hero-next" type="button" data-next aria-label="Next slide"><?= icon('next') ?></button>
+    <div class="hero-dots" data-dots aria-label="Choose slide"></div>
   </div>
   <a class="hero-scroll" href="#overview" aria-label="Scroll to our services and pricing">
     <span class="hero-scroll-mouse" aria-hidden="true"><span></span></span>

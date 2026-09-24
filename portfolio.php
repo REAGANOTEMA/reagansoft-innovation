@@ -38,7 +38,7 @@ public_head([
       <h1>Real projects, delivered for real businesses.</h1>
       <p class="lead">A selection of finished work, added here as clients approve it for public display.</p>
     </div>
-    <?= page_image('assets/img/hero4.png', 4, 'A selection of finished work, added as clients approve'); ?>
+    <?= page_image('assets/img/hero4.webp', 4, 'A selection of finished work, added as clients approve'); ?>
   </div>
 </section>
 

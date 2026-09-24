@@ -15,7 +15,7 @@ public_head([
       <h1>Cookie Policy</h1>
       <p class="lead">A short note on the small files our site uses to keep you signed in and secure.</p>
     </div>
-    <?= page_image('assets/img/hero5.png', 5, 'Small files, clearly explained'); ?>
+    <?= page_image('assets/img/hero5.webp', 5, 'Small files, clearly explained'); ?>
   </div>
 </section>
 

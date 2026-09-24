@@ -17,7 +17,7 @@ public_head([
       <h1>Everything your business needs to go digital.</h1>
       <p class="lead">Services are scoped individually after a short conversation. Prices below are the actual ranges in <?= e(settings('currency')) ?>: professional websites and ecommerce run from <?= money(PRICE_WEBSITE_MIN, settings('currency')) ?> to <?= money(PRICE_WEBSITE_MAX, settings('currency')) ?>, automatic receipt and billing systems from <?= money(PRICE_RECEIPT_MIN, settings('currency')) ?> to <?= money(PRICE_RECEIPT_MAX, settings('currency')) ?>, apps from <?= money(PRICE_APP_MIN, settings('currency')) ?>, and custom business systems and software for schools, hospitals, NGOs and companies from <?= money(PRICE_SYSTEM_MIN, settings('currency')) ?> to <?= money(PRICE_SYSTEM_MAX, settings('currency')) ?>.</p>
     </div>
-    <?= page_image('assets/img/hero5.png', 5, 'One partner for websites, systems, apps and ecommerce'); ?>
+    <?= page_image('assets/img/hero5.webp', 5, 'One partner for websites, systems, apps and ecommerce'); ?>
   </div>
 </section>
 
