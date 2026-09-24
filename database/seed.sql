@@ -58,7 +58,7 @@ Inventory management
 Delivery and order tracking',
   30, 'cart', 'active', 2),
 
-('Custom Business Systems', 'business-systems', 'Management systems built for schools, hospitals, NGOs, government offices and companies — client portals, dashboards, workflow automation and database-driven tools around your real business processes.', 20000000, 40000000, 'UGX', 'range', 'Custom business systems',
+('Custom Business Systems', 'business-systems', 'Management systems built for schools, hospitals, NGOs, government offices and companies, with client portals, dashboards, workflow automation and database driven tools around your real business processes.', 20000000, 40000000, 'UGX', 'range', 'Custom business systems',
  'Role based user access
 Online fees, payments & mobile money
 Dashboards and reports
@@ -76,7 +76,7 @@ API and integration ready
 Deployment and support',
   30, 'code-s', 'active', 4),
 
-('Web & Mobile App Development', 'web-mobile-apps', 'Business apps built to work as a website, an Android app and an iOS app — prepared, tested and published to the Apple App Store and Google Play.', 10000000, NULL, 'UGX', 'starting_from', 'Apps for the App Store & Google Play',
+('Web & Mobile App Development', 'web-mobile-apps', 'Business apps built to work as a website, an Android app and an iOS app, prepared, tested and published to the Apple App Store and Google Play.', 10000000, NULL, 'UGX', 'starting_from', 'Apps for the App Store & Google Play',
  'Web, Android & iOS builds
 App Store & Google Play publication
 Push and SMS notifications
@@ -85,7 +85,7 @@ Dashboards and admin panels
 Testing across devices',
   30, 'mobile', 'active', 5),
 
-('Receipt & Billing Automation', 'receipt-billing', 'Automatic receipt and invoice generation — every sale prints or sends a professional receipt instantly, with totals, mobile money references and daily reports.', 3000000, 10000000, 'UGX', 'range', 'Automatic receipts & invoices',
+('Receipt & Billing Automation', 'receipt-billing', 'Automatic receipt and invoice generation, so every sale prints or sends a professional receipt instantly, with totals, mobile money references and daily reports.', 3000000, 10000000, 'UGX', 'range', 'Automatic receipts & invoices',
  'Automatic receipt printing and sending
 Invoice generation and numbering
 Mobile money reference capture
@@ -94,7 +94,7 @@ Shop, school and clinic billing
 Report formats for daily and monthly use',
   14, 'receipt', 'active', 6),
 
-('Custom Digital Solutions', 'custom-solutions', 'A specific business problem that does not fit a ready-made package? We design and build the right digital solution for it.', 0, NULL, 'UGX', 'contact_for_quote', 'Contact for a quote',
+('Custom Digital Solutions', 'custom-solutions', 'A specific business problem that does not fit a ready made package? We design and build the right digital solution for it.', 0, NULL, 'UGX', 'contact_for_quote', 'Contact for a quote',
  'Consultation and scoping
 Feasibility recommendation
 Bespoke design and build
@@ -121,7 +121,7 @@ Priority technical support
 Uptime reporting',
   1, 'shield', 'active', 9),
 
-('Video Game Development', 'video-games', 'Custom video games and interactive media for mobile, web and PC — game design, graphics, scoring, levels and store ready builds.', 12000000, NULL, 'UGX', 'starting_from', 'Custom games & interactive media',
+('Video Game Development', 'video-games', 'Custom video games and interactive media for mobile, web and PC, covering game design, graphics, scoring, levels and store ready builds.', 12000000, NULL, 'UGX', 'starting_from', 'Custom games & interactive media',
  'Game design and story development
 2D and 3D game graphics
 Mobile, web and PC builds
@@ -148,7 +148,7 @@ SMS and WhatsApp integration
 Training and handover',
   21, 'chat', 'active', 12),
 
-('System Integration & Payments', 'system-integration', 'Connecting your systems, websites and apps — mobile money and bank payment links, SMS services, APIs and data exchange between the tools you already use.', 3000000, 15000000, 'UGX', 'range', 'Payments, SMS, APIs & system links',
+('System Integration & Payments', 'system-integration', 'Connecting your systems, websites and apps: mobile money and bank payment links, SMS services, APIs and data exchange between the tools you already use.', 3000000, 15000000, 'UGX', 'range', 'Payments, SMS, APIs & system links',
  'Mobile money & bank payment links
 SMS notification services
 API connections between systems
@@ -180,7 +180,7 @@ INSERT INTO settings (setting_key, setting_value) VALUES
 ('company_fb',              ''),
 ('company_x',               ''),
 ('company_linkedin',        ''),
-('company_about',           'Reagan Soft Innovation Limited is a software company based in Jinja, Uganda. We design and build websites, business systems, ecommerce stores and custom software for businesses across the country — and we stay around to look after them after launch.'),
+('company_about',           'Reagan Soft Innovation Limited is a software company based in Jinja, Uganda. We design and build websites, business systems, ecommerce stores and custom software for businesses across the country, and we stay around to look after them after launch.'),
 ('currency',                'UGX'),
 ('tax_percent',             '0'),
 ('invoices_due_days',       '14'),

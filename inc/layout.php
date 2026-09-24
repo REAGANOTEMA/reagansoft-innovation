@@ -52,7 +52,7 @@ function public_head(array $page = []): void {
 <a class="skip-link" href="#main">Skip to main content</a>
 <header class="topbar" id="topbar">
   <div class="container nav">
-    <a class="brand" href="<?= app_url('index.php') ?>" aria-label="Reagan Soft Innovation Limited — Home">
+    <a class="brand" href="<?= app_url('index.php') ?>" aria-label="Reagan Soft Innovation Limited, Home">
       <img src="<?= app_url('assets/img/reagansoftinnovation-logo.jpeg') ?>" alt="" width="40" height="40">
       <span class="brand-text">Reagan Soft <b>Innovation</b><small class="brand-tagline"><?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></small></span>
     </a>

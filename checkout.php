@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $invoiceId = issue_deposit_invoice($pdo, $projectId, (int)$user['id'], $deposit, $label);
             $pdo->prepare(
                 "INSERT INTO payments (invoice_id, amount, method, reference, status, notes)
-                 VALUES (?,?,?,?, 'pending', 'Project deposit — initiated by client')"
+                 VALUES (?,?,?,?, 'pending', 'Project deposit, initiated by client')"
             )->execute([$invoiceId, $deposit, $values['method'], $values['reference'] !== '' ? $values['reference'] : null]);
 
             audit('project_started', 'project', $projectId, 'Client started ' . $label . ' (' . $ref . ') with deposit payment submitted');
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             notify_staff('New project + deposit', $user['full_name'] . ' started "' . $values['title'] . '" (' . $ref . ') and submitted a deposit of ' . money($deposit, $currency) . '.', 'project', $projectId);
 
             $pdo->commit();
-            flash('success', 'Project ' . $ref . ' created. Your deposit payment has been submitted for confirmation — we will start as soon as it is verified.');
+            flash('success', 'Project ' . $ref . ' created. Your deposit payment has been submitted for confirmation, and we will start as soon as it is verified.');
             clear_old();
             redirect(app_url('client/project.php?id=' . $projectId . '&tab=invoice'));
         } catch (Throwable $e) {
@@ -98,7 +98,7 @@ public_head([
   <div class="container">
     <span class="eyebrow">Checkout · <?= e($service['name'] ?? 'Your project') ?></span>
     <h1>Secure your project with a one time deposit.</h1>
-    <p class="lead">Every project starts with a fixed deposit of <strong style="color:var(--navy)"><?= money($deposit, $currency) ?></strong> — it holds your slot, gets your requirements reviewed, and is credited against your final quotation. The remaining cost is agreed in writing before development begins.</p>
+    <p class="lead">Every project starts with a fixed deposit of <strong style="color:var(--navy)"><?= money($deposit, $currency) ?></strong>, which holds your slot, gets your requirements reviewed and is credited against your final quotation. The remaining cost is agreed in writing before development begins.</p>
   </div>
 </section>
 
@@ -159,7 +159,7 @@ public_head([
             <span class="db-label">Project deposit <small>(one time, credited to your quote)</small></span>
             <strong data-deposit="<?= (float)$deposit ?>"><?= money($deposit, $currency) ?></strong>
           </div>
-          <p class="db-note"><?= icon('lock') ?> Your deposit is not an extra cost — it is applied to your project. The balance is fixed in a written quotation you approve before development begins.</p>
+          <p class="db-note"><?= icon('lock') ?> Your deposit is not an extra cost. It is applied to your project. The balance is fixed in a written quotation you approve before development begins.</p>
         </section>
 
         <?php $payHtml = payment_instructions_html(); ?>

@@ -34,13 +34,13 @@ public_head([
        srcset="<?= app_url('assets/img/cover-640.webp') ?> 640w, <?= app_url('assets/img/cover-960.webp') ?> 960w, <?= app_url('assets/img/cover-1600.webp') ?> 1600w"
        sizes="100vw"
        width="1672" height="941"
-       alt="Reagan Soft Innovation Limited — digital solutions, websites and business systems built in Jinja, Uganda"
+       alt="Reagan Soft Innovation Limited, digital solutions, websites and business systems built in Jinja, Uganda"
        loading="eager" fetchpriority="high" decoding="async">
   <div class="hero-overlay" aria-hidden="true"></div>
   <div class="container hero-inner">
-    <span class="hero-tag"><span class="dot" aria-hidden="true"></span> Software · Websites · Business Systems — Jinja, Uganda</span>
+    <span class="hero-tag"><span class="dot" aria-hidden="true"></span> Software · Websites · Business Systems in Jinja, Uganda</span>
     <h1>Building digital solutions that <span class="accent">move your business forward.</span></h1>
-    <p class="lead">Reagan Soft Innovation Limited creates professional websites, custom business systems, ecommerce platforms, software, branding and digital solutions — and keeps you in the loop through a simple client portal.</p>
+    <p class="lead">Reagan Soft Innovation Limited creates professional websites, custom business systems, ecommerce platforms, software, branding and digital solutions, and keeps you in the loop through a simple client portal.</p>
     <div class="hero-actions">
       <a class="btn btn-primary" href="<?= app_url('checkout.php') ?>"><?= icon('rocket') ?> Start a Project</a>
       <a class="btn btn-ghost" href="<?= app_url('pricing.php') ?>">View services &amp; pricing</a>
@@ -70,7 +70,7 @@ public_head([
     </div>
     <div class="hero-byline">
       <img src="<?= app_url('assets/img/founder.webp') ?>" alt="Reagan Otema, founder" width="40" height="40" loading="eager" fetchpriority="high">
-      <span>Built by <b>Reagan Otema</b>, founder — Jinja, Uganda</span>
+      <span>Built by <b>Reagan Otema</b>, founder in Jinja, Uganda</span>
     </div>
     <p class="hero-motto"><?= icon('rocket') ?> <?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></p>
   </div>
@@ -111,7 +111,7 @@ public_head([
       <div class="split-body">
         <span class="eyebrow">Clean code, on purpose</span>
         <h2>Code that is built to be looked after, not just launched.</h2>
-        <p class="muted">Anyone can put up a page. We write systems that stay fast, stay secure and stay easy for you to use — with the database, access control and roles set up properly from the start.</p>
+        <p class="muted">Anyone can put up a page. We write systems that stay fast, stay secure and stay easy for you to use, with the database, access control and roles set up properly from the start.</p>
         <ul class="feature-list">
           <li><span class="fcheck"><?= icon('check') ?></span> Secure logins &amp; role based access on every build</li>
           <li><span class="fcheck"><?= icon('check') ?></span> Clean, documented code your next developer can read</li>
@@ -126,13 +126,13 @@ public_head([
 <section class="section">
   <div class="container">
     <div class="section-head">
-      <div><span class="eyebrow">Why people work with us</span><h2>More than a developer — a partner in the work.</h2></div>
+      <div><span class="eyebrow">Why people work with us</span><h2>More than a developer, a partner in the work.</h2></div>
     </div>
     <div class="value-grid">
       <div class="value-card">
         <div class="card-icon"><?= icon('shield') ?></div>
         <h3>No security shortcuts</h3>
-        <p>Passwords, logins and client data are protected properly from day one — not bolted on as an afterthought.</p>
+        <p>Passwords, logins and client data are protected properly from day one, not bolted on as an afterthought.</p>
       </div>
       <div class="value-card">
         <div class="card-icon"><?= icon('chat') ?></div>
@@ -142,7 +142,7 @@ public_head([
       <div class="value-card">
         <div class="card-icon"><?= icon('pin') ?></div>
         <h3>A real team in your time zone</h3>
-        <p>Based in Jinja, working with businesses across Uganda — reachable by phone and WhatsApp when you need us.</p>
+        <p>Based in Jinja, working with businesses across Uganda, and reachable by phone and WhatsApp when you need us.</p>
       </div>
       <div class="value-card">
         <div class="card-icon"><?= icon('doc') ?></div>
@@ -152,7 +152,7 @@ public_head([
       <div class="value-card">
         <div class="card-icon"><?= icon('layers') ?></div>
         <h3>Systems that grow with you</h3>
-        <p>We build in modular pieces, so your software expands as your business does — no scrapping and starting over.</p>
+        <p>We build in modular pieces, so your software expands as your business does, without any scrapping or starting over.</p>
       </div>
       <div class="value-card">
         <div class="card-icon"><?= icon('clock') ?></div>
@@ -170,7 +170,7 @@ public_head([
       <p>Four clear stages. You stay informed at every step.</p>
     </div>
     <div class="steps">
-      <div class="step"><span class="step-num">STEP 01</span><h3>Create account</h3><p>Register your name, company, phone and email — takes less than a minute.</p></div>
+      <div class="step"><span class="step-num">STEP 01</span><h3>Create account</h3><p>Register your name, company, phone and email. It takes less than a minute.</p></div>
       <div class="step"><span class="step-num">STEP 02</span><h3>Choose program &amp; pay</h3><p>Pick the program for your project and secure it with a one time deposit.</p></div>
       <div class="step"><span class="step-num">STEP 03</span><h3>We review &amp; quote</h3><p>Our team reviews the work, agrees scope and sends a professional quotation.</p></div>
       <div class="step"><span class="step-num">STEP 04</span><h3>Track delivery</h3><p>Follow tasks, progress, messages and completion from your dashboard.</p></div>
@@ -183,13 +183,13 @@ public_head([
   <div class="container">
     <div class="section-head">
       <div><span class="eyebrow">Transparent pricing</span><h2>Clear ranges. No surprises.</h2></div>
-      <p>Projects are secured with a fixed one time deposit of <?= money(deposit_amount(), settings('currency')) ?>, credited against your final quotation. As a custom studio we never promise a fixed price before we review your requirements — a written quotation is always approved by you first.</p>
+      <p>Projects are secured with a fixed one time deposit of <?= money(deposit_amount(), settings('currency')) ?>, credited against your final quotation. As a custom studio we never promise a fixed price before reviewing your requirements. A written quotation is always approved by you first.</p>
     </div>
     <div class="pricing-band">
       <div class="pband-card">
         <span class="card-icon"><?= icon('globe') ?></span>
         <h3>Professional Websites</h3>
-        <p>Company websites, online stores and web platforms — scoped by pages, design, features and integrations.</p>
+        <p>Company websites, online stores and web platforms, scoped by pages, design, features and integrations.</p>
         <div class="pband-amount"><?= money(PRICE_WEBSITE_MIN, settings('currency')) ?><span>–</span><?= money(PRICE_WEBSITE_MAX, settings('currency')) ?></div>
         <a class="btn btn-primary" href="<?= app_url('checkout.php?service=' . (int)$bandService['websites']) ?>">Choose this program <?= icon('arrow') ?></a>
       </div>
@@ -210,7 +210,7 @@ public_head([
       <div class="pband-card alt">
         <span class="card-icon"><?= icon('cpu') ?></span>
         <h3>Custom Business Systems</h3>
-        <p>Portals, management systems, dashboards and automation for schools, hospitals, NGOs and companies — scoped by modules, roles and workflows.</p>
+        <p>Portals, management systems, dashboards and automation for schools, hospitals, NGOs and companies, scoped by modules, roles and workflows.</p>
         <div class="pband-amount"><?= money(PRICE_SYSTEM_MIN, settings('currency')) ?><span>–</span><?= money(PRICE_SYSTEM_MAX, settings('currency')) ?></div>
         <a class="btn btn-light" href="<?= app_url('checkout.php?service=' . (int)$bandService['systems']) ?>">Choose this program <?= icon('arrow') ?></a>
       </div>
@@ -225,7 +225,7 @@ public_head([
         <span class="eyebrow">About Reagan Soft Innovation</span>
         <h2>Built in Jinja. Designed for real businesses.</h2>
         <p class="lead mb-2"><?= e(settings('company_about', 'We help organisations turn ideas and everyday business processes into practical digital products.')) ?></p>
-        <p class="muted">We keep things simple: you always see what was requested, what is being worked on, what has been completed and what comes next — all from your own portal.</p>
+        <p class="muted">We keep things simple: you always see what was requested, what is being worked on, what has been completed and what comes next, all from your own portal.</p>
         <div class="hero-actions mt-3">
           <a class="btn btn-primary" href="<?= app_url('about.php') ?>">More about us</a>
           <a class="btn btn-ghost" href="<?= app_url('portfolio.php') ?>">Our work</a>

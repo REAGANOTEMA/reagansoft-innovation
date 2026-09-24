@@ -9,7 +9,7 @@ $faqs = [
     ['How are prices determined?',
      'Starting prices are published for each service. The final figure depends on scope, pages/features, integrations and timeline. You always approve the exact figure in writing before we start.'],
     ['Can I see progress while my project is being built?',
-     'Yes. Your client portal shows the project status, overall progress, individual tasks, deadlines, files and messages — updated by the team as work happens.'],
+     'Yes. Your client portal shows the project status, overall progress, individual tasks, deadlines, files and messages, updated by the team as work happens.'],
     ['How do payments work?',
      'We issue an invoice with clear items and due date. Once payment is confirmed, the payment is recorded against your invoice. Mobile money and bank payment details are provided on your invoice.'],
     ['What file types can I attach to a request?',
@@ -49,7 +49,7 @@ public_head([
       <div>
         <span class="eyebrow">Still have questions?</span>
         <h2>Ask us directly.</h2>
-        <p>We respond quickly with practical answers — even if the answer is that you do not need our services.</p>
+        <p>We respond quickly with practical answers, even if the answer is that you do not need our services.</p>
       </div>
       <a class="btn btn-light" href="<?= app_url('contact.php') ?>">Contact us</a>
     </div>

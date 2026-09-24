@@ -27,9 +27,9 @@ public_head([
       <h2>Information we collect</h2>
       <p>We only collect what we genuinely need to serve you:</p>
       <ul>
-        <li><strong>Contact details</strong> — your full name, phone number, email address and company name, given when you register, message us or request a service.</li>
-        <li><strong>Project information</strong> — the descriptions, requirements and files you send when you request work.</li>
-        <li><strong>Technical information</strong> — your IP address and the pages you visit, used to keep the site secure and to protect against abuse, such as repeated login attempts.</li>
+        <li><strong>Contact details</strong>: your full name, phone number, email address and company name, given when you register, message us or request a service.</li>
+        <li><strong>Project information</strong>: the descriptions, requirements and files you send when you request work.</li>
+        <li><strong>Technical information</strong>: your IP address and the pages you visit, used to keep the site secure and to protect against abuse, such as repeated login attempts.</li>
       </ul>
 
       <h2>How we use your information</h2>

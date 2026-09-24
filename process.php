@@ -29,21 +29,21 @@ public_head([
         <span class="pf-num">01</span>
         <div class="pf-body">
           <h3>Choose your program</h3>
-          <p>Browse the programs on the services and pricing pages — websites, ecommerce, receipt systems, apps, business systems and more — and pick the one that fits your project.</p>
+          <p>Browse the programs on the services and pricing pages: websites, ecommerce, receipt systems, apps, business systems and more. Pick the one that fits your project.</p>
         </div>
       </div>
       <div class="pf-step">
         <span class="pf-num">02</span>
         <div class="pf-body">
           <h3>Create your account or sign in</h3>
-          <p>You must have a client account to start a project. Registration is free and takes under a minute — your secure portal is created instantly.</p>
+          <p>You must have a client account to start a project. Registration is free and takes under a minute, and your secure portal is created instantly.</p>
         </div>
       </div>
       <div class="pf-step">
         <span class="pf-num">03</span>
         <div class="pf-body">
           <h3>Pay your project deposit</h3>
-          <p>A fixed one time deposit of <?= money($deposit, settings('currency')) ?> secures your project and is <strong>credited against your final quotation</strong>. Pay by MTN MoMo, Airtel Money, bank transfer or cash — we confirm it within the day.</p>
+          <p>A fixed one time deposit of <?= money($deposit, settings('currency')) ?> secures your project and is <strong>credited against your final quotation</strong>. Pay by MTN MoMo, Airtel Money, bank transfer or cash, and we confirm it within the day.</p>
         </div>
       </div>
       <div class="pf-step">
@@ -64,7 +64,7 @@ public_head([
         <span class="pf-num">06</span>
         <div class="pf-body">
           <h3>Quotation &amp; approval</h3>
-          <p>You receive a written quotation with line items, pricing (minus your deposit) and terms — approve it in your portal.</p>
+          <p>You receive a written quotation with line items, pricing (minus your deposit) and terms, which you approve in your portal.</p>
         </div>
       </div>
       <div class="pf-step">
@@ -85,7 +85,7 @@ public_head([
         <span class="pf-num">09</span>
         <div class="pf-body">
           <h3>Delivery &amp; handover</h3>
-          <p>Final files, credentials and training are handed over — status moves to Completed.</p>
+          <p>Final files, credentials and training are handed over, and the status moves to Completed.</p>
         </div>
       </div>
       <div class="pf-step">
@@ -123,7 +123,7 @@ public_head([
       <div>
         <span class="eyebrow" style="color:#7fd0ff">Ready when you are</span>
         <h2>Start your project today.</h2>
-        <p>Choose a program, create your account and pay your <?= money($deposit, settings('currency')) ?> deposit — it takes less than five minutes to begin.</p>
+        <p>Choose a program, create your account and pay your <?= money($deposit, settings('currency')) ?> deposit. It takes less than five minutes to begin.</p>
       </div>
       <a class="btn btn-light" href="<?= app_url('checkout.php') ?>">Start a project <?= icon('arrow') ?></a>
     </div>

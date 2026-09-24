@@ -23,7 +23,7 @@ public_head([
   <div class="container">
     <span class="eyebrow">Pricing</span>
     <h1>Honest ranges, agreed before we start.</h1>
-    <p class="lead">We work in clear pricing ranges: professional websites and ecommerce, automatic receipt and billing systems, apps for both web and mobile app stores, and larger custom business systems. Every project is secured with a fixed one time deposit of <strong style="color:var(--navy)"><?= money($deposit, $currency) ?></strong> (credited against your quotation). The final figure depends entirely on your requirements — and it is always written into a quotation that you approve before any development begins.</p>
+    <p class="lead">We work in clear pricing ranges: professional websites and ecommerce, automatic receipt and billing systems, apps for both web and mobile app stores, and larger custom business systems. Every project is secured with a fixed one time deposit of <strong style="color:var(--navy)"><?= money($deposit, $currency) ?></strong> (credited against your quotation). The final figure depends entirely on your requirements, and it is always written into a quotation that you approve before any development begins.</p>
   </div>
 </section>
 
@@ -32,7 +32,7 @@ public_head([
     <span class="dr-icon"><?= icon('shield') ?></span>
     <div>
       <b>How it works: choose a program → create your account → pay the <?= money($deposit, $currency) ?> deposit.</b>
-      <p>Your deposit secures your slot and is credited to your project. You only pay the balance after approving your written quotation — never before.</p>
+      <p>Your deposit secures your slot and is credited to your project. You only pay the balance after approving your written quotation, never before.</p>
     </div>
     <a class="btn btn-ghost btn-sm" href="<?= app_url('checkout.php') ?>">Start now <?= icon('arrow') ?></a>
   </div>
@@ -46,7 +46,7 @@ public_head([
         <div class="pb-body">
           <span class="eyebrow">Web Development</span>
           <h2>Professional websites &amp; ecommerce</h2>
-          <p>Company websites, online stores, portfolios and web platforms — designed, built and launched for real results.</p>
+          <p>Company websites, online stores, portfolios and web platforms, designed, built and launched for real results.</p>
           <div class="pb-amount"><?= money(PRICE_WEBSITE_MIN, $currency) ?> <span class="pb-to">to</span> <?= money(PRICE_WEBSITE_MAX, $currency) ?></div>
           <a class="btn btn-primary" href="<?= app_url('checkout.php?service=' . (int)$bandService['websites']) ?>">Start a website project <?= icon('arrow') ?></a>
         </div>
@@ -70,7 +70,7 @@ public_head([
         <div class="pb-body">
           <span class="eyebrow">Receipt &amp; Billing Automation</span>
           <h2>Automatic receipts, invoices &amp; payment records</h2>
-          <p>Whenever you make a sale, the system prints or sends a professional receipt automatically — perfectly suited to shops, schools, clinics and service businesses.</p>
+          <p>Whenever you make a sale, the system prints or sends a professional receipt automatically. It is perfect for shops, schools, clinics and service businesses.</p>
           <div class="pb-amount"><?= money(PRICE_RECEIPT_MIN, $currency) ?> <span class="pb-to">to</span> <?= money(PRICE_RECEIPT_MAX, $currency) ?></div>
           <a class="btn btn-primary" href="<?= app_url('checkout.php?service=' . (int)$bandService['receipts']) ?>">Start a receipt system project <?= icon('arrow') ?></a>
         </div>
@@ -95,7 +95,7 @@ public_head([
         <div class="pb-body">
           <span class="eyebrow">Web &amp; Mobile Applications</span>
           <h2>Apps for the App Store and Google Play</h2>
-          <p>Business applications built to work as a website, an Android app and an iOS app — prepared, tested and published to the Apple App Store and Google Play.</p>
+          <p>Business applications built to work as a website, an Android app and an iOS app, prepared, tested and published to the Apple App Store and Google Play.</p>
           <div class="pb-amount"><span class="pb-to" style="margin-right:6px">from</span><?= money(PRICE_APP_MIN, $currency) ?></div>
           <a class="btn btn-light" href="<?= app_url('checkout.php?service=' . (int)$bandService['apps']) ?>">Start an app project <?= icon('arrow') ?></a>
         </div>
@@ -120,7 +120,7 @@ public_head([
         <div class="pb-body">
           <span class="eyebrow">Custom Business Systems</span>
           <h2>Systems, software &amp; automation</h2>
-          <p>Client portals, management systems, dashboards and workflow automation for schools, hospitals, NGOs, government offices and companies — built around your real business processes.</p>
+          <p>Client portals, management systems, dashboards and workflow automation for schools, hospitals, NGOs, government offices and companies, built around your real business processes.</p>
           <div class="pb-amount"><?= money(PRICE_SYSTEM_MIN, $currency) ?> <span class="pb-to">to</span> <?= money(PRICE_SYSTEM_MAX, $currency) ?></div>
           <a class="btn btn-light" href="<?= app_url('checkout.php?service=' . (int)$bandService['systems']) ?>">Start a systems project <?= icon('arrow') ?></a>
         </div>
