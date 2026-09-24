@@ -24,7 +24,7 @@ $bandService = [
 
 public_head([
     'title'     => 'Software Development & Digital Solutions in Jinja, Uganda',
-    'desc'      => 'Reagan Soft Innovation Limited builds professional websites, business systems, e-commerce and custom software in Jinja, Uganda. Start your project through our secure client portal.',
+    'desc'      => 'Reagan Soft Innovation Limited builds professional websites, business systems, ecommerce and custom software in Jinja, Uganda. Start your project through our secure client portal.',
     'active'    => 'home',
     'canonical' => 'index.php',
 ]);
@@ -40,7 +40,7 @@ public_head([
   <div class="container hero-inner">
     <span class="hero-tag"><span class="dot" aria-hidden="true"></span> Software · Websites · Business Systems — Jinja, Uganda</span>
     <h1>Building digital solutions that <span class="accent">move your business forward.</span></h1>
-    <p class="lead">Reagan Soft Innovation Limited creates professional websites, custom business systems, e-commerce platforms, software, branding and digital solutions — and keeps you in the loop through a simple client portal.</p>
+    <p class="lead">Reagan Soft Innovation Limited creates professional websites, custom business systems, ecommerce platforms, software, branding and digital solutions — and keeps you in the loop through a simple client portal.</p>
     <div class="hero-actions">
       <a class="btn btn-primary" href="<?= app_url('checkout.php') ?>"><?= icon('rocket') ?> Start a Project</a>
       <a class="btn btn-ghost" href="<?= app_url('pricing.php') ?>">View services &amp; pricing</a>
@@ -113,7 +113,7 @@ public_head([
         <h2>Code that is built to be looked after, not just launched.</h2>
         <p class="muted">Anyone can put up a page. We write systems that stay fast, stay secure and stay easy for you to use — with the database, access control and roles set up properly from the start.</p>
         <ul class="feature-list">
-          <li><span class="fcheck"><?= icon('check') ?></span> Secure logins &amp; role-based access on every build</li>
+          <li><span class="fcheck"><?= icon('check') ?></span> Secure logins &amp; role based access on every build</li>
           <li><span class="fcheck"><?= icon('check') ?></span> Clean, documented code your next developer can read</li>
           <li><span class="fcheck"><?= icon('check') ?></span> Backups, updates and support after launch</li>
         </ul>
@@ -146,7 +146,7 @@ public_head([
       </div>
       <div class="value-card">
         <div class="card-icon"><?= icon('doc') ?></div>
-        <h3>Write-ups you can actually follow</h3>
+        <h3>Records you can actually follow</h3>
         <p>Quotations, invoices and project history stay saved and searchable. Nothing disappears into a lost email chain.</p>
       </div>
       <div class="value-card">
@@ -171,7 +171,7 @@ public_head([
     </div>
     <div class="steps">
       <div class="step"><span class="step-num">STEP 01</span><h3>Create account</h3><p>Register your name, company, phone and email — takes less than a minute.</p></div>
-      <div class="step"><span class="step-num">STEP 02</span><h3>Choose program &amp; pay</h3><p>Pick the program for your project and secure it with a one-time deposit.</p></div>
+      <div class="step"><span class="step-num">STEP 02</span><h3>Choose program &amp; pay</h3><p>Pick the program for your project and secure it with a one time deposit.</p></div>
       <div class="step"><span class="step-num">STEP 03</span><h3>We review &amp; quote</h3><p>Our team reviews the work, agrees scope and sends a professional quotation.</p></div>
       <div class="step"><span class="step-num">STEP 04</span><h3>Track delivery</h3><p>Follow tasks, progress, messages and completion from your dashboard.</p></div>
     </div>
@@ -183,7 +183,7 @@ public_head([
   <div class="container">
     <div class="section-head">
       <div><span class="eyebrow">Transparent pricing</span><h2>Clear ranges. No surprises.</h2></div>
-      <p>Projects are secured with a fixed one-time deposit of <?= money(deposit_amount(), settings('currency')) ?>, credited against your final quotation. As a custom studio we never promise a fixed price before we review your requirements — a written quotation is always approved by you first.</p>
+      <p>Projects are secured with a fixed one time deposit of <?= money(deposit_amount(), settings('currency')) ?>, credited against your final quotation. As a custom studio we never promise a fixed price before we review your requirements — a written quotation is always approved by you first.</p>
     </div>
     <div class="pricing-band">
       <div class="pband-card">
@@ -261,7 +261,7 @@ public_head([
       <div>
         <span class="eyebrow">Let's build</span>
         <h2>Have a project in mind?</h2>
-        <p>Create an account, choose your program and secure it with a one-time deposit. We will review it and respond with a clear plan and quotation.</p>
+        <p>Create an account, choose your program and secure it with a one time deposit. We will review it and respond with a clear plan and quotation.</p>
       </div>
       <div style="display:flex;gap:12px;flex-wrap:wrap">
         <a class="btn btn-light" href="<?= app_url('checkout.php') ?>">Start a project &amp; pay deposit</a>

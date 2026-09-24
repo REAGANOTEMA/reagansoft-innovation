@@ -22,7 +22,7 @@ function render_alerts(): void {
 
 function public_head(array $page = []): void {
     $base = settings('company_name', APP_NAME);
-    $desc = $page['desc'] ?? 'Software development company in Jinja, Uganda. Websites, business systems, e-commerce, branding and custom software solutions.';
+    $desc = $page['desc'] ?? 'Software development company in Jinja, Uganda. Websites, business systems, ecommerce, branding and custom software solutions.';
     $title = page_title($page);
     $active = $page['active'] ?? '';
     $canon = app_url($page['canonical'] ?? '');

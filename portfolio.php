@@ -18,7 +18,7 @@ try {
 $capabilities = [
     ['globe', 'Company websites', 'Responsive marketing and corporate websites that represent your brand and generate enquiries.'],
     ['cpu', 'Business systems', 'Client portals, inventories, bookings and internal management systems.'],
-    ['cart', 'E-commerce', 'Online stores with catalogues, orders and mobile money ready architecture.'],
+    ['cart', 'Ecommerce', 'Online stores with catalogues, orders and mobile money ready architecture.'],
     ['code-s', 'Custom software', 'Tailored web applications built around a specific business process.'],
     ['palette', 'Branding', 'Logos, guidelines and design assets that give your business a consistent identity.'],
     ['layers', 'Dashboards & tools', 'Reporting dashboards and practical tools that make daily decisions easier.'],
@@ -26,7 +26,7 @@ $capabilities = [
 
 public_head([
     'title'     => 'Our Work | Projects by Reagan Soft Innovation Limited',
-    'desc'      => 'Recent projects and development capabilities from Reagan Soft Innovation Limited: websites, business systems, e-commerce and custom software in Jinja, Uganda.',
+    'desc'      => 'Recent projects and development capabilities from Reagan Soft Innovation Limited: websites, business systems, ecommerce and custom software in Jinja, Uganda.',
     'active'    => 'portfolio',
     'canonical' => 'portfolio.php',
 ]);

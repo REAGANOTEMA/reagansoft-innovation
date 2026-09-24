@@ -5,7 +5,7 @@ $deposit = deposit_amount();
 
 public_head([
     'title'     => 'Our Process | How We Deliver Software in Jinja, Uganda',
-    'desc'      => 'From choosing a program to delivery: create your account, secure your project with a one-time deposit, then follow your website or business system from request to handover with Reagan Soft Innovation Limited.',
+    'desc'      => 'From choosing a program to delivery: create your account, secure your project with a one time deposit, then follow your website or business system from request to handover with Reagan Soft Innovation Limited.',
     'active'    => 'process',
     'canonical' => 'process.php',
 ]);
@@ -29,7 +29,7 @@ public_head([
         <span class="pf-num">01</span>
         <div class="pf-body">
           <h3>Choose your program</h3>
-          <p>Browse the programs on the services and pricing pages — websites, e-commerce, receipt systems, apps, business systems and more — and pick the one that fits your project.</p>
+          <p>Browse the programs on the services and pricing pages — websites, ecommerce, receipt systems, apps, business systems and more — and pick the one that fits your project.</p>
         </div>
       </div>
       <div class="pf-step">
@@ -43,7 +43,7 @@ public_head([
         <span class="pf-num">03</span>
         <div class="pf-body">
           <h3>Pay your project deposit</h3>
-          <p>A fixed one-time deposit of <?= money($deposit, settings('currency')) ?> secures your project and is <strong>credited against your final quotation</strong>. Pay by MTN MoMo, Airtel Money, bank transfer or cash — we confirm it within the day.</p>
+          <p>A fixed one time deposit of <?= money($deposit, settings('currency')) ?> secures your project and is <strong>credited against your final quotation</strong>. Pay by MTN MoMo, Airtel Money, bank transfer or cash — we confirm it within the day.</p>
         </div>
       </div>
       <div class="pf-step">

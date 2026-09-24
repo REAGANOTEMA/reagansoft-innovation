@@ -23,7 +23,7 @@ public_head([
   <div class="container">
     <span class="eyebrow">Pricing</span>
     <h1>Honest ranges, agreed before we start.</h1>
-    <p class="lead">We work in clear pricing ranges: professional websites and e-commerce, automatic receipt and billing systems, apps for both web and mobile app stores, and larger custom business systems. Every project is secured with a fixed one-time deposit of <strong style="color:var(--navy)"><?= money($deposit, $currency) ?></strong> (credited against your quotation). The final figure depends entirely on your requirements — and it is always written into a quotation that you approve before any development begins.</p>
+    <p class="lead">We work in clear pricing ranges: professional websites and ecommerce, automatic receipt and billing systems, apps for both web and mobile app stores, and larger custom business systems. Every project is secured with a fixed one time deposit of <strong style="color:var(--navy)"><?= money($deposit, $currency) ?></strong> (credited against your quotation). The final figure depends entirely on your requirements — and it is always written into a quotation that you approve before any development begins.</p>
   </div>
 </section>
 
@@ -45,7 +45,7 @@ public_head([
       <article class="price-band" id="websites">
         <div class="pb-body">
           <span class="eyebrow">Web Development</span>
-          <h2>Professional websites &amp; e-commerce</h2>
+          <h2>Professional websites &amp; ecommerce</h2>
           <p>Company websites, online stores, portfolios and web platforms — designed, built and launched for real results.</p>
           <div class="pb-amount"><?= money(PRICE_WEBSITE_MIN, $currency) ?> <span class="pb-to">to</span> <?= money(PRICE_WEBSITE_MAX, $currency) ?></div>
           <a class="btn btn-primary" href="<?= app_url('checkout.php?service=' . (int)$bandService['websites']) ?>">Start a website project <?= icon('arrow') ?></a>
@@ -75,7 +75,7 @@ public_head([
           <a class="btn btn-primary" href="<?= app_url('checkout.php?service=' . (int)$bandService['receipts']) ?>">Start a receipt system project <?= icon('arrow') ?></a>
         </div>
         <div class="pb-factors">
-          <b>Receipt-system pricing depends on:</b>
+          <b>Receipt system pricing depends on:</b>
           <ul class="feature-list">
             <li>Automatic receipt printing and sending</li>
             <li>Invoice generation and numbering</li>
@@ -125,7 +125,7 @@ public_head([
           <a class="btn btn-light" href="<?= app_url('checkout.php?service=' . (int)$bandService['systems']) ?>">Start a systems project <?= icon('arrow') ?></a>
         </div>
         <div class="pb-factors">
-          <b>Business-system pricing depends on:</b>
+          <b>Business system pricing depends on:</b>
           <ul class="feature-list">
             <li>Business requirements</li>
             <li>Number of modules</li>

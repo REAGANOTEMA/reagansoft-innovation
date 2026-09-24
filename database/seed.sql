@@ -32,7 +32,7 @@ USE reagan_soft_innovation;
 -- 01 · SERVICES
 -- ============================================================
 -- price_min / price_max = the authoritative service ranges (UGX)
---               · websites / e-commerce        500,000 – 10,000,000
+--               · websites / ecommerce        500,000 – 10,000,000
 --               · receipt & billing systems    3,000,000 – 10,000,000
 --               · web & mobile apps            from 10,000,000
 --               · business systems / software  20,000,000 – 40,000,000
@@ -44,22 +44,22 @@ INSERT INTO services (name, slug, description, price_min, price_max, currency, p
  'Custom responsive design for mobile, tablet and desktop
 Contact & enquiry form
 WhatsApp and phone integration
-Search-engine friendly structure
+Search engine friendly structure
 Google Map & business details
 Training on how to manage content',
   14, 'globe', 'active', 1),
 
-('E-Commerce Development', 'ecommerce', 'Online stores with product catalogues, order management and a payment architecture ready for mobile money and bank integration.', 500000, 10000000, 'UGX', 'range', 'Websites & online stores',
+('Ecommerce Development', 'ecommerce', 'Online stores with product catalogues, order management and a payment architecture ready for mobile money and bank integration.', 500000, 10000000, 'UGX', 'range', 'Websites & online stores',
  'Product catalogue and categories
 Shopping cart and checkout
 Order management dashboard
-Mobile money & bank payment-ready architecture
+Mobile money and bank payment ready architecture
 Inventory management
 Delivery and order tracking',
   30, 'cart', 'active', 2),
 
 ('Custom Business Systems', 'business-systems', 'Management systems built for schools, hospitals, NGOs, government offices and companies — client portals, dashboards, workflow automation and database-driven tools around your real business processes.', 20000000, 40000000, 'UGX', 'range', 'Custom business systems',
- 'Role-based user access
+ 'Role based user access
 Online fees, payments & mobile money
 Dashboards and reports
 Workflow automation
@@ -72,7 +72,7 @@ User training and handover',
 Custom database design
 Secure authentication
 Administration panels
-API-ready architecture
+API and integration ready
 Deployment and support',
   30, 'code-s', 'active', 4),
 
@@ -94,7 +94,7 @@ Shop, school and clinic billing
 Report formats for daily and monthly use',
   14, 'receipt', 'active', 6),
 
-('Custom Digital Solutions', 'custom-solutions', 'A specific business problem that does not fit an off-the-shelf package? We design and build the right digital solution for it.', 0, NULL, 'UGX', 'contact_for_quote', 'Contact for a quote',
+('Custom Digital Solutions', 'custom-solutions', 'A specific business problem that does not fit a ready-made package? We design and build the right digital solution for it.', 0, NULL, 'UGX', 'contact_for_quote', 'Contact for a quote',
  'Consultation and scoping
 Feasibility recommendation
 Bespoke design and build
@@ -108,7 +108,7 @@ Ongoing support',
 Brand colour and typography
 Business cards and letterheads
 Social media graphics
-Print-ready file delivery
+Print ready file delivery
 Usage guideline document',
   7, 'palette', 'active', 8),
 
@@ -121,7 +121,7 @@ Priority technical support
 Uptime reporting',
   1, 'shield', 'active', 9),
 
-('Video Game Development', 'video-games', 'Custom video games and interactive media for mobile, web and PC — game design, graphics, scoring, levels and store-ready builds.', 12000000, NULL, 'UGX', 'starting_from', 'Custom games & interactive media',
+('Video Game Development', 'video-games', 'Custom video games and interactive media for mobile, web and PC — game design, graphics, scoring, levels and store ready builds.', 12000000, NULL, 'UGX', 'starting_from', 'Custom games & interactive media',
  'Game design and story development
 2D and 3D game graphics
 Mobile, web and PC builds
@@ -130,10 +130,10 @@ Multiplayer and leaderboards
 Testing and store publication support',
   45, 'gamepad', 'active', 10),
 
-('Digital Books & Publications', 'digital-books', 'Professional layout and cover design, editing and e-book formats so your books look great in print and on Kindle, tablets and phones.', 1000000, NULL, 'UGX', 'starting_from', 'E-books & print-ready books',
+('Digital Books & Publications', 'digital-books', 'Professional layout and cover design, editing and ebook formats so your books look great in print and on Kindle, tablets and phones.', 1000000, NULL, 'UGX', 'starting_from', 'Ebooks and print ready books',
  'Book layout and cover design
-E-book formats for common readers
-Print-ready file delivery
+Ebook formats for common readers
+Print ready file delivery
 Editing and proofreading
 Tables, charts and diagrams
 Professional illustration support',
@@ -142,7 +142,7 @@ Professional illustration support',
 ('Chatbots & Smart Automation', 'chat-automation', 'Business chatbots and smart automation that answer customer questions, capture leads and handle routine tasks automatically, day and night.', 5000000, 15000000, 'UGX', 'range', 'Chatbots & business automation',
  'Business chatbot built into your site
 Automated replies and FAQs
-Lead capture and hand-off
+Lead capture and handover
 Workflow automation
 SMS and WhatsApp integration
 Training and handover',
@@ -180,7 +180,7 @@ INSERT INTO settings (setting_key, setting_value) VALUES
 ('company_fb',              ''),
 ('company_x',               ''),
 ('company_linkedin',        ''),
-('company_about',           'Reagan Soft Innovation Limited is a software company based in Jinja, Uganda. We design and build websites, business systems, e-commerce stores and custom software for businesses across the country — and we stay around to look after them after launch.'),
+('company_about',           'Reagan Soft Innovation Limited is a software company based in Jinja, Uganda. We design and build websites, business systems, ecommerce stores and custom software for businesses across the country — and we stay around to look after them after launch.'),
 ('currency',                'UGX'),
 ('tax_percent',             '0'),
 ('invoices_due_days',       '14'),
@@ -224,16 +224,16 @@ INSERT INTO projects (ref_no, client_id, service_id, assigned_to, title, descrip
  'A custom management system for tracking sales, stock levels, suppliers and daily reports across the Pearl Holdings outlets in the Eastern region.',
  'User roles for cashier and manager, product and stock modules, purchase tracking, daily sales reports, backup.',
  14500000, 'high', 'IN_PROGRESS', 70, '2026-09-30', '2026-07-06', NULL, '2026-07-01'),
-('RSI-2026-00003', 5, 2, 2, 'E-Commerce Store – Mulumba & Sons Traders',
- 'An online store for hardware and farm inputs with a product catalogue, cart, order management and mobile-money-ready payment architecture.',
- 'Product categories and search, cart and checkout, order dashboard, inventory, mobile money payment-ready structure.',
+('RSI-2026-00003', 5, 2, 2, 'Ecommerce Store – Mulumba & Sons Traders',
+ 'An online store for hardware and farm inputs with a product catalogue, cart, order management and mobile money ready payment architecture.',
+ 'Product categories and search, cart and checkout, order dashboard, inventory, mobile money payment ready structure.',
  9800000, 'normal', 'QUOTATION', 0, NULL, NULL, NULL, '2026-09-10'),
 ('RSI-2026-00004', 6, 3, NULL, 'Customer Feedback Portal – Agnes Nakato',
  'A small portal where customers submit feedback and track the response, with a staff review dashboard.',
  'Feedback form, automatic acknowledgements, staff review queue, simple analytics.',
  3500000, 'low', 'NEW', 0, NULL, NULL, NULL, '2026-09-20'),
 ('RSI-2026-00005', 3, 6, 1, 'Brand Refresh & Business Cards – Kireka Farm Supplies Ltd',
- 'Logo refresh, updated colour palette and print-ready business cards and letterheads for the farm supply brand.',
+ 'Logo refresh, updated colour palette and print ready business cards and letterheads for the farm supply brand.',
  'Two logo options, brand colours and typography, business cards, letterheads.',
  650000, 'normal', 'REVIEWING', 15, NULL, NULL, NULL, '2026-09-18');
 
@@ -269,7 +269,7 @@ INSERT INTO quotations (quotation_no, project_id, client_id, issued_on, expiry_d
 
 INSERT INTO quotation_items (quotation_id, description, quantity, unit_price) VALUES
 (1, 'E-commerce design & development', 1, 7000000),
-(1, 'Mobile money & bank payment-ready architecture', 1, 2000000),
+(1, 'Mobile money and bank payment ready architecture', 1, 2000000),
 (1, 'Testing, training & launch support', 1, 800000);
 
 -- ============================================================

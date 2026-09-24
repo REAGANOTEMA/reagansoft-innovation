@@ -5,7 +5,7 @@ $services = db()->query("SELECT * FROM services WHERE status='active' ORDER BY s
 
 public_head([
     'title'     => 'Services & Pricing | Reagan Soft Innovation Limited',
-    'desc'      => 'Web development, business systems, e-commerce, software development, branding and website maintenance in Jinja and across Uganda. Clear services and starting prices.',
+    'desc'      => 'Web development, business systems, ecommerce, software development, branding and website maintenance in Jinja and across Uganda. Clear services and starting prices.',
     'active'    => 'services',
     'canonical' => 'services.php',
 ]);
@@ -14,7 +14,7 @@ public_head([
   <div class="container">
     <span class="eyebrow">Services</span>
     <h1>Everything your business needs to go digital.</h1>
-    <p class="lead">Services are scoped individually after a short conversation. Prices below are the actual ranges in <?= e(settings('currency')) ?> — professional websites and e-commerce run from <?= money(PRICE_WEBSITE_MIN, settings('currency')) ?> to <?= money(PRICE_WEBSITE_MAX, settings('currency')) ?>, automatic receipt and billing systems from <?= money(PRICE_RECEIPT_MIN, settings('currency')) ?> to <?= money(PRICE_RECEIPT_MAX, settings('currency')) ?>, apps from <?= money(PRICE_APP_MIN, settings('currency')) ?>, and custom business systems and software for schools, hospitals, NGOs and companies from <?= money(PRICE_SYSTEM_MIN, settings('currency')) ?> to <?= money(PRICE_SYSTEM_MAX, settings('currency')) ?>.</p>
+    <p class="lead">Services are scoped individually after a short conversation. Prices below are the actual ranges in <?= e(settings('currency')) ?> — professional websites and ecommerce run from <?= money(PRICE_WEBSITE_MIN, settings('currency')) ?> to <?= money(PRICE_WEBSITE_MAX, settings('currency')) ?>, automatic receipt and billing systems from <?= money(PRICE_RECEIPT_MIN, settings('currency')) ?> to <?= money(PRICE_RECEIPT_MAX, settings('currency')) ?>, apps from <?= money(PRICE_APP_MIN, settings('currency')) ?>, and custom business systems and software for schools, hospitals, NGOs and companies from <?= money(PRICE_SYSTEM_MIN, settings('currency')) ?> to <?= money(PRICE_SYSTEM_MAX, settings('currency')) ?>.</p>
   </div>
 </section>
 
@@ -29,7 +29,7 @@ public_head([
         <div class="hero-actions" style="margin-top:20px">
           <a class="btn btn-primary" href="<?= app_url('checkout.php?service=' . (int)$s['id']) ?>">Choose this program <?= icon('arrow') ?></a>
         </div>
-        <p class="small muted" style="margin-top:14px"><?= icon('lock') ?> Secured with a fixed one-time deposit of <?= money(deposit_amount(), settings('currency')) ?> — credited against your final quotation.</p>
+        <p class="small muted" style="margin-top:14px"><?= icon('lock') ?> Secured with a fixed one time deposit of <?= money(deposit_amount(), settings('currency')) ?> — credited against your final quotation.</p>
       </div>
       <div class="price-card svc-card" style="<?= $i % 2 === 0 ? '' : 'border-color:var(--line);box-shadow:var(--shadow-sm)' ?>">
         <?php $srvPrice = service_price_display($s, settings('currency')); $srvNote = trim((string)$s['price_note']); ?>

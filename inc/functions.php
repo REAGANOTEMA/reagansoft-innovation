@@ -51,7 +51,7 @@ function price_range(mixed $min, mixed $max, string $currency = 'UGX'): string {
  * These two ranges are the company's official pricing buckets. Every
  * price shown in the UI comes from this model (or the services table).
  * ------------------------------------------------------------------ */
-const PRICE_WEBSITE_MIN = 500000;        // professional websites & e-commerce
+const PRICE_WEBSITE_MIN = 500000;        // professional websites & ecommerce
 const PRICE_WEBSITE_MAX = 10000000;
 
 const PRICE_APP_MIN     = 10000000;      // web & mobile apps, published ready

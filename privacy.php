@@ -22,7 +22,7 @@ public_head([
       <p class="muted">Last updated: 23 September 2026</p>
 
       <h2>Who we are</h2>
-      <p>Reagan Soft Innovation Limited is a software company based in Jinja, Uganda. We build websites, business systems, e-commerce stores and custom software for businesses in Uganda and beyond. When you see "we", "us" or "our" in this policy, it means Reagan Soft Innovation Limited.</p>
+      <p>Reagan Soft Innovation Limited is a software company based in Jinja, Uganda. We build websites, business systems, ecommerce stores and custom software for businesses in Uganda and beyond. When you see "we", "us" or "our" in this policy, it means Reagan Soft Innovation Limited.</p>
 
       <h2>Information we collect</h2>
       <p>We only collect what we genuinely need to serve you:</p>
@@ -48,7 +48,7 @@ public_head([
       <p>We keep account and project records for as long as your account is active, and for a reasonable period afterwards so we can answer questions about past work, invoices and support. You can ask us to delete your data at any time, subject to records we are legally required to keep, such as invoices.</p>
 
       <h2>How we protect it</h2>
-      <p>Passwords are stored as strong, one-way hashes. All forms are protected against forged submissions, traffic is encrypted when your browser supports it, and file uploads are checked for type and size. Access to your portal data is limited to the people who need it to deliver your project.</p>
+      <p>Passwords are stored as strong, one way hashes. All forms are protected against forged submissions, traffic is encrypted when your browser supports it, and file uploads are checked for type and size. Access to your portal data is limited to the people who need it to deliver your project.</p>
 
       <h2>Your rights</h2>
       <p>You can ask us, at any time, to:</p>

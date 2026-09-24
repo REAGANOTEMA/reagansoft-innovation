@@ -90,14 +90,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 public_head([
     'title'     => 'Start Your Project | Reagan Soft Innovation Limited',
-    'desc'      => 'Choose a program, secure your project with a one-time deposit and get your software built by Reagan Soft Innovation Limited in Jinja, Uganda.',
+    'desc'      => 'Choose a program, secure your project with a one time deposit and get your software built by Reagan Soft Innovation Limited in Jinja, Uganda.',
     'robots'    => false,
 ]);
 ?>
 <section class="page-hero checkout-hero">
   <div class="container">
     <span class="eyebrow">Checkout · <?= e($service['name'] ?? 'Your project') ?></span>
-    <h1>Secure your project with a one-time deposit.</h1>
+    <h1>Secure your project with a one time deposit.</h1>
     <p class="lead">Every project starts with a fixed deposit of <strong style="color:var(--navy)"><?= money($deposit, $currency) ?></strong> — it holds your slot, gets your requirements reviewed, and is credited against your final quotation. The remaining cost is agreed in writing before development begins.</p>
   </div>
 </section>
@@ -156,7 +156,7 @@ public_head([
 
         <section class="deposit-box">
           <div class="db-amount">
-            <span class="db-label">Project deposit <small>(one-time, credited to your quote)</small></span>
+            <span class="db-label">Project deposit <small>(one time, credited to your quote)</small></span>
             <strong data-deposit="<?= (float)$deposit ?>"><?= money($deposit, $currency) ?></strong>
           </div>
           <p class="db-note"><?= icon('lock') ?> Your deposit is not an extra cost — it is applied to your project. The balance is fixed in a written quotation you approve before development begins.</p>
@@ -193,7 +193,7 @@ public_head([
             <div class="field"><label for="cs_reference">Transaction reference <span class="req">*</span></label><input class="input" id="cs_reference" name="reference" maxlength="120" required placeholder="e.g. MoMo reference / sender name" value="<?= old('reference', $values['reference']) ?>"><div class="form-note">The number or reference you sent the deposit with.</div></div>
 
             <div class="checkout-total">
-              <span>One-time project deposit</span>
+              <span>One time project deposit</span>
               <strong><?= money($deposit, $currency) ?></strong>
             </div>
 

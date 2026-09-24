@@ -27,7 +27,7 @@ public_head([
         <div class="info-list" style="display:grid;gap:12px;margin-top:22px;max-width:480px">
           <div class="info-line" style="color:var(--ink-2)"><?= icon('flag') ?><span><b>Founded by</b> <?= e(settings('company_founder', 'Reagan Otema')) ?></span></div>
           <div class="info-line" style="color:var(--ink-2)"><?= icon('pin') ?><span><b>Based in</b> <?= e(settings('company_address', 'Jinja, Uganda')) ?></span></div>
-          <div class="info-line" style="color:var(--ink-2)"><?= icon('layers') ?><span><b>Focus</b> Websites · Business systems · E-commerce · Software</span></div>
+          <div class="info-line" style="color:var(--ink-2)"><?= icon('layers') ?><span><b>Focus</b> Websites · Business systems · Ecommerce · Software</span></div>
         </div>
       </div>
       <div class="info-card">
