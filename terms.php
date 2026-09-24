@@ -8,11 +8,14 @@ public_head([
     'canonical' => 'terms.php',
 ]);
 ?>
-<section class="page-hero">
+<section class="page-hero pi-grid">
   <div class="container">
-    <span class="eyebrow">Legal</span>
-    <h1>Terms &amp; Conditions</h1>
-    <p class="lead">The agreed rules of the road between you and us, written so everyone can understand them.</p>
+    <div class="pi-copy">
+      <span class="eyebrow">Legal</span>
+      <h1>Terms &amp; Conditions</h1>
+      <p class="lead">The agreed rules of the road between you and us, written so everyone can understand them.</p>
+    </div>
+    <?= page_image('assets/img/hero4.png', 4, 'The agreed rules of the road between you and us'); ?>
   </div>
 </section>
 

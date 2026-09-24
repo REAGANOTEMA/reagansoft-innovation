@@ -10,15 +10,18 @@ public_head([
     'canonical' => 'process.php',
 ]);
 ?>
-<section class="page-hero">
+<section class="page-hero pi-grid">
   <div class="container">
-    <span class="eyebrow">Our process</span>
-    <h1>A clear path from idea to delivery.</h1>
-    <p class="lead">Every project follows the same structured lifecycle: choose your program, create your account, secure it with a <?= money($deposit, settings('currency')) ?> deposit, and track everything until handover.</p>
-    <div class="hero-actions" style="margin-top:24px">
-      <a class="btn btn-primary" href="<?= app_url('checkout.php') ?>"><?= icon('rocket') ?> Start a project now</a>
-      <a class="btn btn-ghost" href="<?= app_url('pricing.php') ?>">See programs &amp; pricing</a>
+    <div class="pi-copy">
+      <span class="eyebrow">Our process</span>
+      <h1>A clear path from idea to delivery.</h1>
+      <p class="lead">Every project follows the same structured lifecycle: choose your program, create your account, secure it with a <?= money($deposit, settings('currency')) ?> deposit, and track everything until handover.</p>
+      <div class="hero-actions" style="margin-top:24px">
+        <a class="btn btn-primary" href="<?= app_url('checkout.php') ?>"><?= icon('rocket') ?> Start a project now</a>
+        <a class="btn btn-ghost" href="<?= app_url('pricing.php') ?>">See programs &amp; pricing</a>
+      </div>
     </div>
+    <?= page_image('assets/img/hero2.png', 2, 'One lifecycle, tracked from request to handover'); ?>
   </div>
 </section>
 

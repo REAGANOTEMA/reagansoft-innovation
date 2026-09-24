@@ -8,11 +8,14 @@ public_head([
     'canonical' => 'about.php',
 ]);
 ?>
-<section class="page-hero">
+<section class="page-hero pi-grid">
   <div class="container">
-    <span class="eyebrow">About us</span>
-    <h1>A software company built on clarity and delivery.</h1>
-    <p class="lead">Reagan Soft Innovation Limited helps organisations in Uganda and beyond turn everyday business processes into practical, reliable digital products.</p>
+    <div class="pi-copy">
+      <span class="eyebrow">About us</span>
+      <h1>A software company built on clarity and delivery.</h1>
+      <p class="lead">Reagan Soft Innovation Limited helps organisations in Uganda and beyond turn everyday business processes into practical, reliable digital products.</p>
+    </div>
+    <?= page_image('assets/img/hero1.png', 1, 'Software that is built properly and kept working'); ?>
   </div>
 </section>
 

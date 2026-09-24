@@ -50,11 +50,14 @@ public_head([
     'canonical' => 'contact.php',
 ]);
 ?>
-<section class="page-hero">
+<section class="page-hero pi-grid">
   <div class="container">
-    <span class="eyebrow">Contact</span>
-    <h1>Let's talk about your project.</h1>
-    <p class="lead">Send us a message and we will respond with a clear, practical answer.</p>
+    <div class="pi-copy">
+      <span class="eyebrow">Contact</span>
+      <h1>Let's talk about your project.</h1>
+      <p class="lead">Send us a message and we will respond with a clear, practical answer.</p>
+    </div>
+    <?= page_image('assets/img/cover.png', 1, 'Based in Jinja, working with clients across Uganda'); ?>
   </div>
 </section>
 

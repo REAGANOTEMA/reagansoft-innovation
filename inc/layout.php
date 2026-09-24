@@ -81,6 +81,26 @@ function public_head(array $page = []): void {
 <?php
 }
 
+/* ------------------------------------------------------------------
+ * Tidy framed image used inside page headers (HUD corners + caption).
+ * Inner pages carry their visual as a designed in-page image, never
+ * as a full-bleed hero — the home page owns the hero treatment.
+ * ------------------------------------------------------------------ */
+function page_image(string $src, int $idx, string $cap = '', string $alt = '', string $loading = 'lazy'): string
+{
+    if ($alt === '') {
+        $alt = 'Reagan Soft Innovation Limited — ' . ($cap !== '' ? $cap : 'Jinja, Uganda');
+    }
+    $n = min(max($idx, 1), 6);
+    return '<figure class="page-img">'
+        . '<div class="page-img-frame frame-v' . $n . '">'
+        . '<img src="' . e(app_url($src)) . '" alt="' . e($alt) . '" width="1200" height="675" loading="' . e($loading) . '" decoding="async">'
+        . '<span class="pi-c c1"></span><span class="pi-c c2"></span><span class="pi-c c3"></span><span class="pi-c c4"></span>'
+        . '</div>'
+        . '<figcaption class="page-img-cap"><span class="pi-led"></span><span>' . e($cap !== '' ? $cap : 'Reagan Soft Innovation · Jinja, Uganda') . '</span></figcaption>'
+        . '</figure>';
+}
+
 function public_footer(): void {
     $phone = settings('company_phone', '+256730314979');
     $email = settings('company_email', '');
@@ -91,10 +111,60 @@ function public_footer(): void {
     ?>
 </main>
 <footer class="site-footer">
+  <div class="footer-flag" aria-hidden="true">
+    <div class="flag-bird fb-l">
+      <span class="fb-bob">
+        <svg class="crane" viewBox="0 0 72 40" width="72" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g class="legs" stroke="#c9dcec" stroke-width="1.7" stroke-linecap="round">
+            <path d="M24 30 L17 39"/>
+            <path d="M30 30 L26 39"/>
+          </g>
+          <path class="tail" d="M12 21 l-9 -4 l3 7 z" fill="#101c28"/>
+          <ellipse class="body" cx="30" cy="21" rx="14" ry="8" fill="#ffffff" opacity=".96"/>
+          <g class="wing">
+            <path class="wing-main" d="M30 16 C38 7 48 5 57 8 C50 13 42 15 34 18 C32 18.6 30 18 30 16 Z" fill="#d7e6f2"/>
+            <path class="wing-tip" d="M57 8 C60 9.2 62 11 63 13.2 C58 12 53 13 48 14.2 C50.5 11.4 53.6 9.4 57 8 Z" fill="#0f2233"/>
+          </g>
+          <path class="neck" d="M38 19 C45 14 49 12.5 53 13 C50 10 46 7.6 41 8" stroke="#ffffff" stroke-width="4.6" stroke-linecap="round" opacity=".96"/>
+          <circle class="head" cx="55" cy="11" r="3.6" fill="#ffffff"/>
+          <g class="crest" stroke="#ffd23f" stroke-width="1.7" stroke-linecap="round">
+            <path d="M55 7.4 L55 3.4"/>
+            <path d="M57 7.6 L59 4"/>
+            <path d="M53 7.6 L51 4"/>
+          </g>
+          <path class="beak" d="M58.6 10.6 L64 11.4 L58.6 12.6 Z" fill="#c0392b"/>
+        </svg>
+      </span>
+    </div>
+    <div class="flag-bird fb-r">
+      <span class="fb-bob">
+        <svg class="crane" viewBox="0 0 72 40" width="72" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g class="legs" stroke="#c9dcec" stroke-width="1.7" stroke-linecap="round">
+            <path d="M24 30 L17 39"/>
+            <path d="M30 30 L26 39"/>
+          </g>
+          <path class="tail" d="M12 21 l-9 -4 l3 7 z" fill="#101c28"/>
+          <ellipse class="body" cx="30" cy="21" rx="14" ry="8" fill="#ffffff" opacity=".96"/>
+          <g class="wing">
+            <path class="wing-main" d="M30 16 C38 7 48 5 57 8 C50 13 42 15 34 18 C32 18.6 30 18 30 16 Z" fill="#d7e6f2"/>
+            <path class="wing-tip" d="M57 8 C60 9.2 62 11 63 13.2 C58 12 53 13 48 14.2 C50.5 11.4 53.6 9.4 57 8 Z" fill="#0f2233"/>
+          </g>
+          <path class="neck" d="M38 19 C45 14 49 12.5 53 13 C50 10 46 7.6 41 8" stroke="#ffffff" stroke-width="4.6" stroke-linecap="round" opacity=".96"/>
+          <circle class="head" cx="55" cy="11" r="3.6" fill="#ffffff"/>
+          <g class="crest" stroke="#ffd23f" stroke-width="1.7" stroke-linecap="round">
+            <path d="M55 7.4 L55 3.4"/>
+            <path d="M57 7.6 L59 4"/>
+            <path d="M53 7.6 L51 4"/>
+          </g>
+          <path class="beak" d="M58.6 10.6 L64 11.4 L58.6 12.6 Z" fill="#c0392b"/>
+        </svg>
+      </span>
+    </div>
+  </div>
   <div class="container footer-grid">
     <div class="footer-brand">
       <a class="brand" href="<?= app_url('index.php') ?>">
-<img src="<?= app_url('assets/img/reagansoftinnovation-logo.jpeg') ?>" alt="Reagan Soft Innovation logo" width="40" height="40">
+        <img src="<?= app_url('assets/img/reagansoftinnovation-logo.jpeg') ?>" alt="Reagan Soft Innovation logo" width="96" height="96">
         <span class="brand-text">Reagan Soft <b>Innovation</b></span>
       </a>
       <p class="footer-tagline"><?= icon('rocket') ?> <?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></p>

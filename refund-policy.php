@@ -8,11 +8,14 @@ public_head([
     'canonical' => 'refund-policy.php',
 ]);
 ?>
-<section class="page-hero">
+<section class="page-hero pi-grid">
   <div class="container">
-    <span class="eyebrow">Legal</span>
-    <h1>Refund &amp; Cancellation Policy</h1>
-    <p class="lead">A fair, written understanding of what happens to money when a project is cancelled.</p>
+    <div class="pi-copy">
+      <span class="eyebrow">Legal</span>
+      <h1>Refund &amp; Cancellation Policy</h1>
+      <p class="lead">A fair, written understanding of what happens to money when a project is cancelled.</p>
+    </div>
+    <?= page_image('assets/img/hero3.png', 3, 'Fair, written protection for every payment'); ?>
   </div>
 </section>
 

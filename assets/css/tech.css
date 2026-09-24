@@ -342,6 +342,131 @@
   border-radius: 50%; background: radial-gradient(circle, rgba(30,158,234,.14), transparent 70%);
 }
 
+/* ---------- Footer: bigger brand mark ---------- */
+.footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr 1.25fr; gap: 44px; }
+.footer-brand .brand { gap: 20px; }
+.footer-brand .brand img {
+  width: 96px; height: 96px; border-radius: 22px; flex-shrink: 0;
+  border: 1px solid rgba(143,216,255,.32);
+  box-shadow: 0 12px 32px rgba(0,0,0,.38), 0 0 0 6px rgba(143,216,255,.06);
+  transition: box-shadow .25s ease, transform .25s ease;
+}
+.footer-brand .brand:hover img { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,.45), 0 0 0 8px rgba(143,216,255,.12); }
+.footer-brand .brand-text { font-size: 22px; letter-spacing: -.01em; }
+.footer-brand p { max-width: 320px; }
+@media (max-width: 1024px) { .footer-grid { grid-template-columns: 1.6fr 1fr 1fr 1fr; } }
+
+/* ---------- Footer: Uganda flag ribbon with crest cranes ---------- */
+.footer-flag {
+  position: relative; height: 22px; overflow: hidden;
+  background: linear-gradient(180deg,
+    #101417 0 33.334%,
+    #fbcf0d 33.334% 66.667%,
+    #c8102e 66.667% 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.14), inset 0 -1px 0 rgba(0,0,0,.28), 0 4px 18px rgba(0,0,0,.25);
+  z-index: 1;
+}
+.footer-flag::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(0,0,0,.16), transparent 16%, transparent 84%, rgba(0,0,0,.16));
+}
+.flag-bird { position: absolute; top: 50%; margin-top: -20px; z-index: 2; will-change: transform; pointer-events: none; }
+.flag-bird .crane { display: block; filter: drop-shadow(0 2px 4px rgba(0,0,0,.35)); }
+.fb-bob { display: block; animation: birdBob 2.8s ease-in-out infinite; }
+.flag-bird .crane .wing {
+  transform-box: fill-box; transform-origin: 24% 80%;
+  animation: wingFlap .9s ease-in-out infinite;
+}
+.fb-r .crane .wing { animation-delay: .45s; }
+@keyframes flyRtoL {
+  from { transform: translateX(0) scaleX(-1); }
+  to   { transform: translateX(calc(-1 * (100vw + 220px))) scaleX(-1); }
+}
+@keyframes flyLtoR {
+  from { transform: translateX(0) scaleX(1); }
+  to   { transform: translateX(calc(100vw + 220px)) scaleX(1); }
+}
+@keyframes wingFlap {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(-34deg); }
+}
+@keyframes birdBob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}
+.fb-l { right: -86px; animation: flyRtoL 18s linear infinite; }
+.fb-r { left: -86px; animation: flyLtoR 23s linear infinite; animation-delay: -10s; }
+
+/* ---------- In-page framed visual (inner pages, not a hero) ---------- */
+.page-img {
+  position: relative; margin: 36px 0 0; max-width: 640px;
+  animation: pageImgIn .8s cubic-bezier(.22,.61,.36,1) both;
+  animation-delay: .15s;
+}
+@keyframes pageImgIn { from { opacity: 0; transform: translateY(16px) scale(.985); } to { opacity: 1; transform: none; } }
+.page-img::before {
+  content: ''; position: absolute; z-index: 0; right: -18px; top: -18px;
+  width: 160px; height: 160px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, var(--pgl), transparent 72%);
+  opacity: .5; filter: blur(8px);
+}
+.page-img-frame {
+  position: relative; z-index: 1; border-radius: 22px; overflow: hidden;
+  border: 1px solid rgba(10,123,206,.22);
+  background: var(--navy);
+  box-shadow: 0 30px 70px rgba(8,59,102,.22), 0 8px 20px rgba(8,59,102,.12);
+}
+.page-img-frame img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+.page-img-frame::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background:
+    linear-gradient(90deg, transparent 49.7%, rgba(143,216,255,.28) 50%, transparent 50.3%),
+    linear-gradient(180deg, transparent 49.7%, rgba(143,216,255,.18) 50%, transparent 50.3%);
+  background-size: 34px 34px;
+  opacity: .32;
+}
+.page-img-frame::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  background: linear-gradient(158deg, rgba(255,255,255,.18), transparent 40%);
+}
+.pi-c { position: absolute; z-index: 3; width: 18px; height: 18px; border: 2px solid #fff; opacity: .9; filter: drop-shadow(0 1px 2px rgba(0,0,0,.4)); }
+.pi-c.c1 { top: 12px; left: 12px; border-right: 0; border-bottom: 0; border-top-left-radius: 6px; }
+.pi-c.c2 { top: 12px; right: 12px; border-left: 0; border-bottom: 0; border-top-right-radius: 6px; }
+.pi-c.c3 { bottom: 12px; left: 12px; border-right: 0; border-top: 0; border-bottom-left-radius: 6px; }
+.pi-c.c4 { bottom: 12px; right: 12px; border-left: 0; border-top: 0; border-bottom-right-radius: 6px; }
+.page-img-cap {
+  display: flex; align-items: center; gap: 10px; margin-top: 14px;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+}
+.pi-led { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: var(--pg); box-shadow: 0 0 0 4px rgba(10,123,206,.14); }
+
+/* ---------- Inner pages that pair copy + framed visual ---------- */
+@media (min-width: 1000px) {
+  .page-hero.pi-grid { padding-bottom: 88px; }
+  .page-hero.pi-grid .container {
+    display: grid;
+    grid-template-columns: 1.05fr .92fr;
+    gap: 52px;
+    align-items: center;
+  }
+  .page-hero.pi-grid .page-img { margin: 0; max-width: none; }
+  .page-hero.pi-grid .fx-readout { right: auto; left: 24px; }
+}
+
+/* ---------- Section graphic polish (nothing ugly, all sized well) ---------- */
+.service-block { gap: 54px; }
+.service-block .svc-grid { margin-top: -4px; }
+.price-card { position: relative; }
+.price-card .amount { font-size: 30px; letter-spacing: -.02em; }
+.svc-card .amount { font-size: 26px; }
+.price-card .deliver { margin-top: 16px; padding-top: 12px; border-top: 1px dashed rgba(140,180,205,.22); }
+.pricing-grid .price-card { box-shadow: var(--shadow-sm); }
+.pricing-grid .price-card:hover { border-color: rgba(10,123,206,.3); }
+.program-card { position: relative; overflow: hidden; }
+.program-card::before { content: ''; position: absolute; inset: auto -30% -40% auto; width: 70%; height: 120%; background: radial-gradient(circle, rgba(30,158,234,.14), transparent 70%); pointer-events: none; }
+.value-card b, .stats-grid b { font-family: var(--font-disp); letter-spacing: -.02em; }
+
 /* ---------- Responsive ---------- */
 @media (max-width: 1024px) {
   .orbit-stage { transform: scale(.7) translateY(-52%); transform-origin: right center; right: 2%; }
@@ -361,7 +486,8 @@
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   .fx-orb, .radar::after, .orbit-stage .ring, .orbit-stage .core,
-  .page-hero::after, .eyebrow::before, .btn::after, .topbar, .nav {
+  .page-hero::after, .eyebrow::before, .btn::after, .topbar, .nav,
+  .flag-bird, .flag-bird .crane .wing, .fb-bob, .page-img {
     animation: none !important;
     transition: none !important;
   }

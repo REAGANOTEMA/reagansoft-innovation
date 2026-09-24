@@ -27,11 +27,14 @@ public_head([
     'canonical' => 'faq.php',
 ]);
 ?>
-<section class="page-hero">
+<section class="page-hero pi-grid">
   <div class="container">
-    <span class="eyebrow">FAQ</span>
-    <h1>Frequently asked questions.</h1>
-    <p class="lead">Straight answers about how we work, pay and deliver.</p>
+    <div class="pi-copy">
+      <span class="eyebrow">FAQ</span>
+      <h1>Frequently asked questions.</h1>
+      <p class="lead">Straight answers about how we work, pay and deliver.</p>
+    </div>
+    <?= page_image('assets/img/hero6.png', 6, 'Straight answers about how we work, pay and deliver'); ?>
   </div>
 </section>
 

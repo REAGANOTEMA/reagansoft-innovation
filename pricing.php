@@ -19,11 +19,14 @@ public_head([
     'canonical' => 'pricing.php',
 ]);
 ?>
-<section class="page-hero">
+<section class="page-hero pi-grid">
   <div class="container">
-    <span class="eyebrow">Pricing</span>
-    <h1>Honest ranges, agreed before we start.</h1>
-    <p class="lead">We work in clear pricing ranges: professional websites and ecommerce, automatic receipt and billing systems, apps for both web and mobile app stores, and larger custom business systems. Every project is secured with a fixed one time deposit of <strong style="color:var(--navy)"><?= money($deposit, $currency) ?></strong> (credited against your quotation). The final figure depends entirely on your requirements, and it is always written into a quotation that you approve before any development begins.</p>
+    <div class="pi-copy">
+      <span class="eyebrow">Pricing</span>
+      <h1>Honest ranges, agreed before we start.</h1>
+      <p class="lead">We work in clear pricing ranges: professional websites and ecommerce, automatic receipt and billing systems, apps for both web and mobile app stores, and larger custom business systems. Every project is secured with a fixed one time deposit of <strong style="color:var(--navy)"><?= money($deposit, $currency) ?></strong> (credited against your quotation). The final figure depends entirely on your requirements, and it is always written into a quotation that you approve before any development begins.</p>
+    </div>
+    <?= page_image('assets/img/hero3.png', 3, 'Fixed starting prices, written quotation before we build'); ?>
   </div>
 </section>
 

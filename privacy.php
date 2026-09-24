@@ -8,11 +8,14 @@ public_head([
     'canonical' => 'privacy.php',
 ]);
 ?>
-<section class="page-hero">
+<section class="page-hero pi-grid">
   <div class="container">
-    <span class="eyebrow">Legal</span>
-    <h1>Privacy Policy</h1>
-    <p class="lead">Your information stays yours. This policy explains, in plain words, what we collect and why.</p>
+    <div class="pi-copy">
+      <span class="eyebrow">Legal</span>
+      <h1>Privacy Policy</h1>
+      <p class="lead">Your information stays yours. This policy explains, in plain words, what we collect and why.</p>
+    </div>
+    <?= page_image('assets/img/hero6.png', 6, 'Your information stays yours'); ?>
   </div>
 </section>
 

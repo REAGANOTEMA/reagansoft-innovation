@@ -116,11 +116,14 @@ public_head([
 ]);
 $errors = flash_errors();
 ?>
-<section class="page-hero checkout-hero">
+<section class="page-hero checkout-hero pi-grid">
   <div class="container">
-    <span class="eyebrow">Checkout · <?= e($service['name'] ?? 'Your project') ?></span>
-    <h1>Secure your project with a one time deposit.</h1>
-    <p class="lead">Every project starts with a fixed deposit of <strong style="color:var(--navy)"><?= money($deposit, $currency) ?></strong>, which holds your slot, gets your requirements reviewed and is credited against your final quotation. The remaining cost is agreed in writing before development begins.</p>
+    <div class="pi-copy">
+      <span class="eyebrow">Checkout · <?= e($service['name'] ?? 'Your project') ?></span>
+      <h1>Secure your project with a one time deposit.</h1>
+      <p class="lead">Every project starts with a fixed deposit of <strong style="color:var(--navy)"><?= money($deposit, $currency) ?></strong>, which holds your slot, gets your requirements reviewed and is credited against your final quotation. The remaining cost is agreed in writing before development begins.</p>
+    </div>
+    <?= page_image('assets/img/hero6.png', 6, 'One time deposit, credited against your final quotation'); ?>
   </div>
 </section>
 

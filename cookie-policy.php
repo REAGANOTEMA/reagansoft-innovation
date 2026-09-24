@@ -8,11 +8,14 @@ public_head([
     'canonical' => 'cookie-policy.php',
 ]);
 ?>
-<section class="page-hero">
+<section class="page-hero pi-grid">
   <div class="container">
-    <span class="eyebrow">Legal</span>
-    <h1>Cookie Policy</h1>
-    <p class="lead">A short note on the small files our site uses to keep you signed in and secure.</p>
+    <div class="pi-copy">
+      <span class="eyebrow">Legal</span>
+      <h1>Cookie Policy</h1>
+      <p class="lead">A short note on the small files our site uses to keep you signed in and secure.</p>
+    </div>
+    <?= page_image('assets/img/hero5.png', 5, 'Small files, clearly explained'); ?>
   </div>
 </section>
 

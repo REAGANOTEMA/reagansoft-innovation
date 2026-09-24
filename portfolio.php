@@ -31,11 +31,14 @@ public_head([
     'canonical' => 'portfolio.php',
 ]);
 ?>
-<section class="page-hero">
+<section class="page-hero pi-grid">
   <div class="container">
-    <span class="eyebrow">Our work</span>
-    <h1>Real projects, delivered for real businesses.</h1>
-    <p class="lead">A selection of finished work, added here as clients approve it for public display.</p>
+    <div class="pi-copy">
+      <span class="eyebrow">Our work</span>
+      <h1>Real projects, delivered for real businesses.</h1>
+      <p class="lead">A selection of finished work, added here as clients approve it for public display.</p>
+    </div>
+    <?= page_image('assets/img/hero4.png', 4, 'A selection of finished work, added as clients approve'); ?>
   </div>
 </section>
 
