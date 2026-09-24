@@ -26,7 +26,7 @@
 -- Change these passwords after logging in, then delete anything
 -- you no longer need from this file.
 -- ============================================================
-USE reagan_soft_innovation;
+USE reagansoft_clients;
 
 -- ============================================================
 -- 01 · SERVICES

@@ -18,7 +18,7 @@
 -- when you only need the portal accounts (no demo data), or to
 -- restore/reset the admin and staff logins.
 -- ============================================================
-USE reagan_soft_innovation;
+USE reagansoft_clients;
 
 INSERT INTO users (full_name, email, phone, password_hash, role, company, address, active) VALUES
 ('Reagan Otema',   'admin@reagansoft.com', '+256730314979', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'admin', 'Reagan Soft Innovation Limited', 'Jinja, Uganda', 1),

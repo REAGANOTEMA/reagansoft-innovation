@@ -290,11 +290,11 @@ header('Content-Type: text/html; charset=utf-8');
   <div class="install-card">
     <div class="sysbar">
       <span class="led">RSI&nbsp;//&nbsp;INSTALL&nbsp;AGENT</span>
-      <span>reagan_soft_innovation</span>
+      <span><?= e(DB_NAME) ?></span>
     </div>
 
     <h1>Set up your database</h1>
-    <p class="lead" style="font-size:15.5px">This installer creates one database, <b>reagan_soft_innovation</b>, imports the schema and loads the services, settings and demo accounts.</p>
+    <p class="lead" style="font-size:15.5px">This installer creates one database, <b><?= e(DB_NAME) ?></b>, imports the schema and loads the services, settings and demo accounts.</p>
 
     <div class="meta-grid">
       <div class="meta-item"><small>Database</small><b><?= e(DB_NAME) ?></b></div>

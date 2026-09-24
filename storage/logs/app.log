@@ -106,3 +106,7 @@ Stack trace:
 #0 C:\xampp\htdocs\reagansoft-innovation\admin\reports.php(8): PDO->query('SELECT DISTINCT...')
 #1 {main}
   IP: 127.0.0.1  URI: /reagansoft-innovation/admin/reports.php
+[2026-09-24 20:58:32] DB connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it
+  IP: ::1  URI: /reagansoft-innovation/
+[2026-09-24 20:58:46] DB connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it
+  IP: ::1  URI: /reagansoft-innovation/

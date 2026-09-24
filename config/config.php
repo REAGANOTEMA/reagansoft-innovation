@@ -89,19 +89,22 @@ define('APP_VERSION', '2.0.0');
  * ------------------------------------------------------------------
  * ONE database is used for the whole application, named
  *
- *      reagan_soft_innovation
+ *      reagansoft_clients
  *
- * Defaults below are for a local XAMPP install (user `root`, no
- * password). To point the app at a hosted database, either:
+ * The matching admin store `reagansoft_admin` mirrors the same schema
+ * and is provisioned on the host account alongside it.
+ *
+ * Defaults below use the host-account credentials. To override for
+ * another environment either:
  *
  *  1. edit the four lines below, or
  *  2. set these environment variables on the server:
  *       RSI_DB_HOST  RSI_DB_NAME  RSI_DB_USER  RSI_DB_PASS
  * ------------------------------------------------------------------ */
 define('DB_HOST', getenv('RSI_DB_HOST') ?: 'localhost');
-define('DB_NAME', getenv('RSI_DB_NAME') ?: 'reagan_soft_innovation');
-define('DB_USER', getenv('RSI_DB_USER') ?: 'root');
-define('DB_PASS', getenv('RSI_DB_PASS') ?: '');
+define('DB_NAME', getenv('RSI_DB_NAME') ?: 'reagansoft_clients');
+define('DB_USER', getenv('RSI_DB_USER') ?: 'reagansoft_reagansoft');
+define('DB_PASS', getenv('RSI_DB_PASS') ?: 'Lovely2God');
 
 define('MAX_UPLOAD_BYTES', 10 * 1024 * 1024);        // 10 MB
 define('UPLOAD_DIR', __DIR__ . '/../uploads/');

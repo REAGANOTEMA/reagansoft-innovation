@@ -18,9 +18,9 @@
 --   settings          centralised configuration
 --   activity_logs     full audit trail
 -- ============================================================
-CREATE DATABASE IF NOT EXISTS reagan_soft_innovation
+CREATE DATABASE IF NOT EXISTS reagansoft_clients
   CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE reagan_soft_innovation;
+USE reagansoft_clients;
 
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS activity_logs;

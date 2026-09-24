@@ -20,7 +20,7 @@
 -- you only need the portal accounts (no demo data), or to
 -- restore/reset client logins.
 -- ============================================================
-USE reagan_soft_innovation;
+USE reagansoft_clients;
 
 INSERT INTO users (full_name, email, phone, password_hash, role, company, address, active) VALUES
 ('Amara Kaggwa',  'amara@kirekafarms.com',   '+256702456789', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Kireka Farm Supplies Ltd', 'Kireka, Kampala', 1),

@@ -5,12 +5,12 @@ client & admin project-management portal for **Reagan Soft Innovation Limited**
 (Jinja, Uganda). The whole app runs on **one database:**
 
 ```
-reagan_soft_innovation
+reagansoft_clients
 ```
 
-There is no other database. "Iganga" only appears as a *sample client's town*
-(Mulumba & Sons Traders, seeded for the demo) — the database, tables and code all
-say **reagan_soft_innovation**.
+There is no other application database. The matching host-account store
+`reagansoft_admin` mirrors the same schema and login credentials so both
+databases provisioned on the hosting account stay usable.
 
 ## What's included
 
@@ -58,7 +58,7 @@ say **reagan_soft_innovation**.
 **Recommended — web installer (one click)**
 1. Start Apache + MySQL in the XAMPP control panel.
 2. Open <http://localhost/reagansoft-innovation/install.php> and click one button.
-   It creates `reagan_soft_innovation`, imports `database/schema.sql`, then
+   It creates `reagansoft_clients`, imports `database/schema.sql`, then
    `database/seed.sql`.
 3. **Delete `install.php`** afterwards.
 
@@ -68,13 +68,13 @@ say **reagan_soft_innovation**.
 
 **Alternative — command line**
 ```sql
-CREATE DATABASE reagan_soft_innovation CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE reagansoft_clients CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 ```bash
-mysql -u root reagan_soft_innovation < database/schema.sql
-mysql -u root reagan_soft_innovation < database/seed.sql
+mysql -u reagansoft_reagansoft -p reagansoft_clients < database/schema.sql
+mysql -u reagansoft_reagansoft -p reagansoft_clients < database/seed.sql
 ```
-(PowerShell: wrap with `cmd /c "C:\xampp\mysql\bin\mysql.exe -u root reagan_soft_innovation < database\schema.sql"`.)
+(PowerShell: wrap with `cmd /c "C:\xampp\mysql\bin\mysql.exe -u reagansoft_reagansoft -p reagansoft_clients < database\schema.sql"`.)
 
 Account-only scripts `database/admin.sql` and `database/client.sql` upsert the login
 accounts by email — safe to run anytime, never duplicate.
@@ -89,10 +89,13 @@ environment variables — no other file changes anywhere in the app:
 |---------------|----------------------------------|
 | `RSI_APP_URL` | `http://localhost/reagansoft-innovation` |
 | `RSI_DB_HOST` | `localhost`                      |
-| `RSI_DB_NAME` | `reagan_soft_innovation`         |
-| `RSI_DB_USER` | `root`                           |
-| `RSI_DB_PASS` | *(empty for XAMPP root)*         |
+| `RSI_DB_NAME` | `reagansoft_clients`             |
+| `RSI_DB_USER` | `reagansoft_reagansoft`          |
+| `RSI_DB_PASS` | *(set in `config/config.php`)*   |
 | `RSI_DEBUG`   | *(unset — hides error details)*  |
+
+The `reagansoft_reagansoft` database user is granted access to both
+`reagansoft_clients` (the active app database) and `reagansoft_admin` (its mirror).
 
 Ensure `uploads/` is writable by PHP; `storage/logs/` is created automatically.
 
