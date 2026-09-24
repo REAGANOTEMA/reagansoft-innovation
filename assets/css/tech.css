@@ -494,3 +494,81 @@
   .reveal { opacity: 1; transform: none; }
   .tilt { transform: none !important; }
 }
+
+/* ============================================================
+   Home hero — full crossfade slider layer
+   (composes on top of the .hero/.hero-inner base in style.css)
+   ============================================================ */
+.hero-slider {
+  position: relative; height: 100%;
+}
+.hero-slides {
+  position: relative; height: 100%;
+}
+.hero-slide {
+  position: absolute; inset: 0;
+  display: flex; align-items: center;
+  opacity: 0; visibility: hidden; z-index: 1;
+  transition: opacity .9s ease, visibility 0s linear .9s;
+}
+.hero-slide.s-active {
+  opacity: 1; visibility: visible; z-index: 2;
+  transition: opacity .9s ease, visibility 0s;
+}
+.hero-slide .hero-inner { margin: 0; }
+
+/* Hero slider arrows */
+.hero-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  z-index: 5; width: 48px; height: 48px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; background: rgba(4, 26, 48, .42);
+  border: 1px solid rgba(255, 255, 255, .35);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  cursor: pointer; transition: background .25s ease, transform .25s ease, border-color .25s ease;
+}
+.hero-arrow:hover { background: rgba(10, 123, 206, .85); border-color: rgba(255,255,255,.65); transform: translateY(-50%) scale(1.06); }
+.hero-arrow:focus-visible { outline: 2px solid #8fd8ff; outline-offset: 3px; }
+.hero-arrow svg { width: 20px; height: 20px; }
+.hero-prev { left: 22px; }
+.hero-next { right: 22px; }
+
+/* Hero slider dots */
+.hero-dots {
+  position: absolute; left: 50%; bottom: 34px; transform: translateX(-50%);
+  z-index: 5; display: flex; align-items: center; gap: 10px;
+}
+.hero-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: rgba(255, 255, 255, .45);
+  border: 1px solid rgba(255, 255, 255, .65);
+  padding: 0; cursor: pointer; transition: width .3s ease, background .3s ease, transform .3s ease;
+}
+.hero-dot:hover { transform: scale(1.35); background: rgba(255,255,255,.85); }
+.hero-dot:focus-visible { outline: 2px solid #8fd8ff; outline-offset: 3px; }
+.hero-dot.s-active { width: 30px; border-radius: 6px; background: #56c7ff; border-color: #56c7ff; }
+
+/* Autoplay progress bar (drawn by JS into the slider) */
+.hero-progress {
+  position: absolute; left: 0; bottom: 0; height: 3px; z-index: 5;
+  width: 0%; background: linear-gradient(90deg, #56c7ff, #8fd8ff);
+  opacity: .9; pointer-events: none;
+}
+
+/* Keyboards-friendly: keep controls reachable but never cover text on small hero */
+@media (max-width: 720px) {
+  .hero-slide .hero-inner { padding-top: 96px; padding-bottom: 108px; }
+  .hero-arrow { width: 42px; height: 42px; top: auto; bottom: 22px; transform: none; }
+  .hero-arrow svg { width: 17px; height: 17px; }
+  .hero-arrow:active { transform: scale(.94); }
+  .hero-prev { left: 14px; }
+  .hero-next { right: 14px; }
+  .hero-dots { bottom: 30px; gap: 9px; }
+  .hero-dot { width: 10px; height: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide, .hero-slide.s-active { transition: none; }
+  .hero-arrow { transition: none; }
+  .hero-dot { transition: none; }
+}

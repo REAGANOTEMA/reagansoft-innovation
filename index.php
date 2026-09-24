@@ -38,7 +38,7 @@ public_head([
           ['assets/img/hero4.webp', 'Receipt &amp; Billing Automation', 'AUTOMATIC RECEIPTS', 'Your shop, school or clinic prints and sends a professional receipt automatically every time a client pays you.', 9],
           ['assets/img/hero2.webp', 'Custom Business Systems', 'SYSTEMS BUILT AROUND YOUR PROCESSES', 'Client portals, management systems, dashboards and workflow automation, scoped by modules and approved by you first.', 3],
           ['assets/img/hero5.webp', 'Ecommerce', 'ONLINE STORES THAT SELL', 'Product catalogues, cart, checkout and mobile money payment architecture, built to turn visitors into paying customers.', 1],
-          ['assets/img/hero6.webp', 'Software that keeps working', 'A ONE TIME DEPOSIT', 'Secure your project with a fixed one time deposit of <?= money($deposit, $currency) ?>, credited against your written quotation.', 0],
+          ['assets/img/hero6.webp', 'Software that keeps working', 'A ONE TIME DEPOSIT', "Your project gets started with a fixed, one-time deposit that is fully credited against your written quotation. No hidden charges, ever.", 0],
       ]; ?>
       <?php foreach ($heroSlides as $si => $hd): [$hImg, $hTag, $hKicker, $hLead, $hSvc] = $hd; ?>
         <div class="hero-slide<?= $si === 0 ? ' s-active' : '' ?>" data-slide>
