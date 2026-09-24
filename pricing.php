@@ -10,7 +10,7 @@ $requestUrl = is_logged_in() && user_role() === 'client'
 
 public_head([
     'title'     => 'Pricing | Reagan Soft Innovation Limited',
-    'desc'      => 'Honest pricing in Jinja, Uganda: professional websites from UGX 500,000 to UGX 10,000,000 and custom business systems from UGX 20,000,000 to UGX 40,000,000. Final quotes approved before work begins.',
+    'desc'      => 'Honest pricing in Jinja, Uganda: professional websites from UGX 500,000 to UGX 10,000,000, automatic receipt systems from UGX 3,000,000 to UGX 10,000,000, web and mobile apps from UGX 10,000,000 and custom business systems from UGX 20,000,000 to UGX 40,000,000. Final quotes approved before work begins.',
     'active'    => 'pricing',
     'canonical' => 'pricing.php',
 ]);
@@ -19,7 +19,7 @@ public_head([
   <div class="container">
     <span class="eyebrow">Pricing</span>
     <h1>Honest ranges, agreed before we start.</h1>
-    <p class="lead">We work in two clear pricing ranges. The final figure depends entirely on your requirements — and it is always written into a quotation that you approve before any development begins.</p>
+    <p class="lead">We work in clear pricing ranges: professional websites and e-commerce, automatic receipt and billing systems, apps for both web and mobile app stores, and larger custom business systems. The final figure depends entirely on your requirements — and it is always written into a quotation that you approve before any development begins.</p>
   </div>
 </section>
 
@@ -51,11 +51,61 @@ public_head([
         </div>
       </article>
 
-      <article class="price-band alt" id="systems">
+      <article class="price-band" id="receipts">
+        <div class="pb-body">
+          <span class="eyebrow">Receipt &amp; Billing Automation</span>
+          <h2>Automatic receipts, invoices &amp; payment records</h2>
+          <p>Whenever you make a sale, the system prints or sends a professional receipt automatically — perfectly suited to shops, schools, clinics and service businesses.</p>
+          <div class="pb-amount"><?= money(PRICE_RECEIPT_MIN, $currency) ?> <span class="pb-to">to</span> <?= money(PRICE_RECEIPT_MAX, $currency) ?></div>
+          <a class="btn btn-primary" href="<?= app_url($requestUrl) ?>">Start a receipt system project <?= icon('arrow') ?></a>
+        </div>
+        <div class="pb-factors">
+          <b>Receipt-system pricing depends on:</b>
+          <ul class="feature-list">
+            <li>Automatic receipt printing and sending</li>
+            <li>Invoice generation and numbering</li>
+            <li>Payment records and cash totals</li>
+            <li>Mobile money reference capture</li>
+            <li>School or hospital billing needs</li>
+            <li>Daily and monthly report formats</li>
+            <li>Shop and product catalogue size</li>
+            <li>Staff roles and permissions</li>
+            <li>Receipt branding and layout</li>
+            <li>Training and handover</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="price-band alt" id="apps">
+        <div class="pb-body">
+          <span class="eyebrow">Web &amp; Mobile Applications</span>
+          <h2>Apps for the App Store and Google Play</h2>
+          <p>Business applications built to work as a website, an Android app and an iOS app — prepared, tested and published to the Apple App Store and Google Play.</p>
+          <div class="pb-amount"><span class="pb-to" style="margin-right:6px">from</span><?= money(PRICE_APP_MIN, $currency) ?></div>
+          <a class="btn btn-light" href="<?= app_url($requestUrl) ?>">Start an app project <?= icon('arrow') ?></a>
+        </div>
+        <div class="pb-factors">
+          <b>App pricing depends on:</b>
+          <ul class="feature-list">
+            <li>Platforms: web, Android, iOS, or all</li>
+            <li>App Store and Google Play publication</li>
+            <li>Number of screens and features</li>
+            <li>Dashboards and admin panels</li>
+            <li>Push and SMS notifications</li>
+            <li>Payment and mobile money integration</li>
+            <li>Data, database and reporting needs</li>
+            <li>Security and user accounts</li>
+            <li>Testing across devices</li>
+            <li>Support and updates</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="price-band" id="systems">
         <div class="pb-body">
           <span class="eyebrow">Custom Business Systems</span>
           <h2>Systems, software &amp; automation</h2>
-          <p>Client portals, management systems, dashboards and workflow automation — built around your real business processes.</p>
+          <p>Client portals, management systems, dashboards and workflow automation for schools, hospitals, NGOs, government offices and companies — built around your real business processes.</p>
           <div class="pb-amount"><?= money(PRICE_SYSTEM_MIN, $currency) ?> <span class="pb-to">to</span> <?= money(PRICE_SYSTEM_MAX, $currency) ?></div>
           <a class="btn btn-light" href="<?= app_url($requestUrl) ?>">Start a systems project <?= icon('arrow') ?></a>
         </div>

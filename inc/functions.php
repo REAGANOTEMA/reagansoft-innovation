@@ -53,6 +53,13 @@ function price_range(mixed $min, mixed $max, string $currency = 'UGX'): string {
  * ------------------------------------------------------------------ */
 const PRICE_WEBSITE_MIN = 500000;        // professional websites & e-commerce
 const PRICE_WEBSITE_MAX = 10000000;
+
+const PRICE_APP_MIN     = 10000000;      // web & mobile apps, published ready
+const PRICE_APP_MAX     = 10000000;
+
+const PRICE_RECEIPT_MIN = 3000000;       // automatic receipt & billing systems
+const PRICE_RECEIPT_MAX = 10000000;
+
 const PRICE_SYSTEM_MIN  = 20000000;      // custom business systems & software
 const PRICE_SYSTEM_MAX  = 40000000;
 
@@ -437,6 +444,12 @@ function icon(string $name, string $class = ''): string {
         'download'  => '<path d="M12 3v11M7 10l5 5 5-5M4 19h16"/>',
         'upload'    => '<path d="M12 16V5M7 10l5-5 5 5M4 19h16"/>',
         'close'     => '<path d="M6 6l12 12M18 6 6 18"/>',
+        'mobile'    => '<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M12 18h.01"/>',
+        'receipt'   => '<path d="M5 3v18l2-1 2 1 2-1 2 1 2-1 2 1V3l-2 1-2-1-2 1-2-1-2 1z"/><path d="M8.5 9h7M8.5 13h7"/>',
+        'gamepad'   => '<path d="M8 5h8a5 5 0 0 1 5 5 5.5 5.5 0 0 1-6 5.5L13.5 14h-3L9 15.5A5.5 5.5 0 0 1 3 10a5 5 0 0 1 5-5z"/><path d="M7 10v3M5.5 11.5h3M16 10.5h.01M18 12.5h.01"/>',
+        'book'      => '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
+        'link'      => '<path d="M9.1 14.9a5 5 0 0 0 7.1 0l3-3a5 5 0 0 0-7-7l-1.6 1.6"/><path d="M14.9 9.1a5 5 0 0 0-7.1 0l-3 3a5 5 0 0 0 7 7l1.6-1.6"/>',
+        'bot'       => '<rect x="3" y="8" width="18" height="12" rx="3"/><path d="M12 3v2M8.5 12h.01M15.5 12h.01M9 15h6"/>',
     ];
     $path = $paths[$name] ?? $paths['code-s'];
     $cls = $class !== '' ? ' class="' . e($class) . '"' : '';

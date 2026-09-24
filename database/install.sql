@@ -369,6 +369,8 @@ USE reagan_soft_innovation;
 -- ============================================================
 -- price_min / price_max = the authoritative service ranges (UGX)
 --               · websites / e-commerce        500,000 – 10,000,000
+--               · receipt & billing systems    3,000,000 – 10,000,000
+--               · web & mobile apps            from 10,000,000
 --               · business systems / software  20,000,000 – 40,000,000
 --               · branding / maintenance       starting price only
 --               · custom solutions             contact for a quote
@@ -392,12 +394,12 @@ Inventory management
 Delivery and order tracking',
   30, 'cart', 'active', 2),
 
-('Custom Business Systems', 'business-systems', 'Client portals, internal management systems, dashboards, workflow automation and database-driven tools built around your real business processes.', 20000000, 40000000, 'UGX', 'range', 'Custom business systems',
+('Custom Business Systems', 'business-systems', 'Management systems built for schools, hospitals, NGOs, government offices and companies — client portals, dashboards, workflow automation and database-driven tools around your real business processes.', 20000000, 40000000, 'UGX', 'range', 'Custom business systems',
  'Role-based user access
+Online fees, payments & mobile money
 Dashboards and reports
-Form and data management
 Workflow automation
-Database design and optimisation
+SMS notifications
 User training and handover',
   30, 'cpu', 'active', 3),
 
@@ -410,6 +412,24 @@ API-ready architecture
 Deployment and support',
   30, 'code-s', 'active', 4),
 
+('Web & Mobile App Development', 'web-mobile-apps', 'Business apps built to work as a website, an Android app and an iOS app — prepared, tested and published to the Apple App Store and Google Play.', 10000000, NULL, 'UGX', 'starting_from', 'Apps for the App Store & Google Play',
+ 'Web, Android & iOS builds
+App Store & Google Play publication
+Push and SMS notifications
+Mobile money & bank payments
+Dashboards and admin panels
+Testing across devices',
+  30, 'mobile', 'active', 5),
+
+('Receipt & Billing Automation', 'receipt-billing', 'Automatic receipt and invoice generation — every sale prints or sends a professional receipt instantly, with totals, mobile money references and daily reports.', 3000000, 10000000, 'UGX', 'range', 'Automatic receipts & invoices',
+ 'Automatic receipt printing and sending
+Invoice generation and numbering
+Mobile money reference capture
+Daily cash & sales totals
+Shop, school and clinic billing
+Report formats for daily and monthly use',
+  14, 'receipt', 'active', 6),
+
 ('Custom Digital Solutions', 'custom-solutions', 'A specific business problem that does not fit an off-the-shelf package? We design and build the right digital solution for it.', 0, NULL, 'UGX', 'contact_for_quote', 'Contact for a quote',
  'Consultation and scoping
 Feasibility recommendation
@@ -417,7 +437,7 @@ Bespoke design and build
 Testing and quality assurance
 Deployment
 Ongoing support',
-  21, 'layers', 'active', 5),
+  21, 'layers', 'active', 7),
 
 ('Graphic & Branding Design', 'branding', 'Logos, brand guidelines, business cards, posters and digital design that give your company a consistent and professional identity.', 250000, NULL, 'UGX', 'starting_from', 'From',
  'Logo design options
@@ -426,7 +446,7 @@ Business cards and letterheads
 Social media graphics
 Print-ready file delivery
 Usage guideline document',
-  7, 'palette', 'active', 6),
+  7, 'palette', 'active', 8),
 
 ('Website Maintenance', 'maintenance', 'Security updates, backups, content changes and technical support so your website stays fast, safe and up to date.', 150000, NULL, 'UGX', 'starting_from', 'From',
  'Monthly security checks
@@ -435,7 +455,52 @@ Content and image updates
 Performance monitoring
 Priority technical support
 Uptime reporting',
-  1, 'shield', 'active', 7);
+  1, 'shield', 'active', 9),
+
+('Video Game Development', 'video-games', 'Custom video games and interactive media for mobile, web and PC — game design, graphics, scoring, levels and store-ready builds.', 12000000, NULL, 'UGX', 'starting_from', 'Custom games & interactive media',
+ 'Game design and story development
+2D and 3D game graphics
+Mobile, web and PC builds
+Levels, scores and progress saving
+Multiplayer and leaderboards
+Testing and store publication support',
+  45, 'gamepad', 'active', 10),
+
+('Digital Books & Publications', 'digital-books', 'Professional layout and cover design, editing and e-book formats so your books look great in print and on Kindle, tablets and phones.', 1000000, NULL, 'UGX', 'starting_from', 'E-books & print-ready books',
+ 'Book layout and cover design
+E-book formats for common readers
+Print-ready file delivery
+Editing and proofreading
+Tables, charts and diagrams
+Professional illustration support',
+  14, 'book', 'active', 11),
+
+('Chatbots & Smart Automation', 'chat-automation', 'Business chatbots and smart automation that answer customer questions, capture leads and handle routine tasks automatically, day and night.', 5000000, 15000000, 'UGX', 'range', 'Chatbots & business automation',
+ 'Business chatbot built into your site
+Automated replies and FAQs
+Lead capture and hand-off
+Workflow automation
+SMS and WhatsApp integration
+Training and handover',
+  21, 'chat', 'active', 12),
+
+('System Integration & Payments', 'system-integration', 'Connecting your systems, websites and apps — mobile money and bank payment links, SMS services, APIs and data exchange between the tools you already use.', 3000000, 15000000, 'UGX', 'range', 'Payments, SMS, APIs & system links',
+ 'Mobile money & bank payment links
+SMS notification services
+API connections between systems
+Data import and export
+System to system linking
+Testing and security review',
+  14, 'link', 'active', 13),
+
+('Cybersecurity & Audits', 'cybersecurity', 'Security audits, vulnerability fixes, backups and data protection so your website and systems stay safe from attacks and data loss.', 1000000, NULL, 'UGX', 'starting_from', 'Security audits & protection',
+ 'Full security audit of your systems
+Vulnerability and patch fixes
+Backup and recovery setup
+User access and permission review
+Threat and activity monitoring
+Security handover guide',
+  7, 'lock', 'active', 14);
 
 -- ============================================================
 -- 02 · SETTINGS

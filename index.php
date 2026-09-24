@@ -73,19 +73,24 @@ public_head([
   <div class="container">
     <div class="section-head">
       <div><span class="eyebrow">What we do</span><h2>Solutions for real businesses, not templates.</h2></div>
-      <p>Pick a service, describe your requirements in the portal, and follow the work from request to delivery.</p>
+      <div>
+        <p style="margin-bottom:10px">Pick a service, describe your requirements in the portal, and follow the work from request to delivery.</p>
+        <a class="btn btn-ghost btn-sm" href="<?= app_url('services.php') ?>">View all services <?= icon('arrow') ?></a>
+      </div>
     </div>
-    <div class="cards">
-      <?php foreach ($services as $s): ?>
-        <article class="card">
-          <div class="card-icon"><?= icon($s['icon']) ?></div>
+    <div class="cards svc-grid">
+      <?php foreach (array_slice($services, 0, 6) as $i => $s): ?>
+        <article class="card svc-card accent-<?= ($i % 4) + 1 ?>">
+          <div class="svc-top">
+            <span class="svc-icon"><?= icon($s['icon']) ?></span>
+            <?php if ($s['delivery_days']): ?>
+              <span class="svc-days"><?= icon('clock') ?><span><?= (int)$s['delivery_days'] ?> day<?= (int)$s['delivery_days'] === 1 ? '' : 's' ?></span></span>
+            <?php endif; ?>
+          </div>
           <h3><?= e($s['name']) ?></h3>
           <p><?= e($s['description']) ?></p>
-          <?php if ($s['delivery_days']): ?>
-            <div class="deliver" style="margin-top:12px"><?= icon('clock') ?><span>Delivery from <?= (int)$s['delivery_days'] ?> day<?= (int)$s['delivery_days'] === 1 ? '' : 's' ?></span></div>
-          <?php endif; ?>
-          <div class="price"><?php $srvPrice = service_price_display($s, settings('currency')); $srvNote = trim((string)$s['price_note']); if ($srvNote !== '' && mb_stripos($srvPrice, $srvNote) === false): ?><span class="price-note"><?= e($srvNote) ?></span><?php endif; ?><strong><?= e($srvPrice) ?></strong></div>
-          <a class="btn btn-ghost btn-sm mt-2" href="<?= app_url('services.php#' . $s['slug']) ?>">Request service <?= icon('arrow') ?></a>
+          <div class="svc-price"><?php $srvPrice = service_price_display($s, settings('currency')); $srvNote = trim((string)$s['price_note']); if ($srvNote !== '' && mb_stripos($srvPrice, $srvNote) === false): ?><span class="svc-note"><?= e($srvNote) ?></span><?php endif; ?><strong><?= e($srvPrice) ?></strong></div>
+          <a class="svc-btn" href="<?= app_url('services.php#' . $s['slug']) ?>"><span>Request service</span><?= icon('arrow') ?></a>
         </article>
       <?php endforeach; ?>
     </div>
@@ -170,7 +175,7 @@ public_head([
 <section class="section" id="pricing-home">
   <div class="container">
     <div class="section-head">
-      <div><span class="eyebrow">Transparent pricing</span><h2>Two clear ranges. No surprises.</h2></div>
+      <div><span class="eyebrow">Transparent pricing</span><h2>Clear ranges. No surprises.</h2></div>
       <p>As a custom studio we never promise a fixed price before we review your requirements — a written quotation is always approved by you first.</p>
     </div>
     <div class="pricing-band">
@@ -181,10 +186,24 @@ public_head([
         <div class="pband-amount"><?= money(PRICE_WEBSITE_MIN, settings('currency')) ?><span>–</span><?= money(PRICE_WEBSITE_MAX, settings('currency')) ?></div>
         <a class="btn btn-primary" href="<?= app_url('pricing.php#websites') ?>">Explore website pricing <?= icon('arrow') ?></a>
       </div>
+      <div class="pband-card">
+        <span class="card-icon"><?= icon('receipt') ?></span>
+        <h3>Receipt &amp; Billing Automation</h3>
+        <p>Automatic receipt and invoice generation, payment records and simple accounting for shops, schools and service businesses.</p>
+        <div class="pband-amount"><?= money(PRICE_RECEIPT_MIN, settings('currency')) ?><span>–</span><?= money(PRICE_RECEIPT_MAX, settings('currency')) ?></div>
+        <a class="btn btn-primary" href="<?= app_url('pricing.php#receipts') ?>">Explore receipt systems <?= icon('arrow') ?></a>
+      </div>
+      <div class="pband-card">
+        <span class="card-icon"><?= icon('mobile') ?></span>
+        <h3>Web &amp; Mobile Apps</h3>
+        <p>Business apps for phone and browser, prepared and published for the Apple App Store and Google Play.</p>
+        <div class="pband-amount">From <?= money(PRICE_APP_MIN, settings('currency')) ?></div>
+        <a class="btn btn-primary" href="<?= app_url('pricing.php#apps') ?>">Explore app pricing <?= icon('arrow') ?></a>
+      </div>
       <div class="pband-card alt">
         <span class="card-icon"><?= icon('cpu') ?></span>
         <h3>Custom Business Systems</h3>
-        <p>Portals, management systems, dashboards and automation — scoped by modules, roles, workflows and integrations.</p>
+        <p>Portals, management systems, dashboards and automation for schools, hospitals, NGOs and companies — scoped by modules, roles and workflows.</p>
         <div class="pband-amount"><?= money(PRICE_SYSTEM_MIN, settings('currency')) ?><span>–</span><?= money(PRICE_SYSTEM_MAX, settings('currency')) ?></div>
         <a class="btn btn-light" href="<?= app_url('pricing.php#systems') ?>">Explore systems pricing <?= icon('arrow') ?></a>
       </div>
