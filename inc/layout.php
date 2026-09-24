@@ -45,10 +45,14 @@ function public_head(array $page = []): void {
 <meta property="og:title" content="<?= e($title) ?>">
 <meta property="og:description" content="<?= e($desc) ?>">
 <meta property="og:image" content="<?= e($ogImage) ?>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500;600;700;800&display=swap">
 <link rel="stylesheet" href="<?= app_url('assets/css/style.css') ?>">
+<link rel="stylesheet" href="<?= app_url('assets/css/tech.css') ?>">
 <script defer src="<?= app_url('assets/js/app.js') ?>"></script>
 </head>
-<body>
+<body class="page-<?= e($page['active'] !== '' ? $page['active'] : 'default') ?>">
 <a class="skip-link" href="#main">Skip to main content</a>
 <header class="topbar" id="topbar">
   <div class="container nav">
@@ -207,7 +211,11 @@ function dashboard_head(array $page = []): void {
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#083b66">
 <link rel="icon" type="image/png" href="<?= app_url('assets/img/reagansoftinnovation-logo-favicon.png') ?>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500;600;700;800&display=swap">
 <link rel="stylesheet" href="<?= app_url('assets/css/style.css') ?>">
+<link rel="stylesheet" href="<?= app_url('assets/css/tech.css') ?>">
 <script defer src="<?= app_url('assets/js/app.js') ?>"></script>
 </head>
 <body class="dash-body">

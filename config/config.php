@@ -69,7 +69,9 @@ header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: SAMEORIGIN');
 header('Referrer-Policy: strict-origin-when-cross-origin');
 header('Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()');
-header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'");
+// Google Fonts (Space Grotesk / Inter / JetBrains Mono) are fetched from
+// fonts.googleapis.com (stylesheets) and fonts.gstatic.com (font files).
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'");
 header('X-XSS-Protection: 1; mode=block');
 
 /* ------------------------------------------------------------------
@@ -82,6 +84,20 @@ define('APP_FOUNDER', 'Reagan Otema');
 define('APP_LOCATION', 'Jinja, Uganda');
 define('APP_VERSION', '2.0.0');
 
+/* ------------------------------------------------------------------
+ * Database configuration
+ * ------------------------------------------------------------------
+ * ONE database is used for the whole application, named
+ *
+ *      reagan_soft_innovation
+ *
+ * Defaults below are for a local XAMPP install (user `root`, no
+ * password). To point the app at a hosted database, either:
+ *
+ *  1. edit the four lines below, or
+ *  2. set these environment variables on the server:
+ *       RSI_DB_HOST  RSI_DB_NAME  RSI_DB_USER  RSI_DB_PASS
+ * ------------------------------------------------------------------ */
 define('DB_HOST', getenv('RSI_DB_HOST') ?: 'localhost');
 define('DB_NAME', getenv('RSI_DB_NAME') ?: 'reagan_soft_innovation');
 define('DB_USER', getenv('RSI_DB_USER') ?: 'root');

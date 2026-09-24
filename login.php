@@ -8,10 +8,13 @@ if (is_logged_in()) {
 $error = '';
 $email = trim($_POST['email'] ?? '');
 
+$postedRedirect = trim((string)($_POST['redirect'] ?? ''));
+$redirect = $postedRedirect !== '' ? $postedRedirect
+    : (string)(($_GET['redirect'] ?? '') !== '' ? $_GET['redirect'] : (string)($_SESSION['intended'] ?? ''));
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
     $password = (string)($_POST['password'] ?? '');
-    $redirect = $_POST['redirect'] ?? $_SESSION['intended'] ?? '';
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL) || $password === '') {
         $error = 'Please enter your email and password.';
@@ -58,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $intended = $_SESSION['intended'] ?? '';
             unset($_SESSION['intended']);
             $fallback = $u['role'] === 'client' ? app_url('client/index.php') : app_url('admin/index.php');
-            if ($redirect && str_starts_with($redirect, '/')) {
+            if ($redirect && str_starts_with($redirect, '/') && !str_starts_with($redirect, '//')) {
                 redirect($redirect);
             }
             redirect($fallback);
@@ -80,12 +83,12 @@ public_head([
     <?php if ($error): ?><div class="alert" role="alert"><?= e($error) ?></div><?php endif; ?>
     <form method="post" novalidate>
       <?= csrf_field() ?>
-      <input type="hidden" name="redirect" value="<?= e(($_GET['redirect'] ?? '') !== '' ? $_GET['redirect'] : @$_SESSION['intended']) ?>">
+      <input type="hidden" name="redirect" value="<?= e($redirect) ?>">
       <div class="field"><label for="email">Email</label><input class="input" id="email" type="email" name="email" required value="<?= e($email) ?>" autocomplete="email"></div>
       <div class="field"><label for="password">Password</label><input class="input" id="password" type="password" name="password" required autocomplete="current-password"></div>
       <button class="btn btn-primary btn-block" type="submit"><?= icon('lock') ?> Sign in</button>
     </form>
-    <p class="auth-foot">New client? <a href="<?= app_url('register.php') ?>">Create an account</a></p>
+    <p class="auth-foot">New client? <a href="<?= app_url('register.php' . ($redirect !== '' ? '?redirect=' . urlencode($redirect) : '')) ?>">Create an account</a></p>
     <p class="auth-back"><a href="<?= app_url('index.php') ?>"><?= icon('arrow-l') ?> Back to website</a></p>
   </div>
 </section>

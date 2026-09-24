@@ -12,11 +12,15 @@ if (settings('registration_open', '1') !== '1' && APP_DEBUG === false) {
 $errors = [];
 $values = ['full_name' => '', 'company' => '', 'email' => '', 'phone' => ''];
 
+$rawRedirect = (string)(($_POST['redirect'] ?? '') !== '' ? $_POST['redirect'] : (($_GET['redirect'] ?? '') !== '' ? $_GET['redirect'] : (string)($_SESSION['intended'] ?? '')));
+$redirect = preg_match('#^/[^/]#', $rawRedirect) === 1 ? $rawRedirect : '';
+$loginUrl = app_url('login.php' . ($redirect !== '' ? '?redirect=' . urlencode($redirect) : ''));
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
     if (!empty($_POST['company_website'])) {
         flash('success', 'Your account has been created. Please sign in.');
-        redirect(app_url('login.php'));
+        redirect($loginUrl);
     }
     $values = [
         'full_name' => trim($_POST['full_name'] ?? ''),
@@ -70,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             notify($uid, 'Welcome to Reagan Soft Innovation', 'Your client account is ready. You can now send your first project request.', 'success');
             flash('success', 'Your account has been created. Please sign in to continue.');
             clear_old();
-            redirect(app_url('login.php'));
+            redirect($loginUrl);
         } catch (Throwable $e) {
             log_error('registration: ' . $e->getMessage());
             if ($e instanceof PDOException && $e->getCode() === '23000') {
@@ -98,6 +102,7 @@ public_head([
     <?php if ($errors): foreach ($errors as $err): ?><div class="alert" role="alert"><?= e($err) ?></div><?php endforeach; endif; ?>
     <form method="post" novalidate>
       <?= csrf_field() ?>
+      <input type="hidden" name="redirect" value="<?= e($redirect) ?>">
       <div class="field visually-hidden" aria-hidden="true">
         <label for="company_website">Company website</label>
         <input class="input" id="company_website" name="company_website" tabindex="-1" autocomplete="off">
@@ -110,7 +115,7 @@ public_head([
       <div class="field"><label for="confirm">Confirm password <span class="req">*</span></label><input class="input" id="confirm" type="password" name="confirm" required minlength="8" autocomplete="new-password"></div>
       <button class="btn btn-primary btn-block" type="submit"><?= icon('user') ?> Create account</button>
     </form>
-    <p class="auth-foot">Already registered? <a href="<?= app_url('login.php') ?>">Sign in</a></p>
+    <p class="auth-foot">Already registered? <a href="<?= e($loginUrl) ?>">Sign in</a></p>
     <p class="auth-back"><a href="<?= app_url('index.php') ?>"><?= icon('arrow-l') ?> Back to website</a></p>
   </div>
 </section>

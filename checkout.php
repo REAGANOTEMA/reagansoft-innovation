@@ -1,9 +1,15 @@
 <?php
 require __DIR__ . '/config/config.php';
-require_client();
+
+$loggedIn = is_logged_in();
+$user = $loggedIn ? current_user() : null;
+
+// Already signed in but not a client (admin/staff)? Send them to their portal.
+if ($loggedIn && !in_array((string)($user['role'] ?? ''), ['client'], true)) {
+    redirect(app_url('admin/index.php'));
+}
 
 $pdo = db();
-$user = current_user();
 $currency = settings('currency');
 
 $service = null;
@@ -14,12 +20,25 @@ if ($serviceId > 0) {
     $service = $st->fetch() ?: null;
 }
 
+// Return-path used when a guest signs in / registers to continue this checkout.
+$backUrl = app_url('checkout.php' . ($serviceId > 0 ? '?service=' . $serviceId : ''));
+$backPath = (string)parse_url($backUrl, PHP_URL_PATH);
+$backQuery = (string)parse_url($backUrl, PHP_URL_QUERY);
+$continueTarget = $backPath . ($backQuery !== '' ? '?' . $backQuery : '');
+$loginUrl = app_url('login.php?redirect=' . urlencode($continueTarget));
+$registerUrl = app_url('register.php?redirect=' . urlencode($continueTarget));
+
 $deposit = deposit_amount();
 $errors = [];
 $values = ['title' => '', 'description' => '', 'requirements' => '', 'method' => 'mtn_momo', 'reference' => ''];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
+
+    if (!$loggedIn) {
+        redirect($loginUrl);
+    }
+
     $values = [
         'title'        => trim($_POST['title'] ?? ''),
         'description'  => trim($_POST['description'] ?? ''),
@@ -44,7 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'The transaction reference is too long.';
     }
 
-    if (!$errors) {
+    if ($errors) {
+        set_errors($errors);
+    } else {
         try {
             $pdo->beginTransaction();
             $ref = next_project_ref($pdo);
@@ -81,18 +102,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (Throwable $e) {
             $pdo->rollBack();
             log_error('checkout: ' . $e->getMessage());
-            $errors[] = 'We could not complete your checkout right now. Please try again shortly.';
+            set_errors(['We could not complete your checkout right now. Please try again shortly.']);
         }
     }
     keep_old(array_keys($values));
-    set_errors($errors);
 }
 
 public_head([
     'title'     => 'Start Your Project | Reagan Soft Innovation Limited',
     'desc'      => 'Choose a program, secure your project with a one time deposit and get your software built by Reagan Soft Innovation Limited in Jinja, Uganda.',
+    'active'    => 'checkout',
     'robots'    => false,
 ]);
+$errors = flash_errors();
 ?>
 <section class="page-hero checkout-hero">
   <div class="container">
@@ -106,11 +128,17 @@ public_head([
   <div class="container">
 
     <div class="checkout-steps" aria-label="Checkout progress">
-      <div class="cs-step done"><span class="cs-dot"><?= icon('check') ?></span><div><b>Account created</b><small>You are signed in</small></div></div>
-      <div class="cs-line"></div>
       <div class="cs-step done"><span class="cs-dot"><?= icon('check') ?></span><div><b>Program chosen</b><small><?= e($service['name'] ?? 'Your project') ?></small></div></div>
       <div class="cs-line"></div>
-      <div class="cs-step current"><span class="cs-dot"><?= icon('money') ?></span><div><b>Pay deposit</b><small><?= money($deposit, $currency) ?></small></div></div>
+      <?php if ($loggedIn): ?>
+        <div class="cs-step done"><span class="cs-dot"><?= icon('check') ?></span><div><b>Account ready</b><small><?= e(mb_substr($user['full_name'], 0, 20)) ?></small></div></div>
+        <div class="cs-line"></div>
+        <div class="cs-step current"><span class="cs-dot"><?= icon('money') ?></span><div><b>Pay deposit</b><small><?= money($deposit, $currency) ?></small></div></div>
+      <?php else: ?>
+        <div class="cs-step current"><span class="cs-dot"><?= icon('user') ?></span><div><b>Sign in / register</b><small>Create a free client account</small></div></div>
+        <div class="cs-line"></div>
+        <div class="cs-step next"><span class="cs-dot"><?= icon('money') ?></span><div><b>Pay deposit</b><small><?= money($deposit, $currency) ?></small></div></div>
+      <?php endif; ?>
     </div>
 
     <?php render_alerts(); ?>
@@ -174,6 +202,15 @@ public_head([
       </div>
 
       <div class="checkout-col">
+        <?php if (!$loggedIn): ?>
+          <section class="panel checkout-auth">
+            <div class="panel-head"><h3><?= icon('user') ?> One more step: sign in</h3></div>
+            <p>You chose <strong><?= e($service['name'] ?? 'a custom software project') ?></strong>. To submit your deposit and start your project, sign back in or create a free client account — it only takes a minute.</p>
+            <a class="btn btn-primary btn-block" href="<?= e($loginUrl) ?>"><?= icon('lock') ?> Sign in &amp; continue</a>
+            <a class="btn btn-outline btn-block" href="<?= e($registerUrl) ?>"><?= icon('plus') ?> Create a client account</a>
+            <p class="small muted center mt-2 mb-0">You will land back on this exact step, ready to pay your <strong><?= money($deposit, $currency) ?></strong> deposit.</p>
+          </section>
+        <?php else: ?>
         <section class="panel checkout-form">
           <div class="panel-head"><h3><?= icon('send') ?> Submit deposit &amp; start</h3></div>
           <form method="post" novalidate>
@@ -201,6 +238,7 @@ public_head([
             <p class="small muted center mt-2 mb-0">By starting you agree to our <a href="<?= app_url('terms.php') ?>" target="_blank" rel="noopener">Terms &amp; Conditions</a>.</p>
           </form>
         </section>
+        <?php endif; ?>
       </div>
     </div>
 

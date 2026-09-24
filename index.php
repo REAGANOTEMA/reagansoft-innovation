@@ -37,6 +37,11 @@ public_head([
        alt="Reagan Soft Innovation Limited, digital solutions, websites and business systems built in Jinja, Uganda"
        loading="eager" fetchpriority="high" decoding="async">
   <div class="hero-overlay" aria-hidden="true"></div>
+  <div class="hero-grain" aria-hidden="true"></div>
+  <div class="radar" aria-hidden="true"></div>
+  <div class="orbit-stage" aria-hidden="true">
+    <span class="ring r1"></span><span class="ring r2"></span><span class="ring r3"></span><span class="core"></span>
+  </div>
   <div class="container hero-inner">
     <span class="hero-tag"><span class="dot" aria-hidden="true"></span> Software · Websites · Business Systems in Jinja, Uganda</span>
     <h1>Building digital solutions that <span class="accent">move your business forward.</span></h1>
@@ -46,9 +51,13 @@ public_head([
       <a class="btn btn-ghost" href="<?= app_url('pricing.php') ?>">View services &amp; pricing</a>
     </div>
   </div>
+  <a class="hero-scroll" href="#overview" aria-label="Scroll to our services and pricing">
+    <span class="hero-scroll-mouse" aria-hidden="true"><span></span></span>
+    <span class="hero-scroll-label">Scroll</span>
+  </a>
 </section>
 
-<section class="hero-band">
+<section class="hero-band" id="overview">
   <div class="container">
     <div class="hero-pricing">
       <div class="hero-price-item">
@@ -66,7 +75,7 @@ public_head([
       <span><span class="tick"><?= icon('check') ?></span> You can request work online</span>
       <span><span class="tick"><?= icon('check') ?></span> Tasks &amp; progress you can follow</span>
       <span><span class="tick"><?= icon('check') ?></span> Clear, upfront pricing</span>
-      <span><span class="tick"><?= icon('check') ?></span> <?= max(1, $completed) ?>+ projects delivered</span>
+      <span><span class="tick"><?= icon('check') ?></span> <b data-count="<?= max(1, $completed) ?>"><?= max(1, $completed) ?></b>+ projects delivered</span>
     </div>
     <div class="hero-byline">
       <img src="<?= app_url('assets/img/founder.webp') ?>" alt="Reagan Otema, founder" width="40" height="40" loading="eager" fetchpriority="high">
