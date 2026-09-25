@@ -30,7 +30,8 @@
 --   admin@reagansoft.com   +256730314979   (Administrator)
 --   staff@reagansoft.com   +256772514889   (Staff)
 --   amara@kirekafarms.com, grace@pearlholdings.com,
---   david@mulumbasons.com, agnesnakato@gmail.com   (Clients)
+--   david@mulumbasons.com, agnesnakato@gmail.com,
+--   info@hotelparadiseonthenile.co.ug   (Clients)
 -- Change these passwords after logging in, then delete anything
 -- you no longer need from this file.
 --
@@ -241,7 +242,8 @@ INSERT INTO users (full_name, email, phone, password_hash, role, company, addres
 ('Amara Kaggwa',  'amara@kirekafarms.com',   '+256702456789', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Kireka Farm Supplies Ltd', 'Kireka, Kampala', 1),
 ('Grace Ayebare', 'grace@pearlholdings.com', '+256778987654', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Pearl Holdings Ltd', 'Jinja, Uganda', 1),
 ('David Mulumba', 'david@mulumbasons.com',   '+256703246810', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Mulumba & Sons Traders', 'Iganga, Uganda', 1),
-('Agnes Nakato',  'agnesnakato@gmail.com',   '+256759135790', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', NULL, 'Jinja, Uganda', 1)
+('Agnes Nakato',  'agnesnakato@gmail.com',   '+256759135790', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', NULL, 'Jinja, Uganda', 1),
+('Hotel Paradise on the Nile', 'info@hotelparadiseonthenile.co.ug', '+256754412880', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Hotel Paradise on the Nile', 'Main Street, Jinja, Uganda', 1)
 ON DUPLICATE KEY UPDATE
   full_name     = VALUES(full_name),
   phone         = VALUES(phone),
@@ -254,34 +256,63 @@ ON DUPLICATE KEY UPDATE
 -- ============================================================
 -- 05 · PROJECTS  (upsert by ref_no)
 -- ============================================================
--- Demo rows below reference the seeded ids:
---   user ids    1 admin · 2 staff · 3 Kireka · 4 Pearl · 5 Mulumba · 6 Nakato
---   project ids 1 … 5
--- They are correct on a fresh install and on any re-run of this
--- file. In a live database use the admin portal / the client
--- request form instead of re-seeding.
+-- Every reference below is resolved by LOOKUP (user email, service
+-- slug), never by a hard-coded id. Ids are not predictable on a
+-- re-run — MySQL and MariaDB consume an auto-increment value for
+-- every `ON DUPLICATE KEY UPDATE` row even when nothing is
+-- inserted — so a hard-coded id would attach demo data to the
+-- wrong client. Lookups make this file safe on a fresh install
+-- and on any database that already has rows.
 -- ============================================================
 INSERT INTO projects (ref_no, client_id, service_id, assigned_to, title, description, requirements, budget, priority, status, progress, deadline, started_at, completed_at, submitted_at) VALUES
-('RSI-2026-00001', 3, 1, 1, 'Company Website – Kireka Farm Supplies Ltd',
+('RSI-2026-00001',
+ (SELECT id FROM users WHERE email = 'amara@kirekafarms.com'),
+ (SELECT id FROM services WHERE slug = 'business-website'),
+ (SELECT id FROM users WHERE email = 'admin@reagansoft.com'),
+ 'Company Website – Kireka Farm Supplies Ltd',
  'A responsive company website to present the farm supply catalogue, company story and contact details, with a lead-capture enquiry form and SEO foundations.',
  'Six information pages, enquiry form, WhatsApp integration, Google Map, photo gallery.',
  8500000, 'normal', 'COMPLETED', 100, '2026-04-20', '2026-03-02', '2026-04-18', '2026-02-26'),
-('RSI-2026-00002', 4, 3, 2, 'Sales & Stock Management System – Pearl Holdings Ltd',
+('RSI-2026-00002',
+ (SELECT id FROM users WHERE email = 'grace@pearlholdings.com'),
+ (SELECT id FROM services WHERE slug = 'business-systems'),
+ (SELECT id FROM users WHERE email = 'staff@reagansoft.com'),
+ 'Sales & Stock Management System – Pearl Holdings Ltd',
  'A custom management system for tracking sales, stock levels, suppliers and daily reports across the Pearl Holdings outlets in the Eastern region.',
  'User roles for cashier and manager, product and stock modules, purchase tracking, daily sales reports, backup.',
  14500000, 'high', 'IN_PROGRESS', 70, '2026-09-30', '2026-07-06', NULL, '2026-07-01'),
-('RSI-2026-00003', 5, 2, 2, 'Ecommerce Store – Mulumba & Sons Traders',
+('RSI-2026-00003',
+ (SELECT id FROM users WHERE email = 'david@mulumbasons.com'),
+ (SELECT id FROM services WHERE slug = 'ecommerce'),
+ (SELECT id FROM users WHERE email = 'staff@reagansoft.com'),
+ 'Ecommerce Store – Mulumba & Sons Traders',
  'An online store for hardware and farm inputs with a product catalogue, cart, order management and mobile money ready payment architecture.',
  'Product categories and search, cart and checkout, order dashboard, inventory, mobile money payment ready structure.',
  9800000, 'normal', 'QUOTATION', 0, NULL, NULL, NULL, '2026-09-10'),
-('RSI-2026-00004', 6, 3, NULL, 'Customer Feedback Portal – Agnes Nakato',
+('RSI-2026-00004',
+ (SELECT id FROM users WHERE email = 'agnesnakato@gmail.com'),
+ (SELECT id FROM services WHERE slug = 'business-systems'),
+ NULL,
+ 'Customer Feedback Portal – Agnes Nakato',
  'A small portal where customers submit feedback and track the response, with a staff review dashboard.',
  'Feedback form, automatic acknowledgements, staff review queue, simple analytics.',
  3500000, 'low', 'NEW', 0, NULL, NULL, NULL, '2026-09-20'),
-('RSI-2026-00005', 3, 6, 1, 'Brand Refresh & Business Cards – Kireka Farm Supplies Ltd',
+('RSI-2026-00005',
+ (SELECT id FROM users WHERE email = 'amara@kirekafarms.com'),
+ (SELECT id FROM services WHERE slug = 'branding'),
+ (SELECT id FROM users WHERE email = 'admin@reagansoft.com'),
+ 'Brand Refresh & Business Cards – Kireka Farm Supplies Ltd',
  'Logo refresh, updated colour palette and print ready business cards and letterheads for the farm supply brand.',
  'Two logo options, brand colours and typography, business cards, letterheads.',
- 650000, 'normal', 'REVIEWING', 15, NULL, NULL, NULL, '2026-09-18')
+ 650000, 'normal', 'REVIEWING', 15, NULL, NULL, NULL, '2026-09-18'),
+('RSI-2026-00006',
+ (SELECT id FROM users WHERE email = 'info@hotelparadiseonthenile.co.ug'),
+ (SELECT id FROM services WHERE slug = 'business-website'),
+ (SELECT id FROM users WHERE email = 'staff@reagansoft.com'),
+ 'Hotel Website & Booking Enquiry System – Hotel Paradise on the Nile',
+ 'A professional website for the hotel with room and facility presentation, photo gallery, an online booking enquiry form, WhatsApp and phone integration, and a Google Map location, so guests can enquire and the team can reply from one inbox.',
+ 'Home, rooms, facilities, gallery, contact and booking enquiry pages; availability enquiry form; mobile friendly; Google Map; simple content the hotel can update itself.',
+ 12000000, 'high', 'IN_PROGRESS', 45, '2026-10-30', '2026-08-24', NULL, '2026-08-18')
 ON DUPLICATE KEY UPDATE
   client_id      = VALUES(client_id),
   service_id     = VALUES(service_id),
@@ -301,61 +332,111 @@ ON DUPLICATE KEY UPDATE
 -- 06 · TASKS  (inserted only when the task title is not there yet)
 -- ============================================================
 INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
-SELECT 1, 1, 'Design and structure', 'Plan sitemap, wireframes and page structure for the Kireka site.', 'COMPLETED', 100, 'high', '2026-03-02', '2026-03-08', 1
-FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = 1 AND title = 'Design and structure');
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00001'), (SELECT id FROM users WHERE email = 'admin@reagansoft.com'),
+ 'Design and structure', 'Plan sitemap, wireframes and page structure for the Kireka site.', 'COMPLETED', 100, 'high', '2026-03-02', '2026-03-08',
+ (SELECT id FROM users WHERE email = 'admin@reagansoft.com')
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00001') AND title = 'Design and structure');
 
 INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
-SELECT 1, 2, 'Home page build', 'Build the responsive home page and header.', 'COMPLETED', 100, 'high', '2026-03-09', '2026-03-16', 1
-FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = 1 AND title = 'Home page build');
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00001'), (SELECT id FROM users WHERE email = 'staff@reagansoft.com'),
+ 'Home page build', 'Build the responsive home page and header.', 'COMPLETED', 100, 'high', '2026-03-09', '2026-03-16',
+ (SELECT id FROM users WHERE email = 'admin@reagansoft.com')
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00001') AND title = 'Home page build');
 
 INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
-SELECT 1, 2, 'Content upload & launch', 'Upload all copy and images, test on mobile and launch.', 'COMPLETED', 100, 'medium', '2026-03-20', '2026-04-18', 1
-FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = 1 AND title = 'Content upload & launch');
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00001'), (SELECT id FROM users WHERE email = 'staff@reagansoft.com'),
+ 'Content upload & launch', 'Upload all copy and images, test on mobile and launch.', 'COMPLETED', 100, 'medium', '2026-03-20', '2026-04-18',
+ (SELECT id FROM users WHERE email = 'admin@reagansoft.com')
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00001') AND title = 'Content upload & launch');
 
 INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
-SELECT 2, 2, 'Database design', 'Design tables for products, stock, sales and suppliers.', 'COMPLETED', 100, 'high', '2026-07-06', '2026-07-12', 1
-FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = 2 AND title = 'Database design');
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00002'), (SELECT id FROM users WHERE email = 'staff@reagansoft.com'),
+ 'Database design', 'Design tables for products, stock, sales and suppliers.', 'COMPLETED', 100, 'high', '2026-07-06', '2026-07-12',
+ (SELECT id FROM users WHERE email = 'admin@reagansoft.com')
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00002') AND title = 'Database design');
 
 INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
-SELECT 2, 2, 'Sales dashboard module', 'Build the cashier sales entry and manager dashboard.', 'IN_PROGRESS', 60, 'high', '2026-07-15', '2026-09-01', 1
-FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = 2 AND title = 'Sales dashboard module');
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00002'), (SELECT id FROM users WHERE email = 'staff@reagansoft.com'),
+ 'Sales dashboard module', 'Build the cashier sales entry and manager dashboard.', 'IN_PROGRESS', 60, 'high', '2026-07-15', '2026-09-01',
+ (SELECT id FROM users WHERE email = 'admin@reagansoft.com')
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00002') AND title = 'Sales dashboard module');
 
 INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
-SELECT 2, 1, 'Reports & exports', 'Daily sales reports and CSV export for management.', 'TODO', 0, 'medium', NULL, '2026-09-25', 1
-FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = 2 AND title = 'Reports & exports');
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00002'), (SELECT id FROM users WHERE email = 'admin@reagansoft.com'),
+ 'Reports & exports', 'Daily sales reports and CSV export for management.', 'TODO', 0, 'medium', NULL, '2026-09-25',
+ (SELECT id FROM users WHERE email = 'admin@reagansoft.com')
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00002') AND title = 'Reports & exports');
 
 INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
-SELECT 3, 2, 'Catalogue & cart', 'Product catalogue, search and shopping cart.', 'TODO', 0, 'high', NULL, '2026-10-05', 1
-FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = 3 AND title = 'Catalogue & cart');
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00003'), (SELECT id FROM users WHERE email = 'staff@reagansoft.com'),
+ 'Catalogue & cart', 'Product catalogue, search and shopping cart.', 'TODO', 0, 'high', NULL, '2026-10-05',
+ (SELECT id FROM users WHERE email = 'admin@reagansoft.com')
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00003') AND title = 'Catalogue & cart');
+
+INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006'), (SELECT id FROM users WHERE email = 'staff@reagansoft.com'),
+ 'Rooms & facilities pages', 'Build the rooms, facilities and gallery pages with the hotel photography.', 'IN_PROGRESS', 55, 'high', '2026-08-24', '2026-09-20',
+ (SELECT id FROM users WHERE email = 'admin@reagansoft.com')
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006') AND title = 'Rooms & facilities pages');
+
+INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006'), (SELECT id FROM users WHERE email = 'staff@reagansoft.com'),
+ 'Booking enquiry form', 'Availability enquiry form that reaches the hotel WhatsApp and email, with the stay details captured.', 'TODO', 0, 'high', NULL, '2026-10-10',
+ (SELECT id FROM users WHERE email = 'admin@reagansoft.com')
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006') AND title = 'Booking enquiry form');
+
+INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006'), (SELECT id FROM users WHERE email = 'admin@reagansoft.com'),
+ 'Launch & handover', 'Final content check, mobile testing, launch and training for the hotel team.', 'TODO', 0, 'medium', NULL, '2026-10-30',
+ (SELECT id FROM users WHERE email = 'admin@reagansoft.com')
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006') AND title = 'Launch & handover');
 
 -- ============================================================
 -- 07 · MESSAGES  (inserted only when the same message is not there)
 -- ============================================================
 INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_internal, created_at)
-SELECT 1, 3, 'client', 'Thank you for the great work on our website. The team at Kireka Farm Supplies is very happy with it.', 0, '2026-04-20 09:30:00'
-FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = 1 AND sender_id = 3 AND message LIKE 'Thank you for the great work%');
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00001'), (SELECT id FROM users WHERE email = 'amara@kirekafarms.com'),
+ 'client', 'Thank you for the great work on our website. The team at Kireka Farm Supplies is very happy with it.', 0, '2026-04-20 09:30:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00001') AND message LIKE 'Thank you for the great work%');
 
 INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_internal, created_at)
-SELECT 1, 1, 'admin', 'Thank you Amara! It was a pleasure working with you. We are available any time for maintenance.', 0, '2026-04-20 11:00:00'
-FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = 1 AND sender_id = 1 AND message LIKE 'Thank you Amara!%');
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00001'), (SELECT id FROM users WHERE email = 'admin@reagansoft.com'),
+ 'admin', 'Thank you Amara! It was a pleasure working with you. We are available any time for maintenance.', 0, '2026-04-20 11:00:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00001') AND message LIKE 'Thank you Amara!%');
 
 INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_internal, created_at)
-SELECT 2, 4, 'client', 'Please confirm the final layout for the sales dashboard.', 0, '2026-09-01 10:15:00'
-FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = 2 AND sender_id = 4 AND message LIKE 'Please confirm the final layout%');
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00002'), (SELECT id FROM users WHERE email = 'grace@pearlholdings.com'),
+ 'client', 'Please confirm the final layout for the sales dashboard.', 0, '2026-09-01 10:15:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00002') AND message LIKE 'Please confirm the final layout%');
 
 INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_internal, created_at)
-SELECT 2, 2, 'staff', 'Sharing the dashboard preview this week, and we are on track for the end-of-month review.', 0, '2026-09-02 08:40:00'
-FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = 2 AND sender_id = 2 AND message LIKE 'Sharing the dashboard preview%');
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00002'), (SELECT id FROM users WHERE email = 'staff@reagansoft.com'),
+ 'staff', 'Sharing the dashboard preview this week, and we are on track for the end-of-month review.', 0, '2026-09-02 08:40:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00002') AND message LIKE 'Sharing the dashboard preview%');
 
 INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_internal, created_at)
-SELECT 2, 1, 'admin', 'Reminder: confirm Pearl Holdings DB backup schedule before go-live.', 1, '2026-09-02 09:00:00'
-FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = 2 AND sender_id = 1 AND message LIKE 'Reminder: confirm Pearl%');
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00002'), (SELECT id FROM users WHERE email = 'admin@reagansoft.com'),
+ 'admin', 'Reminder: confirm Pearl Holdings DB backup schedule before go-live.', 1, '2026-09-02 09:00:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00002') AND message LIKE 'Reminder: confirm Pearl%');
+
+INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_internal, created_at)
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006'), (SELECT id FROM users WHERE email = 'info@hotelparadiseonthenile.co.ug'),
+ 'client', 'Please send the updated room photographs and the official contact numbers for the footer and booking form.', 0, '2026-08-20 10:20:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006') AND message LIKE 'Please send the updated room%');
+
+INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_internal, created_at)
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006'), (SELECT id FROM users WHERE email = 'staff@reagansoft.com'),
+ 'staff', 'Rooms and facilities pages are in progress. Send the photographs as soon as you can and we will load them immediately.', 0, '2026-08-24 08:15:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006') AND message LIKE 'Rooms and facilities pages%');
 
 -- ============================================================
 -- 08 · QUOTATIONS + ITEMS  (upsert by quotation_no)
 -- ============================================================
 INSERT INTO quotations (quotation_no, project_id, client_id, issued_on, expiry_date, subtotal, discount, tax_percent, total, status, notes, terms) VALUES
-('QT-2026-0001', 3, 5, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY), 9800000, 0, 0, 9800000, 'sent',
+('QT-2026-0001',
+ (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00003'),
+ (SELECT id FROM users WHERE email = 'david@mulumbasons.com'),
+ CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY), 9800000, 0, 0, 9800000, 'sent',
  'E-commerce build for Mulumba & Sons Traders.',
  '50% deposit to start, balance on delivery. Free support for 30 days after launch.')
 ON DUPLICATE KEY UPDATE
@@ -390,8 +471,15 @@ FROM quotations q WHERE q.quotation_no = 'QT-2026-0001'
 -- 09 · INVOICES + ITEMS  (upsert by invoice_no)
 -- ============================================================
 INSERT INTO invoices (invoice_no, project_id, client_id, quotation_id, due_date, subtotal, discount, tax_percent, total, amount_paid, status, is_deposit, notes) VALUES
-('INV-2026-0001', 3, 5, 1, DATE_ADD(CURDATE(), INTERVAL 14 DAY), 9800000, 0, 0, 9800000, 0, 'sent', 1, 'Deposit invoice for QT-2026-0001.'),
-('INV-2026-0002', 1, 3, NULL, '2026-04-24', 8500000, 0, 0, 8500000, 8500000, 'paid', 0, 'Final payment for the Kireka Farm Supplies website.')
+('INV-2026-0001',
+ (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00003'),
+ (SELECT id FROM users WHERE email = 'david@mulumbasons.com'),
+ (SELECT id FROM quotations WHERE quotation_no = 'QT-2026-0001'),
+ DATE_ADD(CURDATE(), INTERVAL 14 DAY), 9800000, 0, 0, 9800000, 0, 'sent', 1, 'Deposit invoice for QT-2026-0001.'),
+('INV-2026-0002',
+ (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00001'),
+ (SELECT id FROM users WHERE email = 'amara@kirekafarms.com'),
+ NULL, '2026-04-24', 8500000, 0, 0, 8500000, 8500000, 'paid', 0, 'Final payment for the Kireka Farm Supplies website.')
 ON DUPLICATE KEY UPDATE
   project_id    = VALUES(project_id),
   client_id     = VALUES(client_id),
@@ -426,7 +514,8 @@ FROM invoices i WHERE i.invoice_no = 'INV-2026-0002'
 -- 10 · PAYMENTS  (matched on invoice + reference)
 -- ============================================================
 INSERT INTO payments (invoice_id, amount, method, reference, status, received_by, notes, confirmed_at, created_at)
-SELECT i.id, 8500000, 'bank', 'KFS-WEB-0420', 'confirmed', 1, 'Transferred from Kireka Farm Supplies bank account.', '2026-04-24 14:00:00', '2026-04-24 14:00:00'
+SELECT i.id, 8500000, 'bank', 'KFS-WEB-0420', 'confirmed', (SELECT id FROM users WHERE email = 'admin@reagansoft.com'),
+ 'Transferred from Kireka Farm Supplies bank account.', '2026-04-24 14:00:00', '2026-04-24 14:00:00'
 FROM invoices i WHERE i.invoice_no = 'INV-2026-0002'
   AND NOT EXISTS (SELECT 1 FROM payments p WHERE p.invoice_id = i.id AND p.reference = 'KFS-WEB-0420');
 
@@ -434,17 +523,31 @@ FROM invoices i WHERE i.invoice_no = 'INV-2026-0002'
 -- 11 · NOTIFICATIONS  (matched on user + title)
 -- ============================================================
 INSERT INTO notifications (user_id, title, message, type, related_project_id, is_read, created_at)
-SELECT 3, 'Project completed', 'Your website project RSI-2026-00001 was completed and launched. Thank you!', 'success', 1, 0, '2026-04-18 12:00:00'
-FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE user_id = 3 AND title = 'Project completed');
+SELECT (SELECT id FROM users WHERE email = 'amara@kirekafarms.com'), 'Project completed',
+ 'Your website project RSI-2026-00001 was completed and launched. Thank you!', 'success',
+ (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00001'), 0, '2026-04-18 12:00:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE user_id = (SELECT id FROM users WHERE email = 'amara@kirekafarms.com') AND title = 'Project completed');
 
 INSERT INTO notifications (user_id, title, message, type, related_project_id, is_read, created_at)
-SELECT 4, 'Task update', 'A task in your project RSI-2026-00002 was updated.', 'task', 2, 0, '2026-09-02 09:00:00'
-FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE user_id = 4 AND title = 'Task update');
+SELECT (SELECT id FROM users WHERE email = 'grace@pearlholdings.com'), 'Task update',
+ 'A task in your project RSI-2026-00002 was updated.', 'task',
+ (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00002'), 0, '2026-09-02 09:00:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE user_id = (SELECT id FROM users WHERE email = 'grace@pearlholdings.com') AND title = 'Task update');
 
 INSERT INTO notifications (user_id, title, message, type, related_project_id, is_read, created_at)
-SELECT 5, 'Your quotation is ready', 'Your quotation QT-2026-0001 is waiting for your approval.', 'quotation', 3, 0, '2026-09-10 09:30:00'
-FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE user_id = 5 AND title = 'Your quotation is ready');
+SELECT (SELECT id FROM users WHERE email = 'david@mulumbasons.com'), 'Your quotation is ready',
+ 'Your quotation QT-2026-0001 is waiting for your approval.', 'quotation',
+ (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00003'), 0, '2026-09-10 09:30:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE user_id = (SELECT id FROM users WHERE email = 'david@mulumbasons.com') AND title = 'Your quotation is ready');
 
 INSERT INTO notifications (user_id, title, message, type, related_project_id, is_read, created_at)
-SELECT 1, 'New request received', 'Agnes Nakato submitted a new request for review.', 'info', 4, 0, '2026-09-20 10:00:00'
-FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE user_id = 1 AND title = 'New request received');
+SELECT (SELECT id FROM users WHERE email = 'admin@reagansoft.com'), 'New request received',
+ 'Agnes Nakato submitted a new request for review.', 'info',
+ (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00004'), 0, '2026-09-20 10:00:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE user_id = (SELECT id FROM users WHERE email = 'admin@reagansoft.com') AND title = 'New request received');
+
+INSERT INTO notifications (user_id, title, message, type, related_project_id, is_read, created_at)
+SELECT (SELECT id FROM users WHERE email = 'info@hotelparadiseonthenile.co.ug'), 'Your project is in progress',
+ 'Your website and booking enquiry project RSI-2026-00006 has started. Track progress, tasks and files in your portal.', 'project',
+ (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006'), 0, '2026-08-24 08:20:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE user_id = (SELECT id FROM users WHERE email = 'info@hotelparadiseonthenile.co.ug') AND title = 'Your project is in progress');

@@ -120,6 +120,12 @@ define('LOGIN_LOCK_MINUTES', 15);
 
 /* ------------------------------------------------------------------
  * Database connection (PDO, exceptions, real prepared statements)
+ * ------------------------------------------------------------------
+ * The session time zone is pinned to East Africa Time (UTC+3, no
+ * daylight saving) so NOW(), CURDATE() and every TIMESTAMP column
+ * agree with PHP's Africa/Kampala clock. Without it a hosted MySQL
+ * running in UTC silently disagrees with PHP by three hours, which
+ * shows up as wrong timestamps, due dates and reports.
  * ------------------------------------------------------------------ */
 function db(): PDO {
     static $pdo = null;
@@ -134,15 +140,58 @@ function db(): PDO {
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                     PDO::ATTR_EMULATE_PREPARES   => false,
                     PDO::ATTR_STRINGIFY_FETCHES  => false,
+                    PDO::ATTR_TIMEOUT            => 5,                       // fail fast, never hang the site
+                    // EAT (UTC+3, no DST) so NOW()/CURDATE()/TIMESTAMP agree with PHP,
+                    // and the same utf8mb4_unicode_ci collation the tables were built with.
+                    PDO::MYSQL_ATTR_INIT_COMMAND => "SET time_zone = '+03:00', NAMES utf8mb4 COLLATE utf8mb4_unicode_ci",
                 ]
             );
         } catch (PDOException $e) {
-            log_error('DB connection failed: ' . $e->getMessage());
-            http_response_code(500);
-            exit('Unable to connect to the database. Please check the installation.');
+            db_connection_failed($e);
         }
     }
     return $pdo;
+}
+
+/**
+ * True when the connection is alive. Used by the health check and
+ * before a long export so a dead connection is reported as such
+ * instead of as a random query error.
+ */
+function db_is_connected(): bool {
+    try {
+        db()->query('SELECT 1');
+        return true;
+    } catch (Throwable $e) {
+        return false;
+    }
+}
+
+/**
+ * A dead database must never show a raw PDO message to a visitor.
+ * Log the real reason, then show a short, honest maintenance notice.
+ */
+function db_connection_failed(Throwable $e): never {
+    $reason = $e instanceof PDOException ? $e->getMessage() : 'unknown error';
+    log_error('DB connection failed (' . DB_USER . '@' . DB_HOST . '/' . DB_NAME . '): ' . $reason);
+    if (!headers_sent()) {
+        http_response_code(503);
+        header('Retry-After: 300');
+    }
+    $detail = APP_DEBUG
+        ? '<pre style="text-align:left;white-space:pre-wrap;background:#0b1b2b;color:#cfe3f7;padding:16px;border-radius:10px;overflow:auto">'
+          . htmlspecialchars($reason, ENT_QUOTES, 'UTF-8') . '</pre>'
+        : '<p style="opacity:.85">Our system is momentarily offline while we restore the connection. Please try again in a few minutes.</p>';
+    echo '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
+       . '<meta name="viewport" content="width=device-width,initial-scale=1">'
+       . '<title>Temporarily offline · ' . APP_NAME . '</title>'
+       . '<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0b1b2b;color:#eaf4ff;'
+       . 'font-family:"Segoe UI",system-ui,-apple-system,sans-serif;text-align:center;padding:24px}'
+       . '.card{max-width:520px}h1{font-size:26px;margin:0 0 10px}p{line-height:1.6;margin:0 0 8px}'
+       . 'a{color:#6fc8ff}</style></head><body><div class="card">'
+       . '<h1>We are briefly offline</h1>' . $detail
+       . '<p><a href="">Reload this page</a></p></div></body></html>';
+    exit;
 }
 
 /* ------------------------------------------------------------------

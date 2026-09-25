@@ -1,7 +1,7 @@
 Options -Indexes
 
 # Protect sensitive files
-<FilesMatch "\.(sql|md|log|env|json|yaml|yml|ini|txt)$">
+<FilesMatch "\.(sql|md|log|env|json|yaml|yml|ini|txt|bak|old|swp)$">
   Require all denied
 </FilesMatch>
 
@@ -9,8 +9,21 @@ Options -Indexes
   Require all denied
 </FilesMatch>
 
-# Block access to configuration and includes from the web
-RedirectMatch 403 ^/(config|inc|storage)(/|$)
+# Never let a browser read the override files themselves
+<FilesMatch "^\.htaccess$">
+  Require all denied
+</FilesMatch>
+
+# Block web access to configuration, code, private data, SQL dumps and
+# command-line tools. Each of those folders also carries its own
+# .htaccess, so the block survives even if this file is replaced.
+#
+# This rule is written relative to this folder on purpose. The old
+# version was anchored with ^/ and therefore only worked when the app
+# sat in the web root — under http://localhost/reagansoft-innovation/
+# it matched nothing, leaving config/ reachable.
+RewriteEngine On
+RewriteRule ^(?:config|inc|storage|database|tools)(?:/|$) - [R=403,L]
 
 # Security headers (also applied in PHP for non-Apache setups)
 <IfModule mod_headers.c>

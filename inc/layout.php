@@ -37,7 +37,7 @@ function public_head(array $page = []): void {
 <meta name="description" content="<?= e($desc) ?>">
 <meta name="theme-color" content="#083b66">
 <link rel="icon" type="image/png" href="<?= app_url('assets/img/reagansoftinnovation-logo-favicon.png') ?>">
-<link rel="apple-touch-icon" href="<?= app_url('assets/img/reagansoftinnovation-logo-apple.png') ?>">
+<link rel="apple-touch-icon" sizes="180x180" href="<?= app_url('assets/img/apple-180.png') ?>">
 <?php if ($canon): ?><link rel="canonical" href="<?= e($canon) ?>"><?php endif; ?>
 <?php if ($page['robots'] ?? true): ?><meta name="robots" content="index, follow"><?php else: ?><meta name="robots" content="noindex, nofollow"><?php endif; ?>
 <meta property="og:type" content="website">

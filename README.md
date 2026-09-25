@@ -51,7 +51,25 @@ hosting account keeps a second, identical store; the app never reads from it.
 
 ## Requirements
 - PHP 8.0+ (verified on 8.0.30) with PDO MySQL
-- MySQL 5.7 / 8+ or MariaDB 10.2+ · Apache or Nginx
+- MySQL 5.7 / 8+ or MariaDB 10.2+ (verified on MariaDB 10.4.32) · Apache or Nginx
+
+## Technology stack
+
+The backend is **PHP only** — no Python, no Node, no second language to install
+or deploy. One XAMPP-style stack runs everything.
+
+| Layer      | Choice                                                        |
+|------------|---------------------------------------------------------------|
+| Backend    | PHP 8 (procedural + PDO, no framework, no Composer)           |
+| Database   | MySQL 5.7/8 or MariaDB 10.2+ · InnoDB · utf8mb4                |
+| Web server | Apache (`.htaccess` guards) or Nginx                          |
+| Frontend   | HTML5, hand-written CSS, vanilla JavaScript — no build step    |
+| Icons      | inline SVG helper (`icon()` in `inc/functions.php`)            |
+| Images     | WebP assets in `assets/img`, checked by `tools/img-opt.php`   |
+| Email      | PHP `mail()` through `rs_mail()` in `inc/functions.php`        |
+
+There is no bundler, transpiler or package manager: you can edit a file, save,
+and refresh the browser. Uploading the folder to any PHP 8 host is a deployment.
 
 ## Installation
 
@@ -67,12 +85,15 @@ hosting account keeps a second, identical store; the app never reads from it.
 1. Open <http://localhost/phpmyadmin> → **Import** → choose `database/install.sql` → **Go**
    (database + tables + demo data in one step).
 
-**Alternative — command line**
+**Alternative — command line** (run from the project folder)
 ```bash
 cmd /c "C:\xampp\mysql\bin\mysql.exe -u reagansoft_reagansoft -p < database\install.sql"
 ```
 
-### The scripts in `database/`
+### Where to run each file in `database/`
+
+Every file selects `reagansoft_clients` itself, so the database you pick in
+phpMyAdmin is ignored. Pick the method, then run the file:
 
 | File               | What it does                                             | Safe to re-run |
 |--------------------|----------------------------------------------------------|----------------|
@@ -80,8 +101,16 @@ cmd /c "C:\xampp\mysql\bin\mysql.exe -u reagansoft_reagansoft -p < database\inst
 | `schema.sql`       | creates the database and the 15 tables                   | yes            |
 | `seed.sql`         | services, settings, accounts, demo projects & invoices   | yes            |
 | `admin.sql`        | admin + staff logins only                                | yes            |
-| `client.sql`       | the four demo client logins only                         | yes            |
+| `client.sql`       | the five demo client logins only                         | yes            |
 | `reset.sql`        | **drops every table — deletes all data**                 | no (destructive) |
+
+- **phpMyAdmin:** Import tab → choose the file → Go. `install.sql` is the one to
+  pick for a fresh site; the others are for topping up an existing one.
+- **Command line:** `mysql -u USER -p < database\FILE.sql`
+- **Web:** only `install.php`. The `.sql` files are blocked from the browser by
+  `.htaccess`, deliberately.
+- **Clean rebuild:** `reset.sql` → `install.sql`. Nothing else, and only when
+  you intend to lose the data.
 
 Every script except `reset.sql` is non-destructive: tables use
 `CREATE TABLE IF NOT EXISTS` and every row is matched on its natural key
@@ -98,6 +127,25 @@ been imported — run `install.sql` (or open `install.php`) once.
 
 `install.sql` is generated from `schema.sql` + `seed.sql`; edit those two and
 regenerate rather than editing the copies in the lower half of `install.sql`.
+
+Seed rows never hard-code an ID. Each one looks its parent up by its natural key
+(`email`, `slug`, `ref_no`, `quotation_no`, `invoice_no`), because MySQL and
+MariaDB both burn auto-increment values on `ON DUPLICATE KEY UPDATE` — hard-coded
+IDs would break the second time a script was imported.
+
+## Command-line tools in `tools/`
+
+Both are CLI-only (they refuse a browser request) and read-only. Run them from
+the project folder:
+
+```bash
+php tools/db-check.php    # connection, schema, row counts, logins, mirror, writable paths
+php tools/img-opt.php     # broken / unused / oversized image report
+```
+
+`db-check.php` is the quickest way to answer "is the database right?" after an
+import; it prints a `FAIL` line per problem and exits non-zero. `img-opt.php`
+should report *"Images are healthy"* — run it after swapping any artwork.
 
 ## Configuration — single database, your credentials
 
@@ -137,11 +185,18 @@ Password for **every** account below: `Reagan@2026` — change these in producti
 | Role   | Email                     | Notes                              |
 |--------|---------------------------|------------------------------------|
 | Admin  | `admin@reagansoft.com`    | Full access incl. reports, settings |
-| Staff  | `staff@reagansoft.com`    | Client management                   |
+| Staff  | `staff@reagansoft.com`    | Client management · +256772514889  |
 | Client | `amara@kirekafarms.com`   | Kireka Farm Supplies Ltd           |
 | Client | `grace@pearlholdings.com` | Pearl Holdings Ltd                 |
 | Client | `david@mulumbasons.com`   | Mulumba & Sons Traders (Iganga)    |
 | Client | `agnesnakato@gmail.com`   | Individual client                   |
+| Client | `info@hotelparadiseonthenile.co.ug` | Hotel Paradise on the Nile · +256754412880 |
+
+The hotel signs in to the client portal and can see project **RSI-2026-00006**
+(website & booking enquiry) with its three tasks and message thread. Every row is
+a **placeholder** — replace the name, email, phone and address in
+`database/seed.sql`, then re-run `install.sql` (or edit the account in
+Admin → Clients) before going live.
 
 A seeded admin already exists, so `create_admin.php` refuses to run. Customise
 company/payment details under **Admin → Settings**.
@@ -149,7 +204,10 @@ company/payment details under **Admin → Settings**.
 ## Production checklist
 - HTTPS + real domain, set `RSI_APP_URL` to it.
 - Change every demo password and the `RSI_DB_*` credentials.
-- Keep `uploads/` out of the public root or forbid script execution.
+- Delete `install.php` (and `create_admin.php`) from the server.
+- Keep `uploads/` out of the public root; `uploads/.htaccess` already blocks
+  script execution there.
 - Schedule database + uploads backups; wire email/SMS/WhatsApp (`inc/functions.php` → `rs_mail()`).
 - Integrate MTN MoMo / Airtel Money only with the company's merchant credentials.
+- Run `php tools/db-check.php` after any import.
 - Review Privacy/Terms/Cookie/Refund policy content before going live.

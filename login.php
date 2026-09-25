@@ -53,10 +53,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_id'] = (int)$u['id'];
             $_SESSION['role'] = $u['role'];
             $_SESSION['name'] = $u['full_name'];
+            // Greet the user at most once a day. Notifying on every sign-in
+            // filled the notifications list with identical "Welcome back"
+            // rows every time the portal was opened.
+            $lastLogin = $u['last_login_at'] ? strtotime((string)$u['last_login_at']) : 0;
             db()->prepare('UPDATE users SET last_login_at = NOW(), failed_logins = 0, locked_until = NULL WHERE id = ?')
                 ->execute([(int)$u['id']]);
             audit('login', 'users', (int)$u['id'], 'Signed in as ' . $u['role']);
-            notify((int)$u['id'], 'Welcome back', 'You have signed in to your portal.', 'info');
+            if ($lastLogin < strtotime('-12 hours')) {
+                notify((int)$u['id'], 'Welcome back', 'You have signed in to your portal.', 'info');
+            }
 
             $intended = $_SESSION['intended'] ?? '';
             unset($_SESSION['intended']);

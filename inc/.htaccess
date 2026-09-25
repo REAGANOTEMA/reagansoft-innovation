@@ -1,0 +1,11 @@
+# Deny all web access to this folder. Everything inside is either
+# configuration, code that must be included (never requested directly),
+# private data, or a command-line tool. Safe to delete this file if
+# your host does not allow .htaccess overrides.
+<IfModule mod_authz_core.c>
+  Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+  Order allow,deny
+  Deny from all
+</IfModule>

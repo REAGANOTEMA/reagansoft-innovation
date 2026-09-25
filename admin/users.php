@@ -119,12 +119,13 @@ dashboard_head(['title' => 'Users', 'active' => 'users', 'crumb' => 'Users']);
   <?php if ($users): ?>
     <div class="table-wrap">
       <table class="table">
-        <thead><tr><th>User</th><th>Role</th><th>Company</th><th>Projects</th><th>Last login</th><th>Status</th><th>Action</th></tr></thead>
+        <thead><tr><th>User</th><th>Role</th><th>Phone</th><th>Company</th><th>Projects</th><th>Last login</th><th>Status</th><th>Action</th></tr></thead>
         <tbody>
           <?php foreach ($users as $u): ?>
             <tr>
               <td><span class="row-title"><?= e($u['full_name']) ?><?= (int)$u['id'] === (int)$me['id'] ? ' <span class="badge blue">You</span>' : '' ?></span><div class="row-sub"><?= e($u['email']) ?></div></td>
               <td><?= $u['role'] === 'admin' ? '<span class="badge violet">Admin</span>' : ($u['role'] === 'staff' ? '<span class="badge sky">Staff</span>' : '<span class="badge gray">Client</span>') ?></td>
+              <td class="small"><?php if (!empty($u['phone'])): ?><a href="tel:<?= e(preg_replace('/[^0-9+]/', '', $u['phone'])) ?>"><?= e($u['phone']) ?></a><?php else: ?><span class="muted">—</span><?php endif; ?></td>
               <td class="small"><?= e($u['company'] ?? '—') ?></td>
               <td class="small"><?= $u['role'] === 'client' ? (int)$u['project_count'] : '—' ?></td>
               <td class="small"><?= $u['last_login_at'] ? time_ago($u['last_login_at']) : 'Never' ?></td>

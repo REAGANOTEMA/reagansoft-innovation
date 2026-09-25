@@ -1,4 +1,40 @@
-Options -Indexes
-<FilesMatch "\.(php|php[0-9]?|phtml|phar)$">
-  Require all denied
-</FilesMatch>
+# Uploaded project files must stay downloadable, but they must never
+# be executed. inc/functions.php already rejects script extensions and
+# stores every file under a random name; this is the second lock on
+# the door, so a future change to that list cannot turn into a shell.
+Options -Indexes -ExecCGI
+
+# The root .htaccess hides .txt/.csv/.log everywhere to keep stray notes
+# private, which would also hide a project file a client legitimately
+# uploaded. Re-allow exactly the extensions the uploader accepts
+# (ALLOWED_EXTENSIONS in inc/functions.php) — nothing else, and no
+# scripts. Add a type in both places or it will be refused here.
+<IfModule mod_authz_core.c>
+  <FilesMatch "(?i)\.(pdf|doc|docx|xls|xlsx|ppt|pptx|txt|csv|png|jpe?g|gif|webp|zip)$">
+    Require all granted
+  </FilesMatch>
+</IfModule>
+<IfModule !mod_authz_core.c>
+  <FilesMatch "(?i)\.(pdf|doc|docx|xls|xlsx|ppt|pptx|txt|csv|png|jpe?g|gif|webp|zip)$">
+    Order allow,deny
+    Allow from all
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_authz_core.c>
+  <FilesMatch "(?i)\.(php|php[0-9]|phtml|phar|cgi|pl|py|rb|sh|shtml|asp|aspx|jsp|htaccess)$">
+    Require all denied
+  </FilesMatch>
+</IfModule>
+<IfModule !mod_authz_core.c>
+  <FilesMatch "(?i)\.(php|php[0-9]|phtml|phar|cgi|pl|py|rb|sh|shtml|asp|aspx|jsp|htaccess)$">
+    Order allow,deny
+    Deny from all
+  </FilesMatch>
+</IfModule>
+
+# Unregister any handler that might still claim these extensions.
+<IfModule mod_mime.c>
+  RemoveHandler .php .php3 .php4 .php5 .php7 .phtml .phar .cgi .pl .py .sh
+  AddType text/plain .php .phtml .phar .php3 .php4 .php5 .php7
+</IfModule>

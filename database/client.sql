@@ -19,10 +19,13 @@
 --   grace@pearlholdings.com   +256778987654  (Pearl Holdings Ltd)
 --   david@mulumbasons.com     +256703246810  (Mulumba & Sons Traders)
 --   agnesnakato@gmail.com     +256759135790  (Individual client)
+--   info@hotelparadiseonthenile.co.ug  +256754412880
+--                               (Hotel Paradise on the Nile, Jinja)
 --
 -- These are demo accounts with placeholder numbers. Change the
 -- passwords after logging in, then delete anything you no longer
--- need from this file.
+-- need from this file. Replace the Hotel Paradise contact
+-- details with the hotel's real ones before going live.
 --
 -- Note: database/seed.sql already creates the same client accounts
 -- together with demo projects and business data. Use this file when
@@ -63,7 +66,8 @@ INSERT INTO `reagansoft_clients`.`users`
   ('Amara Kaggwa',  'amara@kirekafarms.com',   '+256702456789', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Kireka Farm Supplies Ltd', 'Kireka, Kampala', 1),
   ('Grace Ayebare', 'grace@pearlholdings.com', '+256778987654', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Pearl Holdings Ltd', 'Jinja, Uganda', 1),
   ('David Mulumba', 'david@mulumbasons.com',   '+256703246810', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Mulumba & Sons Traders', 'Iganga, Uganda', 1),
-  ('Agnes Nakato',  'agnesnakato@gmail.com',   '+256759135790', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', NULL, 'Jinja, Uganda', 1)
+  ('Agnes Nakato',  'agnesnakato@gmail.com',   '+256759135790', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', NULL, 'Jinja, Uganda', 1),
+('Hotel Paradise on the Nile', 'info@hotelparadiseonthenile.co.ug', '+256754412880', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Hotel Paradise on the Nile', 'Main Street, Jinja, Uganda', 1)
 ON DUPLICATE KEY UPDATE
   full_name     = VALUES(full_name),
   phone         = VALUES(phone),
