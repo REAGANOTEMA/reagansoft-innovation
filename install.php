@@ -148,6 +148,9 @@ function rsi_run_file(PDO $pdo, string $file, array &$log, array &$errors): int
 $installed = rsi_is_installed();
 $log       = [];
 $errors    = [];
+$warnings  = [];
+$mirror_log      = [];
+$mirror_errors   = [];
 $done      = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -175,11 +178,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $pdo = rsi_connect(DB_NAME);
 
+            // 1b. Reinstall only: drop every table first. This is the one
+            //     destructive step, and it is why schema.sql itself is
+            //     non-destructive.
+            if ($do === 'reinstall') {
+                rsi_run_file($pdo, __DIR__ . '/database/reset.sql', $log, $errors);
+                $log[] = 'Existing tables dropped — starting from an empty database.';
+            }
+
             // 2. Tables.
             rsi_run_file($pdo, __DIR__ . '/database/schema.sql', $log, $errors);
 
             // 3. Seed data (services, settings, demo accounts, samples).
             rsi_run_file($pdo, __DIR__ . '/database/seed.sql', $log, $errors);
+
+            // 4. Mirror database (reagansoft_admin) — same schema and data.
+            //    Optional: a host account without a second database simply
+            //    gets a note instead of a failed installation.
+            $mirror = preg_replace('/[^A-Za-z0-9_]/', '', (string)DB_MIRROR);
+            if ($mirror !== '' && $mirror !== $ident) {
+                try {
+                    rsi_connect('')->exec(
+                        'CREATE DATABASE IF NOT EXISTS `' . $mirror . '` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci'
+                    );
+                    $mpdo = rsi_connect($mirror);
+                    rsi_run_file($mpdo, __DIR__ . '/database/schema.sql', $mirror_log, $mirror_errors);
+                    rsi_run_file($mpdo, __DIR__ . '/database/seed.sql', $mirror_log, $mirror_errors);
+                    $log[] = 'Mirror database `' . DB_MIRROR . '` is in step with `' . DB_NAME . '`.';
+                } catch (Throwable $e) {
+                    $mirror_errors[] = 'Mirror `' . DB_MIRROR . '`: ' . substr($e->getMessage(), 0, 200);
+                }
+            }
+            foreach ($mirror_errors as $mw) {
+                $warnings[] = $mw;
+            }
 
             $installed = rsi_is_installed();
             $done      = $installed && !$errors;
@@ -294,10 +326,13 @@ header('Content-Type: text/html; charset=utf-8');
     </div>
 
     <h1>Set up your database</h1>
-    <p class="lead" style="font-size:15.5px">This installer creates one database, <b><?= e(DB_NAME) ?></b>, imports the schema and loads the services, settings and demo accounts.</p>
+    <p class="lead" style="font-size:15.5px">This installer creates <b><?= e(DB_NAME) ?></b>, imports the schema and loads the services, settings and demo accounts<?= DB_MIRROR !== '' && DB_MIRROR !== DB_NAME ? ', then brings the mirror store <b>' . e(DB_MIRROR) . '</b> into the same state' : '' ?>. Running it again is safe — it never deletes anything.</p>
 
     <div class="meta-grid">
       <div class="meta-item"><small>Database</small><b><?= e(DB_NAME) ?></b></div>
+      <?php if (DB_MIRROR !== '' && DB_MIRROR !== DB_NAME): ?>
+        <div class="meta-item"><small>Mirror</small><b><?= e(DB_MIRROR) ?></b></div>
+      <?php endif; ?>
       <div class="meta-item"><small>Host</small><b><?= e(DB_HOST) ?></b></div>
       <div class="meta-item"><small>User</small><b><?= e(DB_USER) ?></b></div>
       <div class="meta-item"><small>Status</small><b><?= $installed ? 'INSTALLED' : 'NOT INSTALLED' ?></b></div>
@@ -310,6 +345,15 @@ header('Content-Type: text/html; charset=utf-8');
           <?php foreach (array_slice($errors, 0, 8) as $er): ?><li><?= e($er) ?></li><?php endforeach; ?>
         </ul>
         <?php if (count($errors) > 8): ?><div class="small muted mt-1">…and <?= count($errors) - 8 ?> more in storage/logs/app.log</div><?php endif; ?>
+      </div>
+    <?php endif; ?>
+
+    <?php if ($warnings): ?>
+      <div class="err-box" style="background:var(--sky-50);border-color:rgba(10,123,206,.2);color:var(--navy)">
+        <b>Installed, but one step was skipped:</b>
+        <ul>
+          <?php foreach (array_slice($warnings, 0, 8) as $wn): ?><li><?= e($wn) ?></li><?php endforeach; ?>
+        </ul>
       </div>
     <?php endif; ?>
 
@@ -350,7 +394,7 @@ header('Content-Type: text/html; charset=utf-8');
 
       <div class="danger-zone">
         <h4 style="color:var(--red)">Danger zone</h4>
-        <p class="small muted">Reinstalling drops every table and reloads the demo data. Type the database name to confirm.</p>
+        <p class="small muted">Reinstalling runs <b>database/reset.sql</b>, which drops every table and reloads the demo data. Type the database name to confirm.</p>
         <form method="post" onsubmit="return confirm('This wipes all current data in <?= e(DB_NAME) ?>. Continue?');">
           <?= csrf_field() ?>
           <input type="hidden" name="do" value="reinstall">

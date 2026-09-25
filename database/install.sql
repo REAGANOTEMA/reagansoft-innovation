@@ -1,10 +1,26 @@
 -- ============================================================
 -- Reagan Soft Innovation Limited
 -- INSTALL SCRIPT (for phpMyAdmin / SQL import)
+-- ============================================================
+-- phpMyAdmin: Import tab -> choose this file -> Go.
+-- It creates the database, all tables and the demo data in one
+-- step, so it is the only file you need for a fresh install.
 --
--- This file combines the schema and the seed data into a single
--- script. In phpMyAdmin: Import tab - choose this file - Go.
--- It creates the database, all tables and demo data automatically.
+--   PHP >= 8.0  |  MySQL >= 5.7 / 8.0  |  MariaDB >= 10.2
+--   InnoDB  |  utf8mb4
+--
+-- SAFE TO RE-RUN. Nothing here drops, truncates or deletes:
+-- tables are created with IF NOT EXISTS and every demo row is
+-- inserted only when it is missing, so re-importing this file
+-- repairs an incomplete install instead of destroying data.
+-- For a clean rebuild, run database/reset.sql FIRST (that is
+-- the only destructive script in this folder), then this file.
+--
+-- This file is the concatenation of the two scripts below and is
+-- kept in step with them — edit schema.sql / seed.sql and
+-- regenerate, rather than editing the copies in the lower half:
+--   database/schema.sql   tables
+--   database/seed.sql     services, settings, accounts, demo data
 -- ============================================================
 
 -- ============================================================
@@ -27,32 +43,25 @@
 --   settings          centralised configuration
 --   activity_logs     full audit trail
 -- ============================================================
+-- ============================================================
+-- SAFE TO RE-RUN. Every table is created with IF NOT EXISTS, so
+-- importing this file never drops or overwrites existing data.
+-- For a clean rebuild (wipes every table) run database/reset.sql
+-- first — that is the only destructive script in this folder.
+--
+-- MySQL >= 5.7 / 8.0 · MariaDB >= 10.2  |  InnoDB  |  utf8mb4
+-- ============================================================
 CREATE DATABASE IF NOT EXISTS reagansoft_clients
   CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE reagansoft_clients;
 
 SET FOREIGN_KEY_CHECKS = 0;
-DROP TABLE IF EXISTS activity_logs;
-DROP TABLE IF EXISTS settings;
-DROP TABLE IF EXISTS payments;
-DROP TABLE IF EXISTS invoice_items;
-DROP TABLE IF EXISTS invoices;
-DROP TABLE IF EXISTS quotation_items;
-DROP TABLE IF EXISTS quotations;
-DROP TABLE IF EXISTS notifications;
-DROP TABLE IF EXISTS project_messages;
-DROP TABLE IF EXISTS project_files;
-DROP TABLE IF EXISTS project_tasks;
-DROP TABLE IF EXISTS projects;
-DROP TABLE IF EXISTS services;
-DROP TABLE IF EXISTS contact_messages;
-DROP TABLE IF EXISTS users;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- ------------------------------------------------------------
 -- users (ADMIN / STAFF / CLIENT)
 -- ------------------------------------------------------------
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   full_name VARCHAR(150) NOT NULL,
   email VARCHAR(190) NOT NULL UNIQUE,
@@ -75,7 +84,7 @@ CREATE TABLE users (
 -- ------------------------------------------------------------
 -- services (database-driven catalogue)
 -- ------------------------------------------------------------
-CREATE TABLE services (
+CREATE TABLE IF NOT EXISTS services (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(150) NOT NULL,
   slug VARCHAR(160) NOT NULL UNIQUE,
@@ -97,7 +106,7 @@ CREATE TABLE services (
 -- ------------------------------------------------------------
 -- projects (a service request becomes a project immediately)
 -- ------------------------------------------------------------
-CREATE TABLE projects (
+CREATE TABLE IF NOT EXISTS projects (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   ref_no VARCHAR(30) NOT NULL UNIQUE,               -- RSI-2026-00001
   client_id INT UNSIGNED NOT NULL,
@@ -127,7 +136,7 @@ CREATE TABLE projects (
 -- ------------------------------------------------------------
 -- project_tasks
 -- ------------------------------------------------------------
-CREATE TABLE project_tasks (
+CREATE TABLE IF NOT EXISTS project_tasks (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   project_id INT UNSIGNED NOT NULL,
   assigned_to INT UNSIGNED NULL,
@@ -152,7 +161,7 @@ CREATE TABLE project_tasks (
 -- ------------------------------------------------------------
 -- project_files (private; served only through download.php)
 -- ------------------------------------------------------------
-CREATE TABLE project_files (
+CREATE TABLE IF NOT EXISTS project_files (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   project_id INT UNSIGNED NOT NULL,
   uploader_id INT UNSIGNED NOT NULL,
@@ -170,7 +179,7 @@ CREATE TABLE project_files (
 -- ------------------------------------------------------------
 -- project_messages (project-specific; is_internal hidden from clients)
 -- ------------------------------------------------------------
-CREATE TABLE project_messages (
+CREATE TABLE IF NOT EXISTS project_messages (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   project_id INT UNSIGNED NOT NULL,
   sender_id INT UNSIGNED NOT NULL,
@@ -186,7 +195,7 @@ CREATE TABLE project_messages (
 -- ------------------------------------------------------------
 -- notifications
 -- ------------------------------------------------------------
-CREATE TABLE notifications (
+CREATE TABLE IF NOT EXISTS notifications (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   user_id INT UNSIGNED NOT NULL,
   title VARCHAR(190) NOT NULL,
@@ -203,7 +212,7 @@ CREATE TABLE notifications (
 -- ------------------------------------------------------------
 -- quotations
 -- ------------------------------------------------------------
-CREATE TABLE quotations (
+CREATE TABLE IF NOT EXISTS quotations (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   quotation_no VARCHAR(30) NOT NULL UNIQUE,
   project_id INT UNSIGNED NOT NULL,
@@ -225,7 +234,7 @@ CREATE TABLE quotations (
   INDEX idx_quotes_client (client_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE quotation_items (
+CREATE TABLE IF NOT EXISTS quotation_items (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   quotation_id INT UNSIGNED NOT NULL,
   description VARCHAR(255) NOT NULL,
@@ -238,7 +247,7 @@ CREATE TABLE quotation_items (
 -- ------------------------------------------------------------
 -- invoices
 -- ------------------------------------------------------------
-CREATE TABLE invoices (
+CREATE TABLE IF NOT EXISTS invoices (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   invoice_no VARCHAR(30) NOT NULL UNIQUE,
   project_id INT UNSIGNED NOT NULL,
@@ -250,7 +259,7 @@ CREATE TABLE invoices (
   tax_percent DECIMAL(5,2) NOT NULL DEFAULT 0,
   total DECIMAL(14,2) NOT NULL DEFAULT 0,
   amount_paid DECIMAL(14,2) NOT NULL DEFAULT 0,
-status ENUM('draft','sent','partially_paid','paid','overdue','cancelled') NOT NULL DEFAULT 'draft',
+  status ENUM('draft','sent','partially_paid','paid','overdue','cancelled') NOT NULL DEFAULT 'draft',
   is_deposit TINYINT(1) NOT NULL DEFAULT 0,
   notes TEXT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -263,7 +272,7 @@ status ENUM('draft','sent','partially_paid','paid','overdue','cancelled') NOT NU
   INDEX idx_invoices_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE invoice_items (
+CREATE TABLE IF NOT EXISTS invoice_items (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   invoice_id INT UNSIGNED NOT NULL,
   description VARCHAR(255) NOT NULL,
@@ -276,7 +285,7 @@ CREATE TABLE invoice_items (
 -- ------------------------------------------------------------
 -- payments (manual confirmation workflow)
 -- ------------------------------------------------------------
-CREATE TABLE payments (
+CREATE TABLE IF NOT EXISTS payments (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   invoice_id INT UNSIGNED NOT NULL,
   amount DECIMAL(14,2) NOT NULL,
@@ -295,7 +304,7 @@ CREATE TABLE payments (
 -- ------------------------------------------------------------
 -- contact_messages (stored contact-form submissions)
 -- ------------------------------------------------------------
-CREATE TABLE contact_messages (
+CREATE TABLE IF NOT EXISTS contact_messages (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   full_name VARCHAR(150) NOT NULL,
   email VARCHAR(190) NOT NULL,
@@ -312,7 +321,7 @@ CREATE TABLE contact_messages (
 -- ------------------------------------------------------------
 -- settings (centralized configuration)
 -- ------------------------------------------------------------
-CREATE TABLE settings (
+CREATE TABLE IF NOT EXISTS settings (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   setting_key VARCHAR(120) NOT NULL UNIQUE,
   setting_value TEXT NULL
@@ -321,7 +330,7 @@ CREATE TABLE settings (
 -- ------------------------------------------------------------
 -- activity_logs (audit trail)
 -- ------------------------------------------------------------
-CREATE TABLE activity_logs (
+CREATE TABLE IF NOT EXISTS activity_logs (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   user_id INT UNSIGNED NULL,             -- NULL for guests
   action VARCHAR(120) NOT NULL,
@@ -335,11 +344,20 @@ CREATE TABLE activity_logs (
   INDEX idx_logs_user (user_id),
   INDEX idx_logs_created (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- ============================================================
 -- Reagan Soft Innovation Limited
--- SEED DATA
+-- SEED DATA  (database/seed.sql)
 -- ============================================================
--- Run AFTER  database/schema.sql  (which drops & recreates tables).
+-- Database : reagansoft_clients  (the one the app uses)
+-- Run AFTER database/schema.sql  — or use database/install.sql,
+-- which is this file plus the schema in one import.
+--
+-- SAFE TO RE-RUN. Every row is matched on its natural key
+-- (slug, setting_key, email, ref_no, quotation_no, invoice_no,
+-- title, reference) and inserted only when it is missing, so
+-- re-importing this file updates the demo data and never
+-- duplicates or deletes anything.
 --
 -- Contents
 --   01. SERVICES            the sellable catalogue
@@ -356,12 +374,15 @@ CREATE TABLE activity_logs (
 --   11. NOTIFICATIONS       in-portal alerts for the demo users
 --
 -- Password for EVERY demo account below:   Reagan@2026
---   admin@reagansoft.com   (Administrator)
---   staff@reagansoft.com   (Staff)
+--   admin@reagansoft.com   +256730314979   (Administrator)
+--   staff@reagansoft.com   +256772514889   (Staff)
 --   amara@kirekafarms.com, grace@pearlholdings.com,
 --   david@mulumbasons.com, agnesnakato@gmail.com   (Clients)
 -- Change these passwords after logging in, then delete anything
 -- you no longer need from this file.
+--
+-- To restore the logins without touching the demo data use
+-- database/admin.sql and database/client.sql instead.
 -- ============================================================
 USE reagansoft_clients;
 
@@ -501,14 +522,27 @@ Backup and recovery setup
 User access and permission review
 Threat and activity monitoring
 Security handover guide',
-  7, 'lock', 'active', 14);
+  7, 'lock', 'active', 14)
+ON DUPLICATE KEY UPDATE
+  name          = VALUES(name),
+  description   = VALUES(description),
+  price_min     = VALUES(price_min),
+  price_max     = VALUES(price_max),
+  currency      = VALUES(currency),
+  pricing_type  = VALUES(pricing_type),
+  price_note    = VALUES(price_note),
+  features      = VALUES(features),
+  delivery_days = VALUES(delivery_days),
+  icon          = VALUES(icon),
+  status        = VALUES(status),
+  sort_order    = VALUES(sort_order);
 
 -- ============================================================
--- 02 · SETTINGS
+-- 02 · SETTINGS  (upsert by setting_key)
 -- ============================================================
 INSERT INTO settings (setting_key, setting_value) VALUES
 ('company_name',            'Reagan Soft Innovation Limited'),
-('company_tagline',         'Software built properly, and kept working.'),
+('company_tagline',         'Innovating today for a smarter tomorrow.'),
 ('company_founder',         'Reagan Otema'),
 ('company_phone',           '+256730314979'),
 ('company_email',           'info@reagansoft.com'),
@@ -522,35 +556,57 @@ INSERT INTO settings (setting_key, setting_value) VALUES
 ('tax_percent',             '0'),
 ('invoices_due_days',       '14'),
 ('payment_mtn_number',      '+256730314979'),
-('payment_airtel_number',   '+256771234567'),
+('payment_airtel_number',   '+256772514889'),
 ('payment_bank_details',    ''),
 ('payment_gateway_status',  'not_configured'),
 ('project_deposit',         '200000'),
-('registration_open',       '1');
+('registration_open',       '1')
+ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value);
 
 -- ============================================================
--- 03 · ADMIN & STAFF
+-- 03 · ADMIN & STAFF  (upsert by email)
 -- ============================================================
 -- The administrator manages the whole portal. Staff serve clients
 -- (requests, projects, quotations, invoices, files, messages).
 -- ============================================================
 INSERT INTO users (full_name, email, phone, password_hash, role, company, address, active) VALUES
 ('Reagan Otema',   'admin@reagansoft.com', '+256730314979', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'admin', 'Reagan Soft Innovation Limited', 'Jinja, Uganda', 1),
-('Sarah Namukasa', 'staff@reagansoft.com', '+256771234567', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'staff', NULL, NULL, 1);
+('Sarah Namukasa', 'staff@reagansoft.com', '+256772514889', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'staff', NULL, NULL, 1)
+ON DUPLICATE KEY UPDATE
+  full_name     = VALUES(full_name),
+  phone         = VALUES(phone),
+  password_hash = VALUES(password_hash),
+  role          = VALUES(role),
+  company       = VALUES(company),
+  address       = VALUES(address),
+  active        = VALUES(active);
 
 -- ============================================================
--- 04 · CLIENTS
+-- 04 · CLIENTS  (upsert by email)
 -- ============================================================
 INSERT INTO users (full_name, email, phone, password_hash, role, company, address, active) VALUES
 ('Amara Kaggwa',  'amara@kirekafarms.com',   '+256702456789', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Kireka Farm Supplies Ltd', 'Kireka, Kampala', 1),
 ('Grace Ayebare', 'grace@pearlholdings.com', '+256778987654', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Pearl Holdings Ltd', 'Jinja, Uganda', 1),
 ('David Mulumba', 'david@mulumbasons.com',   '+256703246810', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Mulumba & Sons Traders', 'Iganga, Uganda', 1),
-('Agnes Nakato',  'agnesnakato@gmail.com',   '+256759135790', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', NULL, 'Jinja, Uganda', 1);
+('Agnes Nakato',  'agnesnakato@gmail.com',   '+256759135790', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', NULL, 'Jinja, Uganda', 1)
+ON DUPLICATE KEY UPDATE
+  full_name     = VALUES(full_name),
+  phone         = VALUES(phone),
+  password_hash = VALUES(password_hash),
+  role          = VALUES(role),
+  company       = VALUES(company),
+  address       = VALUES(address),
+  active        = VALUES(active);
 
 -- ============================================================
--- 05 · PROJECTS
+-- 05 · PROJECTS  (upsert by ref_no)
 -- ============================================================
--- user ids:  1 admin · 2 staff · 3 Kireka · 4 Pearl · 5 Mulumba · 6 Nakato
+-- Demo rows below reference the seeded ids:
+--   user ids    1 admin · 2 staff · 3 Kireka · 4 Pearl · 5 Mulumba · 6 Nakato
+--   project ids 1 … 5
+-- They are correct on a fresh install and on any re-run of this
+-- file. In a live database use the admin portal / the client
+-- request form instead of re-seeding.
 -- ============================================================
 INSERT INTO projects (ref_no, client_id, service_id, assigned_to, title, description, requirements, budget, priority, status, progress, deadline, started_at, completed_at, submitted_at) VALUES
 ('RSI-2026-00001', 3, 1, 1, 'Company Website – Kireka Farm Supplies Ltd',
@@ -572,66 +628,171 @@ INSERT INTO projects (ref_no, client_id, service_id, assigned_to, title, descrip
 ('RSI-2026-00005', 3, 6, 1, 'Brand Refresh & Business Cards – Kireka Farm Supplies Ltd',
  'Logo refresh, updated colour palette and print ready business cards and letterheads for the farm supply brand.',
  'Two logo options, brand colours and typography, business cards, letterheads.',
- 650000, 'normal', 'REVIEWING', 15, NULL, NULL, NULL, '2026-09-18');
+ 650000, 'normal', 'REVIEWING', 15, NULL, NULL, NULL, '2026-09-18')
+ON DUPLICATE KEY UPDATE
+  client_id      = VALUES(client_id),
+  service_id     = VALUES(service_id),
+  assigned_to    = VALUES(assigned_to),
+  title          = VALUES(title),
+  description    = VALUES(description),
+  requirements   = VALUES(requirements),
+  budget         = VALUES(budget),
+  priority       = VALUES(priority),
+  status         = VALUES(status),
+  progress       = VALUES(progress),
+  deadline       = VALUES(deadline),
+  started_at     = VALUES(started_at),
+  completed_at   = VALUES(completed_at);
 
 -- ============================================================
--- 06 · TASKS
+-- 06 · TASKS  (inserted only when the task title is not there yet)
 -- ============================================================
-INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by) VALUES
-(1, 1, 'Design and structure', 'Plan sitemap, wireframes and page structure for the Kireka site.', 'COMPLETED', 100, 'high', '2026-03-02', '2026-03-08', 1),
-(1, 2, 'Home page build', 'Build the responsive home page and header.', 'COMPLETED', 100, 'high', '2026-03-09', '2026-03-16', 1),
-(1, 2, 'Content upload & launch', 'Upload all copy and images, test on mobile and launch.', 'COMPLETED', 100, 'medium', '2026-03-20', '2026-04-18', 1),
-(2, 2, 'Database design', 'Design tables for products, stock, sales and suppliers.', 'COMPLETED', 100, 'high', '2026-07-06', '2026-07-12', 1),
-(2, 2, 'Sales dashboard module', 'Build the cashier sales entry and manager dashboard.', 'IN_PROGRESS', 60, 'high', '2026-07-15', '2026-09-01', 1),
-(2, 1, 'Reports & exports', 'Daily sales reports and CSV export for management.', 'TODO', 0, 'medium', NULL, '2026-09-25', 1),
-(3, 2, 'Catalogue & cart', 'Product catalogue, search and shopping cart.', 'TODO', 0, 'high', NULL, '2026-10-05', 1);
+INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
+SELECT 1, 1, 'Design and structure', 'Plan sitemap, wireframes and page structure for the Kireka site.', 'COMPLETED', 100, 'high', '2026-03-02', '2026-03-08', 1
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = 1 AND title = 'Design and structure');
+
+INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
+SELECT 1, 2, 'Home page build', 'Build the responsive home page and header.', 'COMPLETED', 100, 'high', '2026-03-09', '2026-03-16', 1
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = 1 AND title = 'Home page build');
+
+INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
+SELECT 1, 2, 'Content upload & launch', 'Upload all copy and images, test on mobile and launch.', 'COMPLETED', 100, 'medium', '2026-03-20', '2026-04-18', 1
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = 1 AND title = 'Content upload & launch');
+
+INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
+SELECT 2, 2, 'Database design', 'Design tables for products, stock, sales and suppliers.', 'COMPLETED', 100, 'high', '2026-07-06', '2026-07-12', 1
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = 2 AND title = 'Database design');
+
+INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
+SELECT 2, 2, 'Sales dashboard module', 'Build the cashier sales entry and manager dashboard.', 'IN_PROGRESS', 60, 'high', '2026-07-15', '2026-09-01', 1
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = 2 AND title = 'Sales dashboard module');
+
+INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
+SELECT 2, 1, 'Reports & exports', 'Daily sales reports and CSV export for management.', 'TODO', 0, 'medium', NULL, '2026-09-25', 1
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = 2 AND title = 'Reports & exports');
+
+INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
+SELECT 3, 2, 'Catalogue & cart', 'Product catalogue, search and shopping cart.', 'TODO', 0, 'high', NULL, '2026-10-05', 1
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = 3 AND title = 'Catalogue & cart');
 
 -- ============================================================
--- 07 · MESSAGES
+-- 07 · MESSAGES  (inserted only when the same message is not there)
 -- ============================================================
-INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_internal, created_at) VALUES
-(1, 3, 'client', 'Thank you for the great work on our website. The team at Kireka Farm Supplies is very happy with it.', 0, '2026-04-20 09:30:00'),
-(1, 1, 'admin', 'Thank you Amara! It was a pleasure working with you. We are available any time for maintenance.', 0, '2026-04-20 11:00:00'),
-(2, 4, 'client', 'Please confirm the final layout for the sales dashboard.', 0, '2026-09-01 10:15:00'),
-(2, 2, 'staff', 'Sharing the dashboard preview this week, and we are on track for the end-of-month review.', 0, '2026-09-02 08:40:00'),
-(2, 1, 'admin', 'Reminder: confirm Pearl Holdings DB backup schedule before go-live.', 1, '2026-09-02 09:00:00');
+INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_internal, created_at)
+SELECT 1, 3, 'client', 'Thank you for the great work on our website. The team at Kireka Farm Supplies is very happy with it.', 0, '2026-04-20 09:30:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = 1 AND sender_id = 3 AND message LIKE 'Thank you for the great work%');
+
+INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_internal, created_at)
+SELECT 1, 1, 'admin', 'Thank you Amara! It was a pleasure working with you. We are available any time for maintenance.', 0, '2026-04-20 11:00:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = 1 AND sender_id = 1 AND message LIKE 'Thank you Amara!%');
+
+INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_internal, created_at)
+SELECT 2, 4, 'client', 'Please confirm the final layout for the sales dashboard.', 0, '2026-09-01 10:15:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = 2 AND sender_id = 4 AND message LIKE 'Please confirm the final layout%');
+
+INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_internal, created_at)
+SELECT 2, 2, 'staff', 'Sharing the dashboard preview this week, and we are on track for the end-of-month review.', 0, '2026-09-02 08:40:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = 2 AND sender_id = 2 AND message LIKE 'Sharing the dashboard preview%');
+
+INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_internal, created_at)
+SELECT 2, 1, 'admin', 'Reminder: confirm Pearl Holdings DB backup schedule before go-live.', 1, '2026-09-02 09:00:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = 2 AND sender_id = 1 AND message LIKE 'Reminder: confirm Pearl%');
 
 -- ============================================================
--- 08 · QUOTATIONS + ITEMS
+-- 08 · QUOTATIONS + ITEMS  (upsert by quotation_no)
 -- ============================================================
 INSERT INTO quotations (quotation_no, project_id, client_id, issued_on, expiry_date, subtotal, discount, tax_percent, total, status, notes, terms) VALUES
 ('QT-2026-0001', 3, 5, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY), 9800000, 0, 0, 9800000, 'sent',
  'E-commerce build for Mulumba & Sons Traders.',
- '50% deposit to start, balance on delivery. Free support for 30 days after launch.');
+ '50% deposit to start, balance on delivery. Free support for 30 days after launch.')
+ON DUPLICATE KEY UPDATE
+  project_id   = VALUES(project_id),
+  client_id    = VALUES(client_id),
+  expiry_date  = VALUES(expiry_date),
+  subtotal     = VALUES(subtotal),
+  discount     = VALUES(discount),
+  tax_percent  = VALUES(tax_percent),
+  total        = VALUES(total),
+  status       = VALUES(status),
+  notes        = VALUES(notes),
+  terms        = VALUES(terms);
 
-INSERT INTO quotation_items (quotation_id, description, quantity, unit_price) VALUES
-(1, 'E-commerce design & development', 1, 7000000),
-(1, 'Mobile money and bank payment ready architecture', 1, 2000000),
-(1, 'Testing, training & launch support', 1, 800000);
+-- items are matched on quotation_no, so re-running never duplicates them
+INSERT INTO quotation_items (quotation_id, description, quantity, unit_price)
+SELECT q.id, 'E-commerce design & development', 1, 7000000
+FROM quotations q WHERE q.quotation_no = 'QT-2026-0001'
+  AND NOT EXISTS (SELECT 1 FROM quotation_items qi WHERE qi.quotation_id = q.id AND qi.description = 'E-commerce design & development');
+
+INSERT INTO quotation_items (quotation_id, description, quantity, unit_price)
+SELECT q.id, 'Mobile money and bank payment ready architecture', 1, 2000000
+FROM quotations q WHERE q.quotation_no = 'QT-2026-0001'
+  AND NOT EXISTS (SELECT 1 FROM quotation_items qi WHERE qi.quotation_id = q.id AND qi.description = 'Mobile money and bank payment ready architecture');
+
+INSERT INTO quotation_items (quotation_id, description, quantity, unit_price)
+SELECT q.id, 'Testing, training & launch support', 1, 800000
+FROM quotations q WHERE q.quotation_no = 'QT-2026-0001'
+  AND NOT EXISTS (SELECT 1 FROM quotation_items qi WHERE qi.quotation_id = q.id AND qi.description = 'Testing, training & launch support');
 
 -- ============================================================
--- 09 · INVOICES + ITEMS
+-- 09 · INVOICES + ITEMS  (upsert by invoice_no)
 -- ============================================================
 INSERT INTO invoices (invoice_no, project_id, client_id, quotation_id, due_date, subtotal, discount, tax_percent, total, amount_paid, status, is_deposit, notes) VALUES
 ('INV-2026-0001', 3, 5, 1, DATE_ADD(CURDATE(), INTERVAL 14 DAY), 9800000, 0, 0, 9800000, 0, 'sent', 1, 'Deposit invoice for QT-2026-0001.'),
-('INV-2026-0002', 1, 3, NULL, '2026-04-24', 8500000, 0, 0, 8500000, 8500000, 'paid', 0, 'Final payment for the Kireka Farm Supplies website.');
+('INV-2026-0002', 1, 3, NULL, '2026-04-24', 8500000, 0, 0, 8500000, 8500000, 'paid', 0, 'Final payment for the Kireka Farm Supplies website.')
+ON DUPLICATE KEY UPDATE
+  project_id    = VALUES(project_id),
+  client_id     = VALUES(client_id),
+  quotation_id  = VALUES(quotation_id),
+  due_date      = VALUES(due_date),
+  subtotal      = VALUES(subtotal),
+  discount      = VALUES(discount),
+  tax_percent   = VALUES(tax_percent),
+  total         = VALUES(total),
+  amount_paid   = VALUES(amount_paid),
+  status        = VALUES(status),
+  is_deposit    = VALUES(is_deposit),
+  notes         = VALUES(notes);
 
-INSERT INTO invoice_items (invoice_id, description, quantity, unit_price) VALUES
-(1, 'E-commerce development (first phase)', 1, 4900000),
-(1, 'Payment architecture setup', 1, 4900000),
-(2, 'Company website development', 1, 8500000);
+-- items are matched on invoice_no, so re-running never duplicates them
+INSERT INTO invoice_items (invoice_id, description, quantity, unit_price)
+SELECT i.id, 'E-commerce development (first phase)', 1, 4900000
+FROM invoices i WHERE i.invoice_no = 'INV-2026-0001'
+  AND NOT EXISTS (SELECT 1 FROM invoice_items ii WHERE ii.invoice_id = i.id AND ii.description = 'E-commerce development (first phase)');
+
+INSERT INTO invoice_items (invoice_id, description, quantity, unit_price)
+SELECT i.id, 'Payment architecture setup', 1, 4900000
+FROM invoices i WHERE i.invoice_no = 'INV-2026-0001'
+  AND NOT EXISTS (SELECT 1 FROM invoice_items ii WHERE ii.invoice_id = i.id AND ii.description = 'Payment architecture setup');
+
+INSERT INTO invoice_items (invoice_id, description, quantity, unit_price)
+SELECT i.id, 'Company website development', 1, 8500000
+FROM invoices i WHERE i.invoice_no = 'INV-2026-0002'
+  AND NOT EXISTS (SELECT 1 FROM invoice_items ii WHERE ii.invoice_id = i.id AND ii.description = 'Company website development');
 
 -- ============================================================
--- 10 · PAYMENTS
+-- 10 · PAYMENTS  (matched on invoice + reference)
 -- ============================================================
-INSERT INTO payments (invoice_id, amount, method, reference, status, received_by, notes, confirmed_at, created_at) VALUES
-(2, 8500000, 'bank', 'KFS-WEB-0420', 'confirmed', 1, 'Transferred from Kireka Farm Supplies bank account.', '2026-04-24 14:00:00', '2026-04-24 14:00:00');
+INSERT INTO payments (invoice_id, amount, method, reference, status, received_by, notes, confirmed_at, created_at)
+SELECT i.id, 8500000, 'bank', 'KFS-WEB-0420', 'confirmed', 1, 'Transferred from Kireka Farm Supplies bank account.', '2026-04-24 14:00:00', '2026-04-24 14:00:00'
+FROM invoices i WHERE i.invoice_no = 'INV-2026-0002'
+  AND NOT EXISTS (SELECT 1 FROM payments p WHERE p.invoice_id = i.id AND p.reference = 'KFS-WEB-0420');
 
 -- ============================================================
--- 11 · NOTIFICATIONS
+-- 11 · NOTIFICATIONS  (matched on user + title)
 -- ============================================================
-INSERT INTO notifications (user_id, title, message, type, related_project_id, is_read, created_at) VALUES
-(3, 'Project completed', 'Your website project RSI-2026-00001 was completed and launched. Thank you!', 'success', 1, 0, '2026-04-18 12:00:00'),
-(4, 'Task update', 'A task in your project RSI-2026-00002 was updated.', 'task', 2, 0, '2026-09-02 09:00:00'),
-(5, 'Your quotation is ready', 'Your quotation QT-2026-0001 is waiting for your approval.', 'quotation', 3, 0, '2026-09-10 09:30:00'),
-(1, 'New request received', 'Agnes Nakato submitted a new request for review.', 'info', 4, 0, '2026-09-20 10:00:00');
+INSERT INTO notifications (user_id, title, message, type, related_project_id, is_read, created_at)
+SELECT 3, 'Project completed', 'Your website project RSI-2026-00001 was completed and launched. Thank you!', 'success', 1, 0, '2026-04-18 12:00:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE user_id = 3 AND title = 'Project completed');
+
+INSERT INTO notifications (user_id, title, message, type, related_project_id, is_read, created_at)
+SELECT 4, 'Task update', 'A task in your project RSI-2026-00002 was updated.', 'task', 2, 0, '2026-09-02 09:00:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE user_id = 4 AND title = 'Task update');
+
+INSERT INTO notifications (user_id, title, message, type, related_project_id, is_read, created_at)
+SELECT 5, 'Your quotation is ready', 'Your quotation QT-2026-0001 is waiting for your approval.', 'quotation', 3, 0, '2026-09-10 09:30:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE user_id = 5 AND title = 'Your quotation is ready');
+
+INSERT INTO notifications (user_id, title, message, type, related_project_id, is_read, created_at)
+SELECT 1, 'New request received', 'Agnes Nakato submitted a new request for review.', 'info', 4, 0, '2026-09-20 10:00:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE user_id = 1 AND title = 'New request received');
+

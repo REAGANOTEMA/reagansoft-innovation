@@ -91,18 +91,24 @@ define('APP_VERSION', '2.0.0');
  *
  *      reagansoft_clients
  *
- * The matching admin store `reagansoft_admin` mirrors the same schema
- * and is provisioned on the host account alongside it.
+ * The matching admin store
+ *
+ *      reagansoft_admin
+ *
+ * mirrors the same schema and data on the host account alongside
+ * it. It is created and kept in step by install.php; set
+ * RSI_DB_MIRROR to '' to skip it.
  *
  * Defaults below use the host-account credentials. To override for
  * another environment either:
  *
- *  1. edit the four lines below, or
+ *  1. edit the lines below, or
  *  2. set these environment variables on the server:
- *       RSI_DB_HOST  RSI_DB_NAME  RSI_DB_USER  RSI_DB_PASS
+ *       RSI_DB_HOST  RSI_DB_NAME  RSI_DB_USER  RSI_DB_PASS  RSI_DB_MIRROR
  * ------------------------------------------------------------------ */
 define('DB_HOST', getenv('RSI_DB_HOST') ?: 'localhost');
 define('DB_NAME', getenv('RSI_DB_NAME') ?: 'reagansoft_clients');
+define('DB_MIRROR', getenv('RSI_DB_MIRROR') ?: 'reagansoft_admin');
 define('DB_USER', getenv('RSI_DB_USER') ?: 'reagansoft_reagansoft');
 define('DB_PASS', getenv('RSI_DB_PASS') ?: 'Lovely2God');
 

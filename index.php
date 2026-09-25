@@ -44,7 +44,7 @@ public_head([
         <div class="hero-slide<?= $si === 0 ? ' s-active' : '' ?>" data-slide>
           <img class="hero-bg" src="<?= app_url($hImg) ?>" width="1200" height="675"
                alt="<?= e($hKicker) ?> — Reagan Soft Innovation Limited, digital solutions in Jinja, Uganda"
-               loading="<?= $si === 0 ? 'eager' : 'lazy' ?>" fetchpriority="<?= $si === 0 ? 'high' : 'auto' ?>" decoding="async">
+               loading="eager" fetchpriority="<?= $si === 0 ? 'high' : 'auto' ?>" decoding="<?= $si === 0 ? 'sync' : 'async' ?>">
           <div class="hero-overlay" aria-hidden="true"></div>
           <div class="hero-grain" aria-hidden="true"></div>
           <div class="container hero-inner">

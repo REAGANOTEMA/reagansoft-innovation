@@ -18,32 +18,25 @@
 --   settings          centralised configuration
 --   activity_logs     full audit trail
 -- ============================================================
+-- ============================================================
+-- SAFE TO RE-RUN. Every table is created with IF NOT EXISTS, so
+-- importing this file never drops or overwrites existing data.
+-- For a clean rebuild (wipes every table) run database/reset.sql
+-- first — that is the only destructive script in this folder.
+--
+-- MySQL >= 5.7 / 8.0 · MariaDB >= 10.2  |  InnoDB  |  utf8mb4
+-- ============================================================
 CREATE DATABASE IF NOT EXISTS reagansoft_clients
   CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE reagansoft_clients;
 
 SET FOREIGN_KEY_CHECKS = 0;
-DROP TABLE IF EXISTS activity_logs;
-DROP TABLE IF EXISTS settings;
-DROP TABLE IF EXISTS payments;
-DROP TABLE IF EXISTS invoice_items;
-DROP TABLE IF EXISTS invoices;
-DROP TABLE IF EXISTS quotation_items;
-DROP TABLE IF EXISTS quotations;
-DROP TABLE IF EXISTS notifications;
-DROP TABLE IF EXISTS project_messages;
-DROP TABLE IF EXISTS project_files;
-DROP TABLE IF EXISTS project_tasks;
-DROP TABLE IF EXISTS projects;
-DROP TABLE IF EXISTS services;
-DROP TABLE IF EXISTS contact_messages;
-DROP TABLE IF EXISTS users;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- ------------------------------------------------------------
 -- users (ADMIN / STAFF / CLIENT)
 -- ------------------------------------------------------------
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   full_name VARCHAR(150) NOT NULL,
   email VARCHAR(190) NOT NULL UNIQUE,
@@ -66,7 +59,7 @@ CREATE TABLE users (
 -- ------------------------------------------------------------
 -- services (database-driven catalogue)
 -- ------------------------------------------------------------
-CREATE TABLE services (
+CREATE TABLE IF NOT EXISTS services (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(150) NOT NULL,
   slug VARCHAR(160) NOT NULL UNIQUE,
@@ -88,7 +81,7 @@ CREATE TABLE services (
 -- ------------------------------------------------------------
 -- projects (a service request becomes a project immediately)
 -- ------------------------------------------------------------
-CREATE TABLE projects (
+CREATE TABLE IF NOT EXISTS projects (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   ref_no VARCHAR(30) NOT NULL UNIQUE,               -- RSI-2026-00001
   client_id INT UNSIGNED NOT NULL,
@@ -118,7 +111,7 @@ CREATE TABLE projects (
 -- ------------------------------------------------------------
 -- project_tasks
 -- ------------------------------------------------------------
-CREATE TABLE project_tasks (
+CREATE TABLE IF NOT EXISTS project_tasks (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   project_id INT UNSIGNED NOT NULL,
   assigned_to INT UNSIGNED NULL,
@@ -143,7 +136,7 @@ CREATE TABLE project_tasks (
 -- ------------------------------------------------------------
 -- project_files (private; served only through download.php)
 -- ------------------------------------------------------------
-CREATE TABLE project_files (
+CREATE TABLE IF NOT EXISTS project_files (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   project_id INT UNSIGNED NOT NULL,
   uploader_id INT UNSIGNED NOT NULL,
@@ -161,7 +154,7 @@ CREATE TABLE project_files (
 -- ------------------------------------------------------------
 -- project_messages (project-specific; is_internal hidden from clients)
 -- ------------------------------------------------------------
-CREATE TABLE project_messages (
+CREATE TABLE IF NOT EXISTS project_messages (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   project_id INT UNSIGNED NOT NULL,
   sender_id INT UNSIGNED NOT NULL,
@@ -177,7 +170,7 @@ CREATE TABLE project_messages (
 -- ------------------------------------------------------------
 -- notifications
 -- ------------------------------------------------------------
-CREATE TABLE notifications (
+CREATE TABLE IF NOT EXISTS notifications (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   user_id INT UNSIGNED NOT NULL,
   title VARCHAR(190) NOT NULL,
@@ -194,7 +187,7 @@ CREATE TABLE notifications (
 -- ------------------------------------------------------------
 -- quotations
 -- ------------------------------------------------------------
-CREATE TABLE quotations (
+CREATE TABLE IF NOT EXISTS quotations (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   quotation_no VARCHAR(30) NOT NULL UNIQUE,
   project_id INT UNSIGNED NOT NULL,
@@ -216,7 +209,7 @@ CREATE TABLE quotations (
   INDEX idx_quotes_client (client_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE quotation_items (
+CREATE TABLE IF NOT EXISTS quotation_items (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   quotation_id INT UNSIGNED NOT NULL,
   description VARCHAR(255) NOT NULL,
@@ -229,7 +222,7 @@ CREATE TABLE quotation_items (
 -- ------------------------------------------------------------
 -- invoices
 -- ------------------------------------------------------------
-CREATE TABLE invoices (
+CREATE TABLE IF NOT EXISTS invoices (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   invoice_no VARCHAR(30) NOT NULL UNIQUE,
   project_id INT UNSIGNED NOT NULL,
@@ -254,7 +247,7 @@ CREATE TABLE invoices (
   INDEX idx_invoices_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE invoice_items (
+CREATE TABLE IF NOT EXISTS invoice_items (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   invoice_id INT UNSIGNED NOT NULL,
   description VARCHAR(255) NOT NULL,
@@ -267,7 +260,7 @@ CREATE TABLE invoice_items (
 -- ------------------------------------------------------------
 -- payments (manual confirmation workflow)
 -- ------------------------------------------------------------
-CREATE TABLE payments (
+CREATE TABLE IF NOT EXISTS payments (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   invoice_id INT UNSIGNED NOT NULL,
   amount DECIMAL(14,2) NOT NULL,
@@ -286,7 +279,7 @@ CREATE TABLE payments (
 -- ------------------------------------------------------------
 -- contact_messages (stored contact-form submissions)
 -- ------------------------------------------------------------
-CREATE TABLE contact_messages (
+CREATE TABLE IF NOT EXISTS contact_messages (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   full_name VARCHAR(150) NOT NULL,
   email VARCHAR(190) NOT NULL,
@@ -303,7 +296,7 @@ CREATE TABLE contact_messages (
 -- ------------------------------------------------------------
 -- settings (centralized configuration)
 -- ------------------------------------------------------------
-CREATE TABLE settings (
+CREATE TABLE IF NOT EXISTS settings (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   setting_key VARCHAR(120) NOT NULL UNIQUE,
   setting_value TEXT NULL
@@ -312,7 +305,7 @@ CREATE TABLE settings (
 -- ------------------------------------------------------------
 -- activity_logs (audit trail)
 -- ------------------------------------------------------------
-CREATE TABLE activity_logs (
+CREATE TABLE IF NOT EXISTS activity_logs (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   user_id INT UNSIGNED NULL,             -- NULL for guests
   action VARCHAR(120) NOT NULL,

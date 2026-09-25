@@ -86,7 +86,7 @@ function public_head(array $page = []): void {
  * Inner pages carry their visual as a designed in-page image, never
  * as a full-bleed hero — the home page owns the hero treatment.
  * ------------------------------------------------------------------ */
-function page_image(string $src, int $idx, string $cap = '', string $alt = '', string $loading = 'lazy'): string
+function page_image(string $src, int $idx, string $cap = '', string $alt = '', string $loading = 'eager'): string
 {
     if ($alt === '') {
         $alt = 'Reagan Soft Innovation Limited — ' . ($cap !== '' ? $cap : 'Jinja, Uganda');

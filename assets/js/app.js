@@ -382,6 +382,7 @@
     /* ---------- Home hero slider ---------- */
     var heroSlider = document.getElementById('heroSlider');
     if (heroSlider) {
+      var hSlidesWrap = heroSlider.querySelector('.hero-slides');
       var hSlides = Array.prototype.slice.call(heroSlider.querySelectorAll('.hero-slide'));
       var hDotsWrap = heroSlider.querySelector('[data-dots]');
       var hPrev = heroSlider.querySelector('[data-prev]');
@@ -447,26 +448,39 @@
         if (e.key === 'ArrowRight' && heroSlider.contains(e.target)) { heroNext(); heroResume(); }
       });
 
-      var swipeX = null;
+      var swipeX = null, swipeY = null;
+      function heroResetSwipe () {
+        if (hSlidesWrap) hSlidesWrap.style.transform = '';
+        swipeX = null;
+        swipeY = null;
+        heroResume();
+      }
       heroSlider.addEventListener('touchstart', function (e) {
-        swipeX = e.touches ? e.touches[0].clientX : null;
+        swipeX = swipeY = null;
+        if (e.touches && e.touches.length === 1) {
+          swipeX = e.touches[0].clientX;
+          swipeY = e.touches[0].clientY;
+        }
         heroPause();
       }, { passive: true });
       heroSlider.addEventListener('touchmove', function (e) {
-        if (swipeX !== null && e.touches) {
+        if (swipeX !== null && e.touches && e.touches.length === 1 && hSlidesWrap) {
           var dx = e.touches[0].clientX - swipeX;
-          if (Math.abs(dx) > 8) { heroSlider.style.transform = 'translateX(' + dx + 'px)'; }
+          var dy = e.touches[0].clientY - swipeY;
+          if (Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) {
+            hSlidesWrap.style.transform = 'translateX(' + dx + 'px)';
+          }
         }
       }, { passive: true });
       heroSlider.addEventListener('touchend', function (e) {
         if (swipeX === null) return;
         var endX = e.changedTouches ? e.changedTouches[0].clientX : swipeX;
         var dx = endX - swipeX;
-        heroSlider.style.transform = '';
-        if (Math.abs(dx) > 46) { dx < 0 ? heroNext() : heroPrev(); }
-        swipeX = null;
-        heroResume();
+        var dy = e.changedTouches ? e.changedTouches[0].clientY - swipeY : 0;
+        if (Math.abs(dx) > 46 && Math.abs(dx) > Math.abs(dy)) { dx < 0 ? heroNext() : heroPrev(); }
+        heroResetSwipe();
       }, { passive: true });
+      heroSlider.addEventListener('touchcancel', heroResetSwipe, { passive: true });
 
       document.addEventListener('visibilitychange', function () {
         document.hidden ? heroPause() : heroResume();

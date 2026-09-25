@@ -412,11 +412,12 @@
 }
 .page-img-frame {
   position: relative; z-index: 1; border-radius: 22px; overflow: hidden;
+  aspect-ratio: 16 / 9;
   border: 1px solid rgba(10,123,206,.22);
   background: var(--navy);
   box-shadow: 0 30px 70px rgba(8,59,102,.22), 0 8px 20px rgba(8,59,102,.12);
 }
-.page-img-frame img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+.page-img-frame img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .page-img-frame::after {
   content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
   background:
@@ -500,14 +501,17 @@
    (composes on top of the .hero/.hero-inner base in style.css)
    ============================================================ */
 .hero-slider {
-  position: relative; height: 100%;
+  position: relative; width: 100%; min-height: var(--hero-min-height);
+  touch-action: pan-y pinch-zoom;
 }
 .hero-slides {
-  position: relative; height: 100%;
+  position: relative; display: grid; width: 100%;
+  min-height: var(--hero-min-height);
 }
 .hero-slide {
-  position: absolute; inset: 0;
+  grid-area: 1 / 1; position: relative;
   display: flex; align-items: center;
+  min-width: 0; min-height: var(--hero-min-height);
   opacity: 0; visibility: hidden; z-index: 1;
   transition: opacity .9s ease, visibility 0s linear .9s;
 }
