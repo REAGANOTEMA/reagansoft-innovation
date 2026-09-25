@@ -1,24 +1,26 @@
 -- ============================================================
 -- Reagan Soft Innovation Limited
--- INSTALL SCRIPT — for XAMPP / a server you control
+-- INSTALL SCRIPT — for SHARED HOSTING (cPanel, Plesk, etc.)
 -- ============================================================
--- phpMyAdmin: Import tab -> choose this file -> Go.
--- It creates the database, all 15 tables and the demo data in one
--- step, so it is the only file you need for a fresh install.
 --
---   PHP >= 8.0  |  MySQL >= 5.7 / 8.0  |  MariaDB >= 10.2
---   InnoDB  |  utf8mb4
+-- 1. In your host's control panel create a database and a database
+--    user, and give that user ALL privileges on that one database.
+-- 2. In phpMyAdmin, SELECT that database in the left-hand list.
+-- 3. Import THIS file (Import tab -> choose this file -> Go).
 --
--- ON SHARED HOSTING THIS FILE WILL NOT WORK, because the account
--- there is not allowed to CREATE DATABASE and the database has a
--- host-chosen name. Use database/install-portable.sql instead.
+-- Why a different file? On shared hosting the account is not allowed
+-- to run CREATE DATABASE, and the database is named by the host
+-- (for example "reagansoft_rsi", not "reagansoft_clients"). This
+-- file therefore contains no CREATE DATABASE and no USE statement,
+-- so it creates its tables inside whichever database you selected.
+--
+-- The app must then be told the real name. Either set the
+-- environment variable RSI_DB_NAME, or edit DB_NAME in
+-- config/config.php.
 --
 -- SAFE TO RE-RUN. Nothing here drops, truncates or deletes:
 -- tables are created with IF NOT EXISTS and every demo row is
--- inserted only when it is missing, so re-importing this file
--- repairs an incomplete install instead of destroying data.
--- For a clean rebuild, run database/reset.sql FIRST (that is
--- the only destructive script in this folder), then this file.
+-- inserted only when it is missing.
 --
 -- GENERATED FILE — do not edit. Source: database/schema.sql and
 -- database/seed.sql. Rebuild with: php tools/build-sql.php
@@ -52,9 +54,6 @@
 --
 -- MySQL >= 5.7 / 8.0 · MariaDB >= 10.2  |  InnoDB  |  utf8mb4
 -- ============================================================
-CREATE DATABASE IF NOT EXISTS reagansoft_clients
-  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE reagansoft_clients;
 
 SET FOREIGN_KEY_CHECKS = 0;
 SET FOREIGN_KEY_CHECKS = 1;
@@ -386,7 +385,6 @@ CREATE TABLE IF NOT EXISTS activity_logs (
 -- To restore the logins without touching the demo data use
 -- database/admin.sql and database/client.sql instead.
 -- ============================================================
-USE reagansoft_clients;
 
 -- ============================================================
 -- 01 · SERVICES

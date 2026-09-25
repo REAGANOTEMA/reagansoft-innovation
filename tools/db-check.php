@@ -48,7 +48,7 @@ line('App database', DB_NAME);
 try {
     $pdo = db();
     line('Server', $pdo->getAttribute(PDO::ATTR_SERVER_VERSION), 'ok');
-    line('Host', DB_HOST . ':' . (($pdsn = parse_url('mysql://' . DB_HOST)) ? ($pdo->query('SELECT @@port')->fetchColumn() ?: '3306') : '3306'), 'ok');
+    line('Host', DB_HOST . ':' . (string)$pdo->query('SELECT @@port')->fetchColumn());
 
     $tz = (string)$pdo->query('SELECT @@session.time_zone')->fetchColumn();
     line('Session time zone', $tz . ($tz === '+03:00' ? ' (EAT, matches PHP)' : '  <-- not pinned to +03:00'), $tz === '+03:00' ? 'ok' : 'warn');
@@ -61,6 +61,34 @@ try {
 }
 
 /* ------------------------------------------------------------------ */
+head('Account & privileges');
+/* ------------------------------------------------------------------ */
+/* On shared hosting the site user is often refused the mysql.* system
+ * databases, and the database name is chosen by the host (for example
+ * "reagansoft_rsi" rather than "reagansoft_clients"). Both facts are
+ * printed here so a wrong DB_NAME is obvious straight away. */
+$connectedAs = (string)$pdo->query('SELECT CURRENT_USER()')->fetchColumn();
+line('Connected as', $connectedAs);
+line('Using database', (string)$pdo->query('SELECT DATABASE()')->fetchColumn() ?: '(none selected)', DB_NAME ? 'ok' : 'bad');
+line('Config expects', DB_NAME);
+
+try {
+    foreach ($pdo->query('SHOW GRANTS FOR CURRENT_USER()') as $g) {
+        $grant = is_array($g) ? (string)reset($g) : (string)$g;
+        // Grants are long; show only the part that names the privileges.
+        if (preg_match("/GRANT (.+?) ON (.+?) TO/i", $grant, $m)) {
+            line('  privileges on ' . $m[2], $m[1]);
+        } else {
+            line('  grant', $grant);
+        }
+    }
+} catch (Throwable $e) {
+    line('Privileges', 'could not be read: ' . $e->getMessage(), 'warn');
+}
+
+line('CREATE DATABASE', 'not attempted (it is optional — see the README hosting notes)', 'ok');
+
+/* ------------------------------------------------------------------ */
 head('Schema (expect 15 tables)');
 /* ------------------------------------------------------------------ */
 $expected = [
@@ -69,7 +97,7 @@ $expected = [
     'invoices', 'invoice_items', 'payments', 'contact_messages',
     'settings', 'activity_logs',
 ];
-$have = $pdo->query('SELECT table_name FROM information_schema.tables WHERE table_schema = ' . $pdo->quote(DB_NAME))->fetchAll(PDO::FETCH_COLUMN);
+$have = $pdo->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
 $missing = array_diff($expected, $have);
 $extra   = array_diff($have, $expected);
 line('Tables found', (string)count($have), count($have) >= 15 ? 'ok' : 'bad');
@@ -142,7 +170,7 @@ if (DB_MIRROR === '' || DB_MIRROR === DB_NAME) {
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         ]);
-        $mTables = (int)$m->query('SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ' . $m->quote(DB_MIRROR))->fetchColumn();
+        $mTables = count($m->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN));
         line('Tables', (string)$mTables, $mTables >= 15 ? 'ok' : 'warn');
 
         if ($mTables > 0 && isset($counts['users'])) {

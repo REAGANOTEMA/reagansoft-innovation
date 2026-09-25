@@ -147,6 +147,61 @@ php tools/img-opt.php     # broken / unused / oversized image report
 import; it prints a `FAIL` line per problem and exits non-zero. `img-opt.php`
 should report *"Images are healthy"* — run it after swapping any artwork.
 
+## Deploying to shared hosting (cPanel / Plesk)
+
+Shared hosts usually give you **one** database, **name it themselves**, and
+forbid `CREATE DATABASE`. Two symptoms follow from that, and both are
+already handled — this section only explains which file to use.
+
+```
+#1044 - Access denied for user 'you'@'localhost' to database 'information_schema'
+#1044 - Access denied for user 'you'@'localhost' to database 'reagansoft_clients'
+```
+
+| File                     | Use it when                                                    |
+|--------------------------|----------------------------------------------------------------|
+| `install.sql`            | XAMPP, VPS or dedicated server — you may create databases       |
+| **`install-portable.sql`**| **shared hosting — select your database in phpMyAdmin first**    |
+
+**Steps**
+1. In the host panel create a database and a database user. Note the exact
+   database name — it is usually prefixed, e.g. `reagansoft_rsi`.
+2. Give that user **all privileges on that one database** and nothing else.
+3. In phpMyAdmin, **click your database in the left-hand list** so it is the
+   selected one.
+4. Import `database/install-portable.sql` (Import → choose file → Go).
+5. Point the app at it — either in `config/config.php`:
+   ```php
+   define('DB_NAME', 'reagansoft_rsi');   // the host's name, not ours
+   ```
+   or with environment variables (`RSI_DB_NAME`, `RSI_DB_USER`, `RSI_DB_PASS`).
+6. Open `install.php` once to confirm, then **delete `install.php` and
+   `create_admin.php`**.
+7. Run `php tools/db-check.php` if you have SSH — it prints the connected
+   user, the database actually in use and the privileges, which is the
+   fastest way to spot a mismatch.
+
+**Single-database hosts:** the mirror database is optional. Switch it off with
+either of these (setting the environment variable to an empty value works on
+Linux/Apache; editing the constant works everywhere):
+
+```php
+define('DB_MIRROR', '');   // config/config.php — simplest
+```
+```
+RSI_DB_MIRROR=             // empty value on the server
+```
+
+`db-check.php` then reports `Mirror disabled` instead of an access error.
+
+**Regenerating the SQL packages.** `install.sql` and `install-portable.sql`
+are generated from `schema.sql` + `seed.sql` so they can never drift apart.
+After editing either source file run:
+
+```bash
+php tools/build-sql.php
+```
+
 ## Configuration — single database, your credentials
 
 All settings live in `config/config.php`. To connect to a hosted database (when you

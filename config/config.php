@@ -106,11 +106,31 @@ define('APP_VERSION', '2.0.0');
  *  2. set these environment variables on the server:
  *       RSI_DB_HOST  RSI_DB_NAME  RSI_DB_USER  RSI_DB_PASS  RSI_DB_MIRROR
  * ------------------------------------------------------------------ */
-define('DB_HOST', getenv('RSI_DB_HOST') ?: 'localhost');
-define('DB_NAME', getenv('RSI_DB_NAME') ?: 'reagansoft_clients');
-define('DB_MIRROR', getenv('RSI_DB_MIRROR') ?: 'reagansoft_admin');
-define('DB_USER', getenv('RSI_DB_USER') ?: 'reagansoft_reagansoft');
-define('DB_PASS', getenv('RSI_DB_PASS') ?: 'Lovely2God');
+/**
+ * Reads an environment variable, treating "set but empty" as a real
+ * value rather than as "not set".
+ *
+ * The mirror database is the reason this exists. With the usual
+ * `getenv('RSI_DB_MIRROR') ?: 'reagansoft_admin'`, setting the variable
+ * to an empty string — the documented way to switch the mirror off on a
+ * single-database host — was falsy, so PHP fell back to the default and
+ * the mirror stayed switched on. rsi_env() returns '' for an empty
+ * string, and DB_MIRROR's default is then never reached.
+ *
+ * @return string|null null only when the variable is genuinely absent
+ */
+function rsi_env(string $name): ?string
+{
+    $v = getenv($name);
+    if ($v === false) { return null; }   // not set at all -> use the default
+    return $v;                          // set, even to '' -> honour it
+}
+
+define('DB_HOST', rsi_env('RSI_DB_HOST') ?: 'localhost');
+define('DB_NAME', rsi_env('RSI_DB_NAME') ?: 'reagansoft_clients');
+define('DB_MIRROR', rsi_env('RSI_DB_MIRROR') ?? 'reagansoft_admin');
+define('DB_USER', rsi_env('RSI_DB_USER') ?: 'reagansoft_reagansoft');
+define('DB_PASS', rsi_env('RSI_DB_PASS') ?: 'Lovely2God');
 
 define('MAX_UPLOAD_BYTES', 10 * 1024 * 1024);        // 10 MB
 define('UPLOAD_DIR', __DIR__ . '/../uploads/');

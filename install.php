@@ -31,10 +31,13 @@ function rsi_is_installed(): bool
 {
     try {
         $pdo = rsi_connect(DB_NAME);
-        $n = (int)$pdo->query(
-            'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ' . $pdo->quote(DB_NAME)
-        )->fetchColumn();
-        return $n > 0;
+        // SHOW TABLES, not information_schema. Plenty of shared hosts deny the
+        // site user any access to the mysql.* system databases, and querying
+        // information_schema then fails with "#1044 Access denied ... to
+        // database 'information_schema'". SHOW TABLES only ever touches the
+        // database we were already connected to, so it always works.
+        $rows = $pdo->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
+        return count($rows) > 0;
     } catch (Throwable $e) {
         return false;
     }
