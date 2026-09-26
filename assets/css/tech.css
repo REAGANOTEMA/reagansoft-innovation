@@ -23,6 +23,8 @@
 .page-pricing   { --pg: #6a4fb8; --pgl: #b9a7ff; }
 .page-process   { --pg: #a06a10; --pgl: #ffd596; }
 .page-about     { --pg: #157f5a; --pgl: #7fe0b4; }
+.page-portfolio { --pg: #0a5da0; --pgl: #8fd8ff; }
+.page-faq       { --pg: #0e7490; --pgl: #7fe3e0; }
 .page-contact   { --pg: #0a7bce; --pgl: #8fd8ff; }
 .page-checkout  { --pg: #0a7bce; --pgl: #8fd8ff; }
 .page-default   { --pg: #0a7bce; --pgl: #8fd8ff; }
@@ -209,6 +211,34 @@
 .svc-card, .value-card, .price-card, .program-card, .folio-card, .split-media, .founder-card {
   box-shadow: 0 1px 2px rgba(8,59,102,.06), 0 12px 30px rgba(8,59,102,.07);
 }
+
+/* ---------- Portfolio cover: blueprint field + depth ---------- */
+.folio-cover { isolation: isolate; }
+.folio-cover::after {
+  content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(120% 90% at 82% 8%, rgba(255,255,255,.55), transparent 58%);
+}
+.folio-cover.is-featured::after { background: radial-gradient(120% 90% at 82% 8%, rgba(143,216,255,.16), transparent 60%); }
+
+.folio-gridlines {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 26px 26px;
+  -webkit-mask-image: linear-gradient(200deg, #000, transparent 72%);
+  mask-image: linear-gradient(200deg, #000, transparent 72%);
+}
+.folio-cover.is-featured .folio-gridlines {
+  background:
+    linear-gradient(var(--grid-dk) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-dk) 1px, transparent 1px);
+}
+
+.folio-card:hover .folio-wire { opacity: .95; }
+.folio-wire { opacity: .8; }
+.folio-card:hover .folio-glyph { transform: translateY(-2px); }
+.folio-glyph { transition: transform .28s cubic-bezier(.22,.61,.36,1), box-shadow .28s ease; }
 
 /* Section watermark numbers */
 .section-head { position: relative; }

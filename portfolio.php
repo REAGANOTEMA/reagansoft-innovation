@@ -4,7 +4,8 @@ require __DIR__ . '/config/config.php';
 $projects = [];
 try {
     $projects = db()->query(
-        "SELECT p.title, p.description, s.name AS service
+        "SELECT p.ref_no, p.title, p.description, p.requirements, p.completed_at,
+                s.name AS service, s.slug AS service_slug
          FROM projects p
          LEFT JOIN services s ON s.id = p.service_id
          WHERE p.status = 'COMPLETED'
@@ -36,9 +37,15 @@ public_head([
     <div class="pi-copy">
       <span class="eyebrow">Our work</span>
       <h1>Real projects, delivered for real businesses.</h1>
-      <p class="lead">A selection of finished work, added here as clients approve it for public display.</p>
+      <p class="lead">Every build below was scoped, paid for and handed over in full. We publish a project only once its client has approved it for public display.</p>
+      <?php if ($projects): ?>
+        <div class="folio-count">
+          <span class="tick"><?= icon('check') ?></span>
+          <span><b><?= count($projects) ?></b> <?= count($projects) === 1 ? 'project' : 'projects' ?> delivered and approved for display</span>
+        </div>
+      <?php endif; ?>
     </div>
-    <?= page_image('assets/img/hero4.webp', 4, 'A selection of finished work, added as clients approve'); ?>
+    <?= page_image('assets/img/hero4.webp', 4, 'Delivered work, published with client approval'); ?>
   </div>
 </section>
 
@@ -46,13 +53,20 @@ public_head([
 <section class="section">
   <div class="container">
     <div class="folio-grid">
-      <?php foreach ($projects as $p): ?>
-        <article class="folio-card">
+      <?php foreach ($projects as $i => $p): ?>
+        <article class="folio-card<?= $i === 0 ? ' is-featured' : '' ?>">
+          <?= folio_cover($p, $i + 1, $i === 0) ?>
           <div class="folio-body">
             <span class="tag"><?= e($p['service'] ?? 'Custom project') ?></span>
             <h3><?= e($p['title']) ?></h3>
-            <p class="muted"><?= e(truncate($p['description'], 160)) ?></p>
-            <div class="deliver" style="margin-top:auto;padding-top:12px"><?= icon('check') ?><span>Delivered &amp; completed</span></div>
+            <p class="muted"><?= e(truncate($p['description'], 190)) ?></p>
+            <?= folio_scope($p['requirements'] ?? null) ?>
+            <div class="folio-foot">
+              <span class="folio-foot-done"><?= icon('check') ?><span>Delivered &amp; completed</span></span>
+              <?php if (!empty($p['completed_at'])): ?>
+                <span class="folio-foot-when">Handed over <?= e(fmt_date((string)$p['completed_at'])) ?></span>
+              <?php endif; ?>
+            </div>
           </div>
         </article>
       <?php endforeach; ?>
@@ -61,7 +75,7 @@ public_head([
 </section>
 <?php endif; ?>
 
-<section class="section <?= $projects ? '' : '' ?>">
+<section class="section">
   <div class="container">
     <?php if (!$projects): ?>
       <div class="empty mb-3">
@@ -70,7 +84,13 @@ public_head([
         <p>As soon as the first client project is completed and approved for showcase, it will appear in this gallery. In the meantime, here is the type of work we deliver:</p>
       </div>
     <?php else: ?>
-      <div class="section-head"><div><span class="eyebrow">Beyond the gallery</span><h2>More of what we build.</h2></div></div>
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Beyond the gallery</span>
+          <h2>Most of what we build never appears here.</h2>
+          <p class="section-sub">Internal systems, client portals and business tools are built under confidentiality and stay private. These are the disciplines behind them &mdash; if you need one of these, we have almost certainly built it before.</p>
+        </div>
+      </div>
     <?php endif; ?>
     <div class="value-grid">
       <?php foreach ($capabilities as $c): ?>
@@ -90,7 +110,7 @@ public_head([
       <div>
         <span class="eyebrow">Your project could be next</span>
         <h2>Spotted a problem our software can solve?</h2>
-        <p>Send a request and see how we would approach it.</p>
+        <p>Tell us what is getting in the way. We will come back with an approach, a scope and a fixed price &mdash; before you commit to anything.</p>
       </div>
       <a class="btn btn-light" href="<?= app_url('checkout.php') ?>">Start a project</a>
     </div>

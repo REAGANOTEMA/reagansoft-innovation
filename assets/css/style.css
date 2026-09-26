@@ -377,6 +377,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible, .icon-btn:focus-vi
 /* ---------- Section heads ---------- */
 .section-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; margin-bottom: 42px; }
 .section-head p { margin: 0; color: var(--muted); max-width: 420px; }
+.section-head .section-sub { max-width: 660px; margin: 12px 0 0; font-size: 15.5px; line-height: 1.65; }
 
 /* ---------- Cards ---------- */
 .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
@@ -1081,6 +1082,85 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .folio-body h3 { font-size: 18px; }
 .folio-tags { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
 .tag { font-size: 12px; font-weight: 700; color: var(--blue-700); background: var(--sky-100); padding: 4px 10px; border-radius: 99px; }
+
+.folio-count {
+  display: inline-flex; align-items: center; gap: 9px; margin-top: 18px;
+  padding: 9px 15px 9px 12px; border-radius: 99px;
+  background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow-sm);
+  font-size: 13.5px; font-weight: 600; color: var(--muted);
+}
+.folio-count b { color: var(--navy); font-weight: 800; }
+.folio-count .tick { color: var(--green); display: inline-flex; }
+.folio-count svg { width: 17px; height: 17px; }
+
+/* Cover: drawn, not photographed */
+.folio-cover {
+  position: relative; overflow: hidden; height: 172px; flex-shrink: 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--blue);
+}
+.folio-cover.tone-1 { background: linear-gradient(140deg, #eaf6ff 0%, #d5eafb 100%); }
+.folio-cover.tone-2 { background: linear-gradient(140deg, #e6f5fc 0%, #cfe6f6 100%); }
+.folio-cover.tone-3 { background: linear-gradient(140deg, #f1f9fe 0%, #dcecf9 100%); }
+.folio-cover.tone-4 { background: linear-gradient(140deg, #e9f4fd 0%, #d1e6f7 100%); }
+.folio-cover.is-featured { color: #7fd0ff; background: linear-gradient(140deg, #0a3f6e 0%, #083b66 55%, #062f54 100%); border-bottom-color: rgba(10,63,110,.9); }
+
+.folio-status {
+  position: absolute; top: 14px; left: 14px; z-index: 2;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 11px 5px 9px; border-radius: 99px;
+  background: var(--green-bg); color: var(--green);
+  font-size: 11.5px; font-weight: 800; letter-spacing: .3px; text-transform: uppercase;
+}
+.folio-status svg { width: 13px; height: 13px; stroke-width: 3; }
+.folio-cover.is-featured .folio-status { background: rgba(21,127,90,.22); color: #6fe0b4; }
+
+.folio-glyph {
+  position: absolute; top: 12px; right: 14px; z-index: 2;
+  width: 40px; height: 40px; border-radius: 12px;
+  display: grid; place-items: center;
+  background: rgba(255,255,255,.72); color: var(--blue-700);
+  border: 1px solid rgba(255,255,255,.9);
+  box-shadow: 0 4px 12px rgba(8,59,102,.10);
+}
+.folio-glyph svg { width: 21px; height: 21px; }
+.folio-cover.is-featured .folio-glyph { background: rgba(255,255,255,.12); color: #fff; border-color: rgba(255,255,255,.22); box-shadow: none; }
+
+.folio-wire {
+  position: absolute; right: -18px; bottom: -20px; z-index: 1;
+  width: 58%; max-width: 230px; height: auto;
+  transition: transform .28s cubic-bezier(.22,.61,.36,1);
+}
+.folio-card:hover .folio-wire { transform: translate(-4px, -3px); }
+
+.folio-meta {
+  position: absolute; left: 16px; right: 16px; bottom: 13px; z-index: 2;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  font-size: 11.5px; font-weight: 700;
+}
+.folio-ref {
+  font-family: var(--font-mono); font-weight: 700; letter-spacing: .04em;
+  color: var(--navy); background: rgba(255,255,255,.8);
+  border: 1px solid rgba(255,255,255,.9); border-radius: 6px; padding: 3px 7px;
+}
+.folio-when { margin-left: auto; color: var(--muted); font-weight: 600; }
+.folio-cover.is-featured .folio-ref { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.22); color: #cfe8fb; }
+.folio-cover.is-featured .folio-when { color: #a9c9e6; }
+
+/* Scope of work, from the project's own requirements */
+.folio-scope { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 7px; }
+.folio-scope li { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; color: var(--ink-2); line-height: 1.45; }
+.folio-scope svg { width: 15px; height: 15px; color: var(--blue); flex-shrink: 0; margin-top: 3px; stroke-width: 2.6; }
+.folio-scope .folio-scope-more { color: var(--faint); font-weight: 700; font-size: 12.5px; }
+
+.folio-foot {
+  margin-top: auto; padding-top: 14px;
+  border-top: 1px dashed var(--line);
+  display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+}
+.folio-foot-done { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 700; color: var(--ink-2); }
+.folio-foot-done svg { width: 16px; height: 16px; color: var(--green); stroke-width: 3; }
+.folio-foot-when { font-size: 12.5px; color: var(--faint); font-weight: 600; }
 
 /* Contact */
 .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 42px; align-items: start; }

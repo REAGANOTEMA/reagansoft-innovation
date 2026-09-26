@@ -101,6 +101,107 @@ function page_image(string $src, int $idx, string $cap = '', string $alt = '', s
         . '</figure>';
 }
 
+/* ------------------------------------------------------------------
+ * Portfolio cover.
+ *
+ * Completed projects are not screenshotted, so the cover is drawn, not
+ * photographed: a tinted blueprint panel carrying the service glyph, the
+ * delivery status, the project reference and a generic interface
+ * wireframe. Nothing in it claims to be a picture of the client's site.
+ * ------------------------------------------------------------------ */
+function folio_glyph(?string $slug, string $service = ''): string {
+    $bySlug = [
+        'business-website'  => 'globe',
+        'ecommerce'         => 'cart',
+        'business-systems'  => 'cpu',
+        'software-dev'      => 'code-s',
+        'web-mobile-apps'   => 'mobile',
+        'receipt-billing'   => 'receipt',
+        'custom-solutions'  => 'grid',
+        'branding'          => 'palette',
+        'maintenance'       => 'shield',
+        'video-games'       => 'gamepad',
+        'digital-books'     => 'book',
+        'chat-automation'   => 'bot',
+        'system-integration'=> 'link',
+        'cybersecurity'     => 'lock',
+    ];
+    if ($slug !== null && $slug !== '' && isset($bySlug[$slug])) {
+        return $bySlug[$slug];
+    }
+    $name = strtolower($service);
+    foreach (['website' => 'globe', 'ecommerce' => 'cart', 'system' => 'cpu', 'app' => 'mobile',
+              'billing' => 'receipt', 'brand' => 'palette', 'game' => 'gamepad', 'book' => 'book',
+              'chat' => 'bot', 'payment' => 'link', 'security' => 'lock', 'software' => 'code-s'] as $needle => $glyph) {
+        if (str_contains($name, $needle)) {
+            return $glyph;
+        }
+    }
+    return 'grid';
+}
+
+function folio_cover(array $p, int $idx, bool $featured = false): string {
+    $tone    = (($idx - 1) % 4) + 1;
+    $glyph   = folio_glyph($p['service_slug'] ?? null, (string)($p['service'] ?? ''));
+    $ref     = trim((string)($p['ref_no'] ?? ''));
+    $done    = !empty($p['completed_at']) ? fmt_date((string)$p['completed_at'], 'M Y') : '';
+
+    $out  = '<div class="folio-cover tone-' . $tone . ($featured ? ' is-featured' : '') . '">';
+    $out .= '<span class="folio-gridlines" aria-hidden="true"></span>';
+    $out .= '<span class="folio-status">' . icon('check') . '<span>Delivered</span></span>';
+    $out .= '<span class="folio-glyph" aria-hidden="true">' . icon($glyph) . '</span>';
+    $out .= '<svg class="folio-wire" viewBox="0 0 200 132" fill="none" aria-hidden="true">'
+          . '<rect x="1.5" y="1.5" width="197" height="129" rx="10" stroke="currentColor" stroke-opacity=".34"/>'
+          . '<path d="M1.5 22h197" stroke="currentColor" stroke-opacity=".34"/>'
+          . '<circle cx="13" cy="11.7" r="2.6" fill="currentColor" fill-opacity=".45"/>'
+          . '<circle cx="23" cy="11.7" r="2.6" fill="currentColor" fill-opacity=".3"/>'
+          . '<circle cx="33" cy="11.7" r="2.6" fill="currentColor" fill-opacity=".2"/>'
+          . '<rect x="14" y="36" width="86" height="7" rx="3.5" fill="currentColor" fill-opacity=".22"/>'
+          . '<rect x="14" y="50" width="120" height="5" rx="2.5" fill="currentColor" fill-opacity=".14"/>'
+          . '<rect x="14" y="61" width="104" height="5" rx="2.5" fill="currentColor" fill-opacity=".14"/>'
+          . '<rect x="14" y="78" width="46" height="34" rx="6" fill="currentColor" fill-opacity=".16"/>'
+          . '<rect x="66" y="78" width="46" height="34" rx="6" fill="currentColor" fill-opacity=".16"/>'
+          . '<rect x="118" y="78" width="68" height="34" rx="6" fill="currentColor" fill-opacity=".1"/>'
+          . '</svg>';
+    $out .= '<span class="folio-meta">'
+          . ($ref !== '' ? '<span class="folio-ref">' . e($ref) . '</span>' : '')
+          . ($done !== '' ? '<span class="folio-when">Handed over ' . e($done) . '</span>' : '')
+          . '</span>';
+    $out .= '</div>';
+    return $out;
+}
+
+/* ------------------------------------------------------------------
+ * Scope of work, taken from the project's own requirements field. The
+ * seeded data stores it as a comma-separated sentence, so it is split
+ * into short chips and anything past the limit is summarised.
+ * ------------------------------------------------------------------ */
+function folio_scope(?string $requirements, int $limit = 4): string {
+    $text = trim((string)$requirements);
+    if ($text === '') {
+        return '';
+    }
+    $parts = array_values(array_filter(array_map(
+        static fn(string $p): string => trim($p),
+        preg_split('/[;,]|\s+\/\s+/u', $text) ?: []
+    ), static fn(string $p): bool => $p !== ''));
+
+    if ($parts === []) {
+        return '';
+    }
+    $shown  = array_slice($parts, 0, $limit);
+    $hidden = count($parts) - count($shown);
+
+    $out = '<ul class="folio-scope">';
+    foreach ($shown as $p) {
+        $out .= '<li>' . icon('check') . '<span>' . e(rtrim($p, '. ')) . '</span></li>';
+    }
+    if ($hidden > 0) {
+        $out .= '<li class="folio-scope-more">+' . $hidden . ' more</li>';
+    }
+    return $out . '</ul>';
+}
+
 function public_footer(): void {
     $phone = settings('company_phone', '+256730314979');
     $email = settings('company_email', '');
