@@ -210,7 +210,7 @@ environment variables — no other file changes anywhere in the app:
 
 | Variable       | Default                          |
 |----------------|----------------------------------|
-| `RSI_APP_URL`  | `http://localhost/reagansoft-innovation` |
+| `RSI_APP_URL`  | *auto-detected from the request* (scheme + host + install path) |
 | `RSI_DB_HOST`  | `localhost`                      |
 | `RSI_DB_NAME`  | `reagansoft_clients`             |
 | `RSI_DB_MIRROR`| `reagansoft_admin`               |
@@ -257,7 +257,9 @@ A seeded admin already exists, so `create_admin.php` refuses to run. Customise
 company/payment details under **Admin → Settings**.
 
 ## Production checklist
-- HTTPS + real domain, set `RSI_APP_URL` to it.
+- HTTPS + real domain. `RSI_APP_URL` is detected from the request (scheme, host and
+  install path, including `X-Forwarded-Proto`/`X-Forwarded-Host` behind a proxy);
+  set it explicitly only when the site must advertise a different canonical origin.
 - Change every demo password and the `RSI_DB_*` credentials.
 - Delete `install.php` (and `create_admin.php`) from the server.
 - Keep `uploads/` out of the public root; `uploads/.htaccess` already blocks

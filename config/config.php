@@ -55,7 +55,7 @@ if (session_status() === PHP_SESSION_NONE) {
         'lifetime' => 0,
         'path'     => '/',
         'domain'   => '',
-        'secure'   => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+        'secure'   => rsi_request_scheme() === 'https',
         'httponly' => true,
         'samesite' => 'Lax',
     ]);
@@ -75,11 +75,59 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
 header('X-XSS-Protection: 1; mode=block');
 
 /* ------------------------------------------------------------------
+ * Base URL detection
+ * ------------------------------------------------------------------
+ * APP_URL is used for every link, stylesheet, script and image, so it
+ * must always match the origin the page was actually requested on.
+ * A hardcoded http:// base breaks as soon as the site is opened over
+ * HTTPS: the browser reports every asset as mixed content and then
+ * blocks it because the CSP compares the URL against 'self', which is
+ * the HTTPS origin. The scheme, host and install path are therefore
+ * derived from the request unless RSI_APP_URL says otherwise.
+ * ------------------------------------------------------------------ */
+function rsi_request_scheme(): string {
+    $https = $_SERVER['HTTPS'] ?? '';
+    if ($https !== '' && strtolower((string)$https) !== 'off') {
+        return 'https';
+    }
+    if (strtolower(trim(explode(',', (string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''))[0])) === 'https') {
+        return 'https';
+    }
+    return ((int)($_SERVER['SERVER_PORT'] ?? 0) === 443) ? 'https' : 'http';
+}
+
+function rsi_request_host(): string {
+    $candidates = [(string)($_SERVER['HTTP_X_FORWARDED_HOST'] ?? ''), (string)($_SERVER['HTTP_HOST'] ?? '')];
+    foreach ($candidates as $candidate) {
+        $host = trim(explode(',', $candidate)[0]);
+        // host, optional port, optional bracketed IPv6 literal — nothing else
+        if ($host !== '' && preg_match('/^\[?[A-Za-z0-9._-]+\]?(?::[0-9]{1,5})?$/', $host) === 1) {
+            return $host;
+        }
+    }
+    return 'localhost';
+}
+
+/**
+ * Install path below the document root: '' when the app sits in the web
+ * root, '/reagansoft-innovation' when it sits in a sub-folder. Derived
+ * from the filesystem, so it is correct on any host without config.
+ */
+function rsi_base_path(): string {
+    $docRoot = rtrim(str_replace('\\', '/', (string)($_SERVER['DOCUMENT_ROOT'] ?? '')), '/');
+    $appDir  = rtrim(str_replace('\\', '/', dirname(__DIR__)), '/');
+    if ($docRoot === '' || $appDir === '' || stripos($appDir . '/', $docRoot . '/') !== 0) {
+        return '';
+    }
+    return substr($appDir, strlen($docRoot));
+}
+
+/* ------------------------------------------------------------------
  * Application constants (override via environment in production)
  * ------------------------------------------------------------------ */
 define('APP_NAME', 'Reagan Soft Innovation Limited');
 define('APP_SHORT', 'RSI');
-define('APP_URL', rtrim((string)getenv('RSI_APP_URL') ?: 'http://localhost/reagansoft-innovation', '/'));
+define('APP_URL', rtrim(rsi_env('RSI_APP_URL') ?: rsi_request_scheme() . '://' . rsi_request_host() . rsi_base_path(), '/'));
 define('APP_FOUNDER', 'Reagan Otema');
 define('APP_LOCATION', 'Jinja, Uganda');
 define('APP_VERSION', '2.0.0');
@@ -280,6 +328,11 @@ function clear_old(): void {
     unset($_SESSION['old']);
 }
 
+/**
+ * Absolute URL for a path inside the app, always on the origin the
+ * current request came in on, so assets never trip mixed content or
+ * the 'self' source in the Content Security Policy.
+ */
 function app_url(string $path = ''): string {
     return APP_URL . ($path === '' ? '' : '/' . ltrim($path, '/'));
 }
