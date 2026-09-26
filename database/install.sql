@@ -116,6 +116,11 @@ CREATE TABLE IF NOT EXISTS projects (
   title VARCHAR(190) NOT NULL,
   description TEXT NOT NULL,
   requirements TEXT NULL,
+  -- Showcase fields, read by the public Work page. All three are optional:
+  -- a project without a live site simply shows no "visit" link.
+  website_url  VARCHAR(255) NULL,                   -- https://… the client can open
+  deliverables VARCHAR(190) NULL,                   -- "Website, Business system, Mobile apps"
+  cover_art    VARCHAR(40)  NULL,                   -- artwork key: education, hospitality, …
   budget DECIMAL(14,2) NULL,
   priority ENUM('low','normal','high','urgent') NOT NULL DEFAULT 'normal',
   status ENUM('NEW','REVIEWING','QUOTATION','APPROVED','IN_PROGRESS','WAITING_FOR_CLIENT','TESTING','COMPLETED','CANCELLED') NOT NULL DEFAULT 'NEW',
@@ -591,7 +596,8 @@ INSERT INTO users (full_name, email, phone, password_hash, role, company, addres
 ('Grace Ayebare', 'grace@pearlholdings.com', '+256778987654', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Pearl Holdings Ltd', 'Jinja, Uganda', 1),
 ('David Mulumba', 'david@mulumbasons.com',   '+256703246810', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Mulumba & Sons Traders', 'Iganga, Uganda', 1),
 ('Agnes Nakato',  'agnesnakato@gmail.com',   '+256759135790', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', NULL, 'Jinja, Uganda', 1),
-('Hotel Paradise on the Nile', 'info@hotelparadiseonthenile.co.ug', '+256754412880', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Hotel Paradise on the Nile', 'Main Street, Jinja, Uganda', 1)
+('Hotel Paradise on the Nile', 'info@hotelparadiseonthenile.co.ug', '+256754412880', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Hotel Paradise on the Nile', 'Main Street, Jinja, Uganda', 1),
+('Iganga School of Nursing and Midwifery', 'info@igangaschoolofnursingandmidwifery.ac.ug', '+256701489236', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Iganga School of Nursing and Midwifery', 'Iganga, Uganda', 1)
 ON DUPLICATE KEY UPDATE
   full_name     = VALUES(full_name),
   phone         = VALUES(phone),
@@ -611,15 +617,35 @@ ON DUPLICATE KEY UPDATE
 -- inserted — so a hard-coded id would attach demo data to the
 -- wrong client. Lookups make this file safe on a fresh install
 -- and on any database that already has rows.
+--
+-- The last three columns — website_url, deliverables and cover_art
+-- — are what the public Work page (portfolio.php) reads. They are
+-- showcase data, not project-management data, which is why they sit
+-- apart from budget / status / dates:
+--
+--   website_url   the live address of the finished site. The card
+--                 grows a "visit site" link; NULL means no link.
+--   deliverables  what was actually handed over, comma separated.
+--                 Each item becomes an icon badge on the card, and
+--                 the filter bar above the grid filters on it.
+--   cover_art     which drawn cover scene to use — education,
+--                 hospitality, agriculture, health, commerce,
+--                 logistics or systems. Empty means the page infers
+--                 one from the title, so a card is never bare.
+--
+-- On an install that predates these columns, run database/upgrade.sql
+-- once: it adds them to the table that is already there and loads
+-- the same rows, so an old site ends up identical to a fresh one.
 -- ============================================================
-INSERT INTO projects (ref_no, client_id, service_id, assigned_to, title, description, requirements, budget, priority, status, progress, deadline, started_at, completed_at, submitted_at) VALUES
+INSERT INTO projects (ref_no, client_id, service_id, assigned_to, title, description, requirements, website_url, deliverables, cover_art, budget, priority, status, progress, deadline, started_at, completed_at, submitted_at) VALUES
 ('RSI-2026-00001',
  (SELECT id FROM users WHERE email = 'amara@kirekafarms.com'),
  (SELECT id FROM services WHERE slug = 'business-website'),
  (SELECT id FROM users WHERE email = 'admin@reagansoft.com'),
  'Company Website – Kireka Farm Supplies Ltd',
- 'A responsive company website to present the farm supply catalogue, company story and contact details, with a lead-capture enquiry form and SEO foundations.',
+ 'A responsive company website that presents the farm supply catalogue, the company story and the contact details, with a lead-capture enquiry form and the SEO foundations a rural supplier needs to be found on Google.',
  'Six information pages, enquiry form, WhatsApp integration, Google Map, photo gallery.',
+ NULL, 'Website', 'agriculture',
  8500000, 'normal', 'COMPLETED', 100, '2026-04-20', '2026-03-02', '2026-04-18', '2026-02-26'),
 ('RSI-2026-00002',
  (SELECT id FROM users WHERE email = 'grace@pearlholdings.com'),
@@ -628,6 +654,7 @@ INSERT INTO projects (ref_no, client_id, service_id, assigned_to, title, descrip
  'Sales & Stock Management System – Pearl Holdings Ltd',
  'A custom management system for tracking sales, stock levels, suppliers and daily reports across the Pearl Holdings outlets in the Eastern region.',
  'User roles for cashier and manager, product and stock modules, purchase tracking, daily sales reports, backup.',
+ NULL, NULL, 'commerce',
  14500000, 'high', 'IN_PROGRESS', 70, '2026-09-30', '2026-07-06', NULL, '2026-07-01'),
 ('RSI-2026-00003',
  (SELECT id FROM users WHERE email = 'david@mulumbasons.com'),
@@ -636,6 +663,7 @@ INSERT INTO projects (ref_no, client_id, service_id, assigned_to, title, descrip
  'Ecommerce Store – Mulumba & Sons Traders',
  'An online store for hardware and farm inputs with a product catalogue, cart, order management and mobile money ready payment architecture.',
  'Product categories and search, cart and checkout, order dashboard, inventory, mobile money payment ready structure.',
+ NULL, NULL, 'commerce',
  9800000, 'normal', 'QUOTATION', 0, NULL, NULL, NULL, '2026-09-10'),
 ('RSI-2026-00004',
  (SELECT id FROM users WHERE email = 'agnesnakato@gmail.com'),
@@ -644,6 +672,7 @@ INSERT INTO projects (ref_no, client_id, service_id, assigned_to, title, descrip
  'Customer Feedback Portal – Agnes Nakato',
  'A small portal where customers submit feedback and track the response, with a staff review dashboard.',
  'Feedback form, automatic acknowledgements, staff review queue, simple analytics.',
+ NULL, NULL, 'systems',
  3500000, 'low', 'NEW', 0, NULL, NULL, NULL, '2026-09-20'),
 ('RSI-2026-00005',
  (SELECT id FROM users WHERE email = 'amara@kirekafarms.com'),
@@ -652,15 +681,26 @@ INSERT INTO projects (ref_no, client_id, service_id, assigned_to, title, descrip
  'Brand Refresh & Business Cards – Kireka Farm Supplies Ltd',
  'Logo refresh, updated colour palette and print ready business cards and letterheads for the farm supply brand.',
  'Two logo options, brand colours and typography, business cards, letterheads.',
+ NULL, 'Branding', 'agriculture',
  650000, 'normal', 'REVIEWING', 15, NULL, NULL, NULL, '2026-09-18'),
 ('RSI-2026-00006',
  (SELECT id FROM users WHERE email = 'info@hotelparadiseonthenile.co.ug'),
  (SELECT id FROM services WHERE slug = 'business-website'),
  (SELECT id FROM users WHERE email = 'staff@reagansoft.com'),
- 'Hotel Website & Booking Enquiry System – Hotel Paradise on the Nile',
- 'A professional website for the hotel with room and facility presentation, photo gallery, an online booking enquiry form, WhatsApp and phone integration, and a Google Map location, so guests can enquire and the team can reply from one inbox.',
- 'Home, rooms, facilities, gallery, contact and booking enquiry pages; availability enquiry form; mobile friendly; Google Map; simple content the hotel can update itself.',
- 12000000, 'high', 'IN_PROGRESS', 45, '2026-10-30', '2026-08-24', NULL, '2026-08-18')
+ 'Hotel Website, Booking System & Guest App – Hotel Paradise on the Nile',
+ 'A digital front desk for the hotel: a fast website that presents the rooms, the facilities and the view over the Nile, a booking and availability system the front office runs itself, and a guest app for enquiries, directions and offers.',
+ 'Website with rooms, facilities, gallery and contact pages, online availability and booking enquiry system, front-desk reservation calendar, guest and staff logins, Android guest app, WhatsApp and Google Maps, gallery the hotel updates itself, SSL and nightly backups.',
+ 'https://hotelparadiseonthenile.info', 'Website, Business system, Mobile apps', 'hospitality',
+ 24000000, 'high', 'COMPLETED', 100, '2026-06-30', '2026-02-09', '2026-06-19', '2026-01-14'),
+('RSI-2026-00007',
+ (SELECT id FROM users WHERE email = 'info@igangaschoolofnursingandmidwifery.ac.ug'),
+ (SELECT id FROM services WHERE slug = 'web-mobile-apps'),
+ (SELECT id FROM users WHERE email = 'admin@reagansoft.com'),
+ 'Website, Student Portal & Apps – Iganga School of Nursing and Midwifery',
+ 'One digital home for the school: a public website for applicants and parents, a records and fees portal the staff and bursar use every day, and a mobile app that puts results, fees and school announcements in a student''s pocket.',
+ 'Public website with programmes, fees structure and contacts, online application and enquiry form, student records and fees portal, staff and bursar logins, results and progress reports, Android app for results and school announcements, SMS and email alerts, Google Maps, SSL and nightly backups.',
+ 'https://igangaschoolofnursingandmidwifery.ac.ug', 'Website, Business system, Mobile apps', 'education',
+ 38000000, 'high', 'COMPLETED', 100, '2026-06-30', '2026-01-12', '2026-06-26', '2025-11-24')
 ON DUPLICATE KEY UPDATE
   client_id      = VALUES(client_id),
   service_id     = VALUES(service_id),
@@ -668,6 +708,9 @@ ON DUPLICATE KEY UPDATE
   title          = VALUES(title),
   description    = VALUES(description),
   requirements   = VALUES(requirements),
+  website_url    = VALUES(website_url),
+  deliverables   = VALUES(deliverables),
+  cover_art      = VALUES(cover_art),
   budget         = VALUES(budget),
   priority       = VALUES(priority),
   status         = VALUES(status),
@@ -723,21 +766,52 @@ FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = (SELE
 
 INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
 SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006'), (SELECT id FROM users WHERE email = 'staff@reagansoft.com'),
- 'Rooms & facilities pages', 'Build the rooms, facilities and gallery pages with the hotel photography.', 'IN_PROGRESS', 55, 'high', '2026-08-24', '2026-09-20',
+ 'Rooms & facilities pages', 'Build the rooms, facilities and gallery pages with the hotel photography.', 'COMPLETED', 100, 'high', '2026-02-09', '2026-03-20',
  (SELECT id FROM users WHERE email = 'admin@reagansoft.com')
 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006') AND title = 'Rooms & facilities pages');
 
 INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
 SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006'), (SELECT id FROM users WHERE email = 'staff@reagansoft.com'),
- 'Booking enquiry form', 'Availability enquiry form that reaches the hotel WhatsApp and email, with the stay details captured.', 'TODO', 0, 'high', NULL, '2026-10-10',
+ 'Booking enquiry form', 'Availability enquiry form that reaches the hotel WhatsApp and email, with the stay details captured.', 'COMPLETED', 100, 'high', '2026-03-23', '2026-04-24',
  (SELECT id FROM users WHERE email = 'admin@reagansoft.com')
 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006') AND title = 'Booking enquiry form');
 
 INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006'), (SELECT id FROM users WHERE email = 'staff@reagansoft.com'),
+ 'Booking calendar & guest app', 'Front-desk reservation calendar plus the Android guest app for enquiries and offers.', 'COMPLETED', 100, 'high', '2026-04-27', '2026-06-05',
+ (SELECT id FROM users WHERE email = 'admin@reagansoft.com')
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006') AND title = 'Booking calendar & guest app');
+
+INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
 SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006'), (SELECT id FROM users WHERE email = 'admin@reagansoft.com'),
- 'Launch & handover', 'Final content check, mobile testing, launch and training for the hotel team.', 'TODO', 0, 'medium', NULL, '2026-10-30',
+ 'Launch & handover', 'Final content check, mobile testing, launch and training for the hotel team.', 'COMPLETED', 100, 'medium', '2026-06-08', '2026-06-19',
  (SELECT id FROM users WHERE email = 'admin@reagansoft.com')
 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006') AND title = 'Launch & handover');
+
+-- Iganga School of Nursing and Midwifery
+INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00007'), (SELECT id FROM users WHERE email = 'admin@reagansoft.com'),
+ 'School website', 'Public site: programmes, fees structure, application and enquiry forms, news and contacts.', 'COMPLETED', 100, 'high', '2026-01-12', '2026-02-27',
+ (SELECT id FROM users WHERE email = 'admin@reagansoft.com')
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00007') AND title = 'School website');
+
+INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00007'), (SELECT id FROM users WHERE email = 'staff@reagansoft.com'),
+ 'Student records & fees portal', 'Admissions, class registers, fees per term, receipts and progress reports for staff and bursar logins.', 'COMPLETED', 100, 'high', '2026-03-02', '2026-05-08',
+ (SELECT id FROM users WHERE email = 'admin@reagansoft.com')
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00007') AND title = 'Student records & fees portal');
+
+INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00007'), (SELECT id FROM users WHERE email = 'staff@reagansoft.com'),
+ 'Android app', 'Student app with results, fee balance and school announcements, plus SMS and email alerts.', 'COMPLETED', 100, 'high', '2026-05-11', '2026-06-19',
+ (SELECT id FROM users WHERE email = 'admin@reagansoft.com')
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00007') AND title = 'Android app');
+
+INSERT INTO project_tasks (project_id, assigned_to, title, description, status, progress, priority, start_date, due_date, created_by)
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00007'), (SELECT id FROM users WHERE email = 'admin@reagansoft.com'),
+ 'Training & handover', 'Train the registrar and bursar, load real data, go live and hand over with backups running.', 'COMPLETED', 100, 'medium', '2026-06-22', '2026-06-26',
+ (SELECT id FROM users WHERE email = 'admin@reagansoft.com')
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_tasks WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00007') AND title = 'Training & handover');
 
 -- ============================================================
 -- 07 · MESSAGES  (inserted only when the same message is not there)
@@ -769,13 +843,23 @@ FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = (S
 
 INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_internal, created_at)
 SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006'), (SELECT id FROM users WHERE email = 'info@hotelparadiseonthenile.co.ug'),
- 'client', 'Please send the updated room photographs and the official contact numbers for the footer and booking form.', 0, '2026-08-20 10:20:00'
+ 'client', 'Please send the updated room photographs and the official contact numbers for the footer and booking form.', 0, '2026-03-02 10:20:00'
 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006') AND message LIKE 'Please send the updated room%');
 
 INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_internal, created_at)
 SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006'), (SELECT id FROM users WHERE email = 'staff@reagansoft.com'),
- 'staff', 'Rooms and facilities pages are in progress. Send the photographs as soon as you can and we will load them immediately.', 0, '2026-08-24 08:15:00'
+ 'staff', 'Rooms and facilities pages are in progress. Send the photographs as soon as you can and we will load them immediately.', 0, '2026-03-03 08:15:00'
 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006') AND message LIKE 'Rooms and facilities pages%');
+
+INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_internal, created_at)
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006'), (SELECT id FROM users WHERE email = 'info@hotelparadiseonthenile.co.ug'),
+ 'client', 'The site looks wonderful and the booking form already brought us two walk-in guests. Please show us how to update the gallery ourselves.', 0, '2026-06-19 13:40:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006') AND message LIKE 'The site looks wonderful%');
+
+INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_internal, created_at)
+SELECT (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006'), (SELECT id FROM users WHERE email = 'admin@reagansoft.com'),
+ 'admin', 'Congratulations on your launch. The gallery, rooms and offers are all editable from the front desk login, and we are on WhatsApp whenever you need us.', 0, '2026-06-19 15:05:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM project_messages WHERE project_id = (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006') AND message LIKE 'Congratulations on your launch%');
 
 -- ============================================================
 -- 08 · QUOTATIONS + ITEMS  (upsert by quotation_no)
@@ -895,7 +979,13 @@ SELECT (SELECT id FROM users WHERE email = 'admin@reagansoft.com'), 'New request
 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE user_id = (SELECT id FROM users WHERE email = 'admin@reagansoft.com') AND title = 'New request received');
 
 INSERT INTO notifications (user_id, title, message, type, related_project_id, is_read, created_at)
-SELECT (SELECT id FROM users WHERE email = 'info@hotelparadiseonthenile.co.ug'), 'Your project is in progress',
- 'Your website and booking enquiry project RSI-2026-00006 has started. Track progress, tasks and files in your portal.', 'project',
- (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006'), 0, '2026-08-24 08:20:00'
+SELECT (SELECT id FROM users WHERE email = 'info@hotelparadiseonthenile.co.ug'), 'Your project is live',
+ 'Hotel Paradise on the Nile is now live at hotelparadiseonthenile.info, with the booking system and guest app. Everything you need is in your portal.', 'project',
+ (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00006'), 0, '2026-06-19 15:30:00'
 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE user_id = (SELECT id FROM users WHERE email = 'info@hotelparadiseonthenile.co.ug') AND title = 'Your project is in progress');
+
+INSERT INTO notifications (user_id, title, message, type, related_project_id, is_read, created_at)
+SELECT (SELECT id FROM users WHERE email = 'info@igangaschoolofnursingandmidwifery.ac.ug'), 'Your project is live',
+ 'The school website, student portal and app are live and the team has been trained. Sign in to your portal to get started.', 'project',
+ (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00007'), 0, '2026-06-26 16:00:00'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE user_id = (SELECT id FROM users WHERE email = 'info@igangaschoolofnursingandmidwifery.ac.ug') AND title = 'Your project is live');

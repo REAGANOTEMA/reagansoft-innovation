@@ -90,6 +90,11 @@ CREATE TABLE IF NOT EXISTS projects (
   title VARCHAR(190) NOT NULL,
   description TEXT NOT NULL,
   requirements TEXT NULL,
+  -- Showcase fields, read by the public Work page. All three are optional:
+  -- a project without a live site simply shows no "visit" link.
+  website_url  VARCHAR(255) NULL,                   -- https://… the client can open
+  deliverables VARCHAR(190) NULL,                   -- "Website, Business system, Mobile apps"
+  cover_art    VARCHAR(40)  NULL,                   -- artwork key: education, hospitality, …
   budget DECIMAL(14,2) NULL,
   priority ENUM('low','normal','high','urgent') NOT NULL DEFAULT 'normal',
   status ENUM('NEW','REVIEWING','QUOTATION','APPROVED','IN_PROGRESS','WAITING_FOR_CLIENT','TESTING','COMPLETED','CANCELLED') NOT NULL DEFAULT 'NEW',

@@ -166,6 +166,45 @@ function truncate(string $text, int $length = 90): string {
 }
 
 /* ------------------------------------------------------------------
+ * Schema introspection
+ * ------------------------------------------------------------------
+ * True when a column is present on a table.
+ *
+ * Used by the public pages to stay readable on an install that has not
+ * run database/upgrade.sql yet. A column added to database/schema.sql
+ * after the site went live does NOT exist on the table that is already
+ * there, because every install script creates tables with CREATE TABLE
+ * IF NOT EXISTS and therefore never alters one. Rather than have the
+ * Work page query a column the database does not have — which would
+ * throw, be swallowed by the page's own try/catch and leave the
+ * gallery mysteriously empty — the page asks first and builds its
+ * query from the answer.
+ *
+ * The answer is cached per request, because a page never needs to ask
+ * about the same table twice.
+ * ------------------------------------------------------------------ */
+function db_has_column(string $table, string $column): bool {
+    static $known = [];
+    $key = $table . '.' . $column;
+    if (isset($known[$key])) {
+        return $known[$key];
+    }
+    try {
+        $st = db()->prepare(
+            'SELECT 1 FROM information_schema.COLUMNS
+             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ? LIMIT 1'
+        );
+        $st->execute([$table, $column]);
+        return $known[$key] = $st->fetchColumn() !== false;
+    } catch (Throwable $e) {
+        // Some shared hosts refuse information_schema outright. Answering
+        // false keeps the page on the older, narrower query rather than
+        // taking it down.
+        return $known[$key] = false;
+    }
+}
+
+/* ------------------------------------------------------------------
  * Project reference numbers  (RSI-2026-00001)
  * ------------------------------------------------------------------ */
 function next_project_ref(PDO $pdo): string {

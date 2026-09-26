@@ -195,6 +195,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // 3. Seed data (services, settings, demo accounts, samples).
             rsi_run_file($pdo, __DIR__ . '/database/seed.sql', $log, $errors);
 
+            // 3b. Upgrades. schema.sql only ever CREATEs tables, so on a
+            //     site that was installed before a column was added, that
+            //     column is still missing. upgrade.sql adds whatever the
+            //     current code expects and is a no-op when it is already
+            //     there, which is also why it is safe to run on a fresh
+            //     install straight after the seed.
+            rsi_run_file($pdo, __DIR__ . '/database/upgrade.sql', $log, $errors);
+
             // 4. Mirror database (reagansoft_admin) — same schema and data.
             //    Optional: a host account without a second database simply
             //    gets a note instead of a failed installation.
@@ -207,6 +215,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $mpdo = rsi_connect($mirror);
                     rsi_run_file($mpdo, __DIR__ . '/database/schema.sql', $mirror_log, $mirror_errors);
                     rsi_run_file($mpdo, __DIR__ . '/database/seed.sql', $mirror_log, $mirror_errors);
+                    rsi_run_file($mpdo, __DIR__ . '/database/upgrade.sql', $mirror_log, $mirror_errors);
                     $log[] = 'Mirror database `' . DB_MIRROR . '` is in step with `' . DB_NAME . '`.';
                 } catch (Throwable $e) {
                     $mirror_errors[] = 'Mirror `' . DB_MIRROR . '`: ' . substr($e->getMessage(), 0, 200);

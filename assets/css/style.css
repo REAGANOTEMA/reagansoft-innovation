@@ -1075,13 +1075,36 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .price-card .deliver svg { width: 16px; height: 16px; color: var(--blue); }
 .price-card .btn { margin-top: 20px; }
 
-/* Portfolio */
-.folio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-.folio-card { border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; background: #fff; display: flex; flex-direction: column; }
+/* ============================================================
+   Portfolio — the delivered work
+   ============================================================ */
+.folio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; align-items: stretch; }
+.folio-card {
+  border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden;
+  background: #fff; display: flex; flex-direction: column;
+  transition: transform .25s cubic-bezier(.22,.61,.36,1), box-shadow .25s ease, border-color .25s ease;
+}
+.folio-card:hover { transform: translateY(-4px); border-color: var(--sky-100); box-shadow: var(--shadow-lg); }
+.folio-card.is-featured { border-color: rgba(10,93,160,.28); }
+.folio-card[hidden] { display: none; }
+
 .folio-body { padding: 22px; display: flex; flex-direction: column; flex-grow: 1; }
-.folio-body h3 { font-size: 18px; }
+.folio-body h3 { font-size: 18px; text-wrap: balance; }
 .folio-tags { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
 .tag { font-size: 12px; font-weight: 700; color: var(--blue-700); background: var(--sky-100); padding: 4px 10px; border-radius: 99px; }
+
+/* Service + client, on one line that is allowed to wrap cleanly. */
+.folio-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.folio-client {
+  font-size: 11.5px; font-weight: 700; color: var(--faint);
+  letter-spacing: .04em; text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+.folio-client::before { content: '·'; margin-right: 10px; color: var(--line); }
+
+/* No mid-word ellipsis: the copy is written to fit, and the card
+   grows to whatever height it needs so the grid stays even. */
+.folio-desc { font-size: 14.5px; line-height: 1.62; color: var(--muted); margin: 0 0 16px; text-wrap: pretty; }
 
 .folio-count {
   display: inline-flex; align-items: center; gap: 9px; margin-top: 18px;
@@ -1093,9 +1116,78 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .folio-count .tick { color: var(--green); display: inline-flex; }
 .folio-count svg { width: 17px; height: 17px; }
 
-/* Cover: drawn, not photographed */
+/* ---------- What the gallery adds up to ---------- */
+.folio-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  margin-bottom: 26px;
+}
+.fs-item {
+  display: flex; align-items: center; gap: 13px;
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 15px 16px; box-shadow: var(--shadow-sm);
+}
+.fs-ico {
+  flex-shrink: 0; width: 40px; height: 40px; border-radius: 11px;
+  display: grid; place-items: center;
+  background: linear-gradient(150deg, var(--sky-100), #d7ecfb); color: var(--blue-700);
+  border: 1px solid #fff;
+}
+.fs-ico svg { width: 20px; height: 20px; }
+.fs-txt { display: flex; flex-direction: column; min-width: 0; }
+.fs-txt b { font-size: 24px; font-weight: 800; color: var(--navy); line-height: 1.1; }
+.fs-txt small { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
+
+/* ---------- Filter bar ---------- */
+.folio-filter {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; flex-wrap: wrap; margin-bottom: 22px;
+}
+.ff-bar { display: flex; gap: 8px; flex-wrap: wrap; }
+.ff-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 15px; min-height: 40px;
+  border: 1px solid var(--line); border-radius: 99px; background: #fff;
+  font: inherit; font-size: 13.5px; font-weight: 700; color: var(--ink-2);
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.ff-chip svg { width: 16px; height: 16px; color: var(--blue); flex-shrink: 0; }
+.ff-chip:hover { border-color: var(--blue); color: var(--blue-700); }
+.ff-chip.is-active {
+  background: var(--navy); border-color: var(--navy); color: #fff;
+  box-shadow: 0 6px 16px rgba(8,59,102,.20);
+}
+.ff-chip.is-active svg { color: var(--pgl); }
+.ff-count {
+  margin: 0; font-size: 12.5px; font-weight: 700; color: var(--faint);
+  font-family: var(--font-mono); letter-spacing: .02em;
+}
+
+.folio-none {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  margin: 26px 0 0; padding: 26px; text-align: center;
+  background: var(--bg-soft); border: 1px dashed var(--line); border-radius: var(--radius-lg);
+  font-size: 14.5px; color: var(--muted);
+}
+.folio-none[hidden] { display: none; }
+.folio-none svg { width: 19px; height: 19px; color: var(--faint); flex-shrink: 0; }
+.folio-reset {
+  border: 0; background: none; padding: 0; font: inherit; font-weight: 800;
+  color: var(--blue); cursor: pointer; text-decoration: underline; text-underline-offset: 3px;
+}
+
+.folio-upgrade {
+  display: flex; align-items: flex-start; gap: 10px;
+  margin: 22px 0 0; padding: 13px 16px;
+  background: var(--amber-bg); border: 1px solid #f2e0b8; border-radius: var(--radius);
+  font-size: 13.5px; line-height: 1.55; color: #7a5410;
+}
+.folio-upgrade svg { width: 18px; height: 18px; color: var(--amber); flex-shrink: 0; margin-top: 1px; }
+.folio-upgrade b { font-family: var(--font-mono); font-weight: 700; }
+
+/* ---------- Cover: drawn, not photographed ---------- */
 .folio-cover {
-  position: relative; overflow: hidden; height: 172px; flex-shrink: 0;
+  position: relative; overflow: hidden; height: 190px; flex-shrink: 0;
   border-bottom: 1px solid var(--line);
   color: var(--blue);
 }
@@ -1105,8 +1197,55 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .folio-cover.tone-4 { background: linear-gradient(140deg, #e9f4fd 0%, #d1e6f7 100%); }
 .folio-cover.is-featured { color: #7fd0ff; background: linear-gradient(140deg, #0a3f6e 0%, #083b66 55%, #062f54 100%); border-bottom-color: rgba(10,63,110,.9); }
 
+/* Layer 1 — the sector backdrop, anchored to the bottom edge. */
+.folio-scene {
+  position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  transition: transform .4s cubic-bezier(.22,.61,.36,1);
+}
+.folio-card:hover .folio-scene { transform: scale(1.035); }
+.fs-sun { fill: currentColor; opacity: .16; }
+.fs-hill { fill: currentColor; opacity: .13; }
+.fs-hill-2 { opacity: .09; }
+.fs-line { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; opacity: .3; }
+.fs-wave { opacity: .22; }
+.fs-furrow { opacity: .2; }
+.fs-road { opacity: .28; }
+.fs-pulse { opacity: .38; stroke-width: 2.4; }
+.fs-bars { opacity: .3; }
+.fs-mark { fill: currentColor; opacity: .17; }
+.fs-mark-in { fill: #fff; opacity: .85; }
+
+/* Layer 2 — the delivery: a browser window and the app beside it. */
+.folio-devices {
+  position: absolute; right: -2%; bottom: -3%; z-index: 1;
+  width: 76%; max-width: 330px; height: auto;
+  pointer-events: none;
+  transition: transform .34s cubic-bezier(.22,.61,.36,1);
+}
+.folio-card:hover .folio-devices { transform: translate(-5px, -4px); }
+.fd-frame { fill: rgba(255,255,255,.62); stroke: currentColor; stroke-width: 2; stroke-opacity: .38; }
+.fd-bar { fill: currentColor; opacity: .16; }
+.fd-dot { fill: currentColor; opacity: .3; }
+.fd-url { fill: currentColor; opacity: .12; }
+.fd-solid { fill: currentColor; opacity: .16; }
+.fd-line { fill: currentColor; opacity: .18; }
+.fd-cta { fill: currentColor; opacity: .34; }
+.fd-card { fill: currentColor; opacity: .12; }
+.fd-phone { fill: rgba(255,255,255,.78); stroke: currentColor; stroke-width: 2; stroke-opacity: .45; }
+.fd-notch { fill: currentColor; opacity: .28; }
+.folio-cover.is-featured .fd-frame,
+.folio-cover.is-featured .fd-phone { fill: rgba(255,255,255,.10); }
+.folio-cover.is-featured .fd-bar,
+.folio-cover.is-featured .fd-solid,
+.folio-cover.is-featured .fd-line,
+.folio-cover.is-featured .fd-card,
+.folio-cover.is-featured .fd-url { opacity: .22; }
+.folio-cover.is-featured .fd-cta { opacity: .55; }
+.folio-cover.is-featured .fs-mark-in { fill: #0a3f6e; opacity: .55; }
+
 .folio-status {
-  position: absolute; top: 14px; left: 14px; z-index: 2;
+  position: absolute; top: 14px; left: 14px; z-index: 3;
   display: inline-flex; align-items: center; gap: 6px;
   padding: 5px 11px 5px 9px; border-radius: 99px;
   background: var(--green-bg); color: var(--green);
@@ -1116,42 +1255,83 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .folio-cover.is-featured .folio-status { background: rgba(21,127,90,.22); color: #6fe0b4; }
 
 .folio-glyph {
-  position: absolute; top: 12px; right: 14px; z-index: 2;
+  position: absolute; top: 12px; right: 14px; z-index: 3;
   width: 40px; height: 40px; border-radius: 12px;
   display: grid; place-items: center;
-  background: rgba(255,255,255,.72); color: var(--blue-700);
-  border: 1px solid rgba(255,255,255,.9);
-  box-shadow: 0 4px 12px rgba(8,59,102,.10);
+  background: rgba(255,255,255,.78); color: var(--blue-700);
+  border: 1px solid rgba(255,255,255,.95);
+  box-shadow: 0 4px 12px rgba(8,59,102,.12);
 }
 .folio-glyph svg { width: 21px; height: 21px; }
-.folio-cover.is-featured .folio-glyph { background: rgba(255,255,255,.12); color: #fff; border-color: rgba(255,255,255,.22); box-shadow: none; }
-
-.folio-wire {
-  position: absolute; right: -18px; bottom: -20px; z-index: 1;
-  width: 58%; max-width: 230px; height: auto;
-  transition: transform .28s cubic-bezier(.22,.61,.36,1);
-}
-.folio-card:hover .folio-wire { transform: translate(-4px, -3px); }
+.folio-cover.is-featured .folio-glyph { background: rgba(255,255,255,.14); color: #fff; border-color: rgba(255,255,255,.24); box-shadow: none; }
 
 .folio-meta {
-  position: absolute; left: 16px; right: 16px; bottom: 13px; z-index: 2;
+  position: absolute; left: 16px; right: 16px; bottom: 13px; z-index: 3;
   display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
   font-size: 11.5px; font-weight: 700;
 }
 .folio-ref {
   font-family: var(--font-mono); font-weight: 700; letter-spacing: .04em;
-  color: var(--navy); background: rgba(255,255,255,.8);
-  border: 1px solid rgba(255,255,255,.9); border-radius: 6px; padding: 3px 7px;
+  color: var(--navy); background: rgba(255,255,255,.86);
+  border: 1px solid rgba(255,255,255,.95); border-radius: 6px; padding: 3px 7px;
 }
 .folio-when { margin-left: auto; color: var(--muted); font-weight: 600; }
-.folio-cover.is-featured .folio-ref { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.22); color: #cfe8fb; }
+.folio-cover.is-featured .folio-ref { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.24); color: #cfe8fb; }
 .folio-cover.is-featured .folio-when { color: #a9c9e6; }
 
-/* Scope of work, from the project's own requirements */
-.folio-scope { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 7px; }
+/* ---------- What was handed over ---------- */
+.folio-kit { list-style: none; margin: 0 0 16px; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; }
+.folio-kit li {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 11px 5px 9px; border-radius: 99px;
+  background: linear-gradient(150deg, var(--sky-50), var(--sky-100));
+  border: 1px solid #d3e8f8;
+  font-size: 12px; font-weight: 700; color: var(--blue-700); white-space: nowrap;
+}
+.folio-kit svg { width: 14px; height: 14px; stroke-width: 2.1; flex-shrink: 0; }
+
+/* ---------- Scope of work, from the project's own requirements ---------- */
+.folio-scope { list-style: none; margin: 0 0 4px; padding: 0; display: grid; gap: 7px; }
 .folio-scope li { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; color: var(--ink-2); line-height: 1.45; }
 .folio-scope svg { width: 15px; height: 15px; color: var(--blue); flex-shrink: 0; margin-top: 3px; stroke-width: 2.6; }
-.folio-scope .folio-scope-more { color: var(--faint); font-weight: 700; font-size: 12.5px; }
+
+.folio-scope-all { margin: 2px 0 0; }
+.folio-scope-all > summary {
+  display: inline-flex; align-items: center; gap: 7px; cursor: pointer;
+  list-style: none; padding: 6px 0; min-height: 32px;
+  font-size: 12.5px; font-weight: 800; color: var(--blue);
+}
+.folio-scope-all > summary::-webkit-details-marker { display: none; }
+.folio-scope-all > summary svg { width: 14px; height: 14px; transition: transform .22s ease; }
+.folio-scope-all[open] > summary svg { transform: rotate(45deg); }
+.folio-scope-all > summary:hover { color: var(--blue-700); }
+.folio-scope-all ul { list-style: none; margin: 4px 0 0; padding: 0 0 2px; display: grid; gap: 7px; }
+.folio-scope-all ul li { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; color: var(--ink-2); line-height: 1.45; }
+.folio-scope-all ul svg { width: 15px; height: 15px; color: var(--blue); flex-shrink: 0; margin-top: 3px; stroke-width: 2.6; }
+
+/* ---------- The live site ---------- */
+.folio-live {
+  display: flex; align-items: center; gap: 12px; text-decoration: none;
+  margin: 16px 0 0; padding: 11px 13px;
+  border: 1px solid var(--sky-100); border-radius: var(--radius);
+  background: linear-gradient(150deg, #f7fbff 0%, #eef7fe 100%);
+  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+.folio-live:hover { border-color: var(--blue); box-shadow: 0 6px 18px rgba(10,123,206,.14); transform: translateY(-1px); }
+.folio-live .fl-ico {
+  flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px;
+  display: grid; place-items: center; background: var(--blue); color: #fff;
+}
+.folio-live .fl-ico svg { width: 18px; height: 18px; }
+.folio-live .fl-txt { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.folio-live .fl-txt b { font-size: 13.5px; font-weight: 800; color: var(--navy); line-height: 1.3; }
+.folio-live .fl-txt small {
+  font-family: var(--font-mono); font-size: 11.5px; font-weight: 600;
+  color: var(--blue-700); overflow-wrap: anywhere;
+}
+.folio-live .fl-go { flex-shrink: 0; color: var(--blue); display: inline-flex; transition: transform .2s ease; }
+.folio-live .fl-go svg { width: 18px; height: 18px; }
+.folio-live:hover .fl-go { transform: translateX(3px); }
 
 .folio-foot {
   margin-top: auto; padding-top: 14px;
@@ -1160,7 +1340,8 @@ fieldset { border: 0; padding: 0; margin: 0; }
 }
 .folio-foot-done { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 700; color: var(--ink-2); }
 .folio-foot-done svg { width: 16px; height: 16px; color: var(--green); stroke-width: 3; }
-.folio-foot-when { font-size: 12.5px; color: var(--faint); font-weight: 600; }
+.folio-foot-when { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--faint); font-weight: 600; }
+.folio-foot-when svg { width: 14px; height: 14px; }
 
 /* Contact */
 .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 42px; align-items: start; }
@@ -1175,6 +1356,7 @@ fieldset { border: 0; padding: 0; margin: 0; }
   .pricing-grid { grid-template-columns: 1fr 1fr; }
   .folio-grid { grid-template-columns: 1fr 1fr; }
   .contact-grid { grid-template-columns: 1fr; }
+  .folio-stats { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 900px) {
   .price-ranges { grid-template-columns: 1fr; }
@@ -1182,6 +1364,93 @@ fieldset { border: 0; padding: 0; margin: 0; }
 @media (max-width: 640px) {
   .pricing-grid, .folio-grid { grid-template-columns: 1fr; }
   .range-amount { flex-wrap: wrap; }
+}
+
+/* ============================================================
+   Portfolio on smaller screens
+   ------------------------------------------------------------
+   The grid is the easy half. The hard half is everything that has
+   to stay legible and tappable once the card is the full width of
+   a phone: the cover art must not be cropped into a stripe, the
+   deliverable badges must not overflow, a 42-character domain must
+   break rather than push the card sideways, and every control has
+   to clear 44px so a thumb can hit it first time.
+   ============================================================ */
+@media (max-width: 860px) {
+  /* One column gives the drawn cover room to breathe, so it grows
+     back instead of being squeezed into a letterbox. */
+  .folio-grid { grid-template-columns: 1fr; gap: 18px; }
+  .folio-cover { height: 210px; }
+  .folio-devices { width: 68%; max-width: 300px; }
+
+  .folio-filter { align-items: flex-start; flex-direction: column; gap: 10px; }
+  .ff-bar { width: 100%; }
+  .ff-chip { flex: 1 1 auto; justify-content: center; }
+}
+
+@media (max-width: 720px) {
+  .folio-stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .fs-item { padding: 13px 14px; gap: 11px; }
+  .fs-ico { width: 36px; height: 36px; border-radius: 10px; }
+  .fs-ico svg { width: 18px; height: 18px; }
+  .fs-txt b { font-size: 21px; }
+  .fs-txt small { font-size: 11.5px; }
+}
+
+@media (max-width: 640px) {
+  .folio-body { padding: 20px 18px; }
+  .folio-body h3 { font-size: 17.5px; }
+  .folio-desc { font-size: 14px; }
+  .folio-cover { height: 196px; }
+  .folio-devices { width: 72%; right: -4%; }
+
+  .folio-foot { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .folio-foot-when { margin-left: 0; }
+
+  .folio-live { padding: 12px 13px; }
+  .folio-live .fl-ico { width: 36px; height: 36px; }
+}
+
+@media (max-width: 520px) {
+  .folio-cover { height: 182px; }
+
+  /* Chips stop insisting on one line each, so a long label such as
+     "Support & maintenance" reflows inside its own pill rather than
+     dragging the card wider than the screen. */
+  .folio-kit li { white-space: normal; }
+
+  .folio-stats { grid-template-columns: 1fr 1fr; }
+  .ff-bar { gap: 6px; }
+  .ff-chip { padding: 9px 12px; font-size: 12.5px; gap: 6px; }
+}
+
+@media (max-width: 420px) {
+  .folio-body { padding: 18px 15px; }
+  .folio-cover { height: 168px; }
+  .folio-devices { width: 78%; right: -8%; }
+  .folio-status { top: 11px; left: 11px; font-size: 10.5px; padding: 4px 9px 4px 8px; }
+  .folio-glyph { top: 10px; right: 11px; width: 36px; height: 36px; border-radius: 11px; }
+  .folio-glyph svg { width: 19px; height: 19px; }
+  .folio-meta { left: 13px; right: 13px; bottom: 11px; }
+
+  .folio-stats { grid-template-columns: 1fr; }
+  .fs-item { padding: 12px 14px; }
+  .ff-bar { display: grid; grid-template-columns: 1fr 1fr; }
+  .ff-chip { width: 100%; }
+  .folio-none { flex-direction: column; gap: 8px; padding: 22px 16px; }
+}
+
+/* Touch devices: a card that lifts on tap and then STAYS lifted feels
+   broken, and the reveal animation fights the tap. Opt the hover
+   effects out wherever there is no real pointer. */
+@media (hover: none) {
+  .folio-card:hover { transform: none; box-shadow: 0 1px 2px rgba(8,59,102,.06), 0 12px 30px rgba(8,59,102,.07); }
+  .folio-card:hover .folio-scene,
+  .folio-card:hover .folio-devices,
+  .folio-live:hover .fl-go { transform: none; }
+  .ff-chip, .folio-live, .folio-scope-all > summary { min-height: 44px; }
+  .folio-scope-all > summary { padding: 8px 0; }
+  .folio-live { padding: 13px; }
 }
 
 /* Print (quotations / invoices) */
@@ -1411,4 +1680,67 @@ fieldset { border: 0; padding: 0; margin: 0; }
   .pf-step { gap: 16px; }
   .pf-step::before { left: 21px; }
   .pf-num { width: 44px; height: 44px; font-size: 14px; border-radius: 12px; }
+}
+
+/* ============================================================
+   Small-screen pass — every public page, not just the gallery
+   ============================================================
+   A phone is not a narrow desktop. Three things go wrong most often
+   and are cheap to fix once, here, rather than page by page:
+
+     1. Long unbroken strings — a domain, a reference number, an
+        email — push the layout wider than the screen and leave the
+        whole page scrolling sideways.
+     2. Anything tappable is smaller than a fingertip, because the
+        desktop size was designed for a mouse.
+     3. Fixed furniture sits under the home indicator, so the last
+        line of a footer or a floating button is unreachable on an
+        iPhone.
+   ============================================================ */
+@media (max-width: 640px) {
+  /* 1 · Nothing may be wider than the screen. */
+  h1, h2, h3, h4, h5, h6, p, li, td, th, small, a, button, summary {
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: auto;
+  }
+  pre, code, .mono, .folio-ref, .folio-live .fl-txt small { overflow-wrap: anywhere; }
+
+  /* 2 · Fingertip-sized targets, and never a tap that fires twice. */
+  .btn, .ff-chip, .nav-login, .folio-live, .wa-float { touch-action: manipulation; }
+  .footer-col a, .footer-contact a, .side-nav a { min-height: 40px; }
+
+  /* 3 · Clear the home indicator and the notch. */
+  .footer-bottom { padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px)); }
+  .wa-float { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
+  .container { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); }
+
+  /* The page head on a phone: a tighter rhythm, and a headline that
+     is allowed to break rather than shrink into a single clipped line. */
+  .page-hero { padding-top: 44px; }
+  .page-hero h1 { font-size: clamp(26px, 7.4vw, 34px); line-height: 1.16; }
+  .page-hero .lead { font-size: 15.5px; }
+  .page-img img { height: 190px; }
+  .section-head h2 { text-wrap: balance; }
+  .eyebrow { font-size: 11.5px; }
+}
+
+/* Very small phones (SE, older Androids): the last 15% of width. */
+@media (max-width: 360px) {
+  .container { width: 94%; }
+  .btn { width: 100%; }
+  .page-hero h1 { font-size: 25px; }
+  .folio-body { padding: 16px 13px; }
+  .folio-cover { height: 156px; }
+  .folio-desc { font-size: 13.5px; }
+  .folio-kit li { font-size: 11.5px; padding: 4px 9px 4px 8px; }
+  .folio-scope li, .folio-scope-all ul li { font-size: 13px; }
+  .folio-foot-done { font-size: 12.5px; }
+}
+
+/* Landscape phones: the sticky bar plus a tall hero eats the screen,
+   so the hero stops insisting on a minimum height. */
+@media (max-height: 520px) and (orientation: landscape) {
+  .hero { --hero-min-height: 520px; }
+  .page-hero { padding-top: 30px; padding-bottom: 30px; }
 }

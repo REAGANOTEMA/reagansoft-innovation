@@ -105,9 +105,22 @@ function page_image(string $src, int $idx, string $cap = '', string $alt = '', s
  * Portfolio cover.
  *
  * Completed projects are not screenshotted, so the cover is drawn, not
- * photographed: a tinted blueprint panel carrying the service glyph, the
- * delivery status, the project reference and a generic interface
- * wireframe. Nothing in it claims to be a picture of the client's site.
+ * photographed, and nothing in it claims to be a picture of the
+ * client's site. Three drawn layers stack up:
+ *
+ *   1. folio_scene()   a sector backdrop — the trade, not the software:
+ *                      a school hill, a Nile sunset, a furrow field, a
+ *                      clinic cross, a shop front, a delivery route.
+ *   2. folio_devices() the delivery itself, and the part every project
+ *                      shares: a browser window with a phone beside it,
+ *                      so "website and an app" reads before a word is
+ *                      read.
+ *   3. the status pill, the service glyph, the project reference and
+ *      the handover date.
+ *
+ * Layers 1 and 2 are drawn in currentColor at low opacity, so the same
+ * artwork holds up on the pale covers and on the dark featured one
+ * without a second set of files.
  * ------------------------------------------------------------------ */
 function folio_glyph(?string $slug, string $service = ''): string {
     $bySlug = [
@@ -140,29 +153,215 @@ function folio_glyph(?string $slug, string $service = ''): string {
     return 'grid';
 }
 
+/* ------------------------------------------------------------------
+ * Which drawn scene a project gets.
+ *
+ * projects.cover_art names it directly. An empty column is not a
+ * problem: the title, description and service name are searched for
+ * the trade instead, so a project added by hand in the admin panel
+ * still lands on a sensible picture rather than a blank panel.
+ * ------------------------------------------------------------------ */
+function folio_art_key(array $p): string {
+    $known = ['education', 'hospitality', 'agriculture', 'health', 'commerce', 'logistics', 'systems'];
+    $set   = strtolower(trim((string)($p['cover_art'] ?? '')));
+    if (in_array($set, $known, true)) {
+        return $set;
+    }
+
+    $text = strtolower(trim((string)($p['title'] ?? '')) . ' '
+        . trim((string)($p['description'] ?? '')) . ' '
+        . trim((string)($p['service'] ?? '')) . ' '
+        . trim((string)($p['requirements'] ?? '')));
+
+    $needles = [
+        'education'    => ['school', 'nursery', 'nursing', 'midwifery', 'university', 'college', 'student', 'pupil', 'training', 'academy', 'campus', 'course'],
+        'hospitality'  => ['hotel', 'guest', 'room', 'lodge', 'resort', 'restaurant', 'booking', 'tour', 'travel', 'cafe', 'tourism'],
+        'agriculture'  => ['farm', 'agric', 'crop', 'seed', 'harvest', 'livestock', 'poultry', 'garden', 'plantation', 'irrigation'],
+        'health'       => ['clinic', 'hospital', 'health', 'medical', 'patient', 'doctor', 'surgery', 'pharmacy', 'dental', 'nutrition'],
+        'commerce'     => ['ecommerce', 'e-commerce', 'store', 'shop', 'market', 'trading', 'trade', 'supplies', 'retail', 'wholesale', 'catalogue', 'catalog'],
+        'logistics'    => ['logistic', 'deliver', 'transport', 'fleet', 'courier', 'warehouse', 'supply chain', 'dispatch', 'haulage'],
+    ];
+    foreach ($needles as $key => $words) {
+        foreach ($words as $word) {
+            if (str_contains($text, $word)) {
+                return $key;
+            }
+        }
+    }
+    return 'systems';
+}
+
+/* ------------------------------------------------------------------
+ * Layer 1 — the sector backdrop.
+ *
+ * Every scene is one 360x180 band, anchored to the bottom edge so it
+ * crops rather than floats when the cover is narrow. Only the sun or
+ * emblem uses a real fill; everything else is a stroke or a low
+ * opacity wash, which is what keeps six scenes sitting together
+ * without any of them shouting.
+ * ------------------------------------------------------------------ */
+function folio_scene(string $key): string {
+    $sun = '<circle class="fs-sun" cx="46" cy="34" r="21"/>';
+
+    $scenes = [
+        // A school on a hill: the sun over the crest, a medical cross
+        // on the near slope where every applicant will see it first.
+        'education' =>
+            $sun
+            . '<path class="fs-hill" d="M-10 152Q74 112 168 132T370 120V190H-10Z"/>'
+            . '<path class="fs-hill fs-hill-2" d="M-10 172Q88 140 202 158T370 148V190H-10Z"/>'
+            . '<g class="fs-mark" transform="translate(96 78)">'
+            . '<rect x="-17" y="-17" width="34" height="34" rx="10"/>'
+            . '<path d="M-4.5-10h9v5.5H10v9H4.5V10h-9V4.5h-5.5v-9H-4.5z" class="fs-mark-in"/>'
+            . '</g>'
+            . '<path class="fs-line" d="M232 150q10-8 20 0t20 0 20 0"/>'
+            . '<path class="fs-line" d="M262 162q10-8 20 0t20 0 20 0"/>',
+
+        // A hotel on the Nile: the sun sitting on the water, the far
+        // bank as one long low line, four swells in front of it.
+        'hospitality' =>
+            $sun
+            . '<path class="fs-hill" d="M-10 116q60-16 120 0t130 0 120 0V190H-10Z"/>'
+            . '<g class="fs-line fs-wave">'
+            . '<path d="M-10 132q18-9 36 0t36 0 36 0 36 0 36 0 36 0 36 0 36 0 36 0"/>'
+            . '<path d="M-10 148q18-9 36 0t36 0 36 0 36 0 36 0 36 0 36 0 36 0 36 0"/>'
+            . '<path d="M-10 164q18-9 36 0t36 0 36 0 36 0 36 0 36 0 36 0 36 0 36 0"/>'
+            . '</g>'
+            . '<g class="fs-mark" transform="translate(96 74)">'
+            . '<path d="M0-16 15-6v20H-15V-6Z"/>'
+            . '<path d="M-6 14V-1h12v15"/>'
+            . '</g>',
+
+        // A supply field: the sun over furrows that converge toward
+        // the horizon, and a seedling in the near corner.
+        'agriculture' =>
+            $sun
+            . '<path class="fs-hill" d="M-10 122q90-14 190 0 90 12 190 0v68H-10Z"/>'
+            . '<g class="fs-line fs-furrow">'
+            . '<path d="M-10 190q90-40 190-46 100-6 190 12"/>'
+            . '<path d="M-10 190q90-24 190-28 100-4 190 12"/>'
+            . '<path d="M14 190q80-14 176-16 96-2 176 12"/>'
+            . '</g>'
+            . '<g class="fs-mark" transform="translate(74 66)">'
+            . '<path d="M0 18V0"/>'
+            . '<path d="M0 2C-14 2-18-8-16-18-6-16 0-8 0 2Z"/>'
+            . '<path d="M0 6C14 6 18-4 16-14 6-12 0-4 0 6Z"/>'
+            . '</g>',
+
+        // A clinic: the cross again, but a heartbeat instead of a
+        // hillside, so it never reads as the school scene.
+        'health' =>
+            $sun
+            . '<g class="fs-line fs-pulse">'
+            . '<path d="M-10 150h96l14-26 16 48 16-70 18 48h220"/>'
+            . '</g>'
+            . '<g class="fs-mark" transform="translate(96 74)">'
+            . '<rect x="-17" y="-17" width="34" height="34" rx="10"/>'
+            . '<path d="M-5-11h10v6h6v10H5v6H-5V5h-6v-10h6z" class="fs-mark-in"/>'
+            . '</g>'
+            . '<path class="fs-line" d="M244 150q10-8 20 0t20 0 20 0"/>',
+
+        // A trading floor: an awning over a shop front and a stack of
+        // crates waiting to be picked.
+        'commerce' =>
+            $sun
+            . '<path class="fs-hill" d="M-10 138q90-10 190 2 90 10 190-2v52H-10Z"/>'
+            . '<g class="fs-mark" transform="translate(92 70)">'
+            . '<path d="M-20-14h40l-4-10H-16Z"/>'
+            . '<path d="M-18-14v34h36v-34"/>'
+            . '<path d="M-7 20V4h14v16"/>'
+            . '</g>'
+            . '<g class="fs-line">'
+            . '<rect x="150" y="128" width="34" height="24" rx="4"/>'
+            . '<rect x="160" y="108" width="30" height="20" rx="4"/>'
+            . '<rect x="196" y="136" width="30" height="16" rx="4"/>'
+            . '</g>',
+
+        // A delivery route: a road to the horizon with a van on it.
+        'logistics' =>
+            $sun
+            . '<path class="fs-hill" d="M-10 120q120-12 370 4v66H-10Z"/>'
+            . '<g class="fs-line fs-road">'
+            . '<path d="M118 190 186 122M242 190 186 122"/>'
+            . '<path d="M186 168v10M186 146v10"/>'
+            . '</g>'
+            . '<g class="fs-mark" transform="translate(96 66)">'
+            . '<path d="M-20-6h22v14h-22zM2-6h10l8 8v6H2z"/>'
+            . '<circle cx="-12" cy="12" r="5"/>'
+            . '<circle cx="12" cy="12" r="5"/>'
+            . '</g>',
+
+        // The fallback: a reporting dashboard, for the internal tools
+        // and client portals that are not tied to one sector.
+        'systems' =>
+            $sun
+            . '<g class="fs-line">'
+            . '<rect x="40" y="96" width="66" height="56" rx="8"/>'
+            . '<rect x="118" y="112" width="66" height="40" rx="8"/>'
+            . '<rect x="196" y="86" width="66" height="66" rx="8"/>'
+            . '</g>'
+            . '<g class="fs-line fs-bars">'
+            . '<path d="M54 138v-12M66 138v-22M78 138v-8M90 138v-28"/>'
+            . '<path d="M210 140v-16M222 140v-26M234 140v-34M246 140v-12"/>'
+            . '</g>',
+    ];
+
+    $body = $scenes[$key] ?? $scenes['systems'];
+    return '<svg class="folio-scene" viewBox="0 0 360 180" preserveAspectRatio="xMidYMax slice" aria-hidden="true">'
+        . $body . '</svg>';
+}
+
+/* ------------------------------------------------------------------
+ * Layer 2 — the delivery: a browser window and the app beside it.
+ *
+ * Drawn once, used by every project, because it is the part of each
+ * build that is genuinely the same: a website the client opens in a
+ * browser, and an app the client carries. Fills are faint so the
+ * sector scene behind it still shows through.
+ * ------------------------------------------------------------------ */
+function folio_devices(): string {
+    return '<svg class="folio-devices" viewBox="0 0 360 180" preserveAspectRatio="xMidYMax meet" aria-hidden="true">'
+        /* browser window */
+        . '<rect class="fd-frame" x="30" y="34" width="196" height="118" rx="13"/>'
+        . '<path class="fd-bar" d="M30 47a13 13 0 0 1 13-13h170a13 13 0 0 1 13 13v7H30Z"/>'
+        . '<circle class="fd-dot" cx="46" cy="44" r="2.7"/>'
+        . '<circle class="fd-dot" cx="58" cy="44" r="2.7"/>'
+        . '<circle class="fd-dot" cx="70" cy="44" r="2.7"/>'
+        . '<rect class="fd-url" x="88" y="39" width="120" height="10" rx="5"/>'
+        /* hero block + copy column + call to action */
+        . '<rect class="fd-solid" x="42" y="64" width="86" height="46" rx="7"/>'
+        . '<rect class="fd-line" x="138" y="68" width="74" height="7" rx="3.5"/>'
+        . '<rect class="fd-line" x="138" y="81" width="60" height="7" rx="3.5"/>'
+        . '<rect class="fd-line" x="138" y="94" width="68" height="7" rx="3.5"/>'
+        . '<rect class="fd-cta" x="138" y="108" width="56" height="15" rx="7.5"/>'
+        /* three cards along the bottom of the window */
+        . '<rect class="fd-card" x="42" y="120" width="52" height="20" rx="6"/>'
+        . '<rect class="fd-card" x="102" y="120" width="52" height="20" rx="6"/>'
+        . '<rect class="fd-card" x="162" y="120" width="52" height="20" rx="6"/>'
+        /* phone, overlapping the window so the two read as one build */
+        . '<rect class="fd-phone" x="222" y="42" width="66" height="118" rx="15"/>'
+        . '<rect class="fd-notch" x="245" y="47" width="20" height="4" rx="2"/>'
+        . '<rect class="fd-solid" x="230" y="60" width="50" height="24" rx="7"/>'
+        . '<rect class="fd-line" x="230" y="92" width="50" height="6" rx="3"/>'
+        . '<rect class="fd-line" x="230" y="103" width="36" height="6" rx="3"/>'
+        . '<rect class="fd-card" x="230" y="116" width="50" height="16" rx="5"/>'
+        . '<rect class="fd-card" x="230" y="136" width="50" height="16" rx="5"/>'
+        . '</svg>';
+}
+
 function folio_cover(array $p, int $idx, bool $featured = false): string {
     $tone    = (($idx - 1) % 4) + 1;
     $glyph   = folio_glyph($p['service_slug'] ?? null, (string)($p['service'] ?? ''));
     $ref     = trim((string)($p['ref_no'] ?? ''));
     $done    = !empty($p['completed_at']) ? fmt_date((string)$p['completed_at'], 'M Y') : '';
+    $scene   = folio_art_key($p);
 
     $out  = '<div class="folio-cover tone-' . $tone . ($featured ? ' is-featured' : '') . '">';
+    $out .= folio_scene($scene);
     $out .= '<span class="folio-gridlines" aria-hidden="true"></span>';
+    $out .= folio_devices();
     $out .= '<span class="folio-status">' . icon('check') . '<span>Delivered</span></span>';
     $out .= '<span class="folio-glyph" aria-hidden="true">' . icon($glyph) . '</span>';
-    $out .= '<svg class="folio-wire" viewBox="0 0 200 132" fill="none" aria-hidden="true">'
-          . '<rect x="1.5" y="1.5" width="197" height="129" rx="10" stroke="currentColor" stroke-opacity=".34"/>'
-          . '<path d="M1.5 22h197" stroke="currentColor" stroke-opacity=".34"/>'
-          . '<circle cx="13" cy="11.7" r="2.6" fill="currentColor" fill-opacity=".45"/>'
-          . '<circle cx="23" cy="11.7" r="2.6" fill="currentColor" fill-opacity=".3"/>'
-          . '<circle cx="33" cy="11.7" r="2.6" fill="currentColor" fill-opacity=".2"/>'
-          . '<rect x="14" y="36" width="86" height="7" rx="3.5" fill="currentColor" fill-opacity=".22"/>'
-          . '<rect x="14" y="50" width="120" height="5" rx="2.5" fill="currentColor" fill-opacity=".14"/>'
-          . '<rect x="14" y="61" width="104" height="5" rx="2.5" fill="currentColor" fill-opacity=".14"/>'
-          . '<rect x="14" y="78" width="46" height="34" rx="6" fill="currentColor" fill-opacity=".16"/>'
-          . '<rect x="66" y="78" width="46" height="34" rx="6" fill="currentColor" fill-opacity=".16"/>'
-          . '<rect x="118" y="78" width="68" height="34" rx="6" fill="currentColor" fill-opacity=".1"/>'
-          . '</svg>';
     $out .= '<span class="folio-meta">'
           . ($ref !== '' ? '<span class="folio-ref">' . e($ref) . '</span>' : '')
           . ($done !== '' ? '<span class="folio-when">Handed over ' . e($done) . '</span>' : '')
@@ -172,9 +371,119 @@ function folio_cover(array $p, int $idx, bool $featured = false): string {
 }
 
 /* ------------------------------------------------------------------
+ * What was handed over.
+ *
+ * Stored on the project as a short comma-separated list, e.g.
+ * "Website, Business system, Mobile apps". Each item becomes an icon
+ * badge, and the same list is emitted as a data-kit attribute so the
+ * filter bar above the grid can match on it.
+ * ------------------------------------------------------------------ */
+function folio_kit_list(?string $deliverables): array {
+    $parts = array_values(array_filter(array_map(
+        static fn(string $p): string => trim($p),
+        preg_split('/[;,]|\s+\/\s+/u', trim((string)$deliverables)) ?: []
+    ), static fn(string $p): bool => $p !== ''));
+
+    $icons = [
+        'website'        => ['globe',   'Website',              'website'],
+        'web'            => ['globe',   'Website',              'website'],
+        'system'         => ['cpu',     'Business system',      'system'],
+        'portal'         => ['cpu',     'Client portal',        'system'],
+        'app'            => ['mobile',  'Mobile apps',          'apps'],
+        'android'        => ['mobile',  'Android app',          'apps'],
+        'store'          => ['cart',    'Online store',         'store'],
+        'ecommerce'      => ['cart',    'Online store',         'store'],
+        'brand'          => ['palette', 'Branding',             'branding'],
+        'support'        => ['shield',  'Support & maintenance','support'],
+        'maintenance'    => ['shield',  'Support & maintenance','support'],
+        'training'       => ['users',   'Staff training',       'training'],
+        'sms'            => ['send',    'SMS alerts',           'alerts'],
+        'email'          => ['mail',    'Email alerts',         'alerts'],
+        'payment'        => ['link',    'Mobile money payments','payments'],
+        'booking'        => ['calendar','Online booking',       'booking'],
+        'dashboard'      => ['chart',   'Reporting dashboard',  'system'],
+        'report'         => ['chart',   'Reporting dashboard',  'system'],
+        'game'           => ['gamepad', 'Game',                 'apps'],
+        'book'           => ['book',    'Publication',          'website'],
+        'automation'     => ['bot',     'Smart automation',     'system'],
+        'security'       => ['lock',    'Security hardening',   'support'],
+        'pos'            => ['receipt', 'Receipts & billing',   'system'],
+        'billing'        => ['receipt', 'Receipts & billing',   'system'],
+    ];
+
+    $out = [];
+    foreach ($parts as $part) {
+        $needle = strtolower(rtrim($part, '. '));
+        if (isset($icons[$needle])) {
+            $out[$icons[$needle][2]] = [$icons[$needle][0], $icons[$needle][1]];
+            continue;
+        }
+        foreach ($icons as $key => $set) {
+            if (str_contains($needle, $key)) {
+                $out[$set[2]] = [$set[0], $set[1]];
+                continue 2;
+            }
+        }
+        $out['other'] = ['grid', ucfirst($needle)];
+    }
+    return $out;
+}
+
+function folio_deliverables(?string $deliverables): string {
+    $kit = folio_kit_list($deliverables);
+    if ($kit === []) {
+        return '';
+    }
+    $out = '<ul class="folio-kit" data-kit="' . e(implode(' ', array_keys($kit))) . '">';
+    foreach ($kit as $set) {
+        $out .= '<li>' . icon($set[0]) . '<span>' . e($set[1]) . '</span></li>';
+    }
+    return $out . '</ul>';
+}
+
+/* ------------------------------------------------------------------
+ * The live site.
+ *
+ * Only http and https are ever linked: a value typed into the admin
+ * panel must not be able to turn the Work page into a javascript:
+ * link. A bare host such as "hotelparadiseonthenile.info" gains an
+ * https:// scheme, because that is what a visitor expects and what
+ * keeps the card free of mixed content.
+ * ------------------------------------------------------------------ */
+function folio_live(?string $url): string {
+    $raw = trim((string)$url);
+    if ($raw === '') {
+        return '';
+    }
+    if (!preg_match('~^[a-z][a-z0-9+.\-]*://~i', $raw)) {
+        $raw = 'https://' . ltrim($raw, '/');
+    }
+    $parts = parse_url($raw);
+    if (!is_array($parts) || empty($parts['host'])) {
+        return '';
+    }
+    $scheme = strtolower((string)($parts['scheme'] ?? 'https'));
+    if (!in_array($scheme, ['http', 'https'], true)) {
+        return '';
+    }
+    $host = (string)$parts['host'];
+    $label = preg_replace('~^www\.~i', '', $host) . (empty($parts['path']) || $parts['path'] === '/' ? '' : rtrim((string)$parts['path'], '/'));
+    $href = $scheme . '://' . $host . (empty($parts['path']) ? '' : (string)$parts['path'])
+          . (isset($parts['query']) ? '?' . $parts['query'] : '');
+
+    return '<a class="folio-live" href="' . e($href) . '" target="_blank" rel="noopener noreferrer">'
+        . '<span class="fl-ico" aria-hidden="true">' . icon('globe') . '</span>'
+        . '<span class="fl-txt"><b>Visit live site</b><small>' . e((string)$label) . '</small></span>'
+        . '<span class="fl-go" aria-hidden="true">' . icon('arrow') . '</span>'
+        . '</a>';
+}
+
+/* ------------------------------------------------------------------
  * Scope of work, taken from the project's own requirements field. The
  * seeded data stores it as a comma-separated sentence, so it is split
- * into short chips and anything past the limit is summarised.
+ * into short chips. Anything past the limit is folded into a details
+ * element rather than dropped, which keeps a nine-item scope readable
+ * on a card and still complete one tap away on a phone.
  * ------------------------------------------------------------------ */
 function folio_scope(?string $requirements, int $limit = 4): string {
     $text = trim((string)$requirements);
@@ -190,17 +499,24 @@ function folio_scope(?string $requirements, int $limit = 4): string {
         return '';
     }
     $shown  = array_slice($parts, 0, $limit);
-    $hidden = count($parts) - count($shown);
+    $hidden = array_slice($parts, $limit);
 
     $out = '<ul class="folio-scope">';
     foreach ($shown as $p) {
         $out .= '<li>' . icon('check') . '<span>' . e(rtrim($p, '. ')) . '</span></li>';
     }
-    if ($hidden > 0) {
-        $out .= '<li class="folio-scope-more">+' . $hidden . ' more</li>';
+    $out .= '</ul>';
+
+    if ($hidden !== []) {
+        $out .= '<details class="folio-scope-all"><summary>' . icon('plus') . '<span>Everything else we built</span></summary><ul>';
+        foreach ($hidden as $p) {
+            $out .= '<li>' . icon('check') . '<span>' . e(rtrim($p, '. ')) . '</span></li>';
+        }
+        $out .= '</ul></details>';
     }
-    return $out . '</ul>';
+    return $out;
 }
+
 
 function public_footer(): void {
     $phone = settings('company_phone', '+256730314979');

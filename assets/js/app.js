@@ -150,6 +150,55 @@
         setTimeout(function () { el.remove(); }, 450);
       }, 7000);
     });
+
+    /* ---------- Work gallery: filter by what was handed over ----------
+       Each card carries data-kit="website system apps" (written by
+       folio_kit_list), so a chip is a plain substring test. With
+       JavaScript off, every chip is a no-op button and the full grid
+       stays on the page — the filter is an addition to the gallery,
+       never the thing that makes it work. */
+    (function folioFilter() {
+      var bar = document.querySelector('[data-folio-filter]');
+      var grid = document.querySelector('[data-folio-grid]');
+      if (!bar || !grid) { return; }
+
+      var chips = bar.querySelectorAll('[data-filter]');
+      var cards = grid.querySelectorAll('.folio-card');
+      var counter = bar.querySelector('[data-filter-count]');
+      var empty = document.querySelector('[data-filter-empty]');
+      var total = cards.length;
+
+      function apply(key) {
+        var shown = 0;
+        cards.forEach(function (card) {
+          var kit = (card.getAttribute('data-kit') || '') + ' ';
+          var match = key === '' || kit.indexOf(' ' + key + ' ') !== -1;
+          card.hidden = !match;
+          if (match) { shown++; }
+        });
+        chips.forEach(function (chip) {
+          var on = (chip.getAttribute('data-filter') || '') === key;
+          chip.classList.toggle('is-active', on);
+          chip.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+        if (counter) {
+          counter.textContent = shown + (shown === 1 ? ' project' : ' projects') +
+            (shown === total ? ' shown' : ' of ' + total + ' shown');
+        }
+        if (empty) { empty.hidden = shown !== 0; }
+      }
+
+      bar.addEventListener('click', function (ev) {
+        var chip = ev.target.closest ? ev.target.closest('[data-filter]') : null;
+        if (chip) { apply(chip.getAttribute('data-filter') || ''); }
+      });
+      if (empty) {
+        empty.addEventListener('click', function (ev) {
+          var reset = ev.target.closest ? ev.target.closest('[data-filter-reset]') : null;
+          if (reset) { apply(''); }
+        });
+      }
+    })();
   });
 
   /* ============================================================

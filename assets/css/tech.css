@@ -212,7 +212,15 @@
   box-shadow: 0 1px 2px rgba(8,59,102,.06), 0 12px 30px rgba(8,59,102,.07);
 }
 
-/* ---------- Portfolio cover: blueprint field + depth ---------- */
+/* ---------- Portfolio cover: blueprint field + depth ----------
+   Three drawn layers inside .folio-cover, in paint order:
+     0  .folio-scene       the sector backdrop (inline SVG)
+     0  .folio-gridlines   the blueprint grid
+     0  ::after            a soft light pool in the top-right corner
+     1  .folio-devices     the browser window and the phone
+     3  .folio-status / .folio-glyph / .folio-meta
+   The layers are all drawn in currentColor, so the same artwork
+   serves the pale covers and the dark featured one. */
 .folio-cover { isolation: isolate; }
 .folio-cover::after {
   content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
@@ -235,10 +243,20 @@
     linear-gradient(90deg, var(--grid-dk) 1px, transparent 1px);
 }
 
-.folio-card:hover .folio-wire { opacity: .95; }
-.folio-wire { opacity: .8; }
+/* Depth: the artwork and the browser/phone lean away from the cursor
+   together, so the cover reads as one object rather than two decals. */
+.folio-scene, .folio-devices { will-change: transform; }
 .folio-card:hover .folio-glyph { transform: translateY(-2px); }
 .folio-glyph { transition: transform .28s cubic-bezier(.22,.61,.36,1), box-shadow .28s ease; }
+
+/* A visitor who asked for less motion still gets the cover — it is
+   content, not decoration — they just do not get it moving. */
+@media (prefers-reduced-motion: reduce) {
+  .folio-scene, .folio-devices, .folio-glyph, .folio-card, .folio-live .fl-go { transition: none; }
+  .folio-card:hover .folio-scene,
+  .folio-card:hover .folio-devices,
+  .folio-card:hover .folio-glyph { transform: none; }
+}
 
 /* Section watermark numbers */
 .section-head { position: relative; }
