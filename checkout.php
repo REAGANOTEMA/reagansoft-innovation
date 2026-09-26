@@ -39,73 +39,104 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         redirect($loginUrl);
     }
 
-    $values = [
-        'title'        => trim($_POST['title'] ?? ''),
-        'description'  => trim($_POST['description'] ?? ''),
-        'requirements' => trim($_POST['requirements'] ?? ''),
-        'method'       => $_POST['method'] ?? 'mtn_momo',
-        'reference'    => trim($_POST['reference'] ?? ''),
-    ];
-    if (!in_array($values['method'], ['mtn_momo', 'airtel_money', 'bank', 'cash', 'other'], true)) {
-        $values['method'] = 'mtn_momo';
-    }
+    /* ---- Step 3: the client's own payment details ----
+     * Rendered inline, on this same page, so the client is never sent
+     * away to fill in a form and then hunt their way back to a
+     * checkout they had half finished. */
+    if ((string)($_POST['action'] ?? '') === 'billing_update') {
+        [$errors, $clean] = billing_process_post($pdo, $user);
 
-    if ($values['title'] === '' || mb_strlen($values['title']) > 190) {
-        $errors[] = 'Please give your project a short title.';
-    }
-    if ($values['description'] === '' || mb_strlen($values['description']) > 10000) {
-        $errors[] = 'Please briefly describe the work you need (max 10,000 characters).';
-    }
-    if ($serviceId > 0 && $service === null) {
-        $errors[] = 'The chosen program is not available. Please pick another program.';
-    }
-    if (mb_strlen($values['reference']) > 120) {
-        $errors[] = 'The transaction reference is too long.';
-    }
-
-    if ($errors) {
-        set_errors($errors);
-    } else {
-        try {
-            $pdo->beginTransaction();
-            $ref = next_project_ref($pdo);
-            $label = $service ? (string)$service['name'] : 'General software project';
-            $ins = $pdo->prepare(
-                "INSERT INTO projects (ref_no, client_id, service_id, title, description, requirements, priority, status)
-                 VALUES (?,?,?,?,?,?, 'normal', 'NEW')"
-            );
-            $ins->execute([
-                $ref,
-                (int)$user['id'],
-                $serviceId > 0 ? $serviceId : null,
-                $values['title'],
-                $values['description'],
-                $values['requirements'] !== '' ? $values['requirements'] : null,
-            ]);
-            $projectId = (int)$pdo->lastInsertId();
-
-            $invoiceId = issue_deposit_invoice($pdo, $projectId, (int)$user['id'], $deposit, $label);
-            $pdo->prepare(
-                "INSERT INTO payments (invoice_id, amount, method, reference, status, notes)
-                 VALUES (?,?,?,?, 'pending', 'Project deposit, initiated by client')"
-            )->execute([$invoiceId, $deposit, $values['method'], $values['reference'] !== '' ? $values['reference'] : null]);
-
-            audit('project_started', 'project', $projectId, 'Client started ' . $label . ' (' . $ref . ') with deposit payment submitted');
-            audit('payment_submitted', 'invoice', $invoiceId, 'Client submitted deposit of ' . $deposit . ' ' . $currency . ' for ' . $ref);
-            notify((int)$user['id'], 'Project started', 'Your project ' . $ref . ' has been created and your deposit payment is in review. We will confirm it shortly.', 'project', $projectId);
-            notify_staff('New project + deposit', $user['full_name'] . ' started "' . $values['title'] . '" (' . $ref . ') and submitted a deposit of ' . money($deposit, $currency) . '.', 'project', $projectId);
-
-            $pdo->commit();
-            flash('success', 'Project ' . $ref . ' created. Your deposit payment has been submitted for confirmation, and we will start as soon as it is verified.');
-            clear_old();
-            redirect(app_url('client/project.php?id=' . $projectId . '&tab=invoice'));
-        } catch (Throwable $e) {
-            $pdo->rollBack();
-            log_error('checkout: ' . $e->getMessage());
-            set_errors(['We could not complete your checkout right now. Please try again shortly.']);
+        if ($errors) {
+            // Redraw against the branch they just chose, or the
+            // business/individual fields flicker back to the old one.
+            $posted = billing_post_fields($_POST);
+            foreach (['payer_type', 'company', 'tax_id', 'national_id', 'country', 'city'] as $key) {
+                if (array_key_exists($key, $posted)) {
+                    $user[$key] = $posted[$key];
+                }
+            }
+        } else {
+            flash('success', 'Payment details saved. Complete your deposit below.');
+            redirect($backUrl);
         }
     }
-    keep_old(array_keys($values));
+
+    /* ---- Step 4: the deposit itself ----
+     * billing_require_complete() is the gate. It is checked here on the
+     * server and not merely hidden in the interface, because a form
+     * field being absent is not a security control — anyone can post
+     * to this endpoint directly. */
+    if ((string)($_POST['action'] ?? '') === 'checkout_deposit') {
+        billing_require_complete($user, $continueTarget);
+
+        $values = [
+            'title'        => trim($_POST['title'] ?? ''),
+            'description'  => trim($_POST['description'] ?? ''),
+            'requirements' => trim($_POST['requirements'] ?? ''),
+            'method'       => $_POST['method'] ?? 'mtn_momo',
+            'reference'    => trim($_POST['reference'] ?? ''),
+        ];
+        if (!in_array($values['method'], ['mtn_momo', 'airtel_money', 'bank', 'cash', 'other'], true)) {
+            $values['method'] = 'mtn_momo';
+        }
+
+        if ($values['title'] === '' || mb_strlen($values['title']) > 190) {
+            $errors[] = 'Please give your project a short title.';
+        }
+        if ($values['description'] === '' || mb_strlen($values['description']) > 10000) {
+            $errors[] = 'Please briefly describe the work you need (max 10,000 characters).';
+        }
+        if ($serviceId > 0 && $service === null) {
+            $errors[] = 'The chosen program is not available. Please pick another program.';
+        }
+        if (mb_strlen($values['reference']) > 120) {
+            $errors[] = 'The transaction reference is too long.';
+        }
+
+        if ($errors) {
+            set_errors($errors);
+        } else {
+            try {
+                $pdo->beginTransaction();
+                $ref = next_project_ref($pdo);
+                $label = $service ? (string)$service['name'] : 'General software project';
+                $ins = $pdo->prepare(
+                    "INSERT INTO projects (ref_no, client_id, service_id, title, description, requirements, priority, status)
+                     VALUES (?,?,?,?,?,?, 'normal', 'NEW')"
+                );
+                $ins->execute([
+                    $ref,
+                    (int)$user['id'],
+                    $serviceId > 0 ? $serviceId : null,
+                    $values['title'],
+                    $values['description'],
+                    $values['requirements'] !== '' ? $values['requirements'] : null,
+                ]);
+                $projectId = (int)$pdo->lastInsertId();
+
+                $invoiceId = issue_deposit_invoice($pdo, $projectId, (int)$user['id'], $deposit, $label);
+                $pdo->prepare(
+                    "INSERT INTO payments (invoice_id, amount, method, reference, status, notes)
+                     VALUES (?,?,?,?, 'pending', 'Project deposit, initiated by client')"
+                )->execute([$invoiceId, $deposit, $values['method'], $values['reference'] !== '' ? $values['reference'] : null]);
+
+                audit('project_started', 'project', $projectId, 'Client started ' . $label . ' (' . $ref . ') with deposit payment submitted');
+                audit('payment_submitted', 'invoice', $invoiceId, 'Client submitted deposit of ' . $deposit . ' ' . $currency . ' for ' . $ref);
+                notify((int)$user['id'], 'Project started', 'Your project ' . $ref . ' has been created and your deposit payment is in review. We will confirm it shortly.', 'project', $projectId);
+                notify_staff('New project + deposit', $user['full_name'] . ' started "' . $values['title'] . '" (' . $ref . ') and submitted a deposit of ' . money($deposit, $currency) . '.', 'project', $projectId);
+
+                $pdo->commit();
+                flash('success', 'Project ' . $ref . ' created. Your deposit payment has been submitted for confirmation, and we will start as soon as it is verified.');
+                clear_old();
+                redirect(app_url('client/project.php?id=' . $projectId . '&tab=invoice'));
+            } catch (Throwable $e) {
+                $pdo->rollBack();
+                log_error('checkout: ' . $e->getMessage());
+                set_errors(['We could not complete your checkout right now. Please try again shortly.']);
+            }
+        }
+        keep_old(array_keys($values));
+    }
 }
 
 public_head([
@@ -114,7 +145,6 @@ public_head([
     'active'    => 'checkout',
     'robots'    => false,
 ]);
-$errors = flash_errors();
 ?>
 <section class="page-hero checkout-hero pi-grid">
   <div class="container">
@@ -130,15 +160,26 @@ $errors = flash_errors();
 <section class="section">
   <div class="container">
 
+    <?php $detailsDone = $loggedIn && billing_complete($user); ?>
     <div class="checkout-steps" aria-label="Checkout progress">
       <div class="cs-step done"><span class="cs-dot"><?= icon('check') ?></span><div><b>Program chosen</b><small><?= e($service['name'] ?? 'Your project') ?></small></div></div>
       <div class="cs-line"></div>
       <?php if ($loggedIn): ?>
         <div class="cs-step done"><span class="cs-dot"><?= icon('check') ?></span><div><b>Account ready</b><small><?= e(mb_substr($user['full_name'], 0, 20)) ?></small></div></div>
         <div class="cs-line"></div>
-        <div class="cs-step current"><span class="cs-dot"><?= icon('money') ?></span><div><b>Pay deposit</b><small><?= money($deposit, $currency) ?></small></div></div>
+        <?php if ($detailsDone): ?>
+          <div class="cs-step done"><span class="cs-dot"><?= icon('check') ?></span><div><b>Your details</b><small>Ready to pay</small></div></div>
+          <div class="cs-line"></div>
+          <div class="cs-step current"><span class="cs-dot"><?= icon('money') ?></span><div><b>Pay deposit</b><small><?= money($deposit, $currency) ?></small></div></div>
+        <?php else: ?>
+          <div class="cs-step current"><span class="cs-dot"><?= icon('user') ?></span><div><b>Your details</b><small>Needed before you can pay</small></div></div>
+          <div class="cs-line"></div>
+          <div class="cs-step next"><span class="cs-dot"><?= icon('money') ?></span><div><b>Pay deposit</b><small><?= money($deposit, $currency) ?></small></div></div>
+        <?php endif; ?>
       <?php else: ?>
         <div class="cs-step current"><span class="cs-dot"><?= icon('user') ?></span><div><b>Sign in / register</b><small>Create a free client account</small></div></div>
+        <div class="cs-line"></div>
+        <div class="cs-step next"><span class="cs-dot"><?= icon('name') ?></span><div><b>Your details</b><small>Who is paying</small></div></div>
         <div class="cs-line"></div>
         <div class="cs-step next"><span class="cs-dot"><?= icon('money') ?></span><div><b>Pay deposit</b><small><?= money($deposit, $currency) ?></small></div></div>
       <?php endif; ?>
@@ -213,11 +254,26 @@ $errors = flash_errors();
             <a class="btn btn-outline btn-block" href="<?= e($registerUrl) ?>"><?= icon('plus') ?> Create a client account</a>
             <p class="small muted center mt-2 mb-0">You will land back on this exact step, ready to pay your <strong><?= money($deposit, $currency) ?></strong> deposit.</p>
           </section>
+        <?php elseif (!$detailsDone): ?>
+        <section class="panel checkout-form billing-step-panel">
+          <div class="panel-head"><h3><?= icon('name') ?> Step 3 — confirm your payment details</h3></div>
+          <p class="small muted">We cannot take your deposit until we know who is paying. This takes about a minute, it is asked once, and you will come straight back here to finish your deposit.</p>
+          <?php
+          billing_form_html(
+              $user,
+              $errors,
+              'Save and continue to my deposit',
+              $continueTarget
+          );
+          ?>
+        </section>
         <?php else: ?>
         <section class="panel checkout-form">
-          <div class="panel-head"><h3><?= icon('send') ?> Submit deposit &amp; start</h3></div>
+          <div class="panel-head"><h3><?= icon('send') ?> Step 4 — submit deposit &amp; start</h3></div>
+          <?php billing_summary_html($user); ?>
           <form method="post" novalidate>
             <?= csrf_field() ?>
+            <input type="hidden" name="action" value="checkout_deposit">
             <div class="field"><label for="cs_title">Project title <span class="req">*</span></label><input class="input" id="cs_title" name="title" maxlength="190" required placeholder="e.g. Company website, school system, online store" value="<?= old('title', $values['title']) ?>"></div>
             <div class="field"><label for="cs_description">Briefly describe the work <span class="req">*</span></label><textarea class="textarea" id="cs_description" name="description" required maxlength="10000" rows="5" placeholder="What do you need built? Who uses it? Which pages/modules matter most?"><?= old('description', $values['description']) ?></textarea></div>
             <div class="field"><label for="cs_requirements">Detailed requirements <span class="muted">(optional)</span></label><textarea class="textarea" id="cs_requirements" name="requirements" maxlength="10000" rows="3" style="min-height:80px" placeholder="Platforms, integrations, content you already have, references…"><?= old('requirements', $values['requirements']) ?></textarea></div>

@@ -112,3 +112,15 @@ Stack trace:
   IP: ::1  URI: /reagansoft-innovation/
 [2026-09-26 05:38:43] DB connection failed (reagansoft_reagansoft@localhost/reagansoft_clients): SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it
   IP: ::1  URI: /reagansoft-innovation/
+[2026-09-26 07:55:52] ArgumentCountError: Too few arguments to function billing_validate(), 1 passed in C:\Users\REAGAN OTEMA\AppData\Local\Temp\opencode\billing-test.php on line 69 and exactly 2 expected in C:\xampp\htdocs\reagansoft-innovation\inc\billing.php:301
+Stack trace:
+#0 C:\Users\REAGAN OTEMA\AppData\Local\Temp\opencode\billing-test.php(69): billing_validate(Array)
+#1 {main}
+  IP:   URI: 
+[2026-09-26 07:57:30] ArgumentCountError: Too few arguments to function billing_validate(), 1 passed in C:\Users\REAGAN OTEMA\AppData\Local\Temp\opencode\billing-test.php on line 69 and exactly 2 expected in C:\xampp\htdocs\reagansoft-innovation\inc\billing.php:316
+Stack trace:
+#0 C:\Users\REAGAN OTEMA\AppData\Local\Temp\opencode\billing-test.php(69): billing_validate(Array)
+#1 {main}
+  IP:   URI: 
+[2026-09-26 08:01:25] CSRF verification failed
+  IP: ::1  URI: /reagansoft-innovation/login.php

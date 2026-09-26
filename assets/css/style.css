@@ -1744,3 +1744,253 @@ fieldset { border: 0; padding: 0; margin: 0; }
   .hero { --hero-min-height: 520px; }
   .page-hero { padding-top: 30px; padding-bottom: 30px; }
 }
+
+/* ============================================================
+   PAYMENT DETAILS GATE
+   ============================================================
+   The form a client fills in before they can hand over money, the
+   notice that stands in for a payment form while it is incomplete,
+   and the progress meter both share.
+
+   Two rules run through all of it:
+     · the state a client is in is shown before it is asked about —
+       the meter and the checklist update as they type, so nothing
+       here is a surprise on submit;
+     · nothing that blocks them is a dead end — every blocked state
+       carries the button that unblocks it.
+   ============================================================ */
+
+/* ---------- Progress meter ---------- */
+.billing-meter { margin: 0 0 20px; }
+.bm-top {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 12px; margin-bottom: 8px; flex-wrap: wrap;
+}
+.bm-label { font-size: 13.5px; font-weight: 700; color: var(--navy); }
+.bm-count { font-size: 12.5px; color: var(--muted); }
+.bm-count b { color: var(--blue); font-weight: 800; font-size: 14px; }
+.bm-track {
+  height: 8px; border-radius: 99px; background: var(--sky-100);
+  overflow: hidden; box-shadow: inset 0 1px 2px rgba(8, 59, 102, .07);
+}
+.bm-fill {
+  display: block; height: 100%; border-radius: 99px;
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+  transition: width .3s ease;
+}
+.billing-meter.is-complete .bm-fill { background: linear-gradient(90deg, var(--green), #1aa876); }
+.billing-meter.is-complete .bm-count b { color: var(--green); }
+
+/* ---------- Field groups ---------- */
+.billing-form { display: block; }
+.billing-intro { color: var(--ink-2); font-size: 14.5px; line-height: 1.6; margin: 0 0 18px; }
+.billing-group {
+  border: 0; border-top: 1px solid var(--line-2); margin: 0 0 4px;
+  padding: 20px 0 4px;
+}
+.billing-group:first-of-type { border-top: 0; padding-top: 4px; }
+.billing-group legend {
+  padding: 0; font-size: 15px; font-weight: 800; color: var(--navy);
+  letter-spacing: -.01em; margin-bottom: 3px;
+}
+.bg-blurb { font-size: 13px; color: var(--muted); margin: 0 0 16px; line-height: 1.5; }
+
+/* ---------- Business / individual choice ---------- */
+.choice-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.choice { display: block; cursor: pointer; }
+.choice input { position: absolute; opacity: 0; width: 0; height: 0; }
+.choice-box {
+  display: block; padding: 13px 15px; border: 2px solid var(--line);
+  border-radius: var(--radius); background: #fff;
+  transition: border-color .18s ease, background .18s ease, box-shadow .18s ease;
+}
+.choice-box b { display: block; font-size: 14px; color: var(--ink); }
+.choice-box small { display: block; font-size: 12.5px; color: var(--muted); margin-top: 3px; line-height: 1.45; }
+.choice:hover .choice-box { border-color: var(--sky-100); }
+.choice input:checked + .choice-box {
+  border-color: var(--blue); background: var(--sky-50);
+  box-shadow: 0 0 0 3px rgba(10, 123, 206, .12);
+}
+.choice input:checked + .choice-box b { color: var(--blue-700); }
+/* Keyboard users get a ring on the visible box, not the hidden input. */
+.choice input:focus-visible + .choice-box { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+/* ---------- Field states ---------- */
+/* Used by the payer-type switch to take a question away without
+   taking the answer with it — see the note in app.js. */
+.is-hidden { display: none !important; }
+.field .opt { font-weight: 600; color: var(--faint); font-size: 12px; margin-left: 4px; }
+.field.has-error .input,
+.field.has-error .select { border-color: var(--red); background: #fffbfb; }
+.field.has-error .input:focus { box-shadow: 0 0 0 3px rgba(179, 64, 58, .14); }
+.field-error {
+  color: var(--red); font-size: 12.5px; font-weight: 600; margin-top: 6px;
+  display: flex; gap: 6px; align-items: flex-start; line-height: 1.45;
+}
+.field-error::before { content: '!'; font-weight: 800; flex-shrink: 0; }
+
+/* A field the client has just filled in correctly, so the list of
+   things left to do visibly shrinks as they work. */
+.field.is-done .input,
+.field.is-done .select { border-color: rgba(21, 127, 90, .45); }
+
+/* The number we will actually dialled, echoed back while they type. */
+.phone-echo { font-size: 12.5px; font-weight: 700; margin-top: 6px; min-height: 17px; }
+.phone-echo.ok { color: var(--green); }
+.phone-echo.warn { color: var(--amber); font-weight: 600; }
+
+/* ---------- Terms ---------- */
+.billing-terms { padding-bottom: 0; }
+.terms-done {
+  display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px;
+  background: var(--green-bg); border: 1px solid rgba(21, 127, 90, .22);
+  border-radius: var(--radius); margin-bottom: 4px;
+}
+.td-icon {
+  width: 28px; height: 28px; border-radius: 50%; background: var(--green);
+  color: #fff; display: grid; place-items: center; flex-shrink: 0;
+}
+.td-icon svg { width: 15px; height: 15px; }
+.terms-done b { display: block; color: var(--green); font-size: 14px; }
+.terms-done small { display: block; color: #2c6b56; font-size: 12.5px; margin-top: 2px; }
+
+.terms-tick {
+  display: flex; gap: 12px; align-items: flex-start; cursor: pointer;
+  padding: 15px 16px; border: 2px solid var(--line);
+  border-radius: var(--radius); background: #fff;
+  transition: border-color .18s ease, background .18s ease;
+}
+.terms-tick:hover { border-color: var(--sky-100); }
+.terms-tick input { width: 20px; height: 20px; margin: 1px 0 0; flex-shrink: 0; accent-color: var(--blue); }
+.terms-tick b { display: block; font-size: 14px; color: var(--ink); line-height: 1.45; }
+.terms-tick small { display: block; font-size: 12.5px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+.terms-tick:has(input:checked) { border-color: var(--blue); background: var(--sky-50); }
+.terms-tick.has-error { border-color: var(--red); background: #fffbfb; }
+
+.terms-privacy {
+  display: flex; gap: 8px; align-items: flex-start; margin-top: 14px;
+  font-size: 12.5px; color: var(--muted); line-height: 1.5;
+}
+.terms-privacy svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; color: var(--green); }
+
+.billing-actions { margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--line-2); }
+.billing-actions .btn-block { margin-top: 0; }
+.billing-actions p svg { width: 13px; height: 13px; vertical-align: -2px; }
+
+/* ---------- The "cannot pay yet" notice ---------- */
+.billing-lock {
+  border: 1px solid var(--line); border-left: 4px solid var(--blue);
+  border-radius: var(--radius-lg); background: #fff; padding: 22px;
+}
+.bl-head { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 18px; }
+.bl-icon {
+  width: 44px; height: 44px; border-radius: 13px; flex-shrink: 0;
+  background: var(--sky-100); color: var(--blue-700);
+  display: grid; place-items: center;
+}
+.bl-icon svg { width: 21px; height: 21px; }
+.bl-head h3 { margin: 0 0 4px; font-size: 17px; }
+.bl-head p { margin: 0; color: var(--ink-2); font-size: 14px; line-height: 1.55; }
+.bl-sub { font-size: 13px; font-weight: 700; color: var(--navy); margin: 0 0 10px; }
+
+.bl-list { list-style: none; margin: 0 0 20px; padding: 0; display: grid; gap: 9px; }
+.bl-list li { display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; line-height: 1.5; }
+.bl-list b { color: var(--ink); }
+.bl-list small { color: var(--muted); display: block; font-size: 12.5px; margin-top: 1px; }
+.bl-tick {
+  width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; margin-top: 1px;
+  background: var(--sky-100); color: var(--blue-700);
+  display: grid; place-items: center;
+  transition: background .2s ease, color .2s ease;
+}
+.bl-tick svg { width: 12px; height: 12px; }
+.bl-tick.ok { background: var(--green); color: #fff; }
+.bl-list li.is-done .bl-tick { background: var(--green); color: #fff; }
+.bl-list li.is-done b { color: var(--green); text-decoration: line-through; text-decoration-color: rgba(21, 127, 90, .35); }
+.bl-list.compact { gap: 6px; margin: 10px 0 0; }
+.bl-list.compact li { font-size: 12.5px; }
+.bl-why { list-style: none; margin: 0; padding: 0; display: grid; gap: 13px; }
+.bl-why li { font-size: 13px; color: var(--muted); line-height: 1.55; }
+.bl-why b { display: block; color: var(--navy); font-size: 13.5px; margin-bottom: 2px; }
+
+/* ---------- Invoice recipient summary ---------- */
+.billing-summary {
+  display: flex; gap: 12px; align-items: center; padding: 13px 15px;
+  background: var(--sky-50); border: 1px solid var(--line-2);
+  border-radius: var(--radius); margin-bottom: 18px;
+}
+.bs-icon {
+  width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
+  background: #fff; border: 1px solid var(--line); color: var(--navy);
+  display: grid; place-items: center;
+}
+.bs-icon svg { width: 17px; height: 17px; }
+.billing-summary > div { flex: 1; min-width: 0; }
+.billing-summary b { display: block; font-size: 11.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); font-weight: 700; }
+.billing-summary small { display: block; font-size: 13.5px; color: var(--navy); font-weight: 700; margin-top: 2px; line-height: 1.4; word-break: break-word; }
+.bs-edit {
+  display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0;
+  font-size: 12.5px; font-weight: 700; color: var(--blue);
+  text-decoration: none; padding: 6px 10px; border-radius: 8px;
+}
+.bs-edit:hover { background: var(--sky-100); }
+.bs-edit svg { width: 13px; height: 13px; }
+
+/* ---------- Page furniture ---------- */
+.billing-layout { align-items: start; }
+.billing-panel { margin-bottom: 0; }
+.billing-aside { display: grid; gap: 0; }
+.billing-aside .panel { margin-bottom: 22px; }
+.billing-step-panel .panel-head { margin-bottom: 8px; }
+.billing-step-panel > p { margin: 0 0 18px; }
+.billing-blocked-note { background: var(--sky-100); border-color: rgba(10, 123, 206, .2); color: var(--blue-700); }
+.billing-blocked-note b { display: flex; align-items: center; gap: 7px; }
+.billing-blocked-note b svg { width: 15px; height: 15px; }
+.billing-blocked-note p { margin: 5px 0 0; line-height: 1.55; }
+.billing-ok-note b { display: flex; align-items: center; gap: 7px; }
+.billing-ok-note b svg { width: 15px; height: 15px; }
+.billing-ok-note p { margin: 5px 0 0; }
+.billing-summary-errors {
+  display: flex; flex-direction: column; gap: 3px; margin-bottom: 20px;
+}
+.billing-summary-errors b { display: flex; align-items: center; gap: 7px; }
+.billing-summary-errors b svg { width: 15px; height: 15px; }
+.billing-summary-errors p { margin: 0; line-height: 1.55; }
+.billing-schema-note p { margin: 6px 0 0; line-height: 1.55; }
+.billing-schema-note code {
+  background: rgba(179, 64, 58, .1); padding: 1px 6px;
+  border-radius: 5px; font-family: var(--font-mono, monospace); font-size: 12.5px;
+}
+.billing-schema-note b { display: flex; align-items: center; gap: 7px; }
+.billing-schema-note b svg { width: 15px; height: 15px; }
+
+/* The deposit callout switches to a cooler, informational tone while
+   the gate is shut, so "you must act" and "pay here" never look alike. */
+.deposit-callout.gated { background: var(--sky-50); border-color: var(--line); border-left-color: var(--blue); }
+.deposit-callout.gated .dc-icon { background: var(--sky-100); color: var(--blue-700); }
+.deposit-callout.gated .dc-body b { color: var(--navy); }
+.deposit-callout.gated .dc-body p { color: var(--ink-2); }
+
+/* The sidebar count of outstanding payment details. */
+.side-badge.warn { background: var(--amber); color: #4a3400; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1024px) {
+  .billing-layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .choice-row { grid-template-columns: 1fr; }
+  .billing-lock, .billing-panel { padding: 18px 16px; }
+  .bm-count { font-size: 12px; }
+  .billing-summary { flex-wrap: wrap; }
+  .bs-edit { margin-left: 46px; margin-top: -6px; }
+  .terms-tick { padding: 13px 14px; gap: 10px; }
+  .deposit-callout.gated { flex-wrap: wrap; }
+  .deposit-callout.gated .btn-primary { width: 100%; }
+}
+
+/* The meter animates as they type, which is a nicety rather than
+   information — drop it for anyone who has asked for less movement. */
+@media (prefers-reduced-motion: reduce) {
+  .bm-fill, .choice-box, .terms-tick, .bl-tick { transition: none; }
+}

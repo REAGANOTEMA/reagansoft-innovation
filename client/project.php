@@ -5,6 +5,11 @@ require_client();
 $pdo = db();
 $id = (int)($_GET['id'] ?? 0);
 
+// The signed-in client, kept in one place because the payment gate
+// below needs it several times. current_user() caches its row, so this
+// costs nothing.
+$userForGate = current_user();
+
 $st = $pdo->prepare("SELECT p.*, c.full_name AS client_name, c.company, s.name AS service, a.full_name AS assigned_name
                      FROM projects p
                      JOIN users c ON c.id = p.client_id
@@ -70,6 +75,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($action === 'submit_payment') {
+        // The gate. Checked on the server, not just by hiding the form,
+        // because the absence of an input is not a control anyone can
+        // rely on — this endpoint can be posted to directly.
+        billing_require_complete($userForGate, billing_return_here());
+
         $invId = (int)($_POST['invoice_id'] ?? 0);
         $amount = (float)($_POST['amount'] ?? 0);
         $method = $_POST['method'] ?? 'other';
@@ -136,6 +146,16 @@ dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' =>
 <?php render_alerts(); ?>
 
 <?php if ($depositInv && $depositDue > 0 && !in_array($depositInv['status'], ['paid', 'cancelled'], true)): ?>
+  <?php if (!billing_complete($userForGate)): ?>
+    <div class="deposit-callout gated">
+      <span class="dc-icon"><?= icon('lock') ?></span>
+      <div class="dc-body">
+        <b>Confirm your payment details to pay your <?= money($depositDue, settings('currency')) ?> deposit.</b>
+        <p>We need a few details about you before we can accept the payment. It takes about a minute, you only do it once, and you will come straight back to this project.</p>
+      </div>
+      <a class="btn btn-primary btn-sm" href="<?= e(app_url('client/billing.php?next=' . urlencode('/client/project.php?id=' . $id . '&tab=invoice'))) ?>"><?= icon('edit') ?> Enter my details</a>
+    </div>
+  <?php else: ?>
   <div class="deposit-callout">
     <span class="dc-icon"><?= icon('rocket') ?></span>
     <div class="dc-body">
@@ -144,6 +164,7 @@ dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' =>
     </div>
     <a class="btn btn-primary btn-sm" href="<?= app_url('client/project.php?id=' . $id . '&tab=invoice') ?>"><?= icon('money') ?> Pay deposit</a>
   </div>
+  <?php endif; ?>
 <?php endif; ?>
 
 <div class="tabs" role="tablist">
@@ -335,28 +356,39 @@ dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' =>
       <?php if ($outstanding > 0 && !in_array($inv['status'], ['paid', 'cancelled'], true)): ?>
         <p class="muted small"><strong>How to pay</strong> — send the amount using any option below, then submit the payment form so our team can confirm it.</p>
         <?= payment_instructions_html() ?>
-        <details class="mt-2">
-          <summary class="small" style="font-weight:700;cursor:pointer">Submit a payment for confirmation</summary>
-          <form method="post" class="mt-2" novalidate>
-            <?= csrf_field() ?>
-            <input type="hidden" name="action" value="submit_payment">
-            <input type="hidden" name="invoice_id" value="<?= (int)$inv['id'] ?>">
-            <div class="form-row">
-              <div class="field"><label for="amount">Amount (<?= e(settings('currency')) ?>) *</label><input class="input" id="amount" type="number" min="1" step="100" name="amount" required max="<?= e((string)$outstanding) ?>" value="<?= e($outstanding > 0 ? (string)$outstanding : '') ?>"><div class="form-note">Outstanding: <?= money($outstanding, settings('currency')) ?></div></div>
-              <div class="field"><label for="method">Payment method *</label>
-                <select class="select" id="method" name="method" required>
-                  <option value="mtn_momo">MTN Mobile Money</option>
-                  <option value="airtel_money">Airtel Money</option>
-                  <option value="bank">Bank transfer</option>
-                  <option value="cash">Cash</option>
-                  <option value="other">Other</option>
-                </select>
+        <?php if (!billing_complete($userForGate)): ?>
+          <?php
+          billing_lock_notice_html(
+              $userForGate,
+              billing_return_here(),
+              'We cannot accept this payment until we know who is paying. It takes about a minute, and you only do it once.'
+          );
+          ?>
+        <?php else: ?>
+          <?php billing_summary_html($userForGate); ?>
+          <details class="mt-2" open>
+            <summary class="small" style="font-weight:700;cursor:pointer">Submit a payment for confirmation</summary>
+            <form method="post" class="mt-2" novalidate>
+              <?= csrf_field() ?>
+              <input type="hidden" name="action" value="submit_payment">
+              <input type="hidden" name="invoice_id" value="<?= (int)$inv['id'] ?>">
+              <div class="form-row">
+                <div class="field"><label for="amount">Amount (<?= e(settings('currency')) ?>) *</label><input class="input" id="amount" type="number" min="1" step="100" name="amount" required max="<?= e((string)$outstanding) ?>" value="<?= e($outstanding > 0 ? (string)$outstanding : '') ?>"><div class="form-note">Outstanding: <?= money($outstanding, settings('currency')) ?></div></div>
+                <div class="field"><label for="method">Payment method *</label>
+                  <select class="select" id="method" name="method" required>
+                    <option value="mtn_momo">MTN Mobile Money</option>
+                    <option value="airtel_money">Airtel Money</option>
+                    <option value="bank">Bank transfer</option>
+                    <option value="cash">Cash</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
               </div>
-            </div>
-            <div class="field"><label for="reference">Reference / transaction ID</label><input class="input" id="reference" name="reference" maxlength="120" placeholder="e.g. MoMo transaction reference"></div>
-            <button class="btn btn-primary" type="submit"><?= icon('money') ?> Submit payment</button>
-          </form>
-        </details>
+              <div class="field"><label for="reference">Reference / transaction ID</label><input class="input" id="reference" name="reference" maxlength="120" placeholder="e.g. MoMo transaction reference"></div>
+              <button class="btn btn-primary" type="submit"><?= icon('money') ?> Submit payment</button>
+            </form>
+          </details>
+        <?php endif; ?>
       <?php endif; ?>
     </section>
   <?php endforeach; ?>

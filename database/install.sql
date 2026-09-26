@@ -72,6 +72,18 @@ CREATE TABLE IF NOT EXISTS users (
   company VARCHAR(190) NULL,
   address VARCHAR(255) NULL,
   avatar VARCHAR(255) NULL,
+  -- Payment details. A client cannot submit ANY payment until these are
+  -- complete — see inc/billing.php, which is the single place that
+  -- decides whether the gate is satisfied. payer_type = 'individual'
+  -- is the "I am not paying as a business" escape hatch, and it is what
+  -- stops company / tax_id from being demanded from someone who has no
+  -- business to declare.
+  payer_type ENUM('business','individual') NOT NULL DEFAULT 'business',
+  tax_id VARCHAR(60) NULL,
+  national_id VARCHAR(60) NULL,
+  country VARCHAR(80) NOT NULL DEFAULT 'Uganda',
+  city VARCHAR(90) NULL,
+  billing_terms_at DATETIME NULL,
   active TINYINT(1) NOT NULL DEFAULT 1,
   failed_logins INT UNSIGNED NOT NULL DEFAULT 0,
   locked_until DATETIME NULL,
@@ -591,21 +603,38 @@ ON DUPLICATE KEY UPDATE
 -- ============================================================
 -- 04 · CLIENTS  (upsert by email)
 -- ============================================================
-INSERT INTO users (full_name, email, phone, password_hash, role, company, address, active) VALUES
-('Amara Kaggwa',  'amara@kirekafarms.com',   '+256702456789', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Kireka Farm Supplies Ltd', 'Kireka, Kampala', 1),
-('Grace Ayebare', 'grace@pearlholdings.com', '+256778987654', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Pearl Holdings Ltd', 'Jinja, Uganda', 1),
-('David Mulumba', 'david@mulumbasons.com',   '+256703246810', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Mulumba & Sons Traders', 'Iganga, Uganda', 1),
-('Agnes Nakato',  'agnesnakato@gmail.com',   '+256759135790', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', NULL, 'Jinja, Uganda', 1),
-('Hotel Paradise on the Nile', 'info@hotelparadiseonthenile.co.ug', '+256754412880', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Hotel Paradise on the Nile', 'Main Street, Jinja, Uganda', 1),
-('Iganga School of Nursing and Midwifery', 'info@igangaschoolofnursingandmidwifery.ac.ug', '+256701489236', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Iganga School of Nursing and Midwifery', 'Iganga, Uganda', 1)
+-- payer_type / tax_id / country / city / billing_terms_at are the
+-- payment-details gate (inc/billing.php). A client cannot submit any
+-- payment until these are complete, so the demo accounts are seeded
+-- complete: a reviewer can log in as any of them and walk a payment
+-- all the way through without inventing data. A brand new account
+-- registered from the website starts with them empty and is walked
+-- through the gate, which is the path a real client takes.
+--
+-- Agnes Nakato has no company, so she is seeded as an 'individual'.
+-- She is the worked example of the branch that does not demand a
+-- company name or a tax number from someone who has neither.
+INSERT INTO users (full_name, email, phone, password_hash, role, company, address, payer_type, tax_id, national_id, country, city, billing_terms_at, active) VALUES
+('Amara Kaggwa',  'amara@kirekafarms.com',   '+256702456789', '$2y$10$yzlD5fteOLtLy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Kireka Farm Supplies Ltd', 'Kireka, Kampala',   'business',  '1002456789', '256754321098', 'Uganda', 'Kampala', '2026-01-12 09:14:00', 1),
+('Grace Ayebare', 'grace@pearlholdings.com', '+256778987654', '$2y$10$yzlD5fteOLtLy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Pearl Holdings Ltd', 'Jinja, Uganda',            'business',  '1008765432', '256701234567', 'Uganda', 'Jinja',   '2026-01-18 10:02:00', 1),
+('David Mulumba', 'david@mulumbasons.com',   '+256703246810', '$2y$10$yzlD5fteOLtLy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Mulumba & Sons Traders', 'Iganga, Uganda',        'business',  '1011325468', '256788990011', 'Uganda', 'Iganga',  '2026-02-03 14:37:00', 1),
+('Agnes Nakato',  'agnesnakato@gmail.com',   '+256759135790', '$2y$10$yzlD5fteOLtLy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', NULL, 'Plot 14, Nalufenya, Jinja',                'individual', NULL,      '256700112233', 'Uganda', 'Jinja',   '2026-02-11 08:55:00', 1),
+('Hotel Paradise on the Nile', 'info@hotelparadiseonthenile.co.ug', '+256754412880', '$2y$10$yzlD5fteOLtLy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Hotel Paradise on the Nile', 'Main Street, Jinja, Uganda', 'business', '1015246800', NULL, 'Uganda', 'Jinja', '2026-01-25 11:20:00', 1),
+('Iganga School of Nursing and Midwifery', 'info@igangaschoolofnursingandmidwifery.ac.ug', '+256701489236', '$2y$10$yzlD5fteOLtLy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Iganga School of Nursing and Midwifery', 'Iganga, Uganda', 'business', '1009988776', NULL, 'Uganda', 'Iganga', '2026-01-14 16:08:00', 1)
 ON DUPLICATE KEY UPDATE
-  full_name     = VALUES(full_name),
-  phone         = VALUES(phone),
-  password_hash = VALUES(password_hash),
-  role          = VALUES(role),
-  company       = VALUES(company),
-  address       = VALUES(address),
-  active        = VALUES(active);
+  full_name        = VALUES(full_name),
+  phone            = VALUES(phone),
+  password_hash    = VALUES(password_hash),
+  role             = VALUES(role),
+  company          = VALUES(company),
+  address          = VALUES(address),
+  payer_type       = VALUES(payer_type),
+  tax_id           = VALUES(tax_id),
+  national_id      = VALUES(national_id),
+  country          = VALUES(country),
+  city             = VALUES(city),
+  billing_terms_at = VALUES(billing_terms_at),
+  active           = VALUES(active);
 
 -- ============================================================
 -- 05 · PROJECTS  (upsert by ref_no)

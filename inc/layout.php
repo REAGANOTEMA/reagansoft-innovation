@@ -654,6 +654,7 @@ function dashboard_nav_items(): array {
         ['messages', 'Messages', app_url('client/messages.php'), 'chat'],
         ['files', 'Files', app_url('client/files.php'), 'file'],
         ['notifications', 'Notifications', app_url('client/notifications.php'), 'bell'],
+        ['billing', 'Payment Details', app_url('client/billing.php'), 'receipt'],
         ['profile', 'Profile', app_url('client/profile.php'), 'user'],
     ];
     $staff = [
@@ -685,6 +686,10 @@ function dashboard_head(array $page = []): void {
     $items = dashboard_nav_items();
     $active = $page['active'] ?? '';
     $unread = unread_notifications();
+    // A client who has not finished their payment details cannot pay, so
+    // the sidebar carries a count of what is outstanding. Silence here
+    // would mean they only discover it at the moment they try to pay.
+    $billingLeft = ($role === 'client' && $user && billing_schema_ready()) ? count(billing_missing($user)) : 0;
     $title = page_title($page, 'Portal');
     $loginUrl = $role === 'client' ? app_url('client/index.php') : app_url('admin/index.php');
     ?>
@@ -720,6 +725,7 @@ function dashboard_head(array $page = []): void {
         <a href="<?= e($it[2]) ?>" class="<?= $active === $it[0] ? 'active' : '' ?>">
           <?= icon($it[3]) ?><span><?= e($it[1]) ?></span>
           <?php if ($it[0] === 'notifications' && $unread > 0): ?><span class="side-badge"><?= $unread ?></span><?php endif; ?>
+          <?php if ($it[0] === 'billing' && $billingLeft > 0): ?><span class="side-badge warn" title="<?= $billingLeft ?> payment detail<?= $billingLeft === 1 ? '' : 's' ?> still needed"><?= $billingLeft ?></span><?php endif; ?>
         </a>
       <?php endforeach; ?>
     </nav>

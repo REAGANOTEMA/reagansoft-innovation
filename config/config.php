@@ -407,3 +407,8 @@ function can_use_admin_console(): bool {
  * Shared library
  * ------------------------------------------------------------------ */
 require_once __DIR__ . '/../inc/functions.php';
+// The payment-details gate. Loaded after functions.php because it uses
+// phone_digits(), settings() and e(), and it must be available to every
+// page that can take money — checkout.php, client/project.php and
+// client/billing.php.
+require_once __DIR__ . '/../inc/billing.php';

@@ -566,5 +566,169 @@
       heroGoTo(0);
       heroStart();
     }
+
+    /* ---------- Payment details gate ----------
+     * The form a client fills in before they can pay. Three jobs, all
+     * of them about not surprising them:
+     *   1. hide the business-only questions when they say they are not
+     *      a business, so nobody is asked for a TIN they do not have;
+     *   2. keep the progress meter and the "still needed" list honest
+     *      as they type, so submitting is never a surprise;
+     *   3. show the number we will actually call, so a typo in a phone
+     *      number — the usual reason a payment sits unconfirmed — is
+     *      visible before they hand over money rather than after.
+     * The server re-checks all of it. This only saves them the
+     * round-trip of finding out they were wrong. */
+    var billingForm = document.querySelector('[data-billing-form]');
+
+    if (billingForm) {
+      var bMeter = billingForm.querySelector('[data-billing-meter]');
+      var bFill = billingForm.querySelector('[data-billing-fill]');
+      var bDone = billingForm.querySelector('[data-billing-done]');
+      var bRequired = Array.prototype.slice.call(billingForm.querySelectorAll('[data-billing-field][data-required="1"]'));
+      var bTracked = Array.prototype.slice.call(billingForm.querySelectorAll('[data-billing-item]'));
+      var bBusinessOnly = Array.prototype.slice.call(billingForm.querySelectorAll('[data-business-only]'));
+      var bPhone = billingForm.querySelector('[data-billing-phone]');
+      var bPhoneEcho = billingForm.querySelector('[data-billing-phone-echo]');
+
+      /* Snapshot which fields the server marked required, before any
+       * toggling happens. The payer-type switch flips data-required back
+       * and off, so without a copy to restore from, switching to
+       * "just me" and back would quietly drop the TIN from the list
+       * and let the bar reach 100% over a missing TIN. */
+      var bDefaultRequired = {};
+      Array.prototype.slice.call(billingForm.querySelectorAll('[data-billing-field][data-required]')).forEach(function (el) {
+        bDefaultRequired[el.getAttribute('data-billing-field')] = el.getAttribute('data-required') === '1';
+      });
+
+      /* Mirrors phone_digits() in inc/functions.php: reduce whatever was
+       * typed to a dialable national form. Anything we do not recognise
+       * is handed back untouched rather than guessed at. */
+      function bDigits(raw) {
+        var d = String(raw || '').replace(/\D+/g, '');
+        if (!d) { return ''; }
+        if (d.indexOf('256') === 0) { return d; }
+        if (d.charAt(0) === '0') { d = d.slice(1); }
+        if (d.length === 9) { return '256' + d; }
+        return d;
+      }
+
+      function bGrouped(d) {
+        if (d.length === 12 && d.indexOf('256') === 0) {
+          return '+' + d.slice(0, 3) + ' ' + d.slice(3, 6) + ' ' + d.slice(6, 9) + ' ' + d.slice(9);
+        }
+        return d;
+      }
+
+      function bFilled(el) {
+        if (!el) { return false; }
+        if (el.type === 'checkbox') { return el.checked; }
+        return String(el.value || '').trim() !== '';
+      }
+
+      function bPayerIsBusiness() {
+        var checked = billingForm.querySelector('input[name="bill_payer_type"]:checked');
+        return !checked || checked.value === 'business';
+      }
+
+      function bApplyPayerType() {
+        var isBusiness = bPayerIsBusiness();
+        bBusinessOnly.forEach(function (wrap) {
+          var input = wrap.querySelector('.input, .select');
+          if (!input) { return; }
+          var key = input.getAttribute('data-billing-field');
+          if (isBusiness) {
+            wrap.classList.remove('is-hidden');
+            input.required = !!bDefaultRequired[key];
+            input.setAttribute('data-required', bDefaultRequired[key] ? '1' : '0');
+          } else {
+            /* Hidden, not disabled. A disabled input is not submitted,
+             * which would throw away a trading name or TIN that is
+             * still on file from a previous visit. Dropping it from the
+             * required list as well is what keeps the meter showing 8
+             * for an individual where the server also shows 8. */
+            wrap.classList.add('is-hidden');
+            input.required = false;
+            input.setAttribute('data-required', '0');
+          }
+        });
+        bRefresh();
+      }
+
+      function bRefreshPhone() {
+        if (!bPhone || !bPhoneEcho) { return; }
+        var typed = String(bPhone.value || '').trim();
+        if (!typed) {
+          bPhoneEcho.textContent = '';
+          bPhoneEcho.className = 'phone-echo';
+          return;
+        }
+        var d = bDigits(typed);
+        if (d.length >= 9 && d.length <= 15) {
+          bPhoneEcho.textContent = 'We will call ' + bGrouped(d) + '.';
+          bPhoneEcho.className = 'phone-echo ok';
+        } else {
+          bPhoneEcho.textContent = 'Keep typing — we need at least 9 digits.';
+          bPhoneEcho.className = 'phone-echo warn';
+        }
+      }
+
+      function bRefresh() {
+        /* Count the required units only — the same list billing_missing()
+         * reads on the server. Counting the optional questions as well
+         * would leave an individual with no TIN and no NIN stuck at 91%
+         * having answered everything actually asked of them, and the
+         * gate would then disagree with the bar on the same page. */
+        var done = 0;
+        bRequired.forEach(function (el) {
+          /* The payer-type radio always has a selection, so it counts
+           * as answered from the start. */
+          var ok = el.hasAttribute('data-billing-choice') ? true : bFilled(el);
+          if (ok) { done++; }
+        });
+
+        var total = bRequired.length;
+        var percent = total > 0 ? Math.round((done / total) * 100) : 0;
+
+        if (bFill) { bFill.style.width = percent + '%'; }
+        if (bDone) { bDone.textContent = String(done); }
+        if (bMeter) { bMeter.classList.toggle('is-complete', done >= total); }
+
+        /* Tick the shared "still needed" list off. It is looked up on
+         * the document rather than the form because on the payment
+         * details page it sits in the column beside the form. */
+        document.querySelectorAll('[data-billing-check]').forEach(function (li) {
+          var key = li.getAttribute('data-billing-check');
+          var el = billingForm.querySelector('[data-billing-field="' + key + '"]');
+          var ok = el ? bFilled(el) : false;
+          li.classList.toggle('is-done', ok);
+          var tick = li.querySelector('.bl-tick');
+          if (tick && li.classList.contains('is-done')) {
+            tick.classList.add('ok');
+            tick.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 13 4 4L19 7"/></svg>';
+          }
+        });
+
+        /* And mark each field green once it carries something, so the
+         * form itself reads as progress rather than a wall of boxes. */
+        bTracked.forEach(function (wrap) {
+          var input = wrap.querySelector('.input, .select');
+          wrap.classList.toggle('is-done', !!input && bFilled(input));
+        });
+
+        bRefreshPhone();
+      }
+
+      billingForm.addEventListener('input', bRefresh);
+      billingForm.addEventListener('change', bRefresh);
+      billingForm.addEventListener('blur', bRefresh, true);
+
+      var payerRadios = billingForm.querySelectorAll('input[name="bill_payer_type"]');
+      Array.prototype.forEach.call(payerRadios, function (r) {
+        r.addEventListener('change', bApplyPayerType);
+      });
+
+      bApplyPayerType();
+    }
   });
 })();

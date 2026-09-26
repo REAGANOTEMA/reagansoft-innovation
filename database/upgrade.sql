@@ -158,3 +158,100 @@ UPDATE projects
 SET deliverables = 'Website',
     cover_art    = 'agriculture'
 WHERE ref_no = 'RSI-2026-00001';
+
+-- ============================================================
+-- PAYMENT DETAILS GATE
+-- ============================================================
+-- A client may not submit a payment of any kind until the billing
+-- details on their account are complete. Without these columns the
+-- gate cannot be evaluated, so on an older install the payment form
+-- would have nothing to check and would let the payment straight
+-- through. Adding them is therefore part of enabling the gate, not
+-- an optional extra.
+--
+--   payer_type      'business' or 'individual'. An individual is not
+--                   asked for a company name or a tax number, because
+--                   they have neither.
+--   tax_id          Uganda Revenue Authority TIN. Required when
+--                   payer_type = 'business', so invoices can be
+--                   raised against a real taxpayer.
+--   national_id     NIN or passport number. Optional, but it is what
+--                   lets us settle a payment query without phoning.
+--   country         Defaults to Uganda so an existing Ugandan client
+--                   is not forced to retype it.
+--   city            District or town. The postal address alone is not
+--                   enough to route a courier or a bank transfer.
+--   billing_terms_at  Set the first time the client accepts the
+--                   payment terms. Non-NULL is what marks the gate as
+--                   passed, so it must never be back-filled — every
+--                   client has to accept the terms themselves.
+--
+-- Existing rows are deliberately left NULL: a client who has already
+-- been trading with us is not assumed to have agreed to terms they
+-- were never shown. They will be asked once, on their next visit.
+
+SET @rsi_sql := (
+  SELECT IF(COUNT(*) = 0,
+    'ALTER TABLE `users` ADD COLUMN `payer_type` ENUM(''business'',''individual'') NOT NULL DEFAULT ''business'' AFTER `avatar`',
+    'DO 0')
+  FROM information_schema.COLUMNS
+  WHERE TABLE_SCHEMA = @rsi_db AND TABLE_NAME = 'users' AND COLUMN_NAME = 'payer_type'
+);
+PREPARE rsi_stmt FROM @rsi_sql;
+EXECUTE rsi_stmt;
+DEALLOCATE PREPARE rsi_stmt;
+
+SET @rsi_sql := (
+  SELECT IF(COUNT(*) = 0,
+    'ALTER TABLE `users` ADD COLUMN `tax_id` VARCHAR(60) NULL AFTER `payer_type`',
+    'DO 0')
+  FROM information_schema.COLUMNS
+  WHERE TABLE_SCHEMA = @rsi_db AND TABLE_NAME = 'users' AND COLUMN_NAME = 'tax_id'
+);
+PREPARE rsi_stmt FROM @rsi_sql;
+EXECUTE rsi_stmt;
+DEALLOCATE PREPARE rsi_stmt;
+
+SET @rsi_sql := (
+  SELECT IF(COUNT(*) = 0,
+    'ALTER TABLE `users` ADD COLUMN `national_id` VARCHAR(60) NULL AFTER `tax_id`',
+    'DO 0')
+  FROM information_schema.COLUMNS
+  WHERE TABLE_SCHEMA = @rsi_db AND TABLE_NAME = 'users' AND COLUMN_NAME = 'national_id'
+);
+PREPARE rsi_stmt FROM @rsi_sql;
+EXECUTE rsi_stmt;
+DEALLOCATE PREPARE rsi_stmt;
+
+SET @rsi_sql := (
+  SELECT IF(COUNT(*) = 0,
+    'ALTER TABLE `users` ADD COLUMN `country` VARCHAR(80) NOT NULL DEFAULT ''Uganda'' AFTER `national_id`',
+    'DO 0')
+  FROM information_schema.COLUMNS
+  WHERE TABLE_SCHEMA = @rsi_db AND TABLE_NAME = 'users' AND COLUMN_NAME = 'country'
+);
+PREPARE rsi_stmt FROM @rsi_sql;
+EXECUTE rsi_stmt;
+DEALLOCATE PREPARE rsi_stmt;
+
+SET @rsi_sql := (
+  SELECT IF(COUNT(*) = 0,
+    'ALTER TABLE `users` ADD COLUMN `city` VARCHAR(90) NULL AFTER `country`',
+    'DO 0')
+  FROM information_schema.COLUMNS
+  WHERE TABLE_SCHEMA = @rsi_db AND TABLE_NAME = 'users' AND COLUMN_NAME = 'city'
+);
+PREPARE rsi_stmt FROM @rsi_sql;
+EXECUTE rsi_stmt;
+DEALLOCATE PREPARE rsi_stmt;
+
+SET @rsi_sql := (
+  SELECT IF(COUNT(*) = 0,
+    'ALTER TABLE `users` ADD COLUMN `billing_terms_at` DATETIME NULL AFTER `city`',
+    'DO 0')
+  FROM information_schema.COLUMNS
+  WHERE TABLE_SCHEMA = @rsi_db AND TABLE_NAME = 'users' AND COLUMN_NAME = 'billing_terms_at'
+);
+PREPARE rsi_stmt FROM @rsi_sql;
+EXECUTE rsi_stmt;
+DEALLOCATE PREPARE rsi_stmt;

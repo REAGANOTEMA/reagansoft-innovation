@@ -46,6 +46,18 @@ CREATE TABLE IF NOT EXISTS users (
   company VARCHAR(190) NULL,
   address VARCHAR(255) NULL,
   avatar VARCHAR(255) NULL,
+  -- Payment details. A client cannot submit ANY payment until these are
+  -- complete — see inc/billing.php, which is the single place that
+  -- decides whether the gate is satisfied. payer_type = 'individual'
+  -- is the "I am not paying as a business" escape hatch, and it is what
+  -- stops company / tax_id from being demanded from someone who has no
+  -- business to declare.
+  payer_type ENUM('business','individual') NOT NULL DEFAULT 'business',
+  tax_id VARCHAR(60) NULL,
+  national_id VARCHAR(60) NULL,
+  country VARCHAR(80) NOT NULL DEFAULT 'Uganda',
+  city VARCHAR(90) NULL,
+  billing_terms_at DATETIME NULL,
   active TINYINT(1) NOT NULL DEFAULT 1,
   failed_logins INT UNSIGNED NOT NULL DEFAULT 0,
   locked_until DATETIME NULL,

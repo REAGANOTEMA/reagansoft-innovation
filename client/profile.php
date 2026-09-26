@@ -6,6 +6,13 @@ $pdo = db();
 $user = current_user();
 $errors = [];
 
+// The payment gate reads the same name, email, phone, company and
+// address this page edits, so the two must not disagree about who
+// holds the authority. Payment details are edited in one place —
+// client/billing.php — and this page only points at it.
+$billingOutstanding = billing_schema_ready() ? billing_missing($user) : [];
+$billingReady = billing_schema_ready() && $billingOutstanding === [];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
     $action = $_POST['action'] ?? '';
@@ -105,7 +112,7 @@ dashboard_head(['title' => 'My Profile', 'active' => 'profile', 'crumb' => 'Prof
         <div class="field"><label for="email">Email <span class="req">*</span></label><input class="input" id="email" type="email" name="email" required maxlength="190" value="<?= e($user['email']) ?>"></div>
         <div class="field"><label for="phone">Phone <span class="req">*</span></label><input class="input" id="phone" name="phone" required maxlength="40" value="<?= e($user['phone'] ?? '') ?>"></div>
       </div>
-      <div class="field"><label for="address">Address</label><input class="input" id="address" name="address" maxlength="255" value="<?= e($user['address'] ?? '') ?>"></div>
+      <div class="field"><label for="address">Address</label><input class="input" id="address" name="address" maxlength="255" value="<?= e($user['address'] ?? '') ?>"><div class="form-note">Also used on your invoice and for deliveries. <a href="<?= app_url('client/billing.php') ?>">Manage all payment details</a>.</div></div>
       <div class="field">
         <label for="avatar">Profile photo (optional)</label>
         <input class="input" id="avatar" type="file" name="avatar" accept=".png,.jpg,.jpeg,.gif,.webp">
@@ -133,6 +140,28 @@ dashboard_head(['title' => 'My Profile', 'active' => 'profile', 'crumb' => 'Prof
     <div class="kv"><span>Role</span><span><?= e(ucfirst($user['role'])) ?></span></div>
     <div class="kv"><span>Member since</span><span><?= fmt_date($user['created_at'], 'd M Y') ?></span></div>
     <div class="kv"><span>Last login</span><span><?= fmt_date($user['last_login_at'], 'd M Y H:i') ?></span></div>
+
+    <div class="panel-head" style="margin-top:26px"><h3><?= icon('receipt') ?> Payment details</h3></div>
+    <?php if (!billing_schema_ready()): ?>
+      <p class="small muted">Payment details are not available on this install yet.</p>
+    <?php elseif ($billingReady): ?>
+      <div class="alert success small">
+        <b><?= icon('check') ?> Ready to pay</b>
+        <p class="mb-0">Your invoices will be raised to <?= e(trim((string)($user['company'] ?? '')) !== '' ? (string)$user['company'] : (string)$user['full_name']) ?><?= trim((string)($user['tax_id'] ?? '')) !== '' ? ' (TIN ' . e((string)$user['tax_id']) . ')' : '' ?>.</p>
+      </div>
+      <a class="btn btn-outline btn-block" href="<?= app_url('client/billing.php') ?>"><?= icon('edit') ?> Review payment details</a>
+    <?php else: ?>
+      <div class="alert small">
+        <b><?= icon('lock') ?> <?= count($billingOutstanding) ?> detail<?= count($billingOutstanding) === 1 ? '' : 's' ?> still needed</b>
+        <p class="mb-0">You cannot pay until these are filled in:</p>
+        <ul class="bl-list compact">
+          <?php foreach ($billingOutstanding as $item): ?>
+            <li data-billing-check="<?= e($item['key']) ?>"><span class="bl-tick"><?= icon('next') ?></span><span><b><?= e($item['label']) ?></b></span></li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
+      <a class="btn btn-primary btn-block" href="<?= app_url('client/billing.php') ?>"><?= icon('edit') ?> Complete payment details</a>
+    <?php endif; ?>
   </section>
 </div>
 <?php dashboard_footer(); ?>
