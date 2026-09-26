@@ -191,7 +191,7 @@
       el.appendChild(c);
     }
 
-    document.querySelectorAll('.hero, .page-hero, .auth-page, .cta').forEach(addCorners);
+    document.querySelectorAll('.page-hero, .auth-page, .cta').forEach(addCorners);
 
     /* ---------- Readout strip for page heroes + auth ---------- */
     document.querySelectorAll('.page-hero, .auth-page').forEach(function (el) {
@@ -248,15 +248,16 @@
       revealTargets.forEach(function (el) { robs.observe(el); });
     }
 
-    /* ---------- Network canvas (hero + page heroes + auth) ---------- */
+    /* ---------- Network canvas (page heroes + auth) ----------
+       The home hero is excluded on purpose: the particle web sat on top of
+       the centred copy and made it hard to read. */
     var canvases = [];
-    document.querySelectorAll('.hero, .page-hero, .auth-page').forEach(function (host) {
+    document.querySelectorAll('.page-hero, .auth-page').forEach(function (host) {
       if (!host || host.querySelector('.fx-canvas')) { return; }
       var cv = document.createElement('canvas');
       cv.className = 'fx-canvas';
       cv.setAttribute('aria-hidden', 'true');
       host.appendChild(cv);
-      var dark = host.classList.contains('hero');
 
       var ctx = cv.getContext('2d');
       var parts = [];
@@ -278,8 +279,8 @@
       function frame() {
         if (!running) { return; }
         ctx.clearRect(0, 0, W, H);
-        var line = dark ? '143,216,255' : '10,123,206';
-        var dot = dark ? '143,216,255' : '10,123,206';
+        var line = '10,123,206';
+        var dot = '10,123,206';
         ctx.lineWidth = 1;
         var link = 128;
         for (var i = 0; i < parts.length; i++) {
@@ -292,7 +293,7 @@
             var dx = p.x - q.x, dy = p.y - q.y;
             var d2 = dx * dx + dy * dy;
             if (d2 < link * link) {
-              var a = (1 - Math.sqrt(d2) / link) * (dark ? .30 : .22);
+              var a = (1 - Math.sqrt(d2) / link) * .22;
               ctx.strokeStyle = 'rgba(' + line + ',' + a + ')';
               ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke();
             }
@@ -300,7 +301,7 @@
         }
         for (var k = 0; k < parts.length; k++) {
           var s = parts[k];
-          ctx.fillStyle = 'rgba(' + dot + ',' + (dark ? .5 : .4) + ')';
+          ctx.fillStyle = 'rgba(' + dot + ',.4)';
           ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.283); ctx.fill();
         }
         rafId = requestAnimationFrame(frame);
@@ -387,7 +388,9 @@
       var hDotsWrap = heroSlider.querySelector('[data-dots]');
       var hPrev = heroSlider.querySelector('[data-prev]');
       var hNext = heroSlider.querySelector('[data-next]');
-      var iActive = 0, hAuto = null, hTimer = reduceMotion ? 0 : 6400;
+      var hProgress = heroSlider.querySelector('[data-progress]');
+      var iActive = 0, hTimer = reduceMotion ? 0 : 6400;
+      var hRaf = 0, hStart = 0, hRunning = false;
 
       function heroGoTo (idx) {
         if (hSlides.length === 0) return;
@@ -402,8 +405,8 @@
         });
         var live = heroSlider.querySelector('[aria-live]');
         if (live) {
-          var activeTxt = hSlides[iActive].querySelector('h1');
-          live.textContent = activeTxt ? activeTxt.textContent : '';
+          var activeTxt = hSlides[iActive].querySelector('.hero-title');
+          live.textContent = activeTxt ? activeTxt.textContent.replace(/\s+/g, ' ').trim() : '';
           heroSlider.classList.remove('is-settled');
           void heroSlider.offsetWidth;
           heroSlider.classList.add('is-settled');
@@ -411,22 +414,47 @@
       }
       function heroNext () { heroGoTo(iActive + 1); }
       function heroPrev () { heroGoTo(iActive - 1); }
-      function heroStop () { if (hAuto) { clearInterval(hAuto); hAuto = null; } }
+
+      /* One rAF loop drives both the advance and the progress bar, so the
+         bar can never drift out of step with the timer the way a
+         setInterval plus a separate CSS animation would. */
+      function heroFrame (now) {
+        hRaf = 0;
+        if (!hRunning) { return; }
+        var elapsed = now - hStart;
+        if (hProgress) {
+          hProgress.style.width = Math.min(100, (elapsed / hTimer) * 100).toFixed(2) + '%';
+        }
+        if (elapsed >= hTimer) { hStart = now; heroGoTo(iActive + 1); }
+        hRaf = requestAnimationFrame(heroFrame);
+      }
+      function heroStop () {
+        hRunning = false;
+        if (hRaf) { cancelAnimationFrame(hRaf); hRaf = 0; }
+        if (hProgress) { hProgress.classList.remove('is-running'); }
+      }
       function heroStart () {
-        if (!hTimer || reduceMotion) return;
-        heroStop();
-        hAuto = setInterval(heroNext, hTimer);
+        if (!hTimer || reduceMotion || hRunning) { return; }
+        hRunning = true;
+        hStart = (window.performance || Date).now();
+        if (hProgress) {
+          hProgress.style.width = '0%';
+          hProgress.classList.add('is-running');
+        }
+        hRaf = requestAnimationFrame(heroFrame);
       }
       function heroPause () { heroStop(); }
       function heroResume () { if (!hTimer || reduceMotion || document.hidden) return; heroStart(); }
 
       if (hDotsWrap) {
-        hSlides.forEach(function (_, i) {
+        hSlides.forEach(function (slide, i) {
           var b = document.createElement('button');
           b.type = 'button';
           b.className = 'hero-dot' + (i === 0 ? ' s-active' : '');
-          b.setAttribute('role', 'tab');
-          b.setAttribute('aria-label', 'Go to slide ' + (i + 1) + ' of ' + hSlides.length);
+          var label = slide.getAttribute('data-label');
+          b.setAttribute('aria-label', 'Show slide ' + (i + 1) + ' of ' + hSlides.length +
+            (label ? ': ' + label : ''));
+          b.setAttribute('aria-current', i === 0 ? 'true' : 'false');
           b.addEventListener('click', function () { heroGoTo(i); heroResume(); });
           hDotsWrap.appendChild(b);
         });

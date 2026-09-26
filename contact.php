@@ -70,7 +70,7 @@ public_head([
         <div class="contact-list">
           <div class="contact-item">
             <span class="ci-icon"><?= icon('phone') ?></span>
-            <div><b>Phone</b><span><a href="tel:+256<?= preg_replace('/\D/', '', $phone) ?>"><?= e($phone) ?></a></span></div>
+            <div><b>Phone</b><span><a href="<?= e(phone_tel($phone)) ?>"><?= e(phone_display($phone, $phone)) ?></a></span></div>
           </div>
           <div class="contact-item">
             <span class="ci-icon"><?= icon('chat') ?></span>

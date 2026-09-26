@@ -16,10 +16,10 @@ try {
 } catch (Throwable $e) { /* not installed yet */ }
 
 $bandService = [
-    'websites' => 1,
-    'receipts' => 9,
-    'apps'     => 8,
-    'systems'  => 3,
+    'websites' => service_id_by_slug('business-website'),
+    'receipts' => service_id_by_slug('receipt-billing'),
+    'apps'     => service_id_by_slug('web-mobile-apps'),
+    'systems'  => service_id_by_slug('business-systems'),
 ];
 
 public_head([
@@ -30,30 +30,39 @@ public_head([
 ]);
 ?>
 <section class="hero" id="home">
+  <h1 class="visually-hidden">Reagan Soft Innovation Limited &mdash; software development and digital solutions in Jinja, Uganda</h1>
   <div class="hero-slider" id="heroSlider" role="region" aria-roledescription="carousel" aria-label="What we build for you">
     <div class="hero-slides">
-      <?php $heroSlides = [
-          ['assets/img/hero1.webp', 'Web Development', 'PROFESSIONAL WEBSITES', 'A website built around your business, designed to look right on every phone and computer, and kept working long after launch.', 1],
-          ['assets/img/hero3.webp', 'Web &amp; Mobile Applications', 'APPS FOR YOUR OWNERSHIP', 'Business apps delivered as a website, Android and iOS app together, prepared and published to the App Store and Google Play.', 8],
-          ['assets/img/hero4.webp', 'Receipt &amp; Billing Automation', 'AUTOMATIC RECEIPTS', 'Your shop, school or clinic prints and sends a professional receipt automatically every time a client pays you.', 9],
-          ['assets/img/hero2.webp', 'Custom Business Systems', 'SYSTEMS BUILT AROUND YOUR PROCESSES', 'Client portals, management systems, dashboards and workflow automation, scoped by modules and approved by you first.', 3],
-          ['assets/img/hero5.webp', 'Ecommerce', 'ONLINE STORES THAT SELL', 'Product catalogues, cart, checkout and mobile money payment architecture, built to turn visitors into paying customers.', 1],
-          ['assets/img/hero6.webp', 'Software that keeps working', 'A ONE TIME DEPOSIT', "Your project gets started with a fixed, one-time deposit that is fully credited against your written quotation. No hidden charges, ever.", 0],
-      ]; ?>
-      <?php foreach ($heroSlides as $si => $hd): [$hImg, $hTag, $hKicker, $hLead, $hSvc] = $hd; ?>
-        <div class="hero-slide<?= $si === 0 ? ' s-active' : '' ?>" data-slide>
+      <?php
+      /* One slide per hero image, in image order. Each entry is:
+         [image, chip label, heading before the accent, accented words,
+          supporting line, service slug ('' = general checkout),
+          secondary link label, secondary link] */
+      $heroSlides = [
+          ['assets/img/hero1.webp', 'Web Development', 'Websites that ', 'earn their keep', 'A fast, secure website built around your business, designed to look right on every screen and still working properly years after launch.', 'business-website', 'View web pricing', 'pricing.php'],
+          ['assets/img/hero2.webp', 'Custom Business Systems', 'Systems built around ', 'how you work', 'Client portals, management systems, dashboards and workflow automation, scoped module by module and approved by you before we write a line of code.', 'business-systems', 'See our services', 'services.php'],
+          ['assets/img/hero3.webp', 'Web & Mobile Apps', 'One app, ', 'every screen', 'Business apps delivered for the browser, Android and iOS together, prepared and published to the App Store and Google Play.', 'web-mobile-apps', 'View app pricing', 'pricing.php'],
+          ['assets/img/hero4.webp', 'Receipt & Billing Automation', 'Receipts that ', 'issue themselves', 'Your shop, school or clinic sends a professional receipt the moment a client pays, with every payment recorded and easy to find again.', 'receipt-billing', 'See how billing works', 'process.php'],
+          ['assets/img/hero5.webp', 'Ecommerce', 'Online stores that ', 'actually sell', 'Product catalogues, cart, checkout and mobile money payment flows, designed to turn visitors into paying customers.', 'ecommerce', 'View store pricing', 'pricing.php'],
+          ['assets/img/hero6.webp', 'Fixed One-Time Deposit', 'Start with a fixed, ', 'one-time deposit', 'Your deposit is credited in full against your written quotation. The scope is agreed before the work begins, and there are no hidden charges.', '', 'How a project runs', 'process.php'],
+      ];
+      ?>
+      <?php foreach ($heroSlides as $si => $hs):
+          [$hImg, $hTag, $hPre, $hAccent, $hLead, $hSlug, $hAlt, $hAltUrl] = $hs;
+          $hSvc = $hSlug !== '' ? service_id_by_slug($hSlug) : 0; ?>
+        <div class="hero-slide<?= $si === 0 ? ' s-active' : '' ?>" data-slide data-label="<?= e($hTag) ?>">
           <img class="hero-bg" src="<?= app_url($hImg) ?>" width="1200" height="675"
-               alt="<?= e($hKicker) ?> — Reagan Soft Innovation Limited, digital solutions in Jinja, Uganda"
-               loading="eager" fetchpriority="<?= $si === 0 ? 'high' : 'auto' ?>" decoding="<?= $si === 0 ? 'sync' : 'async' ?>">
+               alt="<?= e($hTag) ?> &mdash; Reagan Soft Innovation Limited, digital solutions in Jinja, Uganda"
+               loading="<?= $si === 0 ? 'eager' : 'lazy' ?>" fetchpriority="<?= $si === 0 ? 'high' : 'auto' ?>" decoding="<?= $si === 0 ? 'sync' : 'async' ?>">
           <div class="hero-overlay" aria-hidden="true"></div>
           <div class="hero-grain" aria-hidden="true"></div>
           <div class="container hero-inner">
-            <span class="hero-tag"><span class="dot" aria-hidden="true"></span> <?= e($hTag) ?></span>
-            <h1><?= icon('rocket') ?> Build the <span class="accent"><?= e($hKicker) ?></span></h1>
+            <span class="hero-tag"><span class="dot" aria-hidden="true"></span><?= e($hTag) ?></span>
+            <h2 class="hero-title"><?= e($hPre) ?><span class="accent"><?= e($hAccent) ?></span></h2>
             <p class="lead"><?= e($hLead) ?></p>
             <div class="hero-actions">
-              <a class="btn btn-primary" href="<?= app_url('checkout.php' . ($hSvc > 0 ? '?service=' . (int)$hSvc : '')) ?>"><?= icon('rocket') ?> Get Now</a>
-              <a class="btn btn-ghost" href="<?= app_url('pricing.php') ?>">View services &amp; pricing</a>
+              <a class="btn btn-primary btn-lg" href="<?= app_url('checkout.php' . ($hSvc > 0 ? '?service=' . (int)$hSvc : '')) ?>">Get Started <?= icon('arrow') ?></a>
+              <a class="btn btn-ghost btn-lg" href="<?= app_url($hAltUrl) ?>"><?= e($hAlt) ?></a>
             </div>
           </div>
         </div>
@@ -61,12 +70,10 @@ public_head([
     </div>
     <button class="hero-arrow hero-prev" type="button" data-prev aria-label="Previous slide"><?= icon('prev') ?></button>
     <button class="hero-arrow hero-next" type="button" data-next aria-label="Next slide"><?= icon('next') ?></button>
-    <div class="hero-dots" data-dots aria-label="Choose slide"></div>
+    <div class="hero-dots" data-dots aria-label="Choose a slide to view"></div>
+    <div class="hero-progress" data-progress aria-hidden="true"></div>
+    <p class="visually-hidden" aria-live="polite" data-live></p>
   </div>
-  <a class="hero-scroll" href="#overview" aria-label="Scroll to our services and pricing">
-    <span class="hero-scroll-mouse" aria-hidden="true"><span></span></span>
-    <span class="hero-scroll-label">Scroll</span>
-  </a>
 </section>
 
 <section class="hero-band" id="overview">

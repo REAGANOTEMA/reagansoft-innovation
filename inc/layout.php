@@ -195,7 +195,7 @@ function public_footer(): void {
     <div class="footer-col">
       <b>Contact</b>
       <p class="footer-contact"><span><?= icon('pin') ?></span> <?= e($address) ?></p>
-      <p class="footer-contact"><span><?= icon('phone') ?></span> <a href="tel:+256<?= preg_replace('/\D/', '', $phone) ?>"><?= e($phone) ?></a></p>
+      <p class="footer-contact"><span><?= icon('phone') ?></span> <a href="<?= e(phone_tel($phone)) ?>"><?= e(phone_display($phone, $phone)) ?></a></p>
       <p class="footer-contact"><span><?= icon('mail') ?></span> <a href="mailto:<?= e($email) ?>"><?= e($email) ?></a></p>
       <?php if (whatsapp_url() !== ''): ?>
         <p class="footer-contact"><span><?= icon('chat') ?></span> <a href="<?= e(whatsapp_url('Hello Reagan Soft Innovation, I would like to enquire about a project.')) ?>" target="_blank" rel="noopener">WhatsApp</a></p>

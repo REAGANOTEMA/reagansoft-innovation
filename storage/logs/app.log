@@ -110,3 +110,5 @@ Stack trace:
   IP: ::1  URI: /reagansoft-innovation/
 [2026-09-24 20:58:46] DB connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it
   IP: ::1  URI: /reagansoft-innovation/
+[2026-09-26 05:38:43] DB connection failed (reagansoft_reagansoft@localhost/reagansoft_clients): SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it
+  IP: ::1  URI: /reagansoft-innovation/

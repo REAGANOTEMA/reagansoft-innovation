@@ -549,7 +549,7 @@ INSERT INTO settings (setting_key, setting_value) VALUES
 ('company_phone',           '+256730314979'),
 ('company_email',           'info@reagansoft.com'),
 ('company_address',         'Jinja, Uganda'),
-('company_whatsapp',        '+256772514889'),
+  ('company_whatsapp',        '+256730314979'),
 ('company_fb',              ''),
 ('company_x',               ''),
 ('company_linkedin',        ''),

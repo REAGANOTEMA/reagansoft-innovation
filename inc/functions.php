@@ -112,6 +112,34 @@ function service_price_short(array $s, string $currency = ''): string {
     return 'From ' . $currency . ' ' . money_compact($min);
 }
 
+/**
+ * Resolves a service id from its slug.
+ *
+ * Slugs are used instead of hardcoded ids on purpose. The home page once
+ * carried a literal ['apps' => 8, 'receipts' => 9] map, which silently
+ * rotted when the services table was re-seeded: id 8 had become
+ * "Graphic & Branding Design" and id 9 "Website Maintenance", so the
+ * "Receipt & Billing Automation" slide was linking a visitor to a
+ * maintenance plan. Slugs are UNIQUE and survive re-seeding.
+ *
+ * @return int 0 when the slug is unknown, inactive, or the DB is down
+ */
+function service_id_by_slug(string $slug): int {
+    static $cache = [];
+    if (isset($cache[$slug])) {
+        return $cache[$slug];
+    }
+    try {
+        $st = db()->prepare("SELECT id FROM services WHERE slug = ? AND status = 'active' LIMIT 1");
+        $st->execute([$slug]);
+        $id = (int)($st->fetchColumn() ?: 0);
+    } catch (Throwable $e) {
+        log_error('service_id_by_slug(' . $slug . '): ' . $e->getMessage());
+        $id = 0;
+    }
+    return $cache[$slug] = $id;
+}
+
 function fmt_date(?string $date, string $format = 'd M Y'): string {
     if (!$date) {
         return '—';
@@ -486,6 +514,8 @@ function icon(string $name, string $class = ''): string {
         'logout'    => '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/>',
         'arrow'     => '<path d="M5 12h14M13 6l6 6-6 6"/>',
         'arrow-l'   => '<path d="M19 12H5M11 6l-6 6 6 6"/>',
+        'prev'      => '<path d="M15 5l-7 7 7 7"/>',
+        'next'      => '<path d="M9 5l7 7-7 7"/>',
         'calendar'  => '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/>',
         'flag'      => '<path d="M5 21V4M5 5h13l-2.5 4 2.5 4H5"/>',
         'truck'     => '<path d="M2 6h12v9H2zM14 9h4l3 3v3h-7z"/><circle cx="6.5" cy="18" r="1.8"/><circle cx="17.5" cy="18" r="1.8"/>',
@@ -526,15 +556,96 @@ function rs_mail(string $to, string $subject, string $body): bool {
 }
 
 /* ------------------------------------------------------------------
- * WhatsApp helpers.
- * Uses the company WhatsApp setting when set, otherwise the phone.
+ * Phone & WhatsApp helpers.
+ * ------------------------------------------------------------------
+ * Numbers reach us in every shape a Ugandan business types them:
+ * "+256730314979", "256730314979", "0730314979", "0730 314 979".
+ * wa.me and tel: both need the bare international digits, so every
+ * number is normalised once, here.
+ *
+ * This used to be a plain preg_replace('/\D/'), which produced
+ * "https://wa.me/0730314979" the moment anyone saved the WhatsApp
+ * field in the local format they actually use. That link is dead:
+ * WhatsApp wants the country code and no leading zero.
  * ------------------------------------------------------------------ */
+
+/**
+ * Digits only, in full international form with no '+' and no trunk zero.
+ * Assumes Uganda (+256) when the country code is missing.
+ */
+function phone_digits(?string $num): string {
+    $d = preg_replace('/\D+/', '', (string)$num);
+    if ($d === '') {
+        return '';
+    }
+    if (strpos($d, '256') === 0) {
+        return $d;                                   // already +256…
+    }
+    if ($d[0] === '0') {
+        $d = substr($d, 1);                          // 0730… -> 730…
+    }
+    if (strlen($d) === 9) {
+        return '256' . $d;                           // bare national number
+    }
+    return $d;                                      // unknown shape: pass through
+}
+
+/**
+ * Groups a bare 9-digit national number the way it is written locally.
+ * Mobiles (07X/01X) read 0730 314 979; landlines (020) read 020 312 3456.
+ */
+function phone_national_display(string $nat): string {
+    if (strlen($nat) !== 9) {
+        return $nat;
+    }
+    if (strpos($nat, '20') === 0) {
+        return '0' . substr($nat, 0, 2) . ' ' . substr($nat, 2, 3) . ' ' . substr($nat, 5, 4);
+    }
+    return '0' . substr($nat, 0, 3) . ' ' . substr($nat, 3, 3) . ' ' . substr($nat, 6, 3);
+}
+
+/** Pretty local format for display: 0730 314 979. */
+function phone_display(?string $num, string $fallback = ''): string {
+    $d = phone_digits($num);
+    if ($d === '') {
+        return $fallback;
+    }
+    $nat = strpos($d, '256') === 0 ? substr($d, 3) : $d;
+    return strlen($nat) === 9 ? phone_national_display($nat) : (string)$num;
+}
+
+/** International display form: +256 730 314 979. */
+function phone_display_intl(?string $num, string $fallback = ''): string {
+    $d = phone_digits($num);
+    if ($d === '') {
+        return $fallback;
+    }
+    $nat = strpos($d, '256') === 0 ? substr($d, 3) : $d;
+    return strlen($nat) === 9 ? '+256 ' . substr(phone_national_display($nat), 1) : (string)$num;
+}
+
+/** href for a tap-to-call link, or '' when there is no usable number. */
+function phone_tel(?string $num): string {
+    $d = phone_digits($num);
+    return $d === '' ? '' : 'tel:+' . $d;
+}
+
+/** The number behind the WhatsApp button: the setting, else the phone. */
 function whatsapp_number_raw(): string {
     $num = settings('company_whatsapp', '');
-    if ($num === '') {
+    if (trim((string)$num) === '') {
         $num = settings('company_phone', '');
     }
-    return preg_replace('/\D/', '', $num);
+    return phone_digits($num);
+}
+
+/** The number as a visitor should read it (local format). */
+function whatsapp_number_display(): string {
+    $num = settings('company_whatsapp', '');
+    if (trim((string)$num) === '') {
+        $num = settings('company_phone', '');
+    }
+    return phone_display($num);
 }
 
 function whatsapp_url(string $text = ''): string {

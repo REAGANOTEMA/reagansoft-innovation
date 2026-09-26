@@ -73,7 +73,11 @@ dashboard_head(['title' => 'Settings', 'active' => 'settings', 'crumb' => 'Setti
       <div class="field"><label for="company_address">Address</label><input class="input" id="company_address" name="company_address" maxlength="255" value="<?= e($cfg['company_address']) ?>"></div>
     </div>
     <div class="form-row">
-      <div class="field"><label for="company_whatsapp">WhatsApp number</label><input class="input" id="company_whatsapp" name="company_whatsapp" maxlength="40" value="<?= e($cfg['company_whatsapp']) ?>" placeholder="+256… (leave empty to hide)"></div>
+      <div class="field">
+        <label for="company_whatsapp">WhatsApp number</label>
+        <input class="input" id="company_whatsapp" name="company_whatsapp" maxlength="40" value="<?= e($cfg['company_whatsapp']) ?>" placeholder="0730314979 or +256730314979">
+        <div class="form-note">Local or international format both work &mdash; <?= e(whatsapp_number_display() !== '' ? whatsapp_number_display() : 'the number') ?> links as <code>wa.me/<?= e(whatsapp_number_raw()) ?></code>. Leave empty to fall back to the phone above.</div>
+      </div>
       <div class="field"><label for="company_fb">Facebook URL</label><input class="input" id="company_fb" name="company_fb" maxlength="255" value="<?= e($cfg['company_fb']) ?>"></div>
     </div>
     <div class="form-row">

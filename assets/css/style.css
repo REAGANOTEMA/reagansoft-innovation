@@ -157,7 +157,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 /* ---------- Hero ---------- */
 .hero {
-  --hero-min-height: clamp(560px, 88vh, 1000px);
+  --hero-min-height: clamp(620px, 90vh, 1000px);
   position: relative; overflow: hidden;
   display: flex; align-items: center;
   min-height: var(--hero-min-height);
@@ -171,56 +171,64 @@ button, input, select, textarea { font: inherit; color: inherit; }
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover; object-position: center;
-  transform: scale(1.02); transform-origin: 55% 28%;
+  transform: scale(1.02); transform-origin: center;
   backface-visibility: hidden;
 }
 .hero-slide.s-active .hero-bg {
   animation: kenburns 28s ease-in-out infinite alternate;
   will-change: transform;
 }
+/* Copy is centred, so the scrim is even too: a soft pool behind the text
+   with darker top and bottom bands to seat the chip and the buttons. */
 .hero-overlay {
   position: absolute; inset: 0;
   background:
-    radial-gradient(1000px 560px at 16% 44%, rgba(7, 36, 66, .62) 0%, transparent 68%),
-    radial-gradient(1200px 720px at 92% 6%, rgba(14, 150, 224, .18) 0%, transparent 72%),
-    linear-gradient(103deg, rgba(4, 26, 48, .96) 0%, rgba(4, 26, 48, .80) 38%, rgba(4, 26, 48, .46) 58%, rgba(4, 26, 48, .08) 78%, rgba(4, 26, 48, .28) 100%),
-    linear-gradient(0deg, rgba(4, 26, 48, .82) 0%, rgba(4, 26, 48, 0) 44%);
+    radial-gradient(1150px 640px at 50% 47%, rgba(4, 26, 48, .72) 0%, rgba(4, 26, 48, .44) 54%, transparent 80%),
+    linear-gradient(180deg, rgba(4, 26, 48, .72) 0%, rgba(4, 26, 48, .30) 32%, rgba(4, 26, 48, .38) 64%, rgba(4, 26, 48, .84) 100%);
 }
 .hero-grain {
   position: absolute; inset: 0; z-index: 1;
   pointer-events: none;
-  opacity: .045; mix-blend-mode: overlay;
+  opacity: .04; mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
 }
-.hero-scroll {
-  position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%);
-  z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 8px;
-  color: rgba(255, 255, 255, .85); text-decoration: none; transition: color .25s ease;
-}
-.hero-scroll-mouse { width: 24px; height: 38px; border: 1.6px solid rgba(255, 255, 255, .6); border-radius: 14px; display: flex; justify-content: center; padding-top: 7px; transition: border-color .25s ease; }
-.hero-scroll-mouse span { width: 3px; height: 7px; border-radius: 3px; background: #fff; animation: scrollDot 2s ease-in-out infinite; }
-.hero-scroll-label { font-size: 11px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; opacity: .75; }
-.hero-scroll:hover { color: #fff; }
-.hero-scroll:hover .hero-scroll-mouse { border-color: #fff; }
 .hero-band { scroll-margin-top: 80px; }
 .hero-inner {
   position: relative; z-index: 1;
-  max-width: 760px; padding: 110px 0 120px;
+  max-width: 1000px; margin: 0 auto;
+  padding: 118px 0 126px;
+  text-align: center;
 }
 .hero-tag {
-  display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700;
-  color: #fff; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.3);
+  display: inline-flex; align-items: center; gap: 9px; font-size: 12.5px; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: #fff; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.32);
   -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.06), 0 10px 28px rgba(4,26,48,.32);
-  padding: 7px 13px; border-radius: 100px; margin-bottom: 24px;
+  padding: 8px 16px; border-radius: 100px; margin: 0 auto 26px;
 }
 .hero-tag .dot { width: 8px; height: 8px; border-radius: 50%; background: #56c7ff; box-shadow: 0 0 0 4px rgba(86,199,255,.25); }
-.hero h1 { color: #fff; margin-bottom: 20px; text-shadow: 0 3px 30px rgba(0,0,0,.5); }
-.hero h1 .accent { color: #8fd8ff; text-shadow: 0 0 26px rgba(86,199,255,.42), 0 3px 30px rgba(0,0,0,.45); }
-.hero .lead { margin-bottom: 34px; color: rgba(255,255,255,.95); max-width: 640px; text-shadow: 0 1px 18px rgba(0,0,0,.5); }
-.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.hero .hero-title {
+  color: #fff; margin: 0 auto 22px;
+  font-family: var(--font-disp);
+  font-size: clamp(32px, 4.9vw, 58px);
+  font-weight: 800; line-height: 1.08; letter-spacing: -.03em;
+  max-width: 860px;
+  text-shadow: 0 2px 26px rgba(0, 0, 0, .55);
+}
+.hero .hero-title .accent {
+  color: #8fd8ff;
+  text-shadow: 0 0 28px rgba(86, 199, 255, .45), 0 2px 26px rgba(0, 0, 0, .5);
+}
+.hero .lead {
+  margin: 0 auto 38px; color: rgba(255, 255, 255, .94);
+  max-width: 640px; font-size: clamp(15.5px, 1.5vw, 18.5px); line-height: 1.66;
+  text-shadow: 0 1px 16px rgba(0, 0, 0, .55);
+}
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
 .hero-actions .btn-ghost { background: rgba(255,255,255,.1); color: #fff; border-color: rgba(255,255,255,.55); box-shadow: none; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
 .hero-actions .btn-ghost:hover { background: rgba(255,255,255,.22); border-color: #fff; color: #fff; }
+.hero-actions .btn-primary { box-shadow: 0 10px 30px rgba(10, 123, 206, .45), inset 0 1px 0 rgba(255,255,255,.32); }
 
 /* ---------- Hero band (pricing + trust below the image) ---------- */
 .hero-band {
@@ -343,6 +351,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .btn-outline:active { transform: translateY(0); box-shadow: 0 1px 2px rgba(10, 123, 206, .08); }
 
 .btn-sm { padding: 8px 13px; font-size: 13.5px; border-radius: 9px; }
+.btn-lg { padding: 15px 30px; font-size: 16px; border-radius: 12px; }
 .btn-block { width: 100%; }
 
 .icon-btn {
@@ -473,6 +482,58 @@ a:focus-visible, button:focus-visible, summary:focus-visible, .icon-btn:focus-vi
 .info-list { display: grid; gap: 12px; margin-top: 18px; }
 .info-line { display: flex; gap: 12px; align-items: flex-start; color: #dbeafe; font-size: 14.5px; }
 .info-line svg { width: 18px; height: 18px; color: #7fd0ff; flex-shrink: 0; margin-top: 3px; }
+
+/* Light-on-white variant of .info-line, for the "who we are" column. */
+.info-lines { list-style: none; padding: 0; margin: 22px 0 0; display: grid; gap: 12px; max-width: 500px; }
+.info-lines li { display: flex; gap: 12px; align-items: flex-start; color: var(--ink-2); font-size: 14.5px; }
+.info-lines b { color: var(--ink); }
+.info-lines .il-icon {
+  width: 38px; height: 38px; flex-shrink: 0; border-radius: 11px;
+  background: var(--sky-100); color: var(--blue);
+  display: grid; place-items: center;
+}
+.info-lines .il-icon svg { width: 19px; height: 19px; }
+
+/* ---------- Studio (Jinja workstation feature) ---------- */
+.studio { display: grid; grid-template-columns: .82fr 1.18fr; gap: 52px; align-items: center; }
+.studio-media { margin: 0; position: relative; }
+.studio-frame {
+  position: relative; border-radius: var(--radius-xl); overflow: hidden;
+  border: 1px solid rgba(10, 123, 206, .18);
+  box-shadow: 0 30px 70px rgba(8, 59, 102, .20), 0 8px 20px rgba(8, 59, 102, .10);
+  background: var(--navy);
+  aspect-ratio: 3 / 4;
+}
+.studio-frame img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.studio-frame::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .10), transparent 34%, rgba(4, 30, 54, .28));
+}
+.studio-glow {
+  position: absolute; z-index: 0; right: -30px; top: -30px;
+  width: 190px; height: 190px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, var(--pgl), transparent 70%);
+  opacity: .55; filter: blur(10px);
+}
+.studio-media figcaption {
+  display: flex; align-items: center; gap: 10px; margin-top: 14px;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+}
+.studio-body h2 { margin-bottom: 14px; }
+.studio-body .lead { margin-bottom: 4px; }
+.studio-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* Six promises read better as a 3 x 2 block than as 4 + 2 orphans. */
+.steps.six { grid-template-columns: repeat(3, 1fr); }
+.steps.six .step { display: flex; flex-direction: column; }
+.steps.six .step h3 { margin-top: 14px; }
+
+/* Contact channels laid out across the row. */
+.contact-list.three { grid-template-columns: repeat(3, 1fr); margin-top: 22px; }
+.contact-list.three .contact-item { padding: 15px 16px; }
+.contact-item a { color: var(--blue); font-weight: 600; }
+.contact-item a:hover { text-decoration: underline; }
 
 .value-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .value-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 24px; }
@@ -838,6 +899,14 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .hero-inner > *:nth-child(3), .hero-band > *:nth-child(3) { animation-delay: .16s; }
 .hero-inner > *:nth-child(4), .hero-band > *:nth-child(4) { animation-delay: .24s; }
 
+/* Bound to .s-active so the copy re-enters on every slide change, not just
+   on first paint. Specificity beats the generic rule above. */
+.hero-slide.s-active .hero-inner > * { animation: fadeUp .62s cubic-bezier(.2, .7, .3, 1) both; }
+.hero-slide.s-active .hero-inner > *:nth-child(1) { animation-delay: .05s; }
+.hero-slide.s-active .hero-inner > *:nth-child(2) { animation-delay: .14s; }
+.hero-slide.s-active .hero-inner > *:nth-child(3) { animation-delay: .23s; }
+.hero-slide.s-active .hero-inner > *:nth-child(4) { animation-delay: .32s; }
+
 .hero-tag .dot { animation: pulseDot 2.2s ease-in-out infinite; }
 .portal-card { animation: floaty 7s ease-in-out infinite; }
 
@@ -890,7 +959,7 @@ fieldset { border: 0; padding: 0; margin: 0; }
    RESPONSIVE
    ============================================================ */
 @media (max-width: 1024px) {
-  .hero { --hero-min-height: clamp(480px, 74vh, 880px); }
+  .hero { --hero-min-height: clamp(560px, 78vh, 880px); }
   .hero-inner { padding: 84px 0 92px; }
   .hero-band { padding: 54px 0 62px; }
   .cards, .value-grid { grid-template-columns: repeat(2, 1fr); }
@@ -927,12 +996,18 @@ fieldset { border: 0; padding: 0; margin: 0; }
   .dash-topbar-right { flex-shrink: 0; }
   .about-grid { grid-template-columns: 1fr; }
   .grid-2 { grid-template-columns: 1fr; }
+  .studio { grid-template-columns: 1fr; gap: 34px; }
+  .studio-media { max-width: 460px; }
+  .steps.six { grid-template-columns: repeat(2, 1fr); }
+  .contact-list.three { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 640px) {
   .container { width: 92%; }
   .section { padding: 60px 0; }
   .cards, .value-grid, .steps, .stats { grid-template-columns: 1fr; }
+  .steps.six { grid-template-columns: 1fr; }
+  .contact-list.three { grid-template-columns: 1fr; }
   .grid-3 { grid-template-columns: 1fr; }
   .section-head { flex-direction: column; align-items: flex-start; }
   .hero-actions { flex-direction: column; }
@@ -951,11 +1026,12 @@ fieldset { border: 0; padding: 0; margin: 0; }
   .line-item .input, .line-item .select { padding: 10px; }
 
   .hero-overlay { background:
-    radial-gradient(900px 520px at 30% 34%, rgba(7, 36, 66, .66) 0%, transparent 72%),
-    linear-gradient(180deg, rgba(4,26,48,.88) 0%, rgba(4,26,48,.6) 55%, rgba(4,26,48,.88) 100%); }
-  .hero-scroll { display: none; }
+    radial-gradient(760px 460px at 50% 46%, rgba(4, 26, 48, .80) 0%, rgba(4, 26, 48, .56) 58%, transparent 84%),
+    linear-gradient(180deg, rgba(4,26,48,.88) 0%, rgba(4,26,48,.62) 50%, rgba(4,26,48,.9) 100%); }
   .hero-inner { padding: 92px 0 100px; }
-  .hero h1 { font-size: 30px; }
+  .hero .hero-title { font-size: clamp(27px, 8vw, 36px); }
+  .hero .lead { margin-bottom: 30px; }
+  .hero-actions .btn-lg { padding: 13px 24px; font-size: 15px; }
   .hero-band { padding: 46px 0 54px; }
   .svc-card { padding: 22px 20px 20px; }
   .svc-icon { width: 48px; height: 48px; border-radius: 13px; }
