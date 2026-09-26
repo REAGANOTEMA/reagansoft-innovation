@@ -82,7 +82,7 @@ public_head([
           </div>
           <div class="contact-item">
             <span class="ci-icon"><?= icon('mail') ?></span>
-            <div><b>Email</b><span><?= e(settings('company_email', 'info@reagansoft.com')) ?></span></div>
+            <div><b>Email</b><span><?= e(settings('company_email', 'info@reagansoftinnovation.com')) ?></span></div>
           </div>
           <div class="contact-item">
             <span class="ci-icon"><?= icon('user') ?></span>

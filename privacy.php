@@ -60,7 +60,7 @@ public_head([
         <li>correct anything that is wrong or out of date;</li>
         <li>delete your account and your personal data, where the law allows.</li>
       </ul>
-      <p>To make a request, email <?= e(settings('company_email', 'info@reagansoft.com')) ?> or call <?= e(settings('company_phone', '+256730314979')) ?>. We respond within a reasonable time and never charge for a simple request.</p>
+      <p>To make a request, email <?= e(settings('company_email', 'info@reagansoftinnovation.com')) ?> or call <?= e(settings('company_phone', '+256730314979')) ?>. We respond within a reasonable time and never charge for a simple request.</p>
 
       <h2>Children</h2>
       <p>Our services are for businesses and adults. We do not knowingly collect information from children under 18.</p>
@@ -69,7 +69,7 @@ public_head([
       <p>If we change this policy, we will update the date above and, for significant changes, tell you through your portal or by email. Continuing to use the site after a change means you accept the updated policy.</p>
 
       <h2>Contact</h2>
-      <p>Questions about this policy? Email <?= e(settings('company_email', 'info@reagansoft.com')) ?> or write to us at <?= e(settings('company_address', 'Jinja, Uganda')) ?>.</p>
+      <p>Questions about this policy? Email <?= e(settings('company_email', 'info@reagansoftinnovation.com')) ?> or write to us at <?= e(settings('company_address', 'Jinja, Uganda')) ?>.</p>
     </article>
   </div>
 </section>

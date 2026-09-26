@@ -124,3 +124,7 @@ Stack trace:
   IP:   URI: 
 [2026-09-26 08:01:25] CSRF verification failed
   IP: ::1  URI: /reagansoft-innovation/login.php
+[2026-09-26 08:10:31] CSRF verification failed
+  IP: 127.0.0.1  URI: /reagansoft-innovation/register.php
+[2026-09-26 08:11:19] CSRF verification failed
+  IP: 127.0.0.1  URI: /reagansoft-innovation/register.php

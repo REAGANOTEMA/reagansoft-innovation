@@ -2,7 +2,7 @@
 require __DIR__ . '/config/config.php';
 
 $phone  = settings('company_phone', '+256730314979');
-$email  = settings('company_email', 'info@reagansoft.com');
+$email  = settings('company_email', 'info@reagansoftinnovation.com');
 $waText = 'Hello Reagan Soft Innovation, I would like to enquire about a project.';
 
 public_head([

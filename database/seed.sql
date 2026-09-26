@@ -199,7 +199,7 @@ INSERT INTO settings (setting_key, setting_value) VALUES
 ('company_tagline',         'Innovating today for a smarter tomorrow.'),
 ('company_founder',         'Reagan Otema'),
 ('company_phone',           '+256730314979'),
-('company_email',           'info@reagansoft.com'),
+('company_email',           'info@reagansoftinnovation.com'),
 ('company_address',         'Jinja, Uganda'),
   ('company_whatsapp',        '+256730314979'),
 ('company_fb',              ''),

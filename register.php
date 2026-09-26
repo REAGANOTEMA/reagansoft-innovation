@@ -72,9 +72,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $uid = (int)db()->lastInsertId();
             audit('client_registered', 'users', $uid, 'New client account created');
             notify($uid, 'Welcome to Reagan Soft Innovation', 'Your client account is ready. You can now send your first project request.', 'success');
-            flash('success', 'Your account has been created. Please sign in to continue.');
+
+            // Sign them straight in. They have just proved they know
+            // this email address and chosen this password, so making
+            // them type it a second time on the very next screen is
+            // pure friction — and on a phone it is the step people
+            // abandon. The session is set up exactly as login.php does
+            // it, including the id regeneration, so there is only one
+            // definition of "signed in" in this application.
+            session_regenerate_id(true);
+            $_SESSION['user_id'] = $uid;
+            $_SESSION['role'] = 'client';
+            $_SESSION['name'] = $values['full_name'];
+            unset($_SESSION['intended']);
+
+            // A new client has no payment details yet, and cannot pay
+            // without them, so send them straight to the one form that
+            // unblocks paying. Everything else stays reachable.
+            flash('success', 'Welcome, ' . $values['full_name'] . '. Your account is ready.');
             clear_old();
-            redirect($loginUrl);
+            $destination = $redirect !== '' ? $redirect : app_url('client/billing.php');
+            redirect($destination);
         } catch (Throwable $e) {
             log_error('registration: ' . $e->getMessage());
             if ($e instanceof PDOException && $e->getCode() === '23000') {

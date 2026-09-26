@@ -81,7 +81,7 @@ public_head([
       <p>We may update these terms from time to time. Significant changes will be announced through your portal or by email. Continued use of the service after a change means you accept the updated terms.</p>
 
       <h2>16. Contact</h2>
-      <p>Questions about these terms? Email <?= e(settings('company_email', 'info@reagansoft.com')) ?> or call <?= e(settings('company_phone', '+256730314979')) ?>.</p>
+      <p>Questions about these terms? Email <?= e(settings('company_email', 'info@reagansoftinnovation.com')) ?> or call <?= e(settings('company_phone', '+256730314979')) ?>.</p>
     </article>
   </div>
 </section>

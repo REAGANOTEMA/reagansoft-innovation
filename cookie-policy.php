@@ -38,7 +38,7 @@ public_head([
       <p>If we ever start using additional cookies, we will update this page and, where the law requires, ask for your consent first.</p>
 
       <h2>Contact</h2>
-      <p>Questions about our use of cookies? Email <?= e(settings('company_email', 'info@reagansoft.com')) ?>.</p>
+      <p>Questions about our use of cookies? Email <?= e(settings('company_email', 'info@reagansoftinnovation.com')) ?>.</p>
     </article>
   </div>
 </section>

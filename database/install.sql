@@ -564,7 +564,7 @@ INSERT INTO settings (setting_key, setting_value) VALUES
 ('company_tagline',         'Innovating today for a smarter tomorrow.'),
 ('company_founder',         'Reagan Otema'),
 ('company_phone',           '+256730314979'),
-('company_email',           'info@reagansoft.com'),
+('company_email',           'info@reagansoftinnovation.com'),
 ('company_address',         'Jinja, Uganda'),
   ('company_whatsapp',        '+256730314979'),
 ('company_fb',              ''),
@@ -615,12 +615,12 @@ ON DUPLICATE KEY UPDATE
 -- She is the worked example of the branch that does not demand a
 -- company name or a tax number from someone who has neither.
 INSERT INTO users (full_name, email, phone, password_hash, role, company, address, payer_type, tax_id, national_id, country, city, billing_terms_at, active) VALUES
-('Amara Kaggwa',  'amara@kirekafarms.com',   '+256702456789', '$2y$10$yzlD5fteOLtLy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Kireka Farm Supplies Ltd', 'Kireka, Kampala',   'business',  '1002456789', '256754321098', 'Uganda', 'Kampala', '2026-01-12 09:14:00', 1),
-('Grace Ayebare', 'grace@pearlholdings.com', '+256778987654', '$2y$10$yzlD5fteOLtLy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Pearl Holdings Ltd', 'Jinja, Uganda',            'business',  '1008765432', '256701234567', 'Uganda', 'Jinja',   '2026-01-18 10:02:00', 1),
-('David Mulumba', 'david@mulumbasons.com',   '+256703246810', '$2y$10$yzlD5fteOLtLy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Mulumba & Sons Traders', 'Iganga, Uganda',        'business',  '1011325468', '256788990011', 'Uganda', 'Iganga',  '2026-02-03 14:37:00', 1),
-('Agnes Nakato',  'agnesnakato@gmail.com',   '+256759135790', '$2y$10$yzlD5fteOLtLy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', NULL, 'Plot 14, Nalufenya, Jinja',                'individual', NULL,      '256700112233', 'Uganda', 'Jinja',   '2026-02-11 08:55:00', 1),
-('Hotel Paradise on the Nile', 'info@hotelparadiseonthenile.co.ug', '+256754412880', '$2y$10$yzlD5fteOLtLy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Hotel Paradise on the Nile', 'Main Street, Jinja, Uganda', 'business', '1015246800', NULL, 'Uganda', 'Jinja', '2026-01-25 11:20:00', 1),
-('Iganga School of Nursing and Midwifery', 'info@igangaschoolofnursingandmidwifery.ac.ug', '+256701489236', '$2y$10$yzlD5fteOLtLy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Iganga School of Nursing and Midwifery', 'Iganga, Uganda', 'business', '1009988776', NULL, 'Uganda', 'Iganga', '2026-01-14 16:08:00', 1)
+('Amara Kaggwa',  'amara@kirekafarms.com',   '+256702456789', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Kireka Farm Supplies Ltd', 'Kireka, Kampala',   'business',  '1002456789', '256754321098', 'Uganda', 'Kampala', '2026-01-12 09:14:00', 1),
+('Grace Ayebare', 'grace@pearlholdings.com', '+256778987654', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Pearl Holdings Ltd', 'Jinja, Uganda',            'business',  '1008765432', '256701234567', 'Uganda', 'Jinja',   '2026-01-18 10:02:00', 1),
+('David Mulumba', 'david@mulumbasons.com',   '+256703246810', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Mulumba & Sons Traders', 'Iganga, Uganda',        'business',  '1011325468', '256788990011', 'Uganda', 'Iganga',  '2026-02-03 14:37:00', 1),
+('Agnes Nakato',  'agnesnakato@gmail.com',   '+256759135790', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', NULL, 'Plot 14, Nalufenya, Jinja',                'individual', NULL,      '256700112233', 'Uganda', 'Jinja',   '2026-02-11 08:55:00', 1),
+('Hotel Paradise on the Nile', 'info@hotelparadiseonthenile.co.ug', '+256754412880', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Hotel Paradise on the Nile', 'Main Street, Jinja, Uganda', 'business', '1015246800', NULL, 'Uganda', 'Jinja', '2026-01-25 11:20:00', 1),
+('Iganga School of Nursing and Midwifery', 'info@igangaschoolofnursingandmidwifery.ac.ug', '+256701489236', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Iganga School of Nursing and Midwifery', 'Iganga, Uganda', 'business', '1009988776', NULL, 'Uganda', 'Iganga', '2026-01-14 16:08:00', 1)
 ON DUPLICATE KEY UPDATE
   full_name        = VALUES(full_name),
   phone            = VALUES(phone),

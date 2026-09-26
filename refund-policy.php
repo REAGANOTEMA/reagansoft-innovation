@@ -40,7 +40,7 @@ public_head([
       <p>Once a project is delivered, handed over and accepted, it is not refunded, because the value of completed software is the finished product and its source. Defects that are clearly our fault are fixed under the support terms in our <a href="<?= app_url('terms.php') ?>">Terms &amp; Conditions</a>.</p>
 
       <h2>How to cancel</h2>
-      <p>Send your cancellation request by email to <?= e(settings('company_email', 'info@reagansoft.com')) ?> with the subject "Cancellation" and your project reference number. We confirm receipt and settle the position within a reasonable time.</p>
+      <p>Send your cancellation request by email to <?= e(settings('company_email', 'info@reagansoftinnovation.com')) ?> with the subject "Cancellation" and your project reference number. We confirm receipt and settle the position within a reasonable time.</p>
 
       <h2>Processing a refund</h2>
       <p>Approved refunds are paid back through the same channel you used to pay (mobile money, bank transfer or another agreed method) within the timeframe agreed at the time of approval, usually no more than two weeks.</p>
