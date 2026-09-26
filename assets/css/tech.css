@@ -68,6 +68,14 @@
 /* ---------- Public inner page hero: blueprint grid ---------- */
 .page-hero {
   position: relative;
+  /* Two decorative layers deliberately sit outside their own boxes:
+     .page-img::before hangs at right:-18px, and the gridDrift animation
+     below slides .page-hero::after 28px to the right. On a phone, where
+     the hero spans the full viewport width, that overhang pushed the whole
+     document sideways by up to 8px. `clip` contains the decoration
+     without creating a scroll container, so sticky descendants and the
+     vertical page scroll are unaffected. */
+  overflow-x: clip;
 }
 .page-hero::before {
   content: ''; position: absolute; inset: 0; pointer-events: none;
@@ -531,23 +539,36 @@
 /* Hero slider dots, on a frosted pill so they read over any photo */
 .hero-dots {
   position: absolute; left: 50%; bottom: 30px; transform: translateX(-50%);
-  z-index: 5; display: flex; align-items: center; gap: 9px;
-  padding: 9px 15px; border-radius: 100px;
+  z-index: 5; display: flex; align-items: center; gap: 0;
+  padding: 7px 11px; border-radius: 100px;
   background: rgba(4, 26, 48, .32);
   border: 1px solid rgba(255, 255, 255, .18);
   -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
   box-shadow: 0 8px 26px rgba(4, 26, 48, .26);
 }
 .hero-dot {
-  width: 8px; height: 8px; border-radius: 50%;
+  /* The visible dot is 8px, which is far below a usable tap target. The
+     button is sized for the finger and the dot is drawn inside it, so the
+     control keeps its proportions and gains a 26px hit area. The dot
+     spacing moved into the buttons, which is why the gap is 0 above. */
+  width: 26px; height: 26px; border-radius: 8px;
+  background: transparent; border: 0; padding: 0;
+  display: grid; place-items: center;
+}
+.hero-dot::before {
+  content: ''; width: 8px; height: 8px; border-radius: 50%;
   background: rgba(255, 255, 255, .5);
   border: 1px solid rgba(255, 255, 255, .7);
-  padding: 0; cursor: pointer;
-  transition: width .32s cubic-bezier(.2, .7, .3, 1), background .3s ease, transform .3s ease;
+  transition: width .32s cubic-bezier(.2, .7, .3, 1), background .3s ease;
 }
-.hero-dot:hover { transform: scale(1.3); background: rgba(255, 255, 255, .9); }
+.hero-dot { cursor: pointer; }
+.hero-dot:hover::before { transform: scale(1.3); background: rgba(255, 255, 255, .9); }
 .hero-dot:focus-visible { outline: 2px solid #8fd8ff; outline-offset: 3px; }
-.hero-dot.s-active { width: 28px; border-radius: 5px; background: #56c7ff; border-color: #56c7ff; box-shadow: 0 0 12px rgba(86, 199, 255, .7); }
+.hero-dot.s-active { width: 26px; }
+.hero-dot.s-active::before {
+  width: 28px; border-radius: 5px; background: #56c7ff; border-color: #56c7ff;
+  box-shadow: 0 0 12px rgba(86, 199, 255, .7);
+}
 
 /* Autoplay progress bar (driven by JS) */
 .hero-progress {
@@ -567,12 +588,49 @@
   .hero-arrow:active { transform: scale(.94); }
   .hero-prev { left: 14px; }
   .hero-next { right: 14px; }
-  .hero-dots { bottom: 30px; gap: 9px; }
-  .hero-dot { width: 9px; height: 9px; }
+  .hero-dots { bottom: 30px; gap: 0; }
+  /* Shrink the drawn dot, never the button: the button is the tap target. */
+  .hero-dot, .hero-dot.s-active { width: 24px; height: 24px; }
+  .hero-dot::before { width: 8px; height: 8px; }
+  .hero-dot.s-active::before { width: 22px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .hero-slide, .hero-slide.s-active { transition: none; }
   .hero-arrow { transition: none; }
   .hero-dot { transition: none; }
+}
+
+/* ===================================================================
+   Footer responsive collapse
+   -------------------------------------------------------------------
+   This file is loaded AFTER style.css, so its footer rules win the
+   cascade regardless of source order in the other file. style.css
+   already collapsed .footer-grid to 1fr at 640px, but the 5-column and
+   4-column declarations above silently overrode it on every phone:
+   measured 244.9px + 75.1px + 68.6px + 73.4px of track inside a 301px
+   container, overflowing the page by up to 284px at 320px wide.
+
+   Repeating the collapse here, at winning specificity, is the fix.
+   The 96px brand mark is also too large to sit beside four columns of
+   links, so it steps down with the rest.
+   =================================================================== */
+.footer-grid > * { min-width: 0; }
+
+@media (max-width: 1024px) {
+  .footer-grid { grid-template-columns: 1.6fr 1fr 1fr; gap: 34px; }
+  .footer-brand .brand img { width: 74px; height: 74px; border-radius: 18px; }
+}
+@media (max-width: 860px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 30px; }
+}
+@media (max-width: 640px) {
+  .footer-grid { grid-template-columns: 1fr; gap: 26px; }
+  .footer-brand .brand img { width: 62px; height: 62px; border-radius: 16px; }
+  .footer-brand .brand-text { font-size: 19px; }
+  .footer-col > b { margin-bottom: 6px; }
+}
+@media (max-width: 360px) {
+  .footer-grid { gap: 22px; }
+  .footer-brand .brand img { width: 54px; height: 54px; }
 }

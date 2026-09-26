@@ -120,7 +120,7 @@ dashboard_head(['title' => 'Settings', 'active' => 'settings', 'crumb' => 'Setti
     </div>
   </section>
 
-  <div style="display:flex;gap:10px;align-items:center">
+  <div class="form-actions">
     <button class="btn btn-primary" type="submit"><?= icon('check') ?> Save settings</button>
     <a class="btn btn-ghost" href="<?= app_url('admin/settings.php') ?>">Discard changes</a>
   </div>

@@ -772,6 +772,32 @@ function dashboard_footer(): void {
 <?php
 }
 
+/* A record that is genuinely gone should still answer with a 404, but a
+   bare `exit('Project not found.')` drops the reader out of the portal
+   into unstyled text with no way back. This renders the same 404 inside
+   the normal shell, so the status code stays correct for crawlers while
+   the person keeps their navigation and gets a route onward. */
+function dashboard_not_found(string $heading, string $message, string $backUrl, string $backLabel): void {
+    http_response_code(404);
+    dashboard_head(['title' => $heading, 'crumb' => $heading]);
+    ?>
+    <div class="dash-head">
+      <div>
+        <h2><?= e($heading) ?></h2>
+        <p class="sub"><?= e($message) ?></p>
+      </div>
+      <div class="actions">
+        <a class="btn btn-primary" href="<?= e($backUrl) ?>"><?= e($backLabel) ?></a>
+      </div>
+    </div>
+    <section class="panel">
+      <p class="muted"><?= e($message) ?></p>
+    </section>
+<?php
+    dashboard_footer();
+    exit;
+}
+
 /* ------------------------------------------------------------------
  * Extra icons used by the footer only (social).
  * ------------------------------------------------------------------ */

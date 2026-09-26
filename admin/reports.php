@@ -72,7 +72,7 @@ dashboard_head(['title' => 'Reports', 'active' => 'reports', 'crumb' => 'Reports
   <div class="stat"><span class="stat-icon"><?= icon('money') ?></span><div><small>Outstanding</small><strong><?= money($stats['outstanding'], $currency) ?></strong></div></div>
 </div>
 
-<div style="display:grid;grid-template-columns:1.35fr 1fr;gap:22px" class="report-grid">
+<div class="report-grid">
   <section class="panel">
     <div class="panel-head"><h3>Confirmed revenue — <?= $year ?></h3><a class="small" href="<?= app_url('admin/invoices.php') ?>">View invoices</a></div>
     <?php if ($monthly): ?>

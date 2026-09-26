@@ -15,8 +15,12 @@ $st->execute([$id]);
 $project = $st->fetch();
 
 if (!$project) {
-    http_response_code(404);
-    exit('Project not found.');
+    dashboard_not_found(
+        'Project not found',
+        'This project does not exist. It may have been removed.',
+        app_url('admin/projects.php'),
+        'Back to projects'
+    );
 }
 
 $tab = $_GET['tab'] ?? 'overview';

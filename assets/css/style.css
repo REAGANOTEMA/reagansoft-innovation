@@ -567,7 +567,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible, .icon-btn:focus-vi
 .footer-col a:hover { color: #7fd0ff; }
 .footer-contact { display: flex; gap: 10px; align-items: flex-start; color: #9db6cc; font-size: 14.5px; margin-bottom: 8px; }
 .footer-contact svg { width: 17px; height: 17px; color: #7fd0ff; margin-top: 4px; flex-shrink: 0; }
-.footer-contact a { color: #9db6cc; }
+.footer-contact a { color: #9db6cc; overflow-wrap: anywhere; }
 .footer-contact a:hover { color: #7fd0ff; }
 .footer-social { display: flex; gap: 10px; margin-top: 14px; }
 .footer-social a { width: 38px; height: 38px; border: 1px solid rgba(255,255,255,.2); border-radius: 10px; display: grid; place-items: center; color: #cfe0ef; }
@@ -1993,4 +1993,139 @@ fieldset { border: 0; padding: 0; margin: 0; }
    information — drop it for anyone who has asked for less movement. */
 @media (prefers-reduced-motion: reduce) {
   .bm-fill, .choice-box, .terms-tick, .bl-tick { transition: none; }
+}
+
+/* ===================================================================
+   Responsive hardening
+   -------------------------------------------------------------------
+   Measured against a real browser at 320-1920px. Each block below fixes
+   a defect that was actually observed, not a hypothetical one.
+
+   The recurring theme is CSS Grid's default `min-width: auto` on grid
+   items: a grid child refuses to shrink below its content's min-content
+   width, so one wide table or one long <select> inside a card pushes the
+   whole page sideways. `min-width: 0` hands that decision back to the
+   track sizing. The existing `.table-wrap { overflow-x: auto }` then does
+   its job and the card scrolls its own table instead of the page.
+   =================================================================== */
+
+/* --- Grid children must be allowed to shrink --- */
+.grid-2 > *, .grid-3 > *, .cards > *, .stats > *, .steps > *,
+.report-grid > *, .pricing-grid > *, .folio-grid > *, .value-grid > *,
+.checkout-grid > *, .billing-layout > *, .contact-grid > *,
+.price-ranges > *, .price-bands > *, .portal-metrics > *,
+.range-card, .folio-stats > * {
+  min-width: 0;
+}
+
+/* A flex child holding text or a control needs the same escape hatch. */
+.toolbar > *, .panel-head > *, .dash-head > *, .form-actions > *,
+.notif-item > *, .line-item > * {
+  min-width: 0;
+}
+
+/* --- Selects and inputs must not out-grow their container ---
+   A <select> is sized by its widest option, so a long project or client
+   name ("RSI-2026-00004 — Customer Feedback Portal") pushed the toolbar
+   off the side of a 320px screen. */
+.select, .input, .textarea {
+  max-width: 100%;
+}
+.toolbar .select, .toolbar .input {
+  width: auto;
+  min-width: 0;
+  flex: 1 1 180px;
+}
+.toolbar .field {
+  margin-bottom: 0;
+  flex: 1 1 180px;
+  max-width: 100%;
+}
+
+/* --- report-grid replaces a hard-coded inline grid in admin/reports.php ---
+   An inline `grid-template-columns` cannot be overridden by a media query
+   without !important, so the two columns never collapsed. */
+.report-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 22px; align-items: start; }
+@media (max-width: 900px) { .report-grid { grid-template-columns: 1fr; } }
+
+/* --- form-actions replaces a non-wrapping inline flex row --- */
+.form-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+/* --- Primary navigation ---
+   Measured: the inline menu needs 1203px, and the shell is 92% of the
+   viewport, so the links only fit at >=1250px. The hamburger used to appear
+   only below 860px and the inline menu overflowed every width in between.
+   Collapse up to 1279px so the last overflow-free inline width (1280px) is
+   the first one that shows the full menu. */
+@media (max-width: 1279px) {
+  .menu { display: block; }
+  .links {
+    display: none; position: absolute; top: 76px; left: 0; right: 0; background: #fff;
+    padding: 18px 6%; flex-direction: column; gap: 4px; border-bottom: 1px solid var(--line);
+    box-shadow: var(--shadow);
+  }
+  .links.open { display: flex; }
+  .links a { padding: 12px 10px; border-radius: 9px; width: 100%; }
+  .links a:hover, .links a.active { background: var(--sky-50); }
+  .links a.active::after { display: none; }
+  .nav-login { text-align: center; margin-top: 6px; }
+  .topbar { position: relative; }
+}
+@media (min-width: 1280px) {
+  /* Safety net: if the menu ever grows again, wrap rather than overflow. */
+  .nav { flex-wrap: wrap; }
+  .links { min-width: 0; }
+}
+
+/* --- Touch targets ---
+   Anything tappable should clear ~32px on a touch screen. These are the
+   small-but-real tap targets the audit flagged: panel "View all" links,
+   footer links, tabs, and the small icon buttons. */
+@media (hover: none), (max-width: 860px) {
+  .panel-head .small,
+  .panel-head a.small,
+  a.small {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 4px 2px;
+  }
+  .footer-col a { display: inline-block; min-height: 34px; padding: 4px 0; }
+  /* The footer sign-in links and the small "Open" links inside admin stat
+     tiles are plain inline text, so they are only as tall as the line box. */
+  .footer-bottom a, .foot-bottom a { display: inline-flex; align-items: center; min-height: 34px; padding: 2px 4px; }
+  .stat a { display: inline-flex; align-items: center; min-height: 32px; }
+  /* "Manage all payment details" is the main route to the billing page,
+     so give it a finger-sized target even though it reads as prose. */
+  .form-note a { display: inline-flex; align-items: center; min-height: 30px; }
+  .tabs a { display: inline-flex; align-items: center; min-height: 40px; }
+  .side-nav a, .side-bottom a { min-height: 40px; }
+  .billing-check-list a, .bl-tick { min-height: 40px; }
+  .btn { min-height: 42px; }
+  .menu, .nav-toggle { min-width: 44px; min-height: 44px; }
+  select.select, .toolbar .select { min-height: 42px; }
+}
+
+/* --- Very small phones ---
+   320px is the narrowest device still in real use, so it gets its own
+   pass rather than inheriting the 360px layout. */
+@media (max-width: 360px) {
+  .container { width: min(var(--maxw), 94%); }
+  .panel { padding: 18px 15px; }
+  .section { padding: 48px 0; }
+  .dash-main { padding: 18px 12px 46px; }
+  .stat, .info-card, .price-band, .billing-panel, .billing-lock { padding-left: 15px; padding-right: 15px; }
+  .toolbar .select, .toolbar .input, .toolbar .field { flex-basis: 100%; }
+  .form-actions .btn { width: 100%; }
+  .choice-box { padding: 11px 12px; }
+  .line-item { grid-template-columns: 1fr; gap: 6px; }
+}
+
+/* The deposit ribbon aligns its button 64px in, level with the text
+   beside the icon. Below ~390px that indent plus the button was wider
+   than the container, so the button hung off the right edge. Stack the
+   ribbon instead of indenting it. */
+@media (max-width: 420px) {
+  .deposit-ribbon .container { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .deposit-ribbon .btn-ghost { margin-left: 0; width: 100%; justify-content: center; }
 }

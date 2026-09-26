@@ -20,8 +20,14 @@ $st->execute([$id]);
 $project = $st->fetch();
 
 if (!$project || (int)$project['client_id'] !== (int)current_user()['id']) {
-    http_response_code(404);
-    exit('Project not found.');
+    // Another client's project is reported exactly like a missing one, so
+    // the URL cannot be used to probe for other people's project ids.
+    dashboard_not_found(
+        'Project not found',
+        'This project does not exist, or it belongs to another account.',
+        app_url('client/projects.php'),
+        'Back to my projects'
+    );
 }
 
 $tab = $_GET['tab'] ?? 'overview';

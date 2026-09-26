@@ -470,13 +470,31 @@ function billing_validate(array $user, array $post): array
         $clean['country'] = $country;
     }
 
-    // The terms tick is only demanded the first time. Once a client has
-    // accepted, quietly re-asking on every small edit would train them
-    // to tick boxes without reading, which defeats the point of having
-    // one at all.
-    if (!billing_terms_accepted($user)) {
+    // The terms tick is demanded the first time, and again after a change
+    // to a field that actually reaches an invoice. The billing page tells
+    // the client they will only be asked again "if you change them", so the
+    // two have to agree. Re-asking on a purely cosmetic edit would train
+    // clients to tick boxes without reading, which defeats the point of
+    // having one at all, so only the payer-identity fields below count.
+    // national_id is left out on purpose: it is optional and never printed
+    // on an invoice.
+    $material = ['full_name', 'email', 'phone', 'payer_type', 'company', 'tax_id', 'address', 'city', 'country'];
+    $changed = false;
+    foreach ($material as $key) {
+        if (!array_key_exists($key, $clean)) {
+            continue;
+        }
+        if (trim((string)($user[$key] ?? '')) !== trim((string)$clean[$key])) {
+            $changed = true;
+            break;
+        }
+    }
+
+    if ($changed || !billing_terms_accepted($user)) {
         if (empty($post['terms_agree'])) {
-            $errors['terms'] = 'Please confirm the details above are correct, so we can use them on your invoice.';
+            $errors['terms'] = $changed
+                ? 'You changed the details we put on your invoice, so please confirm them again.'
+                : 'Please confirm the details above are correct, so we can use them on your invoice.';
         } else {
             $clean['billing_terms_at'] = date('Y-m-d H:i:s');
         }
@@ -620,7 +638,11 @@ function billing_form_html(array $user, array $errors = [], string $submitLabel 
         'location' => ['Where you are', 'Used for delivery, for your contract, and to work out how to take your payment.'],
     ];
     $requirements = billing_requirements($user);
-    $termsDone = billing_terms_accepted($user);
+    // A terms error means the tick is outstanding right now — either the
+    // first time, or because the client just changed a field that reaches
+    // the invoice. The box has to come back in that case, or the form would
+    // demand a tick it does not let anyone give.
+    $termsDone = billing_terms_accepted($user) && !isset($errors['terms']);
     $progress = billing_progress($user);
     ?>
     <?php if ($intro !== ''): ?>
