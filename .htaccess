@@ -23,7 +23,7 @@ Options -Indexes
 # sat in the web root — under http://localhost/reagansoft-innovation/
 # it matched nothing, leaving config/ reachable.
 RewriteEngine On
-RewriteRule ^(?:config|inc|storage|database|tools)(?:/|$) - [R=403,L]
+RewriteRule ^(?:config|inc|storage|database|system|website|tools)(?:/|$) - [R=403,L]
 
 # Security headers (also applied in PHP for non-Apache setups)
 <IfModule mod_headers.c>

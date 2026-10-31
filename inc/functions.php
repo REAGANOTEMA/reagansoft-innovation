@@ -10,7 +10,13 @@
 function settings(?string $key = null, ?string $default = ''): string {
     static $cache = null;
     if ($cache === null) {
-        $cache = ['company_name' => APP_NAME, 'company_phone' => '+256730314979', 'currency' => 'UGX'];
+        $cache = [
+            'company_name' => APP_NAME,
+            'company_phone' => '+256772514889',
+            'company_whatsapp' => '+256730314979',
+            'payment_mtn_number' => '+256730314979',
+            'currency' => 'UGX',
+        ];
         try {
             $rows = db()->query('SELECT setting_key, setting_value FROM settings')->fetchAll();
             foreach ($rows as $r) {
@@ -171,7 +177,7 @@ function truncate(string $text, int $length = 90): string {
  * True when a column is present on a table.
  *
  * Used by the public pages to stay readable on an install that has not
- * run database/upgrade.sql yet. A column added to database/schema.sql
+ * run system/03_UPGRADE.sql yet. A column added to database/schema.sql
  * after the site went live does NOT exist on the table that is already
  * there, because every install script creates tables with CREATE TABLE
  * IF NOT EXISTS and therefore never alters one. Rather than have the
@@ -669,22 +675,17 @@ function phone_tel(?string $num): string {
     return $d === '' ? '' : 'tel:+' . $d;
 }
 
-/** The number behind the WhatsApp button: the setting, else the phone. */
+/**
+ * The number behind the WhatsApp button. Never falls back to the company
+ * phone: that number is Airtel and is intentionally call-only.
+ */
 function whatsapp_number_raw(): string {
-    $num = settings('company_whatsapp', '');
-    if (trim((string)$num) === '') {
-        $num = settings('company_phone', '');
-    }
-    return phone_digits($num);
+    return phone_digits(settings('company_whatsapp', ''));
 }
 
 /** The number as a visitor should read it (local format). */
 function whatsapp_number_display(): string {
-    $num = settings('company_whatsapp', '');
-    if (trim((string)$num) === '') {
-        $num = settings('company_phone', '');
-    }
-    return phone_display($num);
+    return phone_display(settings('company_whatsapp', ''));
 }
 
 function whatsapp_url(string $text = ''): string {

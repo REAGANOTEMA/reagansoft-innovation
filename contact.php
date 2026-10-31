@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$phone = settings('company_phone', '+256730314979');
+$phone = settings('company_phone', '+256772514889');
 
 public_head([
     'title'     => 'Contact Us | Reagan Soft Innovation Limited, Jinja, Uganda',

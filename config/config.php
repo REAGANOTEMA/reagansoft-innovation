@@ -135,31 +135,30 @@ define('APP_VERSION', '2.0.0');
 /* ------------------------------------------------------------------
  * Database configuration
  * ------------------------------------------------------------------
- * ONE database is used for the whole application, named
+ * The application uses ONE active database:
  *
- *      reagansoft_clients
+ *      reagansoft_system
  *
- * The matching admin store
+ * A second, identical database mirrors the same schema and data:
  *
- *      reagansoft_admin
+ *      reagansoft_website
  *
- * mirrors the same schema and data on the host account alongside
- * it. It is created and kept in step by install.php; set
- * RSI_DB_MIRROR to '' to skip it.
+ * install.php keeps the mirror in step. Each database has its own
+ * account credentials; set RSI_DB_MIRROR to '' to skip the mirror.
  *
- * Defaults below use the host-account credentials. To override for
- * another environment either:
+ * To override for another environment either:
  *
  *  1. edit the lines below, or
  *  2. set these environment variables on the server:
  *       RSI_DB_HOST  RSI_DB_NAME  RSI_DB_USER  RSI_DB_PASS  RSI_DB_MIRROR
+ *       RSI_DB_MIRROR_USER  RSI_DB_MIRROR_PASS
  * ------------------------------------------------------------------ */
 /**
  * Reads an environment variable, treating "set but empty" as a real
  * value rather than as "not set".
  *
  * The mirror database is the reason this exists. With the usual
- * `getenv('RSI_DB_MIRROR') ?: 'reagansoft_admin'`, setting the variable
+ * `getenv('RSI_DB_MIRROR') ?: 'reagansoft_website'`, setting the variable
  * to an empty string — the documented way to switch the mirror off on a
  * single-database host — was falsy, so PHP fell back to the default and
  * the mirror stayed switched on. rsi_env() returns '' for an empty
@@ -175,10 +174,12 @@ function rsi_env(string $name): ?string
 }
 
 define('DB_HOST', rsi_env('RSI_DB_HOST') ?: 'localhost');
-define('DB_NAME', rsi_env('RSI_DB_NAME') ?: 'reagansoft_clients');
-define('DB_MIRROR', rsi_env('RSI_DB_MIRROR') ?? 'reagansoft_admin');
-define('DB_USER', rsi_env('RSI_DB_USER') ?: 'reagansoft_reagansoft');
-define('DB_PASS', rsi_env('RSI_DB_PASS') ?: 'Lovely2God');
+define('DB_NAME', rsi_env('RSI_DB_NAME') ?: 'reagansoft_system');
+define('DB_MIRROR', rsi_env('RSI_DB_MIRROR') ?? 'reagansoft_website');
+define('DB_USER', rsi_env('RSI_DB_USER') ?: 'reagansoft_system');
+define('DB_PASS', rsi_env('RSI_DB_PASS') ?: 'f.o9Wv2dP5Tmv]?+');
+define('DB_MIRROR_USER', rsi_env('RSI_DB_MIRROR_USER') ?: 'reagansoft_website');
+define('DB_MIRROR_PASS', rsi_env('RSI_DB_MIRROR_PASS') ?: 'dORp*y_e[2@&JjD}');
 
 define('MAX_UPLOAD_BYTES', 10 * 1024 * 1024);        // 10 MB
 define('UPLOAD_DIR', __DIR__ . '/../uploads/');

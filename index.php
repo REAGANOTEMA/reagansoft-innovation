@@ -273,7 +273,7 @@ public_head([
               <span class="brand-text">Reagan Soft <b>Innovation</b></span>
             </div>
             <div class="founder-contact">
-              <span><?= icon('phone') ?><?= e(settings('company_phone', '+256730314979')) ?></span>
+              <span><?= icon('phone') ?><?= e(settings('company_phone', '+256772514889')) ?></span>
               <span><?= icon('pin') ?><?= e(settings('company_address', 'Jinja, Uganda')) ?></span>
             </div>
           </div>

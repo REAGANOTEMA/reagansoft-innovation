@@ -60,7 +60,7 @@ public_head([
         <li>correct anything that is wrong or out of date;</li>
         <li>delete your account and your personal data, where the law allows.</li>
       </ul>
-      <p>To make a request, email <?= e(settings('company_email', 'info@reagansoftinnovation.com')) ?> or call <?= e(settings('company_phone', '+256730314979')) ?>. We respond within a reasonable time and never charge for a simple request.</p>
+      <p>To make a request, email <?= e(settings('company_email', 'info@reagansoftinnovation.com')) ?> or call <?= e(settings('company_phone', '+256772514889')) ?>. We respond within a reasonable time and never charge for a simple request.</p>
 
       <h2>Children</h2>
       <p>Our services are for businesses and adults. We do not knowingly collect information from children under 18.</p>

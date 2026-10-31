@@ -288,7 +288,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $method = $_POST['method'] ?? 'other';
         $reference = trim($_POST['reference'] ?? '');
         $decision = $_POST['payment_status'] ?? 'confirmed';
-        if (!in_array($method, ['mtn_momo', 'airtel_money', 'bank', 'cash', 'other'], true)) $method = 'other';
+        if (!in_array($method, ['mtn_momo', 'bank', 'cash', 'other'], true)) $method = 'other';
         $ist = $pdo->prepare('SELECT * FROM invoices WHERE id = ? AND project_id = ?');
         $ist->execute([$invId, $id]);
         $inv = $ist->fetch();
@@ -727,7 +727,7 @@ dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' =>
               <div class="field" style="margin-bottom:8px"><label for="pay_amount_<?= (int)$inv['id'] ?>">Payment amount *</label><input class="input" id="pay_amount_<?= (int)$inv['id'] ?>" type="number" name="amount" min="1" step="100" required value="<?= e((string)$outstanding) ?>"></div>
               <div class="field" style="margin-bottom:8px"><label for="pay_method_<?= (int)$inv['id'] ?>">Method</label>
                 <select class="select" id="pay_method_<?= (int)$inv['id'] ?>" name="method">
-                  <option value="mtn_momo">MTN Mobile Money</option><option value="airtel_money">Airtel Money</option><option value="bank">Bank transfer</option><option value="cash">Cash</option><option value="other">Other</option>
+                  <option value="mtn_momo">MTN Mobile Money</option><option value="bank">Bank transfer</option><option value="cash">Cash</option><option value="other">Other</option>
                 </select>
               </div>
             </div>

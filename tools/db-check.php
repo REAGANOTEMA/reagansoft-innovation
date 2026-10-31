@@ -4,7 +4,7 @@
  *
  * Tells you, in one command, whether the database is reachable,
  * whether the schema is complete, whether the seed data is there
- * and whether the two stores (reagansoft_clients / reagansoft_admin)
+ * and whether the two stores (reagansoft_system / reagansoft_website)
  * still match. Run it after every import or any time a page looks
  * empty:
  *
@@ -64,9 +64,8 @@ try {
 head('Account & privileges');
 /* ------------------------------------------------------------------ */
 /* On shared hosting the site user is often refused the mysql.* system
- * databases, and the database name is chosen by the host (for example
- * "reagansoft_rsi" rather than "reagansoft_clients"). Both facts are
- * printed here so a wrong DB_NAME is obvious straight away. */
+ * databases, and the database name is chosen by the host. Both facts
+ * are printed here so a wrong DB_NAME is obvious straight away. */
 $connectedAs = (string)$pdo->query('SELECT CURRENT_USER()')->fetchColumn();
 line('Connected as', $connectedAs);
 line('Using database', (string)$pdo->query('SELECT DATABASE()')->fetchColumn() ?: '(none selected)', DB_NAME ? 'ok' : 'bad');
@@ -102,7 +101,7 @@ $missing = array_diff($expected, $have);
 $extra   = array_diff($have, $expected);
 line('Tables found', (string)count($have), count($have) >= 15 ? 'ok' : 'bad');
 if ($missing) {
-    line('Missing tables', implode(', ', $missing) . '  <-- run database/install.sql', 'bad');
+    line('Missing tables', implode(', ', $missing) . '  <-- run system/00_INSTALL_ALL.sql', 'bad');
 } else {
     line('Missing tables', 'none');
 }
@@ -153,10 +152,17 @@ if (in_array('settings', $have, true)) {
         $s[$r['setting_key']] = $r['setting_value'];
     }
     foreach (['company_name', 'company_phone', 'company_email', 'company_whatsapp',
-              'payment_mtn_number', 'payment_airtel_number', 'currency'] as $k) {
+              'payment_mtn_number', 'currency'] as $k) {
         $v = $s[$k] ?? '';
         line($k, $v !== '' ? $v : 'not set', $v !== '' ? 'ok' : 'warn');
     }
+    line('payment_airtel_number', ($s['payment_airtel_number'] ?? '') === ''
+        ? 'not used (Airtel is calls only)'
+        : (string)$s['payment_airtel_number'] . '  <-- remove: Airtel is calls only',
+        ($s['payment_airtel_number'] ?? '') === '' ? 'ok' : 'warn');
+    $wa = (string)($s['company_whatsapp'] ?? '');
+    $mtn = (string)($s['payment_mtn_number'] ?? '');
+    line('WhatsApp / MTN match', $wa !== '' && $wa === $mtn ? 'yes' : 'NO  <-- MTN must be the WhatsApp number', $wa !== '' && $wa === $mtn ? 'ok' : 'warn');
 }
 
 /* ------------------------------------------------------------------ */
@@ -166,7 +172,7 @@ if (DB_MIRROR === '' || DB_MIRROR === DB_NAME) {
     line('Mirror', 'disabled (RSI_DB_MIRROR is empty)', 'warn');
 } else {
     try {
-        $m = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_MIRROR . ';charset=utf8mb4', DB_USER, DB_PASS, [
+        $m = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_MIRROR . ';charset=utf8mb4', DB_MIRROR_USER, DB_MIRROR_PASS, [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         ]);

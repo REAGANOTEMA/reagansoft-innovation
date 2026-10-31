@@ -2,15 +2,17 @@
 
 A professional white / deep-blue / light-blue business website with a full PHP + MySQL
 client & admin project-management portal for **Reagan Soft Innovation Limited**
-(Jinja, Uganda). The whole app runs on **one database:**
+(Jinja, Uganda). The app uses two databases:
 
 ```
-reagansoft_clients      <- the app database (this is the one that matters)
-reagansoft_admin        <- identical mirror kept on the same host account
+reagansoft_system      <- active app database (accounts, projects, billing)
+reagansoft_website     <- identical mirror kept on the same host account
 ```
 
-Both are named after the company — `reagansoft_*`. The mirror exists only so the
-hosting account keeps a second, identical store; the app never reads from it.
+Both are named after the company — `reagansoft_*` — and each has its own login
+credentials in `config/config.php`. `install.php` builds the system database from
+`system/` and the website database from `website/`. The app reads and writes only
+`reagansoft_system`; the mirror is a full, importable copy.
 
 ## What's included
 
@@ -30,9 +32,9 @@ hosting account keeps a second, identical store; the app never reads from it.
    "Sign in &nbsp;·&nbsp; Create account" gate at the end).
 3. Signing in or registering returns you to the exact checkout step with your
    program remembered.
-4. Submit the deposit (MTN MoMo / Airtel Money / bank / cash / other) with your
-   transaction reference. The payment is confirmed by the team, credited against
-   your quotation.
+4. Submit the deposit (MTN MoMo / bank / cash / other) with your transaction
+   reference. The payment is confirmed by the team and credited against your
+   quotation. MTN is also the WhatsApp number; Airtel is for phone calls only.
 
 **Client portal**
 - Dashboard, projects, files, messages, quotations, invoices, notifications, profile
@@ -76,57 +78,58 @@ and refresh the browser. Uploading the folder to any PHP 8 host is a deployment.
 **Recommended — web installer (one click)**
 1. Start Apache + MySQL in the XAMPP control panel.
 2. Open <http://localhost/reagansoft-innovation/install.php> and click one button.
-   It creates `reagansoft_clients`, imports `database/schema.sql`, then
-   `database/seed.sql`, then brings the `reagansoft_admin` mirror into the
-   same state.
+   It creates `reagansoft_system` from `system/` and then builds the identical
+   `reagansoft_website` mirror from `website/`.
 3. **Delete `install.php`** afterwards.
 
 **Alternative — phpMyAdmin**
-1. Open <http://localhost/phpmyadmin> → **Import** → choose `database/install.sql` → **Go**
-   (database + tables + demo data in one step).
+1. Open <http://localhost/phpmyadmin> → **Import**.
+2. Import `system/00_INSTALL_ALL.sql` for the active database.
+3. Import `website/00_INSTALL_ALL.sql` for the mirror database.
 
 **Alternative — command line** (run from the project folder)
 ```bash
-cmd /c "C:\xampp\mysql\bin\mysql.exe -u reagansoft_reagansoft -p < database\install.sql"
+cmd /c "C:\xampp\mysql\bin\mysql.exe -u reagansoft_system -p < system\00_INSTALL_ALL.sql"
+cmd /c "C:\xampp\mysql\bin\mysql.exe -u reagansoft_website -p < website\00_INSTALL_ALL.sql"
 ```
 
-### Where to run each file in `database/`
+### Where to run each file
 
-Every file selects `reagansoft_clients` itself, so the database you pick in
-phpMyAdmin is ignored. Pick the method, then run the file:
+Both folders contain the same complete pack, wired to a different database.
+Every file selects its own database, so the database you pick in phpMyAdmin is
+replaced by the file's `USE` statement.
 
-| File               | What it does                                             | Safe to re-run |
-|--------------------|----------------------------------------------------------|----------------|
-| `install.sql`      | schema + demo data in one import (phpMyAdmin / CLI)      | yes            |
-| `schema.sql`       | creates the database and the 15 tables                   | yes            |
-| `seed.sql`         | services, settings, accounts, demo projects & invoices   | yes            |
-| `admin.sql`        | admin + staff logins only                                | yes            |
-| `client.sql`       | the five demo client logins only                         | yes            |
-| `reset.sql`        | **drops every table — deletes all data**                 | no (destructive) |
+| File                 | What it does                                           | Safe to re-run |
+|----------------------|--------------------------------------------------------|----------------|
+| `00_INSTALL_ALL.sql` | schema + seed + upgrade in one import                  | yes            |
+| `01_SCHEMA.sql`      | creates the database and the 15 tables                 | yes            |
+| `02_SEED.sql`        | services, settings, accounts, demo projects & invoices | yes            |
+| `03_UPGRADE.sql`     | adds columns and repairs an older install              | yes            |
+| `04_VERIFY.sql`      | read-only table and row-count checks                   | yes            |
+| `05_INSTALL_PORTABLE.sql` | for host-named databases: select the DB, then import | yes        |
+| `99_RESET.sql`       | **drops every table — deletes all data**               | no (destructive) |
 
-- **phpMyAdmin:** Import tab → choose the file → Go. `install.sql` is the one to
-  pick for a fresh site; the others are for topping up an existing one.
-- **Command line:** `mysql -u USER -p < database\FILE.sql`
+- **phpMyAdmin:** Import tab → choose the file → Go. `00_INSTALL_ALL.sql` is the
+  one to pick for a fresh site; the others are for topping up an existing one.
+- **Command line:** `mysql -u USER -p < system\FILE.sql` (or `website\FILE.sql`).
 - **Web:** only `install.php`. The `.sql` files are blocked from the browser by
   `.htaccess`, deliberately.
-- **Clean rebuild:** `reset.sql` → `install.sql`. Nothing else, and only when
-  you intend to lose the data.
+- **Clean rebuild:** `99_RESET.sql` → `00_INSTALL_ALL.sql`. Nothing else, and
+  only when you intend to lose the data.
 
-Every script except `reset.sql` is non-destructive: tables use
+Every script except `99_RESET.sql` is non-destructive: tables use
 `CREATE TABLE IF NOT EXISTS` and every row is matched on its natural key
 (`slug`, `setting_key`, `email`, `ref_no`, `quotation_no`, `invoice_no`,
-`reference`, title), so re-importing updates instead of duplicating. A clean
-rebuild is `reset.sql` → `schema.sql` → `seed.sql`, or just `reset.sql` →
-`install.sql`.
+`reference`, title), so re-importing updates instead of duplicating.
 
-`admin.sql` and `client.sql` also create the `users` table if it is missing and
-qualify every table name (`reagansoft_clients`.`users`), so they can be run from
-phpMyAdmin with **any** database selected. Error 1146
-*"Table 'reagansoft_xxx.users' doesn't exist"* simply means the schema has never
-been imported — run `install.sql` (or open `install.php`) once.
+The canonical sources live in `database/`. Both packs are generated from them:
 
-`install.sql` is generated from `schema.sql` + `seed.sql`; edit those two and
-regenerate rather than editing the copies in the lower half of `install.sql`.
+```bash
+php tools/build-sql.php
+```
+
+Edit `database/schema.sql`, `database/seed.sql`, `database/upgrade.sql` or
+`database/reset.sql`, then rebuild. Do not hand-edit the generated copies.
 
 Seed rows never hard-code an ID. Each one looks its parent up by its natural key
 (`email`, `slug`, `ref_no`, `quotation_no`, `invoice_no`), because MySQL and
@@ -149,37 +152,34 @@ should report *"Images are healthy"* — run it after swapping any artwork.
 
 ## Deploying to shared hosting (cPanel / Plesk)
 
-Shared hosts usually give you **one** database, **name it themselves**, and
-forbid `CREATE DATABASE`. Two symptoms follow from that, and both are
-already handled — this section only explains which file to use.
+Shared hosts often name databases themselves and forbid `CREATE DATABASE`.
+For that setup use the portable file inside each pack:
 
-```
-#1044 - Access denied for user 'you'@'localhost' to database 'information_schema'
-#1044 - Access denied for user 'you'@'localhost' to database 'reagansoft_clients'
-```
-
-| File                     | Use it when                                                    |
-|--------------------------|----------------------------------------------------------------|
-| `install.sql`            | XAMPP, VPS or dedicated server — you may create databases       |
-| **`install-portable.sql`**| **shared hosting — select your database in phpMyAdmin first**    |
+| File                        | Use it when                                                   |
+|-----------------------------|---------------------------------------------------------------|
+| `00_INSTALL_ALL.sql`        | XAMPP, VPS or dedicated server — you may create databases      |
+| **`05_INSTALL_PORTABLE.sql`** | **shared hosting — select your database in phpMyAdmin first** |
 
 **Steps**
-1. In the host panel create a database and a database user. Note the exact
-   database name — it is usually prefixed, e.g. `reagansoft_rsi`.
-2. Give that user **all privileges on that one database** and nothing else.
-3. In phpMyAdmin, **click your database in the left-hand list** so it is the
-   selected one.
-4. Import `database/install-portable.sql` (Import → choose file → Go).
-5. Point the app at it — either in `config/config.php`:
+1. In the host panel create the databases and their users. If your host gives
+   different names (for example `acct_reagansoft_system`), note them exactly.
+2. Give each user **all privileges on its own database** and nothing else.
+3. In phpMyAdmin, **click the target database in the left-hand list**.
+4. Import `05_INSTALL_PORTABLE.sql` from the matching folder.
+5. Point the app at the real names and credentials in `config/config.php`:
    ```php
-   define('DB_NAME', 'reagansoft_rsi');   // the host's name, not ours
+   define('DB_NAME', 'acct_reagansoft_system');
+   define('DB_USER', 'acct_system_user');
+   define('DB_PASS', '...');
+   define('DB_MIRROR', 'acct_reagansoft_website');
+   define('DB_MIRROR_USER', 'acct_website_user');
+   define('DB_MIRROR_PASS', '...');
    ```
-   or with environment variables (`RSI_DB_NAME`, `RSI_DB_USER`, `RSI_DB_PASS`).
+   or use the `RSI_DB_*` environment variables.
 6. Open `install.php` once to confirm, then **delete `install.php` and
    `create_admin.php`**.
 7. Run `php tools/db-check.php` if you have SSH — it prints the connected
-   user, the database actually in use and the privileges, which is the
-   fastest way to spot a mismatch.
+   user, the database actually in use, the mirror state and privileges.
 
 **Single-database hosts:** the mirror database is optional. Switch it off with
 either of these (setting the environment variable to an empty value works on
@@ -194,41 +194,53 @@ RSI_DB_MIRROR=             // empty value on the server
 
 `db-check.php` then reports `Mirror disabled` instead of an access error.
 
-**Regenerating the SQL packages.** `install.sql` and `install-portable.sql`
-are generated from `schema.sql` + `seed.sql` so they can never drift apart.
-After editing either source file run:
+**Regenerating the SQL packages.** Both folders are generated from the
+canonical files in `database/` so they can never drift apart. After editing
+`schema.sql`, `seed.sql`, `upgrade.sql` or `reset.sql` run:
 
 ```bash
 php tools/build-sql.php
 ```
 
-## Configuration — single database, your credentials
+## Configuration — two databases, separate credentials
 
-All settings live in `config/config.php`. To connect to a hosted database (when you
-have the host, name, user and password), either edit those four constants or set
+All settings live in `config/config.php`. The active database and the mirror
+each have their own user and password. Either edit the constants or set
 environment variables — no other file changes anywhere in the app:
 
-| Variable       | Default                          |
-|----------------|----------------------------------|
-| `RSI_APP_URL`  | *auto-detected from the request* (scheme + host + install path) |
-| `RSI_DB_HOST`  | `localhost`                      |
-| `RSI_DB_NAME`  | `reagansoft_clients`             |
-| `RSI_DB_MIRROR`| `reagansoft_admin`               |
-| `RSI_DB_USER`  | `reagansoft_reagansoft`          |
-| `RSI_DB_PASS`  | *(set in `config/config.php`)*   |
-| `RSI_DEBUG`    | *(unset — hides error details)*  |
+| Variable                | Default                          |
+|-------------------------|----------------------------------|
+| `RSI_APP_URL`           | *auto-detected from the request* (scheme + host + install path) |
+| `RSI_DB_HOST`           | `localhost`                      |
+| `RSI_DB_NAME`           | `reagansoft_system`              |
+| `RSI_DB_USER`           | `reagansoft_system`              |
+| `RSI_DB_PASS`           | *(set in `config/config.php`)*   |
+| `RSI_DB_MIRROR`         | `reagansoft_website`             |
+| `RSI_DB_MIRROR_USER`    | `reagansoft_website`             |
+| `RSI_DB_MIRROR_PASS`    | *(set in `config/config.php`)*   |
+| `RSI_DEBUG`             | *(unset — hides error details)*  |
 
-The `reagansoft_reagansoft` database user needs privileges on both
-`reagansoft_clients` (the active app database) and `reagansoft_admin` (its mirror):
+The system user needs privileges on `reagansoft_system`; the website user needs
+privileges on `reagansoft_website`. To create both on a local XAMPP install:
 
 ```sql
-CREATE DATABASE IF NOT EXISTS reagansoft_clients CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE DATABASE IF NOT EXISTS reagansoft_admin   CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-GRANT ALL PRIVILEGES ON reagansoft_clients.* TO 'reagansoft_reagansoft'@'localhost';
-GRANT ALL PRIVILEGES ON reagansoft_admin.*   TO 'reagansoft_reagansoft'@'localhost';
+CREATE DATABASE IF NOT EXISTS reagansoft_system
+  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS reagansoft_website
+  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE USER IF NOT EXISTS 'reagansoft_system'@'localhost'
+  IDENTIFIED BY 'f.o9Wv2dP5Tmv]?+';
+CREATE USER IF NOT EXISTS 'reagansoft_website'@'localhost'
+  IDENTIFIED BY 'dORp*y_e[2@&JjD}';
+
+GRANT ALL PRIVILEGES ON reagansoft_system.*  TO 'reagansoft_system'@'localhost';
+GRANT ALL PRIVILEGES ON reagansoft_website.* TO 'reagansoft_website'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
+If both databases are owned by one MySQL user, set `DB_MIRROR_USER` and
+`DB_MIRROR_PASS` to the same values as `DB_USER` and `DB_PASS`.
 Set `RSI_DB_MIRROR=''` if the host account only allows a single database.
 
 Ensure `uploads/` is writable by PHP; `storage/logs/` is created automatically.
@@ -250,8 +262,9 @@ Password for **every** account below: `Reagan@2026` — change these in producti
 The hotel signs in to the client portal and can see project **RSI-2026-00006**
 (website & booking enquiry) with its three tasks and message thread. Every row is
 a **placeholder** — replace the name, email, phone and address in
-`database/seed.sql`, then re-run `install.sql` (or edit the account in
-Admin → Clients) before going live.
+`database/seed.sql`, rebuild the packs with `php tools/build-sql.php`, then
+re-import `00_INSTALL_ALL.sql` (or edit the account in Admin → Clients) before
+going live.
 
 A seeded admin already exists, so `create_admin.php` refuses to run. Customise
 company/payment details under **Admin → Settings**.
@@ -265,6 +278,7 @@ company/payment details under **Admin → Settings**.
 - Keep `uploads/` out of the public root; `uploads/.htaccess` already blocks
   script execution there.
 - Schedule database + uploads backups; wire email/SMS/WhatsApp (`inc/functions.php` → `rs_mail()`).
-- Integrate MTN MoMo / Airtel Money only with the company's merchant credentials.
+- Integrate MTN MoMo only with the company's merchant credentials. MTN is also
+  the WhatsApp number; Airtel is for voice calls only.
 - Run `php tools/db-check.php` after any import.
 - Review Privacy/Terms/Cookie/Refund policy content before going live.

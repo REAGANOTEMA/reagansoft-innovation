@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'method'       => $_POST['method'] ?? 'mtn_momo',
             'reference'    => trim($_POST['reference'] ?? ''),
         ];
-        if (!in_array($values['method'], ['mtn_momo', 'airtel_money', 'bank', 'cash', 'other'], true)) {
+        if (!in_array($values['method'], ['mtn_momo', 'bank', 'cash', 'other'], true)) {
             $values['method'] = 'mtn_momo';
         }
 
@@ -281,7 +281,7 @@ public_head([
             <div class="field">
               <label for="cs_method">Payment method <span class="req">*</span></label>
               <select class="select" id="cs_method" name="method" required>
-                <?php foreach (['mtn_momo' => 'MTN Mobile Money', 'airtel_money' => 'Airtel Money', 'bank' => 'Bank transfer', 'cash' => 'Cash', 'other' => 'Other'] as $k => $v): ?>
+                <?php foreach (['mtn_momo' => 'MTN Mobile Money', 'bank' => 'Bank transfer', 'cash' => 'Cash', 'other' => 'Other'] as $k => $v): ?>
                   <option value="<?= $k ?>" <?= old('method', $values['method']) === $k ? 'selected' : '' ?>><?= $v ?></option>
                 <?php endforeach; ?>
               </select>

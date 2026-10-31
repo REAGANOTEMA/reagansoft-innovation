@@ -519,7 +519,7 @@ function folio_scope(?string $requirements, int $limit = 4): string {
 
 
 function public_footer(): void {
-    $phone = settings('company_phone', '+256730314979');
+    $phone = settings('company_phone', '+256772514889');
     $email = settings('company_email', '');
     $address = settings('company_address', 'Jinja, Uganda');
     $fb = settings('company_fb', '');
@@ -818,7 +818,7 @@ function icon_social(string $name): string {
 function payment_method_label(string $method): string {
     return [
         'mtn_momo'     => 'MTN Mobile Money',
-        'airtel_money' => 'Airtel Money',
+        'airtel_money' => 'Airtel Money (legacy record)',
         'bank'         => 'Bank transfer',
         'cash'         => 'Cash',
         'other'        => 'Other',
@@ -827,18 +827,14 @@ function payment_method_label(string $method): string {
 
 function payment_instructions_html(): string {
     $mtn = settings('payment_mtn_number', '');
-    $airtel = settings('payment_airtel_number', '');
     $bank = settings('payment_bank_details', '');
-    if ($mtn === '' && $airtel === '' && $bank === '') {
+    if ($mtn === '' && $bank === '') {
         return '';
     }
     ob_start();
     echo '<div class="pay-details">';
     if ($mtn !== '') {
-        echo '<div class="pay-box"><span class="pbx-icon">' . icon('phone') . '</span><div><b>MTN Mobile Money</b><span class="pbx-num">' . e($mtn) . '</span><p>Send the amount to this number, then submit the payment below with the MoMo transaction reference so we can confirm it quickly.</p></div></div>';
-    }
-    if ($airtel !== '') {
-        echo '<div class="pay-box"><span class="pbx-icon">' . icon('phone') . '</span><div><b>Airtel Money</b><span class="pbx-num">' . e($airtel) . '</span><p>Send the amount to this number, then submit the payment below with the transaction reference.</p></div></div>';
+        echo '<div class="pay-box"><span class="pbx-icon">' . icon('phone') . '</span><div><b>MTN Mobile Money / WhatsApp</b><span class="pbx-num">' . e($mtn) . '</span><p>Send the amount to this MTN number, then submit the payment below with the MoMo transaction reference so we can confirm it quickly. Airtel is for phone calls only.</p></div></div>';
     }
     if (trim($bank) !== '') {
         echo '<div class="pay-box"><span class="pbx-icon">' . icon('money') . '</span><div><b>Bank transfer</b>' . nl2br(e(trim($bank))) . '</div></div>';

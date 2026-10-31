@@ -29,6 +29,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($key === 'registration_open') { $val = isset($_POST['registration_open']) ? '1' : '0'; }
             $up->execute([$key, $val]);
         }
+        // MTN is the single WhatsApp + Mobile Money number. Keeping these
+        // two keys identical stops the footer and checkout from disagreeing.
+        $mtn = trim((string)($_POST['payment_mtn_number'] ?? ''));
+        if ($mtn === '') {
+            $current = $pdo->query("SELECT setting_value FROM settings WHERE setting_key = 'payment_mtn_number'")->fetchColumn();
+            $mtn = trim((string)$current);
+        }
+        if ($mtn !== '') {
+            $up->execute(['payment_mtn_number', $mtn]);
+            $up->execute(['company_whatsapp', $mtn]);
+        }
+        // Airtel is calls-only; clear any legacy payment destination.
+        $up->execute(['payment_airtel_number', '']);
         $pdo->commit();
         audit('settings_updated', 'settings', 0, 'Company settings updated by ' . $me['full_name']);
         flash('success', 'Settings saved.');
@@ -66,7 +79,7 @@ dashboard_head(['title' => 'Settings', 'active' => 'settings', 'crumb' => 'Setti
     </div>
     <div class="form-row">
       <div class="field"><label for="company_founder">Founder</label><input class="input" id="company_founder" name="company_founder" maxlength="120" value="<?= e($cfg['company_founder']) ?>"></div>
-      <div class="field"><label for="company_phone">Phone</label><input class="input" id="company_phone" name="company_phone" maxlength="40" value="<?= e($cfg['company_phone']) ?>"></div>
+      <div class="field"><label for="company_phone">Phone (Airtel &mdash; calls only)</label><input class="input" id="company_phone" name="company_phone" maxlength="40" value="<?= e($cfg['company_phone']) ?>"><div class="form-note">Used for phone calls only, never as a payment number.</div></div>
     </div>
     <div class="form-row">
       <div class="field"><label for="company_email">Email</label><input class="input" id="company_email" name="company_email" type="email" maxlength="190" value="<?= e($cfg['company_email']) ?>"></div>
@@ -74,9 +87,9 @@ dashboard_head(['title' => 'Settings', 'active' => 'settings', 'crumb' => 'Setti
     </div>
     <div class="form-row">
       <div class="field">
-        <label for="company_whatsapp">WhatsApp number</label>
+        <label for="company_whatsapp">WhatsApp number (MTN)</label>
         <input class="input" id="company_whatsapp" name="company_whatsapp" maxlength="40" value="<?= e($cfg['company_whatsapp']) ?>" placeholder="0730314979 or +256730314979">
-        <div class="form-note">Local or international format both work &mdash; <?= e(whatsapp_number_display() !== '' ? whatsapp_number_display() : 'the number') ?> links as <code>wa.me/<?= e(whatsapp_number_raw()) ?></code>. Leave empty to fall back to the phone above.</div>
+        <div class="form-note">This must be the MTN number. It links as <code>wa.me/<?= e(whatsapp_number_raw()) ?></code> and is kept in step with the MTN MoMo number below.</div>
       </div>
       <div class="field"><label for="company_fb">Facebook URL</label><input class="input" id="company_fb" name="company_fb" maxlength="255" value="<?= e($cfg['company_fb']) ?>"></div>
     </div>
@@ -105,8 +118,8 @@ dashboard_head(['title' => 'Settings', 'active' => 'settings', 'crumb' => 'Setti
   <section class="panel">
     <div class="panel-head"><h3><?= icon('settings') ?> Payment details</h3></div>
     <div class="form-row">
-      <div class="field"><label for="payment_mtn_number">MTN MoMo number</label><input class="input" id="payment_mtn_number" name="payment_mtn_number" maxlength="40" value="<?= e($cfg['payment_mtn_number']) ?>"></div>
-      <div class="field"><label for="payment_airtel_number">Airtel Money number</label><input class="input" id="payment_airtel_number" name="payment_airtel_number" maxlength="40" value="<?= e($cfg['payment_airtel_number']) ?>"></div>
+      <div class="field"><label for="payment_mtn_number">MTN MoMo number (also WhatsApp)</label><input class="input" id="payment_mtn_number" name="payment_mtn_number" maxlength="40" value="<?= e($cfg['payment_mtn_number']) ?>"><div class="form-note">Saving this also updates the WhatsApp number to match.</div></div>
+      <div class="field"><label>Airtel number</label><div class="input" style="display:flex;align-items:center;background:var(--sky-50)"><?= e($cfg['company_phone'] ?: 'Set the company phone above') ?></div><div class="form-note">Phone calls only. Airtel is not a payment destination.</div></div>
     </div>
     <div class="field"><label for="payment_bank_details">Bank details</label><textarea class="textarea" id="payment_bank_details" name="payment_bank_details" rows="3" placeholder="Bank name, account name, account number…"><?= e($cfg['payment_bank_details']) ?></textarea></div>
     <div class="form-row">

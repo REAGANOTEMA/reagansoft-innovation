@@ -2,7 +2,8 @@
 /**
  * Reagan Soft Innovation Limited — one-click database installer.
  *
- * Creates the database, imports database/schema.sql, then database/seed.sql.
+ * Creates reagansoft_system from the system/ SQL pack, then builds the
+ * reagansoft_website mirror from the website/ pack.
  * Reads its connection settings from config/config.php (edit those, or set the
  * RSI_DB_* environment variables) — so the same file works on XAMPP and on a
  * hosted server.
@@ -16,10 +17,10 @@ require __DIR__ . '/config/config.php';
 /* Helpers                                                             */
 /* ------------------------------------------------------------------ */
 
-function rsi_connect(string $dbName = ''): PDO
+function rsi_connect(string $dbName = '', ?string $user = null, ?string $pass = null): PDO
 {
     $dsn = 'mysql:host=' . DB_HOST . ';charset=utf8mb4' . ($dbName !== '' ? ';dbname=' . $dbName : '');
-    return new PDO($dsn, DB_USER, DB_PASS, [
+    return new PDO($dsn, $user ?? DB_USER, $pass ?? DB_PASS, [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES   => false,
@@ -127,7 +128,7 @@ function rsi_run_file(PDO $pdo, string $file, array &$log, array &$errors): int
 {
     $sql = @file_get_contents($file);
     if ($sql === false || trim($sql) === '') {
-        $errors[] = 'Could not read ' . basename($file) . ' — make sure the database/ folder came with the project.';
+        $errors[] = 'Could not read ' . basename($file) . ' — make sure the system/ and website/ folders came with the project.';
         return 0;
     }
     $count = 0;
@@ -185,15 +186,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             //     destructive step, and it is why schema.sql itself is
             //     non-destructive.
             if ($do === 'reinstall') {
-                rsi_run_file($pdo, __DIR__ . '/database/reset.sql', $log, $errors);
+                rsi_run_file($pdo, __DIR__ . '/system/99_RESET.sql', $log, $errors);
                 $log[] = 'Existing tables dropped — starting from an empty database.';
             }
 
             // 2. Tables.
-            rsi_run_file($pdo, __DIR__ . '/database/schema.sql', $log, $errors);
+            rsi_run_file($pdo, __DIR__ . '/system/01_SCHEMA.sql', $log, $errors);
 
             // 3. Seed data (services, settings, demo accounts, samples).
-            rsi_run_file($pdo, __DIR__ . '/database/seed.sql', $log, $errors);
+            rsi_run_file($pdo, __DIR__ . '/system/02_SEED.sql', $log, $errors);
 
             // 3b. Upgrades. schema.sql only ever CREATEs tables, so on a
             //     site that was installed before a column was added, that
@@ -201,21 +202,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             //     current code expects and is a no-op when it is already
             //     there, which is also why it is safe to run on a fresh
             //     install straight after the seed.
-            rsi_run_file($pdo, __DIR__ . '/database/upgrade.sql', $log, $errors);
+            rsi_run_file($pdo, __DIR__ . '/system/03_UPGRADE.sql', $log, $errors);
 
-            // 4. Mirror database (reagansoft_admin) — same schema and data.
-            //    Optional: a host account without a second database simply
-            //    gets a note instead of a failed installation.
+            // 4. Mirror database (reagansoft_website) — same schema and data.
+            //    Each database has its own account credentials. Optional: a
+            //    host account without a second database simply gets a note
+            //    instead of a failed installation.
             $mirror = preg_replace('/[^A-Za-z0-9_]/', '', (string)DB_MIRROR);
             if ($mirror !== '' && $mirror !== $ident) {
                 try {
-                    rsi_connect('')->exec(
+                    rsi_connect('', DB_MIRROR_USER, DB_MIRROR_PASS)->exec(
                         'CREATE DATABASE IF NOT EXISTS `' . $mirror . '` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci'
                     );
-                    $mpdo = rsi_connect($mirror);
-                    rsi_run_file($mpdo, __DIR__ . '/database/schema.sql', $mirror_log, $mirror_errors);
-                    rsi_run_file($mpdo, __DIR__ . '/database/seed.sql', $mirror_log, $mirror_errors);
-                    rsi_run_file($mpdo, __DIR__ . '/database/upgrade.sql', $mirror_log, $mirror_errors);
+                    $mpdo = rsi_connect($mirror, DB_MIRROR_USER, DB_MIRROR_PASS);
+                    if ($do === 'reinstall') {
+                        rsi_run_file($mpdo, __DIR__ . '/website/99_RESET.sql', $mirror_log, $mirror_errors);
+                    }
+                    rsi_run_file($mpdo, __DIR__ . '/website/01_SCHEMA.sql', $mirror_log, $mirror_errors);
+                    rsi_run_file($mpdo, __DIR__ . '/website/02_SEED.sql', $mirror_log, $mirror_errors);
+                    rsi_run_file($mpdo, __DIR__ . '/website/03_UPGRADE.sql', $mirror_log, $mirror_errors);
                     $log[] = 'Mirror database `' . DB_MIRROR . '` is in step with `' . DB_NAME . '`.';
                 } catch (Throwable $e) {
                     $mirror_errors[] = 'Mirror `' . DB_MIRROR . '`: ' . substr($e->getMessage(), 0, 200);
@@ -338,7 +343,7 @@ header('Content-Type: text/html; charset=utf-8');
     </div>
 
     <h1>Set up your database</h1>
-    <p class="lead" style="font-size:15.5px">This installer creates <b><?= e(DB_NAME) ?></b>, imports the schema and loads the services, settings and demo accounts<?= DB_MIRROR !== '' && DB_MIRROR !== DB_NAME ? ', then brings the mirror store <b>' . e(DB_MIRROR) . '</b> into the same state' : '' ?>. Running it again is safe — it never deletes anything.</p>
+    <p class="lead" style="font-size:15.5px">This installer creates <b><?= e(DB_NAME) ?></b> from the <b>system/</b> SQL pack and loads the services, settings and demo accounts<?= DB_MIRROR !== '' && DB_MIRROR !== DB_NAME ? ', then builds the <b>' . e(DB_MIRROR) . '</b> mirror from the <b>website/</b> pack' : '' ?>. Running it again is safe — it never deletes anything.</p>
 
     <div class="meta-grid">
       <div class="meta-item"><small>Database</small><b><?= e(DB_NAME) ?></b></div>
@@ -406,7 +411,7 @@ header('Content-Type: text/html; charset=utf-8');
 
       <div class="danger-zone">
         <h4 style="color:var(--red)">Danger zone</h4>
-        <p class="small muted">Reinstalling runs <b>database/reset.sql</b>, which drops every table and reloads the demo data. Type the database name to confirm.</p>
+        <p class="small muted">Reinstalling runs <b>system/99_RESET.sql</b> and <b>website/99_RESET.sql</b>, which drop every table and reload the demo data. Type the database name to confirm.</p>
         <form method="post" onsubmit="return confirm('This wipes all current data in <?= e(DB_NAME) ?>. Continue?');">
           <?= csrf_field() ?>
           <input type="hidden" name="do" value="reinstall">

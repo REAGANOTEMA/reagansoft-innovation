@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $amount = (float)($_POST['amount'] ?? 0);
         $method = $_POST['method'] ?? 'other';
         $reference = trim($_POST['reference'] ?? '');
-        if (!in_array($method, ['mtn_momo', 'airtel_money', 'bank', 'cash', 'other'], true)) $method = 'other';
+        if (!in_array($method, ['mtn_momo', 'bank', 'cash', 'other'], true)) $method = 'other';
         $ist = $pdo->prepare('SELECT * FROM invoices WHERE id = ? AND project_id = ? AND client_id = ?');
         $ist->execute([$invId, $id, (int)current_user()['id']]);
         $inv = $ist->fetch();
@@ -383,7 +383,6 @@ dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' =>
                 <div class="field"><label for="method">Payment method *</label>
                   <select class="select" id="method" name="method" required>
                     <option value="mtn_momo">MTN Mobile Money</option>
-                    <option value="airtel_money">Airtel Money</option>
                     <option value="bank">Bank transfer</option>
                     <option value="cash">Cash</option>
                     <option value="other">Other</option>

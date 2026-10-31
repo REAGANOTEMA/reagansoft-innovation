@@ -16,7 +16,7 @@ require __DIR__ . '/config/config.php';
  * ------------------------------------------------------------------
  * website_url, deliverables and cover_art were added to the projects
  * table after the first release. An install that has not run
- * database/upgrade.sql yet does not have them, and asking for a column
+ * system/03_UPGRADE.sql yet does not have them, and asking for a column
  * the table lacks would throw and leave the gallery empty. So the
  * query is built from what is actually there: an un-migrated site
  * still shows its delivered projects, just without the live links,

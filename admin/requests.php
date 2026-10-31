@@ -32,7 +32,7 @@ dashboard_head(['title' => 'Requests Queue', 'active' => 'requests', 'crumb' => 
         <div class="folio-body">
           <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px">
             <?= status_badge($r['status']) ?>
-            <span class="small muted"><?= time_ago($r['created_at']) ?></span>
+            <span class="small muted"><?= time_ago($r['submitted_at']) ?></span>
           </div>
           <h3 style="font-size:17px;margin:0 0 4px"><?= e($r['title']) ?></h3>
           <div class="row-sub" style="margin-bottom:8px"><?= e($r['ref_no']) ?> · <?= e($r['service'] ?? 'General') ?></div>

@@ -134,3 +134,13 @@ Stack trace:
   IP: 127.0.0.1  URI: /reagansoft-innovation/client/project.php?id=3
 [2026-09-26 08:56:52] CSRF verification failed
   IP: 127.0.0.1  URI: /reagansoft-innovation/client/project.php?id=3
+[2026-10-31 09:50:43] DB connection failed (reagansoft_system@localhost/reagansoft_system): SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it
+  IP: ::1  URI: /reagansoft-innovation/
+[2026-10-31 09:51:16] DB connection failed (reagansoft_system@localhost/reagansoft_system): SQLSTATE[HY000] [1045] Access denied for user 'reagansoft_system'@'localhost' (using password: YES)
+  IP: ::1  URI: /reagansoft-innovation/
+[2026-10-31 09:51:22] DB connection failed (reagansoft_system@localhost/reagansoft_system): SQLSTATE[HY000] [1045] Access denied for user 'reagansoft_system'@'localhost' (using password: YES)
+  IP: ::1  URI: /reagansoft-innovation/
+[2026-10-31 09:51:26] DB connection failed (reagansoft_system@localhost/reagansoft_system): SQLSTATE[HY000] [1045] Access denied for user 'reagansoft_system'@'localhost' (using password: YES)
+  IP: ::1  URI: /reagansoft-innovation/
+[2026-10-31 09:53:12] CSRF verification failed
+  IP: 127.0.0.1  URI: /login.php

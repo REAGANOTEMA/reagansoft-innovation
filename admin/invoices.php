@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $invId = (int)($_POST['invoice_id'] ?? 0);
         $amount = (float)($_POST['amount'] ?? 0);
         $method = $_POST['method'] ?? 'other';
-        if (!in_array($method, ['mtn_momo', 'airtel_money', 'bank', 'cash', 'other'], true)) $method = 'other';
+        if (!in_array($method, ['mtn_momo', 'bank', 'cash', 'other'], true)) $method = 'other';
         $reference = trim($_POST['reference'] ?? '') ?: null;
         $decision = $_POST['payment_status'] ?? 'confirmed';
         $inv = $pdo->prepare('SELECT i.*, p.client_id, p.id AS project_id FROM invoices i JOIN projects p ON p.id = i.project_id WHERE i.id = ?');
@@ -224,7 +224,7 @@ dashboard_head(['title' => 'Invoices', 'active' => 'invoices', 'crumb' => 'Invoi
                     <div class="field"><label for="amount_<?= (int)$i['id'] ?>">Amount (<?= e($currency) ?>) *</label><input class="input" id="amount_<?= (int)$i['id'] ?>" name="amount" type="number" min="1" step="100" required value="<?= e((string)($outstanding > 0 ? $outstanding : $i['total'])) ?>"></div>
                     <div class="field"><label for="method_<?= (int)$i['id'] ?>">Method</label>
                       <select class="select" id="method_<?= (int)$i['id'] ?>" name="method">
-                        <?php foreach (['mtn_momo' => 'MTN MoMo', 'airtel_money' => 'Airtel Money', 'bank' => 'Bank transfer', 'cash' => 'Cash', 'other' => 'Other'] as $k => $v): ?><option value="<?= $k ?>" <?= $k === 'other' ? 'selected' : '' ?>><?= $v ?></option><?php endforeach; ?>
+                        <?php foreach (['mtn_momo' => 'MTN MoMo', 'bank' => 'Bank transfer', 'cash' => 'Cash', 'other' => 'Other'] as $k => $v): ?><option value="<?= $k ?>" <?= $k === 'other' ? 'selected' : '' ?>><?= $v ?></option><?php endforeach; ?>
                       </select>
                     </div>
                   </div>
