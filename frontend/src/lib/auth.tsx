@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { api, setCsrf } from './api';
+import { api, getCsrf, setCsrf } from './api';
 import type { User } from './types';
 
 interface AuthState {
@@ -35,6 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [refresh]);
 
   const login = useCallback(async (email: string, password: string) => {
+    if (!getCsrf()) await refresh();
     const res = await api<{ user: User; csrf: string }>('auth/login', {
       method: 'POST',
       body: { email, password },
@@ -42,9 +43,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setCsrf(res.data.csrf);
     setUserState(res.data.user);
     return res.data.user;
-  }, []);
+  }, [refresh]);
 
   const register = useCallback(async (payload: Record<string, unknown>) => {
+    if (!getCsrf()) await refresh();
     const res = await api<{ user: User; csrf: string }>('auth/register', {
       method: 'POST',
       body: payload,
@@ -52,7 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setCsrf(res.data.csrf);
     setUserState(res.data.user);
     return res.data.user;
-  }, []);
+  }, [refresh]);
 
   const logout = useCallback(async () => {
     try {
