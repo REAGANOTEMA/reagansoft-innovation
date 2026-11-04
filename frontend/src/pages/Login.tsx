@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Eye, EyeOff, Lock, Mail, ShieldCheck, Sparkles } from 'lucide-react';
 import { useAuth } from '../lib/auth';
@@ -27,7 +27,7 @@ export function Login() {
     return <Navigate to={from ?? (user.role === 'client' ? '/portal' : '/console')} replace />;
   }
 
-  async function submit(event: React.FormEvent) {
+  async function submit(event: FormEvent) {
     event.preventDefault();
     setError('');
     setBusy(true);

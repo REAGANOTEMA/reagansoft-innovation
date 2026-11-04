@@ -39,6 +39,12 @@ export interface Settings {
   site_announcement?: string;
   support_email?: string;
   newsletter_enabled?: string;
+  tax_percent?: string;
+  invoices_due_days?: string;
+  payment_mtn_number?: string;
+  payment_airtel_number?: string;
+  payment_bank_details?: string;
+  payment_gateway_status?: string;
 }
 
 export interface Service {
@@ -81,6 +87,7 @@ export interface Project {
   updated_at?: string;
   completed_at?: string | null;
   service?: string | null;
+  service_slug?: string | null;
   client_name?: string;
   company?: string | null;
   client_email?: string;

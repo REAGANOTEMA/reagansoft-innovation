@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { api, setCsrf } from './api';
 import type { Project, Service, Settings, SiteData } from './types';
 
@@ -25,6 +25,7 @@ interface SiteContextValue {
   portfolio: Project[];
   stats: SiteData['stats'];
   loading: boolean;
+  refresh: () => Promise<void>;
 }
 
 const SiteContext = createContext<SiteContextValue>({
@@ -33,30 +34,28 @@ const SiteContext = createContext<SiteContextValue>({
   portfolio: [],
   stats: { projects: 0, completed: 0, clients: 0, services: 0 },
   loading: true,
+  refresh: async () => {},
 });
 
 export function SiteProvider({ children }: { children: ReactNode }) {
   const [data, setData] = useState<SiteData | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    let alive = true;
-    api<SiteData>('public/site')
-      .then((res) => {
-        if (!alive) return;
-        setData(res.data);
-        if (res.data.csrf) setCsrf(res.data.csrf);
-      })
-      .catch(() => {
-        /* The fallback content keeps the marketing site usable offline. */
-      })
-      .finally(() => {
-        if (alive) setLoading(false);
-      });
-    return () => {
-      alive = false;
-    };
+  const refresh = useCallback(async () => {
+    try {
+      const res = await api<SiteData>('public/site');
+      setData(res.data);
+      if (res.data.csrf) setCsrf(res.data.csrf);
+    } catch {
+      /* The fallback content keeps the marketing site usable offline. */
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    void refresh();
+  }, [refresh]);
 
   const value = useMemo<SiteContextValue>(
     () => ({
@@ -65,8 +64,9 @@ export function SiteProvider({ children }: { children: ReactNode }) {
       portfolio: data?.portfolio ?? [],
       stats: data?.stats ?? { projects: 0, completed: 0, clients: 0, services: 0 },
       loading,
+      refresh,
     }),
-    [data, loading],
+    [data, loading, refresh],
   );
 
   return <SiteContext.Provider value={value}>{children}</SiteContext.Provider>;

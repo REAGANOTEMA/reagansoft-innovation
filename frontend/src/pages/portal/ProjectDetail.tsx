@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -70,7 +70,7 @@ export function PortalProjectDetail() {
   const balance = invoices.reduce((sum, invoice) => sum + Math.max(0, Number(invoice.total) - Number(invoice.amount_paid)), 0);
   const completedTasks = tasks.filter((task) => task.status === 'COMPLETED').length;
 
-  async function sendMessage(event: React.FormEvent) {
+  async function sendMessage(event: FormEvent) {
     event.preventDefault();
     if (!message.trim()) return;
     setSending(true);
@@ -86,7 +86,7 @@ export function PortalProjectDetail() {
     }
   }
 
-  async function uploadFile(event: React.ChangeEvent<HTMLInputElement>) {
+  async function uploadFile(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
     const form = new FormData();

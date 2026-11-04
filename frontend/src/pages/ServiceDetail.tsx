@@ -118,7 +118,7 @@ export function ServiceDetail() {
                 {included.map((item) => (
                   <div key={item.title} className="flex gap-3 rounded-2xl border border-brand-100 bg-white p-4">
                     <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600">
-                      <item.icon className="h-4.5 w-4.5" />
+                      <item.icon className="h-4 w-4" />
                     </span>
                     <div>
                       <p className="text-[12.5px] font-semibold text-navy-900">{item.title}</p>
@@ -136,7 +136,7 @@ export function ServiceDetail() {
                   <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
                     {service.features.map((feature) => (
                       <li key={feature} className="flex items-start gap-2 text-[13px] text-ink-soft">
-                        <span className="mt-0.5 grid h-4.5 w-4.5 shrink-0 place-items-center rounded-full bg-emerald-100 text-emerald-600">
+                        <span className="mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full bg-emerald-100 text-emerald-600">
                           <Check className="h-3 w-3" strokeWidth={3} />
                         </span>
                         {feature}

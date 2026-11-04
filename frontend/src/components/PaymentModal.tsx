@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { AlertTriangle, ArrowRight, Wallet } from 'lucide-react';
 import { api, ApiError } from '../lib/api';
@@ -33,7 +33,7 @@ export function PaymentModal({
   if (!invoice) return null;
   const balance = Math.max(0, Number(invoice.total) - Number(invoice.amount_paid));
 
-  async function submit(event: React.FormEvent) {
+  async function submit(event: FormEvent) {
     event.preventDefault();
     setBusy(true);
     setError('');

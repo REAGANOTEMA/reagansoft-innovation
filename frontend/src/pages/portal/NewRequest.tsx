@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Info, Send, Sparkles } from 'lucide-react';
 import { api, ApiError } from '../../lib/api';
@@ -37,7 +37,7 @@ export function NewRequest() {
     });
   }
 
-  async function submit(event: React.FormEvent) {
+  async function submit(event: FormEvent) {
     event.preventDefault();
     setBusy(true);
     setErrors({});

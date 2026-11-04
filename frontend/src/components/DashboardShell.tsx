@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { Bell, ChevronDown, ExternalLink, LogOut, Menu, Search, X, type LucideIcon } from 'lucide-react';
 import { Logo } from './Logo';
@@ -63,7 +63,7 @@ export function DashboardShell({ variant, items, footerItems = [] }: Props) {
     navigate('/');
   }
 
-  function submitSearch(event: React.FormEvent) {
+  function submitSearch(event: FormEvent) {
     event.preventDefault();
     const query = search.trim();
     if (!query) return;

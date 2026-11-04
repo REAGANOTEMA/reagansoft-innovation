@@ -114,7 +114,7 @@ export function ProjectDetail() {
                     : ['Discovery and scope', 'Interface design', 'Development and testing', 'Deployment and training']
                   ).map((item) => (
                     <li key={item} className="flex items-start gap-2 text-[13px] text-ink-soft">
-                      <span className="mt-0.5 grid h-4.5 w-4.5 shrink-0 place-items-center rounded-full bg-emerald-100 text-emerald-600">
+                      <span className="mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full bg-emerald-100 text-emerald-600">
                         <Check className="h-3 w-3" strokeWidth={3} />
                       </span>
                       {item}

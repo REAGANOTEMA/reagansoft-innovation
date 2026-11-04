@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowRight, CheckCircle2, Clock3, Mail, MapPin, MessageCircle, Phone, Send, ShieldCheck } from 'lucide-react';
 import { api, ApiError } from '../lib/api';
@@ -53,7 +53,7 @@ export function Contact() {
     });
   }
 
-  async function submit(event: React.FormEvent) {
+  async function submit(event: FormEvent) {
     event.preventDefault();
     setSending(true);
     setErrors({});

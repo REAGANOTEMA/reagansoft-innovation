@@ -1,6 +1,6 @@
-import { Badge, ProgressBar } from '../UI';
-import { formatDate, money } from '../../lib/format';
-import { invoiceStatus, paymentMethod, paymentStatus } from '../../lib/status';
+import { Badge, ProgressBar } from './UI';
+import { formatDate, money } from '../lib/format';
+import { invoiceStatus, paymentMethod, paymentStatus } from '../lib/status';
 import type { Invoice, Payment } from '../../lib/types';
 
 export function InvoiceView({ invoice, showPayments = true }: { invoice: Invoice; showPayments?: boolean }) {

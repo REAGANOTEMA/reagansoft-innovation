@@ -17,6 +17,8 @@ function handle_admin(string $method, array $seg): bool
     }
     if ($what === 'projects') {
         if ($method === 'GET' && $id === null) admin_projects_list();
+        if ($id !== null && ($seg[3] ?? '') === 'messages' && $method === 'POST') admin_project_message($user, $id);
+        if ($id !== null && ($seg[3] ?? '') === 'files' && $method === 'POST') admin_project_upload($user, $id);
         if ($method === 'GET' && $id !== null) admin_project_detail($id);
         if ($method === 'POST' && $id === null) admin_project_create($user);
         if (in_array($method, ['PATCH', 'PUT', 'POST'], true) && $id !== null) admin_project_update($user, $id);
@@ -382,6 +384,58 @@ function admin_project_update(array $user, string $id): never
     db()->prepare('UPDATE projects SET ' . implode(', ', $fields) . ' WHERE id = ?')->execute($params);
     audit('project_updated', 'projects', (int)$project['id'], 'Updated ' . $project['ref_no']);
     api_ok(admin_find_project($id));
+}
+
+function admin_project_message(array $user, string $id): never
+{
+    api_require_csrf();
+    $project = admin_find_project($id);
+    $data = api_body();
+    $message = api_string($data, 'message', 'Message', 5000, true);
+
+    $pdo = db();
+    $pdo->prepare(
+        'INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_internal) VALUES (?,?,?,?,0)'
+    )->execute([(int)$project['id'], (int)$user['id'], $user['role'], $message]);
+    $mid = (int)$pdo->lastInsertId();
+
+    audit('message_sent', 'project_messages', $mid, 'Staff message on ' . $project['ref_no']);
+    notify((int)$project['client_id'], 'New message from the team', 'There is a new message on ' . $project['ref_no'] . '.', 'project', (int)$project['id']);
+    $st = $pdo->prepare('SELECT * FROM project_messages WHERE id = ?');
+    $st->execute([$mid]);
+    api_ok($st->fetch(), null, 201);
+}
+
+function admin_project_upload(array $user, string $id): never
+{
+    api_require_csrf();
+    $project = admin_find_project($id);
+    if (!isset($_FILES['file']) || !is_array($_FILES['file'])) {
+        throw new ApiException('Choose a file to upload.', 422);
+    }
+    $upload = upload_file($_FILES['file']);
+    if (!$upload['ok']) {
+        throw new ApiException($upload['error'], 422);
+    }
+    $pdo = db();
+    $pdo->prepare(
+        'INSERT INTO project_files (project_id, uploader_id, original_name, stored_name, file_path, mime_type, size_bytes)
+         VALUES (?,?,?,?,?,?,?)'
+    )->execute([
+        (int)$project['id'], (int)$user['id'], $upload['name'], $upload['stored'],
+        $upload['path'], $upload['mime'], $upload['size'],
+    ]);
+    $fid = (int)$pdo->lastInsertId();
+
+    audit('file_uploaded', 'project_files', $fid, $upload['name']);
+    notify((int)$project['client_id'], 'New file shared', $upload['name'] . ' was added to ' . $project['ref_no'] . '.', 'project', (int)$project['id']);
+    api_ok([
+        'id' => $fid,
+        'original_name' => $upload['name'],
+        'size_bytes' => $upload['size'],
+        'mime_type' => $upload['mime'],
+        'url' => app_url('download.php?id=' . $fid),
+    ], null, 201);
 }
 
 function admin_project_delete(array $user, string $id): never

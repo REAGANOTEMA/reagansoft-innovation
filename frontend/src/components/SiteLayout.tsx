@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import {
   ArrowRight,
@@ -332,7 +332,7 @@ function Footer() {
   const [email, setEmail] = useState('');
   const [sending, setSending] = useState(false);
 
-  async function subscribe(event: React.FormEvent) {
+  async function subscribe(event: FormEvent) {
     event.preventDefault();
     if (!email.trim()) return;
     setSending(true);
