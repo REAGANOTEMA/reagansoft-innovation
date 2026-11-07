@@ -1,16 +1,19 @@
 <?php
 /**
- * Database migration runner (CLI only).
+ * Database installer / migrator (CLI only).
  *
- * Runs the additive enterprise migrations in order, then verifies the
- * application accounts can connect using the credentials in config/config.php.
+ * Imports the complete, non-destructive SQL packs:
+ *   system/00_INSTALL_ALL.sql   -> reagansoft_system
+ *   website/00_INSTALL_ALL.sql  -> reagansoft_website
  *
  * Usage:
  *   php tools/migrate.php
  *   php tools/migrate.php --user=root --pass=secret
+ *   php tools/migrate.php --with-accounts
  *   php tools/migrate.php --mysql="C:\xampp\mysql\bin\mysql.exe"
  *
- * It never edits and never deletes existing data.
+ * Every script uses CREATE TABLE IF NOT EXISTS and upserts seed rows on
+ * natural keys, so existing business data is never dropped or deleted.
  */
 
 declare(strict_types=1);
@@ -20,10 +23,11 @@ if (PHP_SAPI !== 'cli') {
     exit("This tool is command-line only.\n");
 }
 
-$options = getopt('', ['user::', 'pass::', 'mysql::']);
+$options = getopt('', ['user::', 'pass::', 'mysql::', 'with-accounts']);
 $user = (string)($options['user'] ?? 'root');
 $pass = (string)($options['pass'] ?? '');
 $mysql = (string)($options['mysql'] ?? '');
+$withAccounts = array_key_exists('with-accounts', $options);
 
 if ($mysql === '') {
     $candidates = [
@@ -41,22 +45,20 @@ if ($mysql === '') {
 
 $root = dirname(__DIR__);
 $files = [
-    'database/migrations/001_enterprise_platform.sql',
-    'database/migrations/002_platform_settings.sql',
-    'database/migrations/003_db_users.sql',
+    'system/00_INSTALL_ALL.sql',
+    'website/00_INSTALL_ALL.sql',
 ];
+if ($withAccounts) {
+    $files[] = 'system/06_DB_ACCOUNTS.sql';
+    $files[] = 'website/06_DB_ACCOUNTS.sql';
+}
 
-echo "Reagan Soft Innovation - additive migrations\n";
+echo "Reagan Soft Innovation - database installer\n";
 echo str_repeat('=', 52) . "\n";
 
-/**
- * Runs one SQL file through the mysql client using stdin (so DELIMITER,
- * stored procedures and multi-statement files all work exactly as they do
- * when imported through phpMyAdmin).
- */
 function run_sql_file(string $mysql, string $user, string $pass, string $path): array
 {
-    $cmd = [$mysql, '-u', $user];
+    $cmd = [$mysql, '-u', $user, '--default-character-set=utf8mb4'];
     if ($pass !== '') {
         $cmd[] = '-p' . $pass;
     }
@@ -109,10 +111,10 @@ try {
     exit(1);
 }
 
-$tables = ['expenses', 'newsletter_subscribers', 'users', 'projects', 'invoices'];
+$tables = ['users', 'services', 'projects', 'invoices', 'payments', 'expenses', 'newsletter_subscribers', 'settings'];
 foreach ($tables as $table) {
     $st = $pdo->query('SHOW TABLES LIKE ' . $pdo->quote($table));
     echo str_pad($table, 26, '.') . ' ' . ($st->fetchColumn() ? 'present' : 'MISSING') . "\n";
 }
 
-echo "\nMigrations complete. Existing tables and rows were not modified.\n";
+echo "\nInstall complete. Existing tables and rows were preserved.\n";

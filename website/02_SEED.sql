@@ -1,78 +1,41 @@
 -- ============================================================
 -- Reagan Soft Innovation Limited
--- SEED DATA
+-- WEBSITE DATABASE — SEED DATA
 -- Database: reagansoft_website
 -- ============================================================
--- This is an identical mirror of reagansoft_system. Keep it in step by importing the same pack, or let install.php rebuild it.
+-- Run AFTER 01_SCHEMA.sql, or import 00_INSTALL_ALL.sql instead.
 --
--- PHP >= 8.0 | MySQL >= 5.7 / 8.0 | MariaDB >= 10.2
--- InnoDB | utf8mb4
---
--- Import the files in number order:
---   01_SCHEMA.sql   tables (safe to re-run)
---   02_SEED.sql     services, settings, demo accounts and samples
---   03_UPGRADE.sql  adds columns an older install may be missing
---   04_VERIFY.sql   read-only checks
---   00_INSTALL_ALL.sql  schema + seed + upgrade in one import
---   99_RESET.sql    DESTRUCTIVE - drops every table, then rebuild
---
--- On shared hosting: select the database in phpMyAdmin first, then
--- import 00_INSTALL_ALL.sql. On XAMPP you may import it directly.
--- ============================================================
-
--- ============================================================
--- Reagan Soft Innovation Limited
--- SEED DATA  (database/seed.sql)
--- ============================================================
--- Database : reagansoft_website  (the one the app uses)
--- Run AFTER database/schema.sql  ΓÇö or use database/install.sql,
--- which is this file plus the schema in one import.
---
--- SAFE TO RE-RUN. Every row is matched on its natural key
+-- SAFE TO RE-RUN. Rows are matched on their natural key
 -- (slug, setting_key, email, ref_no, quotation_no, invoice_no,
--- title, reference) and inserted only when it is missing, so
--- re-importing this file updates the demo data and never
+-- reference) so re-importing updates the demo data and never
 -- duplicates or deletes anything.
 --
 -- Contents
---   01. SERVICES            the sellable catalogue
+--   01. SERVICES            sellable catalogue (14 services)
 --   02. SETTINGS            brand, contact & payment configuration
---   03. ADMIN & STAFF       portal accounts (admin@reagansoft.com,
---                           staff@reagansoft.com)
---   04. CLIENTS             client portal accounts
---   05. PROJECTS            sample client work (RSI-2026-00001 ΓÇª)
+--   03. ADMIN & STAFF       admin@reagansoft.com, staff@reagansoft.com
+--   04. CLIENTS             six client portal accounts
+--   05. PROJECTS            sample delivered and active work
 --   06. TASKS               delivery tasks on the projects
 --   07. MESSAGES            project conversations
 --   08. QUOTATIONS + ITEMS  one sent quotation with line items
---   09. INVOICES + ITEMS    issued & paid invoices
+--   09. INVOICES + ITEMS    issued and paid invoices
 --   10. PAYMENTS            confirmed payment history
---   11. NOTIFICATIONS       in-portal alerts for the demo users
+--   11. NOTIFICATIONS       in-portal alerts for demo users
+--   12. EXPENSES            sample finance records
+--   13. NEWSLETTER          sample marketing opt-ins
 --
--- Password for EVERY demo account below:   Reagan@2026
---   admin@reagansoft.com   +256730314979   (Administrator)
---   staff@reagansoft.com   +256772514889   (Staff)
+-- Password for EVERY demo account: Reagan@2026
+--   admin@reagansoft.com   Administrator
+--   staff@reagansoft.com   Staff
 --   amara@kirekafarms.com, grace@pearlholdings.com,
 --   david@mulumbasons.com, agnesnakato@gmail.com,
---   info@hotelparadiseonthenile.co.ug   (Clients)
--- Change these passwords after logging in, then delete anything
--- you no longer need from this file.
+--   info@hotelparadiseonthenile.co.ug,
+--   info@igangaschoolofnursingandmidwifery.ac.ug
 --
--- To restore the logins without touching the demo data use
--- database/admin.sql and database/client.sql instead.
+-- Change these passwords after signing in.
 -- ============================================================
 USE reagansoft_website;
-
--- ============================================================
--- 01 ┬╖ SERVICES
--- ============================================================
--- price_min / price_max = the authoritative service ranges (UGX)
---               ┬╖ websites / ecommerce        500,000 ΓÇô 10,000,000
---               ┬╖ receipt & billing systems    3,000,000 ΓÇô 10,000,000
---               ┬╖ web & mobile apps            from 10,000,000
---               ┬╖ business systems / software  20,000,000 ΓÇô 40,000,000
---               ┬╖ branding / maintenance       starting price only
---               ┬╖ custom solutions             contact for a quote
--- ============================================================
 INSERT INTO services (name, slug, description, price_min, price_max, currency, pricing_type, price_note, features, delivery_days, icon, status, sort_order) VALUES
 ('Business Website Development', 'business-website', 'A professional, responsive company website with clear structure, contact integration, SEO foundations and a design that represents your brand.', 500000, 10000000, 'UGX', 'range', 'Professional websites',
  'Custom responsive design for mobile, tablet and desktop
@@ -223,11 +186,17 @@ INSERT INTO settings (setting_key, setting_value) VALUES
 ('company_phone',           '+256772514889'),
 ('company_email',           'info@reagansoftinnovation.com'),
 ('company_address',         'Jinja, Uganda'),
-  ('company_whatsapp',        '+256730314979'),
+('company_whatsapp',        '+256730314979'),
 ('company_fb',              ''),
 ('company_x',               ''),
 ('company_linkedin',        ''),
+('company_hours',           'Mon – Fri, 8:00am – 6:00pm EAT'),
+('company_map_url',         'https://www.google.com/maps/search/?api=1&query=Jinja%2C+Uganda'),
 ('company_about',           'Reagan Soft Innovation Limited is a software company based in Jinja, Uganda. We design and build websites, business systems, ecommerce stores and custom software for businesses across the country, and we stay around to look after them after launch.'),
+('seo_keywords',            'software development Uganda, website design Jinja, school management system, hospital management system, POS Uganda, Reagansoft Innovation'),
+('site_announcement',       ''),
+('support_email',           'support@reagansoftinnovation.com'),
+('newsletter_enabled',      '1'),
 ('currency',                'UGX'),
 ('tax_percent',             '0'),
 ('invoices_due_days',       '14'),
@@ -675,3 +644,32 @@ SELECT (SELECT id FROM users WHERE email = 'info@igangaschoolofnursingandmidwife
  'The school website, student portal and app are live and the team has been trained. Sign in to your portal to get started.', 'project',
  (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00007'), 0, '2026-06-26 16:00:00'
 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE user_id = (SELECT id FROM users WHERE email = 'info@igangaschoolofnursingandmidwifery.ac.ug') AND title = 'Your project is live');
+
+-- ============================================================
+-- 12 – EXPENSES  (sample finance records)
+-- ============================================================
+INSERT INTO expenses (category, description, amount, currency, expense_date, project_id, recorded_by, reference, notes)
+SELECT 'Internet & hosting', 'Annual hosting and domain renewal', 850000, 'UGX', '2026-01-15',
+       NULL, (SELECT id FROM users WHERE email = 'admin@reagansoft.com'), 'HOST-2026-001', 'Paid by bank transfer'
+FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM expenses WHERE reference = 'HOST-2026-001');
+
+INSERT INTO expenses (category, description, amount, currency, expense_date, project_id, recorded_by, reference, notes)
+SELECT 'Software licences', 'Design and development tools subscription', 420000, 'UGX', '2026-02-01',
+       NULL, (SELECT id FROM users WHERE email = 'admin@reagansoft.com'), 'TOOLS-2026-002', 'Monthly team licences'
+FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM expenses WHERE reference = 'TOOLS-2026-002');
+
+INSERT INTO expenses (category, description, amount, currency, expense_date, project_id, recorded_by, reference, notes)
+SELECT 'Transport', 'Client site visits in Jinja and Iganga', 180000, 'UGX', '2026-03-08',
+       (SELECT id FROM projects WHERE ref_no = 'RSI-2026-00007'),
+       (SELECT id FROM users WHERE email = 'staff@reagansoft.com'), 'TRIP-2026-003', 'Field requirements workshop'
+FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM expenses WHERE reference = 'TRIP-2026-003');
+
+-- ============================================================
+-- 13 – NEWSLETTER SUBSCRIBERS  (sample opt-ins)
+-- ============================================================
+INSERT INTO newsletter_subscribers (email, full_name, source, is_active) VALUES
+('hello@example.com', 'Website Visitor', 'website', 1)
+ON DUPLICATE KEY UPDATE full_name = VALUES(full_name), is_active = VALUES(is_active);

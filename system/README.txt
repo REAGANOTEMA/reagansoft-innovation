@@ -1,31 +1,45 @@
-SYSTEM DATABASE - the active Reagan Soft Innovation application
+Reagan Soft Innovation Limited
+SYSTEM DATABASE PACK
 Database: reagansoft_system
 
-This is the database the application connects to. It holds accounts, clients, projects, quotations, invoices, payments, services, messages and settings.
+This is the active application database. It holds accounts, clients,
+projects, tasks, files, messages, quotations, invoices, payments,
+expenses, services, contact messages, settings and audit logs.
 
-HOW TO IMPORT IN phpMyAdmin
-1. Start Apache and MySQL.
+IMPORT
+1. Start Apache and MySQL (e.g. XAMPP).
 2. Open http://localhost/phpmyadmin
-3. Click Import.
-4. Choose 00_INSTALL_ALL.sql and click Go.
-   That creates the database, all tables and the demo data.
+3. Import tab -> choose 00_INSTALL_ALL.sql -> Go.
+   That creates the database, all 17 tables and the demo data.
 
 FILES
-00_INSTALL_ALL.sql   schema + seed + upgrade in one step
-01_SCHEMA.sql        tables only
-02_SEED.sql          services, settings, accounts and demo data
-03_UPGRADE.sql       safe column repairs for older installs
-04_VERIFY.sql        read-only row counts
-05_INSTALL_PORTABLE.sql  for a host-named database: select it first
-99_RESET.sql         DESTRUCTIVE: drops every table in reagansoft_system
+00_INSTALL_ALL.sql        schema + seed + upgrade in one import
+01_SCHEMA.sql             creates the database and 17 tables
+02_SEED.sql               services, settings, accounts and demo data
+03_UPGRADE.sql            safe additive repairs for older installs
+04_VERIFY.sql             read-only table and row-count checks
+05_INSTALL_PORTABLE.sql   for host-named databases: select it first
+06_DB_ACCOUNTS.sql        creates the MySQL login (run as root)
+99_RESET.sql              DESTRUCTIVE: drops every table in this database
 
-ACCOUNT PASSWORDS
-Every demo account uses the password Reagan@2026.
+COMMAND LINE (XAMPP on Windows)
+  C:\xampp\mysql\bin\mysql.exe -u root < system\00_INSTALL_ALL.sql
+  C:\xampp\mysql\bin\mysql.exe -u root < system\06_DB_ACCOUNTS.sql
+  C:\xampp\php\php.exe tools\db-check.php
+
+APPLICATION LOGIN (config/config.php)
+  database: reagansoft_system
+  user    : reagansoft_system
+  password: f.o9Wv2dP5Tmv]?+
+
+DEMO PORTAL ACCOUNTS - password for every account: Reagan@2026
+  admin@reagansoft.com                              Administrator
+  staff@reagansoft.com                              Staff
+  amara@kirekafarms.com                             Client
+  grace@pearlholdings.com                           Client
+  david@mulumbasons.com                             Client
+  agnesnakato@gmail.com                             Client
+  info@hotelparadiseonthenile.co.ug                 Client
+  info@igangaschoolofnursingandmidwifery.ac.ug      Client
+
 Change every password after the first sign-in.
-
-CONTACT ROLES
-MTN +256730314979       WhatsApp and Mobile Money
-Airtel +256772514889    phone calls only
-
-The two folders are identical in structure. Import this whole pack
-into reagansoft_system; the other folder rebuilds the matching mirror database.

@@ -88,18 +88,18 @@ try {
 line('CREATE DATABASE', 'not attempted (it is optional — see the README hosting notes)', 'ok');
 
 /* ------------------------------------------------------------------ */
-head('Schema (expect 15 tables)');
+head('Schema (expect 17 tables)');
 /* ------------------------------------------------------------------ */
 $expected = [
     'users', 'services', 'projects', 'project_tasks', 'project_files',
     'project_messages', 'notifications', 'quotations', 'quotation_items',
-    'invoices', 'invoice_items', 'payments', 'contact_messages',
-    'settings', 'activity_logs',
+    'invoices', 'invoice_items', 'payments', 'expenses', 'contact_messages',
+    'newsletter_subscribers', 'settings', 'activity_logs',
 ];
 $have = $pdo->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
 $missing = array_diff($expected, $have);
 $extra   = array_diff($have, $expected);
-line('Tables found', (string)count($have), count($have) >= 15 ? 'ok' : 'bad');
+line('Tables found', (string)count($have), count($have) >= 17 ? 'ok' : 'bad');
 if ($missing) {
     line('Missing tables', implode(', ', $missing) . '  <-- run system/00_INSTALL_ALL.sql', 'bad');
 } else {
@@ -114,7 +114,8 @@ head('Data');
 /* ------------------------------------------------------------------ */
 $counts = [];
 foreach (['users', 'services', 'settings', 'projects', 'project_tasks', 'project_messages',
-          'quotations', 'invoices', 'payments', 'notifications'] as $t) {
+          'quotations', 'invoices', 'payments', 'expenses', 'newsletter_subscribers',
+          'notifications'] as $t) {
     if (in_array($t, $have, true)) {
         $counts[$t] = (int)$pdo->query("SELECT COUNT(*) FROM `$t`")->fetchColumn();
     }
@@ -177,7 +178,7 @@ if (DB_MIRROR === '' || DB_MIRROR === DB_NAME) {
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         ]);
         $mTables = count($m->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN));
-        line('Tables', (string)$mTables, $mTables >= 15 ? 'ok' : 'warn');
+        line('Tables', (string)$mTables, $mTables >= 17 ? 'ok' : 'warn');
 
         if ($mTables > 0 && isset($counts['users'])) {
             $mUsers = (int)$m->query('SELECT COUNT(*) FROM users')->fetchColumn();

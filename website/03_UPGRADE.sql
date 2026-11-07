@@ -1,60 +1,17 @@
 -- ============================================================
 -- Reagan Soft Innovation Limited
--- UPGRADE
+-- WEBSITE DATABASE — UPGRADE (additive and idempotent)
 -- Database: reagansoft_website
 -- ============================================================
--- This is an identical mirror of reagansoft_system. Keep it in step by importing the same pack, or let install.php rebuild it.
+-- Brings an older installation up to the current schema without
+-- dropping, truncating or rewriting any existing business data.
+-- Every column is checked against information_schema before it is
+-- added, so re-running this file changes nothing.
 --
--- PHP >= 8.0 | MySQL >= 5.7 / 8.0 | MariaDB >= 10.2
--- InnoDB | utf8mb4
---
--- Import the files in number order:
---   01_SCHEMA.sql   tables (safe to re-run)
---   02_SEED.sql     services, settings, demo accounts and samples
---   03_UPGRADE.sql  adds columns an older install may be missing
---   04_VERIFY.sql   read-only checks
---   00_INSTALL_ALL.sql  schema + seed + upgrade in one import
---   99_RESET.sql    DESTRUCTIVE - drops every table, then rebuild
---
--- On shared hosting: select the database in phpMyAdmin first, then
--- import 00_INSTALL_ALL.sql. On XAMPP you may import it directly.
+-- Run AFTER 01_SCHEMA.sql on an existing site, or use
+-- 00_INSTALL_ALL.sql for a complete fresh install.
 -- ============================================================
-
--- ============================================================
--- Reagan Soft Innovation Limited
--- UPGRADE  (database/upgrade.sql)
--- ============================================================
--- Adds anything the current code needs that an OLDER install does
--- not have yet. Run it after updating the files on a site that was
--- installed before the change:
---
---     phpMyAdmin  ->  select your database  ->  Import  ->  this
---     or          ->  mysql -u USER -p DBNAME < database/upgrade.sql
---
--- SAFE TO RE-RUN, and safe on a brand new install. Every statement
--- below checks information_schema first and does nothing when the
--- column is already there, so importing it twice changes nothing.
--- Nothing here drops, truncates, deletes or rewrites existing data.
---
--- WHY THIS FILE EXISTS
--- database/install.sql and database/install.php both create the
--- tables with CREATE TABLE IF NOT EXISTS. That is what makes them
--- non-destructive ΓÇö but it also means an existing `projects` table
--- is never altered, so a column added to database/schema.sql today
--- only appears on a FRESH install. This file is the bridge: it adds
--- the missing columns to the tables that are already there.
---
--- GENERATED? No. Unlike install.sql / install-portable.sql (which
--- tools/build-sql.php derives from schema.sql + seed.sql) this file
--- is written by hand, because it is history: it only ever appends.
--- ============================================================
-
--- ------------------------------------------------------------
--- projects.website_url
---   The live address of the finished site. The public Work page
---   turns it into a "visit site" link; NULL simply means the card
---   shows no link.
--- ------------------------------------------------------------
+USE reagansoft_website;
 SET @rsi_db := DATABASE();
 
 SET @rsi_sql := (
@@ -301,3 +258,52 @@ UPDATE settings
    SET setting_value = ''
  WHERE setting_key = 'payment_airtel_number'
    AND setting_value = '+256772514889';
+
+-- ============================================================
+-- Enterprise modules added after the original release
+-- ============================================================
+CREATE TABLE IF NOT EXISTS expenses (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  category VARCHAR(80) NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  amount DECIMAL(14,2) NOT NULL DEFAULT 0.00,
+  currency VARCHAR(8) NOT NULL DEFAULT 'UGX',
+  expense_date DATE NOT NULL,
+  project_id INT UNSIGNED NULL,
+  recorded_by INT UNSIGNED NULL,
+  reference VARCHAR(120) NULL,
+  notes TEXT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  KEY idx_expenses_date (expense_date),
+  KEY idx_expenses_category (category),
+  KEY idx_expenses_project (project_id),
+  CONSTRAINT fk_expenses_project FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL,
+  CONSTRAINT fk_expenses_user FOREIGN KEY (recorded_by) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS newsletter_subscribers (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(190) NOT NULL,
+  full_name VARCHAR(150) NULL,
+  source VARCHAR(60) NOT NULL DEFAULT 'website',
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_newsletter_email (email),
+  KEY idx_newsletter_active (is_active)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Settings introduced by the enterprise upgrade. Existing values are
+-- never overwritten: ON DUPLICATE KEY UPDATE setting_key = setting_key.
+INSERT INTO settings (setting_key, setting_value) VALUES
+('company_hours',           'Mon – Fri, 8:00am – 6:00pm EAT'),
+('company_map_url',         'https://www.google.com/maps/search/?api=1&query=Jinja%2C+Uganda'),
+('company_linkedin',        ''),
+('company_x',               ''),
+('company_fb',              ''),
+('seo_keywords',            'software development Uganda, website design Jinja, school management system, hospital management system, POS Uganda, Reagansoft Innovation'),
+('site_announcement',       ''),
+('support_email',           'support@reagansoftinnovation.com'),
+('newsletter_enabled',      '1')
+ON DUPLICATE KEY UPDATE setting_key = setting_key;
