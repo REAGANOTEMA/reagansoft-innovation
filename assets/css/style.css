@@ -260,6 +260,36 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .split-shine { position: absolute; inset: 0; background: linear-gradient(160deg, transparent 40%, rgba(255,255,255,.12) 50%, transparent 60%); animation: shine 6s ease-in-out infinite; }
 .split-body .feature-list { margin-top: 8px; }
 
+/* ---------- Studio media grid ---------- */
+.studio-grid { display: grid; grid-template-columns: 1.25fr .75fr .75fr; gap: 16px; }
+.studio-tile { position: relative; margin: 0; border-radius: var(--radius-xl); overflow: hidden; border: 1px solid var(--line); box-shadow: var(--shadow); background: var(--navy); min-height: 220px; }
+.studio-tile img { width: 100%; height: 100%; min-height: 220px; object-fit: cover; display: block; transition: transform .7s ease; }
+.studio-tile:hover img { transform: scale(1.03); }
+.studio-tile figcaption { position: absolute; inset: auto 0 0 0; padding: 16px 18px; color: #fff; background: linear-gradient(0deg, rgba(8,59,102,.94), rgba(8,59,102,0)); }
+.studio-tile figcaption span { display: block; font-size: 11px; letter-spacing: 1.6px; text-transform: uppercase; color: #7fd0ff; font-weight: 800; margin-bottom: 4px; }
+.studio-tile figcaption b { font-size: 15px; color: #fff; }
+.studio-tile-lg { grid-row: span 2; }
+.studio-tile-lg img { min-height: 456px; }
+.studio-tile-wide { grid-column: span 2; }
+.studio-band { display: grid; grid-template-columns: 1.05fr .95fr; margin-top: 16px; border-radius: var(--radius-xl); overflow: hidden; border: 1px solid var(--line); background: var(--navy); box-shadow: var(--shadow-lg); }
+.studio-band img { width: 100%; height: 100%; min-height: 220px; object-fit: cover; }
+.studio-band-body { padding: 26px 30px; color: #dbeafe; }
+.studio-band-body h3 { color: #fff; }
+.studio-band-body p { color: #9db6cc; font-size: 14.5px; }
+.studio-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.studio-chips span { border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.06); color: #cfe0ef; border-radius: 999px; padding: 5px 12px; font-size: 12px; }
+@media (max-width: 900px) {
+  .studio-grid { grid-template-columns: 1fr 1fr; }
+  .studio-tile-lg { grid-row: span 1; grid-column: span 2; }
+  .studio-tile-lg img { min-height: 260px; }
+  .studio-tile-wide { grid-column: span 2; }
+  .studio-band { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .studio-grid { grid-template-columns: 1fr; }
+  .studio-tile-lg, .studio-tile-wide { grid-column: span 1; }
+}
+
 /* ---------- Founder card ---------- */
 .founder-stack { display: grid; gap: 22px; }
 .founder-card {

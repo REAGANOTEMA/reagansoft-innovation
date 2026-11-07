@@ -17,7 +17,32 @@ public_head([
       <h1>Everything your business needs to go digital.</h1>
       <p class="lead">Services are scoped individually after a short conversation. Prices below are the actual ranges in <?= e(settings('currency')) ?>: professional websites and ecommerce run from <?= money(PRICE_WEBSITE_MIN, settings('currency')) ?> to <?= money(PRICE_WEBSITE_MAX, settings('currency')) ?>, automatic receipt and billing systems from <?= money(PRICE_RECEIPT_MIN, settings('currency')) ?> to <?= money(PRICE_RECEIPT_MAX, settings('currency')) ?>, apps from <?= money(PRICE_APP_MIN, settings('currency')) ?>, and custom business systems and software for schools, hospitals, NGOs and companies from <?= money(PRICE_SYSTEM_MIN, settings('currency')) ?> to <?= money(PRICE_SYSTEM_MAX, settings('currency')) ?>.</p>
     </div>
-    <?= page_image('assets/img/hero5.webp', 5, 'One partner for websites, systems, apps and ecommerce'); ?>
+    <?= page_image('assets/img/ui-ux-designers-isometric-composition-with-small-people-creating-custom-design-web-site-3d-vector-illustration_1284-68939.webp', 5, 'Designed interfaces, built and maintained by the same team', 'UI and UX designers composing a custom website interface') ?>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="split-banner">
+      <div class="split-media">
+        <img src="<?= app_url('assets/img/software-core-mobile-1024x1024.png') ?>"
+             alt="A Reagansoft web application running as a mobile product"
+             width="1024" height="1024" loading="lazy" decoding="async">
+        <span class="split-shine" aria-hidden="true"></span>
+      </div>
+      <div class="split-body">
+        <span class="eyebrow">One product, every screen</span>
+        <h2>Web, mobile and back office built together.</h2>
+        <p class="lead" style="font-size:16px">Every service is delivered as one coherent product: the public website, the client portal and the staff tools share a single database and a single set of rules, so nothing drifts apart after launch.</p>
+        <ul class="feature-list">
+          <li><span class="fcheck"><?= icon('check') ?></span> Responsive interfaces that work on the phones your customers actually use</li>
+          <li><span class="fcheck"><?= icon('check') ?></span> One database behind the website, portal and mobile views</li>
+          <li><span class="fcheck"><?= icon('check') ?></span> Role-based access for owners, staff and clients</li>
+          <li><span class="fcheck"><?= icon('check') ?></span> Documentation and handover included with every build</li>
+        </ul>
+        <a class="btn btn-primary" href="<?= app_url('checkout.php') ?>">Start a project <?= icon('arrow') ?></a>
+      </div>
+    </div>
   </div>
 </section>
 

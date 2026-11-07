@@ -2,8 +2,8 @@
 /**
  * Reagan Soft Innovation Limited — one-click database installer.
  *
- * Creates reagansoft_system from the system/ SQL pack, then builds the
- * reagansoft_website mirror from the website/ pack.
+ * Creates reagansoft_system from sql/system/reagansoft_system.sql, then
+ * builds the reagansoft_website mirror from sql/website/reagansoft_website.sql.
  * Reads its connection settings from config/config.php (edit those, or set the
  * RSI_DB_* environment variables) — so the same file works on XAMPP and on a
  * hosted server.
@@ -128,7 +128,7 @@ function rsi_run_file(PDO $pdo, string $file, array &$log, array &$errors): int
 {
     $sql = @file_get_contents($file);
     if ($sql === false || trim($sql) === '') {
-        $errors[] = 'Could not read ' . basename($file) . ' — make sure the system/ and website/ folders came with the project.';
+        $errors[] = 'Could not read ' . basename($file) . ' — make sure the sql/ folder came with the project.';
         return 0;
     }
     $count = 0;
@@ -143,6 +143,21 @@ function rsi_run_file(PDO $pdo, string $file, array &$log, array &$errors): int
     }
     $log[] = basename($file) . ' imported (' . $count . ' statements).';
     return $count;
+}
+
+/**
+ * Drop every table in the connected database. Used only by the explicit
+ * reinstall action, and always with foreign key checks off so the drop
+ * order cannot fail.
+ */
+function rsi_drop_all_tables(PDO $pdo): void
+{
+    $pdo->exec('SET FOREIGN_KEY_CHECKS=0');
+    $tables = $pdo->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
+    foreach ($tables as $table) {
+        $pdo->exec('DROP TABLE IF EXISTS `' . str_replace('`', '``', (string)$table) . '`');
+    }
+    $pdo->exec('SET FOREIGN_KEY_CHECKS=1');
 }
 
 /* ------------------------------------------------------------------ */
@@ -183,26 +198,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo = rsi_connect(DB_NAME);
 
             // 1b. Reinstall only: drop every table first. This is the one
-            //     destructive step, and it is why schema.sql itself is
+            //     destructive step, and it is why the import itself is
             //     non-destructive.
             if ($do === 'reinstall') {
-                rsi_run_file($pdo, __DIR__ . '/system/99_RESET.sql', $log, $errors);
+                rsi_drop_all_tables($pdo);
                 $log[] = 'Existing tables dropped — starting from an empty database.';
             }
 
-            // 2. Tables.
-            rsi_run_file($pdo, __DIR__ . '/system/01_SCHEMA.sql', $log, $errors);
-
-            // 3. Seed data (services, settings, demo accounts, samples).
-            rsi_run_file($pdo, __DIR__ . '/system/02_SEED.sql', $log, $errors);
-
-            // 3b. Upgrades. schema.sql only ever CREATEs tables, so on a
-            //     site that was installed before a column was added, that
-            //     column is still missing. upgrade.sql adds whatever the
-            //     current code expects and is a no-op when it is already
-            //     there, which is also why it is safe to run on a fresh
-            //     install straight after the seed.
-            rsi_run_file($pdo, __DIR__ . '/system/03_UPGRADE.sql', $log, $errors);
+            // 2. Full schema, seed data and upgrades in one import.
+            rsi_run_file($pdo, __DIR__ . '/sql/system/reagansoft_system.sql', $log, $errors);
 
             // 4. Mirror database (reagansoft_website) — same schema and data.
             //    Each database has its own account credentials. Optional: a
@@ -216,11 +220,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     );
                     $mpdo = rsi_connect($mirror, DB_MIRROR_USER, DB_MIRROR_PASS);
                     if ($do === 'reinstall') {
-                        rsi_run_file($mpdo, __DIR__ . '/website/99_RESET.sql', $mirror_log, $mirror_errors);
+                        rsi_drop_all_tables($mpdo);
                     }
-                    rsi_run_file($mpdo, __DIR__ . '/website/01_SCHEMA.sql', $mirror_log, $mirror_errors);
-                    rsi_run_file($mpdo, __DIR__ . '/website/02_SEED.sql', $mirror_log, $mirror_errors);
-                    rsi_run_file($mpdo, __DIR__ . '/website/03_UPGRADE.sql', $mirror_log, $mirror_errors);
+                    rsi_run_file($mpdo, __DIR__ . '/sql/website/reagansoft_website.sql', $mirror_log, $mirror_errors);
                     $log[] = 'Mirror database `' . DB_MIRROR . '` is in step with `' . DB_NAME . '`.';
                 } catch (Throwable $e) {
                     $mirror_errors[] = 'Mirror `' . DB_MIRROR . '`: ' . substr($e->getMessage(), 0, 200);
@@ -343,7 +345,7 @@ header('Content-Type: text/html; charset=utf-8');
     </div>
 
     <h1>Set up your database</h1>
-    <p class="lead" style="font-size:15.5px">This installer creates <b><?= e(DB_NAME) ?></b> from the <b>system/</b> SQL pack and loads the services, settings and demo accounts<?= DB_MIRROR !== '' && DB_MIRROR !== DB_NAME ? ', then builds the <b>' . e(DB_MIRROR) . '</b> mirror from the <b>website/</b> pack' : '' ?>. Running it again is safe — it never deletes anything.</p>
+    <p class="lead" style="font-size:15.5px">This installer creates <b><?= e(DB_NAME) ?></b> from the <b>sql/system/</b> dump and loads the services, settings and demo accounts<?= DB_MIRROR !== '' && DB_MIRROR !== DB_NAME ? ', then builds the <b>' . e(DB_MIRROR) . '</b> mirror from the <b>sql/website/</b> dump' : '' ?>. Running it again is safe — it never deletes anything.</p>
 
     <div class="meta-grid">
       <div class="meta-item"><small>Database</small><b><?= e(DB_NAME) ?></b></div>
@@ -411,7 +413,7 @@ header('Content-Type: text/html; charset=utf-8');
 
       <div class="danger-zone">
         <h4 style="color:var(--red)">Danger zone</h4>
-        <p class="small muted">Reinstalling runs <b>system/99_RESET.sql</b> and <b>website/99_RESET.sql</b>, which drop every table and reload the demo data. Type the database name to confirm.</p>
+        <p class="small muted">Reinstalling drops every table in <b><?= e(DB_NAME) ?></b><?= DB_MIRROR !== '' && DB_MIRROR !== DB_NAME ? ' and <b>' . e(DB_MIRROR) . '</b>' : '' ?> and reloads the demo data from the <b>sql/</b> dumps. Type the database name to confirm.</p>
         <form method="post" onsubmit="return confirm('This wipes all current data in <?= e(DB_NAME) ?>. Continue?');">
           <?= csrf_field() ?>
           <input type="hidden" name="do" value="reinstall">

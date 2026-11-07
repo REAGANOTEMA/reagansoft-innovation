@@ -13,7 +13,8 @@ function settings(?string $key = null, ?string $default = ''): string {
         $cache = [
             'company_name' => APP_NAME,
             'company_phone' => '+256772514889',
-            'company_whatsapp' => '+256730314979',
+            'company_phone_alt' => '+256730314979',
+            'company_whatsapp' => '+256772514889',
             'payment_mtn_number' => '+256730314979',
             'currency' => 'UGX',
         ];
@@ -176,13 +177,12 @@ function truncate(string $text, int $length = 90): string {
  * ------------------------------------------------------------------
  * True when a column is present on a table.
  *
- * Used by the public pages to stay readable on an install that has not
- * run system/03_UPGRADE.sql yet. A column added to database/schema.sql
- * after the site went live does NOT exist on the table that is already
- * there, because every install script creates tables with CREATE TABLE
- * IF NOT EXISTS and therefore never alters one. Rather than have the
- * Work page query a column the database does not have — which would
- * throw, be swallowed by the page's own try/catch and leave the
+ * Used by the public pages to stay readable on an older install that
+ * predates a column. A column added to the schema after the site went
+ * live does NOT exist on the table that is already there unless the
+ * dump was re-imported or the column was added manually. Rather than
+ * have the Work page query a column the database does not have — which
+ * would throw, be swallowed by the page's own try/catch and leave the
  * gallery mysteriously empty — the page asks first and builds its
  * query from the answer.
  *
@@ -604,12 +604,12 @@ function rs_mail(string $to, string $subject, string $body): bool {
  * Phone & WhatsApp helpers.
  * ------------------------------------------------------------------
  * Numbers reach us in every shape a Ugandan business types them:
- * "+256730314979", "256730314979", "0730314979", "0730 314 979".
+ * "+256772514889", "256772514889", "0772514889", "0772 514 889".
  * wa.me and tel: both need the bare international digits, so every
  * number is normalised once, here.
  *
  * This used to be a plain preg_replace('/\D/'), which produced
- * "https://wa.me/0730314979" the moment anyone saved the WhatsApp
+ * "https://wa.me/0772514889" the moment anyone saved the WhatsApp
  * field in the local format they actually use. That link is dead:
  * WhatsApp wants the country code and no leading zero.
  * ------------------------------------------------------------------ */
@@ -676,8 +676,8 @@ function phone_tel(?string $num): string {
 }
 
 /**
- * The number behind the WhatsApp button. Never falls back to the company
- * phone: that number is Airtel and is intentionally call-only.
+ * The number behind the WhatsApp button. Kept independent from the
+ * payment numbers so WhatsApp, MTN and the call lines can differ.
  */
 function whatsapp_number_raw(): string {
     return phone_digits(settings('company_whatsapp', ''));

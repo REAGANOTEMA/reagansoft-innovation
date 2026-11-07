@@ -9,7 +9,7 @@ export const MEDIA = {
   engineering:
     'programming-software-interface-device-engineers-application-company-project-space-professional-solutions-systems-117127167.webp',
   design:
-    'ui-ux-designers-isometric-composition-with-small-people-creating-custom-design-web-site-3d-vector-illustration_1284-68939.avif',
+    'ui-ux-designers-isometric-composition-with-small-people-creating-custom-design-web-site-3d-vector-illustration_1284-68939.webp',
   code: 'code.jpg',
   languages: 'the-language-we-use.jpg',
   mobileCore: 'software-core-mobile-1024x1024.png',

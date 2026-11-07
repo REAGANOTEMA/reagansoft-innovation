@@ -83,7 +83,7 @@ public_head([
 ?>
 <section class="auth-page" style="border-top:1px solid var(--line)">
   <div class="auth-card">
-    <a class="brand" href="<?= app_url('index.php') ?>"><img src="<?= app_url('assets/img/reagansoftinnovation-logo.jpeg') ?>" alt="Reagan Soft Innovation logo"><span class="brand-text">Reagan Soft <b>Innovation</b><small class="brand-tagline"><?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></small></span></a>
+    <a class="brand" href="<?= app_url('') ?>"><img src="<?= app_url('assets/img/reagansoftinnovation-logo.jpeg') ?>" alt="Reagan Soft Innovation logo"><span class="brand-text">Reagan Soft <b>Innovation</b><small class="brand-tagline"><?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></small></span></a>
     <h2>Welcome back</h2>
     <p class="auth-sub">Sign in to track your projects and requests.</p>
     <?php if ($error): ?><div class="alert" role="alert"><?= e($error) ?></div><?php endif; ?>
@@ -95,7 +95,7 @@ public_head([
       <button class="btn btn-primary btn-block" type="submit"><?= icon('lock') ?> Sign in</button>
     </form>
     <p class="auth-foot">New client? <a href="<?= app_url('register.php' . ($redirect !== '' ? '?redirect=' . urlencode($redirect) : '')) ?>">Create an account</a></p>
-    <p class="auth-back"><a href="<?= app_url('index.php') ?>"><?= icon('arrow-l') ?> Back to website</a></p>
+    <p class="auth-back"><a href="<?= app_url('') ?>"><?= icon('arrow-l') ?> Back to website</a></p>
   </div>
 </section>
 <?php public_footer(); ?>

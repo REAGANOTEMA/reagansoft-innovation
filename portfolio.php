@@ -15,9 +15,9 @@ require __DIR__ . '/config/config.php';
  * The showcase columns
  * ------------------------------------------------------------------
  * website_url, deliverables and cover_art were added to the projects
- * table after the first release. An install that has not run
- * system/03_UPGRADE.sql yet does not have them, and asking for a column
- * the table lacks would throw and leave the gallery empty. So the
+ * table after the first release. An older install that predates the
+ * current dump does not have them, and asking for a column the table
+ * lacks would throw and leave the gallery empty. So the
  * query is built from what is actually there: an un-migrated site
  * still shows its delivered projects, just without the live links,
  * the badges and the drawn scenes.
@@ -188,7 +188,7 @@ public_head([
     <?php if (count($showcase) < 3): ?>
       <p class="folio-upgrade">
         <?= icon('settings') ?>
-        <span>Live links, deliverable badges and the drawn cover scenes need three columns this site has not got yet. Run <b>database/upgrade.sql</b> once and reload &mdash; it adds them, loads the June 2026 projects and changes nothing else.</span>
+        <span>Live links, deliverable badges and the drawn cover scenes need three columns this site has not got yet. Re-import the current <b>sql/system/reagansoft_system.sql</b> dump (or use the reinstall action in install.php) and reload.</span>
       </p>
     <?php endif; ?>
   </div>

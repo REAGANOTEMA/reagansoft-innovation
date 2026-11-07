@@ -11,7 +11,8 @@ reagansoft_website     <- identical mirror kept on the same host account
 
 Both are named after the company — `reagansoft_*` — and each has its own login
 credentials in `config/config.php`. `install.php` builds the system database from
-`system/` and the website database from `website/`. The app reads and writes only
+`sql/system/reagansoft_system.sql` and the website database from
+`sql/website/reagansoft_website.sql`. The app reads and writes only
 `reagansoft_system`; the mirror is a full, importable copy.
 
 ## What's included
@@ -57,94 +58,93 @@ credentials in `config/config.php`. `install.php` builds the system database fro
 
 ## Technology stack
 
-The backend is **PHP only** — no Python, no Node, no second language to install
-or deploy. One XAMPP-style stack runs everything.
+The backend is **PHP 8 + PDO**; the public experience and console are a
+**React + TypeScript** single-page app built with Vite into `app/`. Legacy
+PHP pages remain available for the server-rendered flows and portals.
 
-| Layer      | Choice                                                        |
-|------------|---------------------------------------------------------------|
-| Backend    | PHP 8 (procedural + PDO, no framework, no Composer)           |
-| Database   | MySQL 5.7/8 or MariaDB 10.2+ · InnoDB · utf8mb4                |
-| Web server | Apache (`.htaccess` guards) or Nginx                          |
-| Frontend   | HTML5, hand-written CSS, vanilla JavaScript — no build step    |
-| Icons      | inline SVG helper (`icon()` in `inc/functions.php`)            |
-| Images     | WebP assets in `assets/img`, checked by `tools/img-opt.php`   |
-| Email      | PHP `mail()` through `rs_mail()` in `inc/functions.php`        |
+| Layer           | Choice                                                        |
+|-----------------|---------------------------------------------------------------|
+| Backend         | PHP 8 (procedural + PDO, no framework, no Composer)           |
+| Database        | MySQL 5.7/8 or MariaDB 10.2+ · InnoDB · utf8mb4                |
+| Web server      | Apache (`.htaccess` guards) or Nginx                          |
+| Frontend app    | React 18, TypeScript, Vite, built to `app/`                    |
+| Legacy frontend | HTML5, hand-written CSS, vanilla JavaScript                    |
+| Icons           | inline SVG helper (`icon()`) + React icon components           |
+| Images          | WebP/AVIF/JPG in `assets/img`, checked by `tools/img-opt.php` |
+| Email           | PHP `mail()` through `rs_mail()` in `inc/functions.php`        |
 
-There is no bundler, transpiler or package manager: you can edit a file, save,
-and refresh the browser. Uploading the folder to any PHP 8 host is a deployment.
+Rebuild the React app after changing anything in `frontend/`:
+
+```bash
+cd frontend
+npm install
+npm run build
+```
+
+Vite writes the production bundle to `../app`, which the root URL serves via
+`spa.php` + `.htaccess`.
 
 ## Installation
 
 **Recommended — web installer (one click)**
 1. Start Apache + MySQL in the XAMPP control panel.
-2. Open <http://localhost/reagansoft-innovation/install.php> and click one button.
-   It creates `reagansoft_system` from `system/` and then builds the identical
-   `reagansoft_website` mirror from `website/`.
-3. **Delete `install.php`** afterwards.
+2. Run `C:\xampp\php\php.exe tools\setup-databases.php` once. It creates both
+   databases and both MySQL logins (a non-root phpMyAdmin session cannot run
+   `CREATE USER`).
+3. Open <http://localhost/reagansoft-innovation/install.php> and click one button.
+   It imports `sql/system/reagansoft_system.sql` into `reagansoft_system`, then
+   builds the identical `reagansoft_website` mirror from
+   `sql/website/reagansoft_website.sql`.
+4. **Delete `install.php`** afterwards.
 
 **Alternative — phpMyAdmin**
-1. Open <http://localhost/phpmyadmin> → **Import**.
-2. Import `system/00_INSTALL_ALL.sql` for the active database.
-3. Import `website/00_INSTALL_ALL.sql` for the mirror database.
+1. Create the two databases (or run `tools\setup-databases.php`).
+2. Click `reagansoft_system` in the left-hand list → **Import** →
+   `sql/system/reagansoft_system.sql` → **Go**.
+3. Click `reagansoft_website` → **Import** →
+   `sql/website/reagansoft_website.sql` → **Go**.
 
 **Alternative — command line** (run from the project folder)
 ```bash
-cmd /c "C:\xampp\mysql\bin\mysql.exe -u reagansoft_system -p < system\00_INSTALL_ALL.sql"
-cmd /c "C:\xampp\mysql\bin\mysql.exe -u reagansoft_website -p < website\00_INSTALL_ALL.sql"
+C:\xampp\mysql\bin\mysql.exe -u root reagansoft_system  < sql\system\reagansoft_system.sql
+C:\xampp\mysql\bin\mysql.exe -u root reagansoft_website < sql\website\reagansoft_website.sql
 ```
 
-### Where to run each file
+### The SQL dumps
 
-Both folders contain the same complete pack, wired to a different database.
-Every file selects its own database, so the database you pick in phpMyAdmin is
-replaced by the file's `USE` statement.
+Each file is a complete phpMyAdmin export of one database: all 17 tables, their
+indexes and foreign keys, plus the seed rows (8 demo accounts, 14 services,
+settings and sample projects). Import it into an **empty** database. Re-importing
+over existing tables is intentionally not supported — use the reinstall action in
+`install.php`, or drop the tables first.
 
-| File                 | What it does                                           | Safe to re-run |
-|----------------------|--------------------------------------------------------|----------------|
-| `00_INSTALL_ALL.sql` | schema + seed + upgrade in one import                  | yes            |
-| `01_SCHEMA.sql`      | creates the database and the 15 tables                 | yes            |
-| `02_SEED.sql`        | services, settings, accounts, demo projects & invoices | yes            |
-| `03_UPGRADE.sql`     | adds columns and repairs an older install              | yes            |
-| `04_VERIFY.sql`      | read-only table and row-count checks                   | yes            |
-| `05_INSTALL_PORTABLE.sql` | for host-named databases: select the DB, then import | yes        |
-| `99_RESET.sql`       | **drops every table — deletes all data**               | no (destructive) |
+| File | Database |
+|------|----------|
+| `sql/system/reagansoft_system.sql` | `reagansoft_system` (active app) |
+| `sql/website/reagansoft_website.sql` | `reagansoft_website` (mirror) |
 
-- **phpMyAdmin:** Import tab → choose the file → Go. `00_INSTALL_ALL.sql` is the
-  one to pick for a fresh site; the others are for topping up an existing one.
-- **Command line:** `mysql -u USER -p < system\FILE.sql` (or `website\FILE.sql`).
-- **Web:** only `install.php`. The `.sql` files are blocked from the browser by
-  `.htaccess`, deliberately.
-- **Clean rebuild:** `99_RESET.sql` → `00_INSTALL_ALL.sql`. Nothing else, and
-  only when you intend to lose the data.
+There is no separate `01_SCHEMA` / `02_SEED` / `03_UPGRADE` / `04_VERIFY` split
+any more, and no generated copies to rebuild. If you edit a dump, re-test the
+import on an empty scratch database before shipping it.
 
-Every script except `99_RESET.sql` is non-destructive: tables use
-`CREATE TABLE IF NOT EXISTS` and every row is matched on its natural key
-(`slug`, `setting_key`, `email`, `ref_no`, `quotation_no`, `invoice_no`,
-`reference`, title), so re-importing updates instead of duplicating.
-
-The canonical sources live in `database/`. Both packs are generated from them:
-
-```bash
-php tools/build-sql.php
-```
-
-Edit `database/schema.sql`, `database/seed.sql`, `database/upgrade.sql` or
-`database/reset.sql`, then rebuild. Do not hand-edit the generated copies.
-
-Seed rows never hard-code an ID. Each one looks its parent up by its natural key
-(`email`, `slug`, `ref_no`, `quotation_no`, `invoice_no`), because MySQL and
-MariaDB both burn auto-increment values on `ON DUPLICATE KEY UPDATE` — hard-coded
-IDs would break the second time a script was imported.
+`CREATE USER` is deliberately **not** in any `.sql` file: importing it through
+phpMyAdmin as a non-root user fails with `#1227 Access denied`.
+`tools/setup-databases.php` creates and verifies both accounts safely.
 
 ## Command-line tools in `tools/`
 
-Both are CLI-only (they refuse a browser request) and read-only. Run them from
-the project folder:
+All are CLI-only (they refuse a browser request). Run them from the project
+folder:
 
 ```bash
-php tools/db-check.php    # connection, schema, row counts, logins, mirror, writable paths
-php tools/img-opt.php     # broken / unused / oversized image report
+php tools\setup-databases.php   # create both databases + MySQL logins, then verify
+php tools\db-check.php          # connection, schema, row counts, logins, mirror, writable paths
+php tools\migrate.php           # import both dumps into empty databases
+php tools\img-opt.php           # broken / unused / oversized image report
 ```
+
+`setup-databases.php` is the only script that runs `CREATE USER`/`GRANT`; that is
+why no `.sql` file can trigger `#1227 Access denied`.
 
 `db-check.php` is the quickest way to answer "is the database right?" after an
 import; it prints a `FAIL` line per problem and exits non-zero. `img-opt.php`
@@ -152,20 +152,17 @@ should report *"Images are healthy"* — run it after swapping any artwork.
 
 ## Deploying to shared hosting (cPanel / Plesk)
 
-Shared hosts often name databases themselves and forbid `CREATE DATABASE`.
-For that setup use the portable file inside each pack:
-
-| File                        | Use it when                                                   |
-|-----------------------------|---------------------------------------------------------------|
-| `00_INSTALL_ALL.sql`        | XAMPP, VPS or dedicated server — you may create databases      |
-| **`05_INSTALL_PORTABLE.sql`** | **shared hosting — select your database in phpMyAdmin first** |
+Shared hosts often name databases themselves and forbid `CREATE DATABASE`, so
+create the databases in the host panel and import the dumps into the empty
+databases you selected.
 
 **Steps**
 1. In the host panel create the databases and their users. If your host gives
    different names (for example `acct_reagansoft_system`), note them exactly.
 2. Give each user **all privileges on its own database** and nothing else.
 3. In phpMyAdmin, **click the target database in the left-hand list**.
-4. Import `05_INSTALL_PORTABLE.sql` from the matching folder.
+4. Import `sql/system/reagansoft_system.sql` for the active database, then
+   `sql/website/reagansoft_website.sql` for the mirror.
 5. Point the app at the real names and credentials in `config/config.php`:
    ```php
    define('DB_NAME', 'acct_reagansoft_system');
@@ -193,14 +190,6 @@ RSI_DB_MIRROR=             // empty value on the server
 ```
 
 `db-check.php` then reports `Mirror disabled` instead of an access error.
-
-**Regenerating the SQL packages.** Both folders are generated from the
-canonical files in `database/` so they can never drift apart. After editing
-`schema.sql`, `seed.sql`, `upgrade.sql` or `reset.sql` run:
-
-```bash
-php tools/build-sql.php
-```
 
 ## Configuration — two databases, separate credentials
 
@@ -261,10 +250,9 @@ Password for **every** account below: `Reagan@2026` — change these in producti
 
 The hotel signs in to the client portal and can see project **RSI-2026-00006**
 (website & booking enquiry) with its three tasks and message thread. Every row is
-a **placeholder** — replace the name, email, phone and address in
-`database/seed.sql`, rebuild the packs with `php tools/build-sql.php`, then
-re-import `00_INSTALL_ALL.sql` (or edit the account in Admin → Clients) before
-going live.
+a **placeholder** — edit the account in Admin → Clients, or change the seed rows
+in `sql/system/reagansoft_system.sql` (and the website mirror), then re-import
+into an empty database before going live.
 
 A seeded admin already exists, so `create_admin.php` refuses to run. Customise
 company/payment details under **Admin → Settings**.

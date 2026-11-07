@@ -151,6 +151,54 @@ public_head([
   </div>
 </section>
 
+<section class="section" id="studio-home">
+  <div class="container">
+    <div class="section-head">
+      <div><span class="eyebrow">Inside the studio</span><h2>Design, engineering and delivery under one roof.</h2></div>
+      <p>The screens our clients use are shaped by designers and built by the same engineers who support them after launch.</p>
+    </div>
+    <div class="studio-grid">
+      <figure class="studio-tile studio-tile-lg">
+        <img src="<?= app_url('assets/img/programming-software-interface-device-engineers-application-company-project-space-professional-solutions-systems-117127167.webp') ?>"
+             alt="Reagan Soft Innovation engineers working at modern development workstations"
+             width="800" height="533" loading="lazy" decoding="async">
+        <figcaption><span>Engineering floor &middot; Jinja</span><b>Where the systems are built and tested.</b></figcaption>
+      </figure>
+      <figure class="studio-tile">
+        <img src="<?= app_url('assets/img/ui-ux-designers-isometric-composition-with-small-people-creating-custom-design-web-site-3d-vector-illustration_1284-68939.webp') ?>"
+             alt="UI and UX designers composing a custom website design"
+             width="740" height="616" loading="lazy" decoding="async">
+        <figcaption><span>Product design</span><b>Interfaces before code.</b></figcaption>
+      </figure>
+      <figure class="studio-tile">
+        <img src="<?= app_url('assets/img/code.jpg') ?>"
+             alt="Clean, well-structured application source code on screen"
+             width="643" height="360" loading="lazy" decoding="async">
+        <figcaption><span>Engineering</span><b>Code you can inherit.</b></figcaption>
+      </figure>
+      <figure class="studio-tile studio-tile-wide">
+        <img src="<?= app_url('assets/img/software-core-mobile-1024x1024.png') ?>"
+             alt="Reagansoft mobile application core running on a smartphone"
+             width="1024" height="1024" loading="lazy" decoding="async">
+        <figcaption><span>Mobile core</span><b>One product, every screen.</b></figcaption>
+      </figure>
+    </div>
+    <div class="studio-band">
+      <img src="<?= app_url('assets/img/the-language-we-use.jpg') ?>"
+           alt="The programming languages and frameworks used by the Reagan Soft Innovation team"
+           width="1200" height="720" loading="lazy" decoding="async">
+      <div class="studio-band-body">
+        <span class="eyebrow" style="color:#7fd0ff">The language we use</span>
+        <h3>Readable code, proven stacks.</h3>
+        <p>TypeScript, React, PHP 8, MySQL and Flutter &mdash; chosen because they are reliable to run, easy to hire for and simple to maintain long after handover.</p>
+        <div class="studio-chips">
+          <span>TypeScript</span><span>React</span><span>PHP 8</span><span>MySQL</span><span>Flutter</span><span>REST APIs</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="section">
   <div class="container">
     <div class="section-head">

@@ -6,7 +6,9 @@ Disallow: /uploads/
 Disallow: /storage/
 Disallow: /config/
 Disallow: /inc/
-Disallow: /database/
+Disallow: /sql/
+Disallow: /tools/
+Disallow: /frontend/
 Disallow: /login.php
 Disallow: /register.php
 Disallow: /logout.php

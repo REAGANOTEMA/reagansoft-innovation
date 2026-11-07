@@ -513,7 +513,7 @@ function billing_validate(array $user, array $post): array
 function billing_save(PDO $pdo, array $user, array $clean): void
 {
     if (!billing_schema_ready()) {
-        throw new RuntimeException('Payment details columns are missing from the users table. Run database/upgrade.sql.');
+        throw new RuntimeException('Payment details columns are missing from the users table. Re-import sql/system/reagansoft_system.sql or use install.php reinstall.');
     }
 
     $sets = [];
@@ -782,7 +782,7 @@ function billing_schema_notice_html(): void
     ?>
     <div class="alert alert-error billing-schema-note">
       <b><?= icon('error') ?> Payment details cannot be saved on this install.</b>
-      <p>The <code>users</code> table is missing the payment details columns, so nobody can pay until it is updated. Import <code>database/upgrade.sql</code> into this database — it is safe to run more than once and changes nothing else.</p>
+      <p>The <code>users</code> table is missing the payment details columns, so nobody can pay until it is updated. Import the current <code>sql/system/reagansoft_system.sql</code> dump into a clean database (or use the reinstall action in <code>install.php</code>).</p>
     </div>
     <?php
 }

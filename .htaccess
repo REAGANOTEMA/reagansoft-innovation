@@ -1,6 +1,14 @@
 Options -Indexes -MultiViews
 DirectoryIndex index.php index.html
 
+# Make sure modern image formats are served with a correct MIME type.
+# Apache 2.4 ships without AVIF in mime.types, so without this line the
+# hero artwork is delivered with an empty Content-Type and some browsers
+# refuse to paint it.
+AddType image/avif .avif
+AddType image/webp .webp
+AddType image/svg+xml .svg
+
 # Protect sensitive files
 <FilesMatch "\.(sql|md|log|env|json|yaml|yml|ini|txt|bak|old|swp)$">
   Require all denied
@@ -24,7 +32,7 @@ DirectoryIndex index.php index.html
 # sat in the web root — under http://localhost/reagansoft-innovation/
 # it matched nothing, leaving config/ reachable.
 RewriteEngine On
-RewriteRule ^(?:config|inc|storage|database|system|website|tools)(?:/|$) - [R=403,L]
+RewriteRule ^(?:config|inc|storage|database|system|website|sql|frontend|tools)(?:/|$) - [R=403,L]
 
 # React SPA. Real files and folders (api, admin, client, uploads, *.php,
 # app assets) keep serving directly. Everything else, including the site

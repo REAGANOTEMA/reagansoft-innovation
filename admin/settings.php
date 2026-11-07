@@ -6,7 +6,7 @@ $pdo = db();
 $me = current_user();
 
 $ALLOWED = [
-    'company_name', 'company_tagline', 'company_founder', 'company_phone', 'company_email',
+    'company_name', 'company_tagline', 'company_founder', 'company_phone', 'company_phone_alt', 'company_email',
     'company_address', 'company_whatsapp', 'company_fb', 'company_x', 'company_linkedin',
     'company_about', 'currency', 'tax_percent', 'invoices_due_days',
     'payment_mtn_number', 'payment_airtel_number', 'payment_bank_details', 'payment_gateway_status',
@@ -29,17 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($key === 'registration_open') { $val = isset($_POST['registration_open']) ? '1' : '0'; }
             $up->execute([$key, $val]);
         }
-        // MTN is the single WhatsApp + Mobile Money number. Keeping these
-        // two keys identical stops the footer and checkout from disagreeing.
-        $mtn = trim((string)($_POST['payment_mtn_number'] ?? ''));
-        if ($mtn === '') {
-            $current = $pdo->query("SELECT setting_value FROM settings WHERE setting_key = 'payment_mtn_number'")->fetchColumn();
-            $mtn = trim((string)$current);
-        }
-        if ($mtn !== '') {
-            $up->execute(['payment_mtn_number', $mtn]);
-            $up->execute(['company_whatsapp', $mtn]);
-        }
+        // WhatsApp is a communication number and is independent from the
+        // MTN payment number, so the two may differ.
         // Airtel is calls-only; clear any legacy payment destination.
         $up->execute(['payment_airtel_number', '']);
         $pdo->commit();
@@ -79,22 +70,25 @@ dashboard_head(['title' => 'Settings', 'active' => 'settings', 'crumb' => 'Setti
     </div>
     <div class="form-row">
       <div class="field"><label for="company_founder">Founder</label><input class="input" id="company_founder" name="company_founder" maxlength="120" value="<?= e($cfg['company_founder']) ?>"></div>
-      <div class="field"><label for="company_phone">Phone (Airtel &mdash; calls only)</label><input class="input" id="company_phone" name="company_phone" maxlength="40" value="<?= e($cfg['company_phone']) ?>"><div class="form-note">Used for phone calls only, never as a payment number.</div></div>
+      <div class="field"><label for="company_phone">Phone for calls (primary)</label><input class="input" id="company_phone" name="company_phone" maxlength="40" value="<?= e($cfg['company_phone']) ?>"><div class="form-note">Used for phone calls and WhatsApp. Never used as a payment number.</div></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label for="company_phone_alt">Phone for calls (second)</label><input class="input" id="company_phone_alt" name="company_phone_alt" maxlength="40" value="<?= e($cfg['company_phone_alt']) ?>"><div class="form-note">A second call line. Shown next to the primary number.</div></div>
+      <div class="field">
+        <label for="company_whatsapp">WhatsApp number</label>
+        <input class="input" id="company_whatsapp" name="company_whatsapp" maxlength="40" value="<?= e($cfg['company_whatsapp']) ?>" placeholder="0772514889 or +256772514889">
+        <div class="form-note">Independent from the MTN MoMo number. Links as <code>wa.me/<?= e(whatsapp_number_raw()) ?></code>.</div>
+      </div>
     </div>
     <div class="form-row">
       <div class="field"><label for="company_email">Email</label><input class="input" id="company_email" name="company_email" type="email" maxlength="190" value="<?= e($cfg['company_email']) ?>"></div>
       <div class="field"><label for="company_address">Address</label><input class="input" id="company_address" name="company_address" maxlength="255" value="<?= e($cfg['company_address']) ?>"></div>
     </div>
     <div class="form-row">
-      <div class="field">
-        <label for="company_whatsapp">WhatsApp number (MTN)</label>
-        <input class="input" id="company_whatsapp" name="company_whatsapp" maxlength="40" value="<?= e($cfg['company_whatsapp']) ?>" placeholder="0730314979 or +256730314979">
-        <div class="form-note">This must be the MTN number. It links as <code>wa.me/<?= e(whatsapp_number_raw()) ?></code> and is kept in step with the MTN MoMo number below.</div>
-      </div>
       <div class="field"><label for="company_fb">Facebook URL</label><input class="input" id="company_fb" name="company_fb" maxlength="255" value="<?= e($cfg['company_fb']) ?>"></div>
+      <div class="field"><label for="company_x">X (Twitter) URL</label><input class="input" id="company_x" name="company_x" maxlength="255" value="<?= e($cfg['company_x']) ?>"></div>
     </div>
     <div class="form-row">
-      <div class="field"><label for="company_x">X (Twitter) URL</label><input class="input" id="company_x" name="company_x" maxlength="255" value="<?= e($cfg['company_x']) ?>"></div>
       <div class="field"><label for="company_linkedin">LinkedIn URL</label><input class="input" id="company_linkedin" name="company_linkedin" maxlength="255" value="<?= e($cfg['company_linkedin']) ?>"></div>
     </div>
     <div class="field"><label for="company_about">About the company</label><textarea class="textarea" id="company_about" name="company_about" rows="4"><?= e($cfg['company_about']) ?></textarea></div>

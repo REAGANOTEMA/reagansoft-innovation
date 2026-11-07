@@ -242,7 +242,7 @@ function api_public_settings(): array
 {
     $keys = [
         'company_name', 'company_tagline', 'company_about', 'company_email',
-        'company_phone', 'company_whatsapp', 'company_address', 'company_founder',
+        'company_phone', 'company_phone_alt', 'company_whatsapp', 'company_address', 'company_founder',
         'company_hours', 'company_map_url', 'company_fb', 'company_linkedin',
         'company_x', 'currency', 'project_deposit', 'registration_open',
         'seo_keywords', 'site_announcement', 'support_email', 'newsletter_enabled',

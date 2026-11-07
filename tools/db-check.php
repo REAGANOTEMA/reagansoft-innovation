@@ -101,7 +101,7 @@ $missing = array_diff($expected, $have);
 $extra   = array_diff($have, $expected);
 line('Tables found', (string)count($have), count($have) >= 17 ? 'ok' : 'bad');
 if ($missing) {
-    line('Missing tables', implode(', ', $missing) . '  <-- run system/00_INSTALL_ALL.sql', 'bad');
+    line('Missing tables', implode(', ', $missing) . '  <-- import sql/system/reagansoft_system.sql', 'bad');
 } else {
     line('Missing tables', 'none');
 }

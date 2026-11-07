@@ -114,7 +114,7 @@ public_head([
 ?>
 <section class="auth-page" style="border-top:1px solid var(--line)">
   <div class="auth-card">
-    <a class="brand" href="<?= app_url('index.php') ?>"><img src="<?= app_url('assets/img/reagansoftinnovation-logo.jpeg') ?>" alt="Reagan Soft Innovation logo"><span class="brand-text">Reagan Soft <b>Innovation</b><small class="brand-tagline"><?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></small></span></a>
+    <a class="brand" href="<?= app_url('') ?>"><img src="<?= app_url('assets/img/reagansoftinnovation-logo.jpeg') ?>" alt="Reagan Soft Innovation logo"><span class="brand-text">Reagan Soft <b>Innovation</b><small class="brand-tagline"><?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></small></span></a>
     <h2>Create your client account</h2>
     <p class="auth-sub">Use accurate contact details so our team can reach you.</p>
     <?php if ($errors): foreach ($errors as $err): ?><div class="alert" role="alert"><?= e($err) ?></div><?php endforeach; endif; ?>
@@ -134,7 +134,7 @@ public_head([
       <button class="btn btn-primary btn-block" type="submit"><?= icon('user') ?> Create account</button>
     </form>
     <p class="auth-foot">Already registered? <a href="<?= e($loginUrl) ?>">Sign in</a></p>
-    <p class="auth-back"><a href="<?= app_url('index.php') ?>"><?= icon('arrow-l') ?> Back to website</a></p>
+    <p class="auth-back"><a href="<?= app_url('') ?>"><?= icon('arrow-l') ?> Back to website</a></p>
   </div>
 </section>
 <?php public_footer(); ?>

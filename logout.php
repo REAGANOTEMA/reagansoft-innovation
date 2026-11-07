@@ -14,4 +14,4 @@ session_destroy();
 session_start();
 session_regenerate_id(true);
 
-redirect(app_url('index.php'));
+redirect(app_url(''));

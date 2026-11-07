@@ -1292,7 +1292,7 @@ function admin_settings_update(): never
     $data = api_body();
     $allowed = [
         'company_name', 'company_tagline', 'company_about', 'company_email', 'company_phone',
-        'company_whatsapp', 'company_address', 'company_founder', 'company_hours', 'company_map_url',
+        'company_phone_alt', 'company_whatsapp', 'company_address', 'company_founder', 'company_hours', 'company_map_url',
         'company_fb', 'company_linkedin', 'company_x', 'currency', 'project_deposit',
         'registration_open', 'seo_keywords', 'site_announcement', 'support_email',
         'newsletter_enabled', 'payment_mtn_number', 'payment_airtel_number',
