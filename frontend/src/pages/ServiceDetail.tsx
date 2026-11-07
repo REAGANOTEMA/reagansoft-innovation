@@ -6,6 +6,7 @@ import { usePageMeta } from '../lib/seo';
 import { Reveal } from '../components/Reveal';
 import { Badge, ErrorBlock, LoadingBlock, SectionHeading } from '../components/UI';
 import { ServiceGlyph } from '../components/Graphics';
+import { serviceMedia } from '../lib/media';
 import { money } from '../lib/format';
 import type { Service } from '../lib/types';
 

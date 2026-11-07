@@ -1,4 +1,5 @@
-Options -Indexes
+Options -Indexes -MultiViews
+DirectoryIndex index.php index.html
 
 # Protect sensitive files
 <FilesMatch "\.(sql|md|log|env|json|yaml|yml|ini|txt|bak|old|swp)$">
@@ -24,6 +25,14 @@ Options -Indexes
 # it matched nothing, leaving config/ reachable.
 RewriteEngine On
 RewriteRule ^(?:config|inc|storage|database|system|website|tools)(?:/|$) - [R=403,L]
+
+# React SPA. Real files and folders (api, admin, client, uploads, *.php,
+# app assets) keep serving directly. Everything else, including the site
+# root, is handed to the PHP shell so BrowserRouter deep links work.
+RewriteRule ^$ spa.php [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ spa.php [L]
 
 # Security headers (also applied in PHP for non-Apache setups)
 <IfModule mod_headers.c>

@@ -6,6 +6,7 @@ import { usePageMeta } from '../lib/seo';
 import { Reveal } from '../components/Reveal';
 import { SectionHeading } from '../components/UI';
 import { ServiceGlyph } from '../components/Graphics';
+import { serviceMedia, media, MEDIA_ALT } from '../lib/media';
 import { cn } from '../lib/cn';
 
 export function Services() {
@@ -43,14 +44,23 @@ export function Services() {
                 operation — the standard does not change.
               </p>
             </div>
-            <div className="rounded-2xl border border-white/12 bg-white/[0.05] p-5 backdrop-blur">
-              <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/40">How pricing works</p>
-              <p className="mt-2 text-[13px] leading-relaxed text-white/65">
-                Ranges shown are real starting points. After a short discovery call we confirm scope, milestones and a fixed quote.
-              </p>
-              <Link to="/pricing" className="mt-4 inline-flex items-center gap-1 text-[11px] font-semibold text-brand-300 hover:text-white">
-                See pricing detail <ArrowUpRight className="h-3 w-3" />
-              </Link>
+            <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.05] backdrop-blur">
+              <img
+                src={media('engineering')}
+                alt={MEDIA_ALT.engineering}
+                className="h-28 w-full object-cover opacity-80"
+                loading="lazy"
+                decoding="async"
+              />
+              <div className="p-5">
+                <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/40">How pricing works</p>
+                <p className="mt-2 text-[13px] leading-relaxed text-white/65">
+                  Ranges shown are real starting points. After a short discovery call we confirm scope, milestones and a fixed quote.
+                </p>
+                <Link to="/pricing" className="mt-4 inline-flex items-center gap-1 text-[11px] font-semibold text-brand-300 hover:text-white">
+                  See pricing detail <ArrowUpRight className="h-3 w-3" />
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -92,6 +102,15 @@ export function Services() {
             {filtered.map((service, index) => (
               <Reveal key={service.id} delay={Math.min(index, 6) * 50}>
                 <div className="card card-hover group flex h-full flex-col p-6">
+                  <div className="mb-5 overflow-hidden rounded-2xl">
+                    <img
+                      src={serviceMedia(service.slug, service.icon)}
+                      alt={`${service.name} by Reagansoft Innovation`}
+                      className="h-32 w-full object-cover transition duration-500 group-hover:scale-[1.04]"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
                   <div className="flex items-start justify-between gap-3">
                     <span className="grid h-12 w-12 place-items-center rounded-2xl bg-brand-50 text-brand-600 ring-1 ring-brand-100 transition group-hover:bg-brand-600 group-hover:text-white">
                       <ServiceGlyph name={service.icon} className="h-6 w-6" />

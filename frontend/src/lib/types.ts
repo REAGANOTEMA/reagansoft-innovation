@@ -83,6 +83,7 @@ export interface Project {
   status: string;
   progress: number;
   deadline?: string | null;
+  started_at?: string | null;
   submitted_at?: string;
   updated_at?: string;
   completed_at?: string | null;

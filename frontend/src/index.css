@@ -143,7 +143,7 @@ body {
     @apply flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-white/65 transition hover:bg-white/10 hover:text-white;
   }
   .side-link-active {
-    @apply bg-white/12 text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,.12)];
+    @apply bg-white/10 text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,.12)];
   }
 
   .stat-card {
@@ -212,6 +212,26 @@ body {
   opacity: 0.035;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* TV-style live showcase */
+@keyframes tvProgress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.tv-progress {
+  transform-origin: left center;
+  animation-name: tvProgress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes kenburns {
+  from { transform: scale(1.02); }
+  to { transform: scale(1.12); }
+}
+.kenburns {
+  animation: kenburns 11s ease-out both;
 }
 
 @media (prefers-reduced-motion: reduce) {

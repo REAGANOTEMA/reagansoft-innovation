@@ -21,9 +21,11 @@ import {
 import { useSite } from '../lib/site';
 import { usePageMeta } from '../lib/seo';
 import { Reveal } from '../components/Reveal';
-import { HeroVisual, ProjectCover, ServiceGlyph, IndustryGlyph } from '../components/Graphics';
+import { ProjectCover, ServiceGlyph, IndustryGlyph } from '../components/Graphics';
+import { LiveShowcase } from '../components/LiveShowcase';
 import { Badge, SectionHeading } from '../components/UI';
 import { money } from '../lib/format';
+import { media, MEDIA_ALT } from '../lib/media';
 
 const industries = [
   { key: 'education', label: 'Education' },
@@ -81,74 +83,13 @@ export function Home() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-navy-950 pb-24 pt-16 text-white sm:pt-20 lg:pb-32 lg:pt-24">
-        <div className="aurora" />
-        <div className="pointer-events-none absolute inset-0 bg-grid-dark opacity-40" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-navy-950 to-transparent" />
+      {/* Live TV-style showcase */}
+      <LiveShowcase services={services} stats={stats} />
 
-        <div className="container-x relative grid items-center gap-16 lg:grid-cols-[1.05fr_0.95fr]">
-          <div>
-            <Reveal>
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 text-[11px] font-medium text-white/70 backdrop-blur">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-                </span>
-                Software studio · {settings.company_address}
-              </span>
-            </Reveal>
-
-            <Reveal delay={80}>
-              <h1 className="h1 mt-6 max-w-2xl text-white">
-                Software that moves
-                <br />
-                your business <span className="bg-gradient-to-r from-brand-300 via-cyan-300 to-brand-400 bg-clip-text text-transparent">forward.</span>
-              </h1>
-            </Reveal>
-
-            <Reveal delay={140}>
-              <p className="mt-6 max-w-xl text-[1.05rem] leading-relaxed text-white/65">
-                We design and build websites, business systems, ecommerce stores and mobile apps for organisations across Uganda —
-                then stay around to keep them fast, secure and useful.
-              </p>
-            </Reveal>
-
-            <Reveal delay={200}>
-              <div className="mt-8 flex flex-wrap items-center gap-3">
-                <Link to="/contact" className="btn-primary">
-                  Start a project <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link to="/portfolio" className="btn inline-flex border border-white/20 bg-white/5 text-white backdrop-blur hover:bg-white/10">
-                  Explore our work <ArrowUpRight className="h-4 w-4" />
-                </Link>
-              </div>
-            </Reveal>
-
-            <Reveal delay={260}>
-              <dl className="mt-10 grid max-w-lg grid-cols-3 gap-4 border-t border-white/10 pt-6">
-                {[
-                  { label: 'Projects delivered', value: `${stats.projects || 7}+` },
-                  { label: 'Organisations served', value: `${stats.clients || 6}+` },
-                  { label: 'Service lines', value: `${stats.services || 14}` },
-                ].map((item) => (
-                  <div key={item.label}>
-                    <dt className="font-mono text-[9px] uppercase tracking-[0.18em] text-white/35">{item.label}</dt>
-                    <dd className="mt-1 font-display text-2xl font-semibold text-white">{item.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </Reveal>
-          </div>
-
-          <Reveal delay={200} className="relative">
-            <HeroVisual />
-          </Reveal>
-        </div>
-
-        <div className="container-x relative mt-16 lg:mt-24">
-          <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 backdrop-blur">
-            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/35">Sectors</span>
+      <section className="relative overflow-hidden bg-navy-950 text-white">
+        <div className="container-x relative py-6">
+          <div className="flex flex-wrap items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 backdrop-blur">
+            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/35">Sectors we serve</span>
             <div className="flex flex-1 flex-wrap items-center gap-x-6 gap-y-2">
               {industries.map((industry) => (
                 <span key={industry.key} className="inline-flex items-center gap-2 text-[12px] font-medium text-white/55">
@@ -156,6 +97,9 @@ export function Home() {
                 </span>
               ))}
             </div>
+            <span className="hidden items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-white/30 sm:flex">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Open for Q1 2027
+            </span>
           </div>
         </div>
       </section>
@@ -254,6 +198,135 @@ export function Home() {
               </Reveal>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Inside the studio */}
+      <section className="relative overflow-hidden bg-white py-20 sm:py-24">
+        <div className="pointer-events-none absolute -left-24 top-24 h-72 w-72 rounded-full bg-brand-100/50 blur-3xl" />
+        <div className="container-x relative">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+            <Reveal>
+              <SectionHeading
+                eyebrow="Inside the studio"
+                title="Design, engineering and delivery under one roof."
+                lead="The screens our clients use are shaped by real designers and built by the same engineers who support them after launch."
+              />
+            </Reveal>
+            <Reveal delay={100}>
+              <Link to="/about" className="btn-ghost btn-sm">
+                Meet the studio <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </Reveal>
+          </div>
+
+          <div className="mt-12 grid gap-4 lg:grid-cols-12">
+            <Reveal className="lg:col-span-7">
+              <figure className="group relative h-full overflow-hidden rounded-3xl border border-brand-100 bg-navy-950">
+                <img
+                  src={media('engineering')}
+                  alt={MEDIA_ALT.engineering}
+                  className="h-full min-h-[320px] w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/25 to-transparent" />
+                <figcaption className="absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-between gap-3 p-6 text-white">
+                  <div>
+                    <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-brand-300">Engineering floor · Jinja</p>
+                    <p className="mt-1 font-display text-lg font-semibold">Where the systems are built and tested.</p>
+                  </div>
+                  <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.16em] text-white/80 backdrop-blur">
+                    Live studio
+                  </span>
+                </figcaption>
+              </figure>
+            </Reveal>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:col-span-5">
+              <Reveal delay={80}>
+                <figure className="group relative h-full overflow-hidden rounded-3xl border border-brand-100 bg-brand-50">
+                  <img
+                    src={media('design')}
+                    alt={MEDIA_ALT.design}
+                    className="h-full min-h-[170px] w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-950/90 to-transparent p-4 text-white">
+                    <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-brand-300">Product design</p>
+                    <p className="mt-0.5 text-[12px] font-semibold">Interfaces before code</p>
+                  </figcaption>
+                </figure>
+              </Reveal>
+
+              <Reveal delay={140}>
+                <figure className="group relative h-full overflow-hidden rounded-3xl border border-brand-100 bg-brand-50">
+                  <img
+                    src={media('code')}
+                    alt={MEDIA_ALT.code}
+                    className="h-full min-h-[170px] w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-950/90 to-transparent p-4 text-white">
+                    <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-brand-300">Engineering</p>
+                    <p className="mt-0.5 text-[12px] font-semibold">Code you can inherit</p>
+                  </figcaption>
+                </figure>
+              </Reveal>
+
+              <Reveal delay={200} className="sm:col-span-2">
+                <figure className="group relative overflow-hidden rounded-3xl border border-brand-100 bg-white p-4 sm:flex sm:items-center sm:gap-5">
+                  <img
+                    src={media('mobileCore')}
+                    alt={MEDIA_ALT.mobileCore}
+                    className="h-36 w-full rounded-2xl object-cover sm:h-24 sm:w-24 sm:shrink-0"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption className="mt-3 sm:mt-0">
+                    <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-brand-600">Mobile core</p>
+                    <p className="mt-1 font-display text-[13.5px] font-semibold text-navy-900">One product, every screen.</p>
+                    <p className="mt-1 text-[11.5px] leading-relaxed text-ink-muted">
+                      Responsive web, Android and iOS built from a shared, secure core.
+                    </p>
+                  </figcaption>
+                </figure>
+              </Reveal>
+            </div>
+          </div>
+
+          <Reveal delay={160}>
+            <div className="mt-4 overflow-hidden rounded-3xl border border-brand-100 bg-navy-950">
+              <div className="grid items-center gap-0 md:grid-cols-[0.9fr_1.1fr]">
+                <img
+                  src={media('languages')}
+                  alt={MEDIA_ALT.languages}
+                  className="h-48 w-full object-cover md:h-full md:min-h-[180px]"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div className="p-6 text-white sm:p-8">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-white/60">
+                    <Layers3 className="h-3 w-3" /> The language we use
+                  </span>
+                  <h3 className="mt-4 font-display text-xl font-semibold">Readable code, proven stacks.</h3>
+                  <p className="mt-2 max-w-lg text-[12.5px] leading-relaxed text-white/55">
+                    TypeScript, React, PHP 8, MySQL and Flutter — chosen because they are reliable to run, easy to hire for and simple
+                    to maintain long after handover.
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {['TypeScript', 'React', 'PHP 8', 'MySQL', 'Flutter', 'REST APIs'].map((item) => (
+                      <span key={item} className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[10.5px] font-medium text-white/70">
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 

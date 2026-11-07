@@ -41,9 +41,9 @@ export function PortalInvoices() {
       <PageHeader eyebrow="Billing" title="Invoices & payments" description="Review what has been billed, what is outstanding, and submit a payment reference for confirmation." />
 
       <div className="grid gap-4 sm:grid-cols-3">
-        <StatCard label="Total billed" value={money(totalBilled)} icon={ReceiptText} tone="brand" />
-        <StatCard label="Paid to date" value={money(totalPaid)} icon={Wallet} tone="green" />
-        <StatCard label="Outstanding" value={money(outstanding)} icon={ReceiptText} tone={outstanding > 0 ? 'amber' : 'gray'} />
+        <StatCard label="Total billed" value={money(totalBilled)} icon={<ReceiptText className="h-5 w-5" />} tone="blue" />
+        <StatCard label="Paid to date" value={money(totalPaid)} icon={<Wallet className="h-5 w-5" />} tone="green" />
+        <StatCard label="Outstanding" value={money(outstanding)} icon={<ReceiptText className="h-5 w-5" />} tone={outstanding > 0 ? 'amber' : 'gray'} />
       </div>
 
       <div className="flex flex-wrap gap-1 rounded-xl border border-brand-100 bg-white p-1.5">
@@ -77,7 +77,7 @@ export function PortalInvoices() {
                     <div className="flex flex-wrap items-center gap-2">
                       <p className="font-mono text-[11.5px] font-semibold text-navy-900">{invoice.invoice_no}</p>
                       <Badge tone={status.tone}>{status.label}</Badge>
-                      {invoice.is_deposit ? <Badge tone="brand">Deposit</Badge> : null}
+                      {invoice.is_deposit ? <Badge tone="blue">Deposit</Badge> : null}
                     </div>
                     <p className="mt-1 text-[12px] font-medium text-navy-900">{invoice.project ?? 'Project'}</p>
                     <p className="text-[10.5px] text-ink-faint">

@@ -68,7 +68,7 @@ export function Portfolio() {
               ['Completed', stats.completed],
               ['Clients', stats.clients],
             ].map(([label, value]) => (
-              <div key={label} className="rounded-2xl border border-white/12 bg-white/[0.05] p-4 text-center backdrop-blur">
+              <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.05] p-4 text-center backdrop-blur">
                 <p className="font-display text-2xl font-semibold text-white">{value}</p>
                 <p className="mt-1 font-mono text-[8px] uppercase tracking-[0.18em] text-white/40">{label}</p>
               </div>

@@ -1,7 +1,7 @@
 import { Badge, ProgressBar } from './UI';
 import { formatDate, money } from '../lib/format';
 import { invoiceStatus, paymentMethod, paymentStatus } from '../lib/status';
-import type { Invoice, Payment } from '../../lib/types';
+import type { Invoice, Payment } from '../lib/types';
 
 export function InvoiceView({ invoice, showPayments = true }: { invoice: Invoice; showPayments?: boolean }) {
   const balance = Math.max(0, Number(invoice.total) - Number(invoice.amount_paid));

@@ -90,7 +90,7 @@ export function DashboardShell({ variant, items, footerItems = [] }: Props) {
         </div>
 
         <div className="relative px-4 py-4">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-white/55">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-white/55">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
             {variant === 'portal' ? 'Client portal' : isAdmin ? 'Administrator' : 'Staff workspace'}
           </span>
@@ -141,13 +141,13 @@ export function DashboardShell({ variant, items, footerItems = [] }: Props) {
               </div>
             </div>
             <div className="mt-3 flex gap-1.5">
-              <Link to="/" className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-white/8 py-1.5 text-[10px] font-medium text-white/60 transition hover:bg-white/15 hover:text-white">
+              <Link to="/" className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-white/10 py-1.5 text-[10px] font-medium text-white/60 transition hover:bg-white/15 hover:text-white">
                 <ExternalLink className="h-3 w-3" /> Website
               </Link>
               <button
                 type="button"
                 onClick={handleLogout}
-                className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-white/8 py-1.5 text-[10px] font-medium text-white/60 transition hover:bg-rose-500/20 hover:text-rose-200"
+                className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-white/10 py-1.5 text-[10px] font-medium text-white/60 transition hover:bg-rose-500/20 hover:text-rose-200"
               >
                 <LogOut className="h-3 w-3" /> Sign out
               </button>
@@ -159,7 +159,7 @@ export function DashboardShell({ variant, items, footerItems = [] }: Props) {
       {open && <div className="fixed inset-0 z-40 bg-navy-950/60 backdrop-blur-sm lg:hidden" onClick={() => setOpen(false)} />}
 
       <div className="lg:pl-[264px]">
-        <header className="sticky top-0 z-30 flex h-[72px] items-center gap-3 border-b border-brand-100 bg-white/85 px-4 backdrop-blur-xl sm:px-6">
+        <header className="sticky top-0 z-30 flex h-[72px] items-center gap-3 border-b border-brand-100 bg-white/105 px-4 backdrop-blur-xl sm:px-6">
           <button type="button" className="grid h-9 w-9 place-items-center rounded-xl border border-brand-100 text-navy-900 lg:hidden" onClick={() => setOpen(true)} aria-label="Open menu">
             <Menu className="h-5 w-5" />
           </button>

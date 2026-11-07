@@ -61,7 +61,7 @@ export function HeroVisual() {
       <div className="absolute -left-8 top-10 h-40 w-40 rounded-full bg-brand-400/25 blur-3xl" />
       <div className="absolute -right-6 bottom-8 h-48 w-48 rounded-full bg-cyan-300/20 blur-3xl" />
 
-      <div className="relative overflow-hidden rounded-[28px] border border-white/12 bg-navy-900/90 p-3 shadow-[0_50px_120px_-40px_rgba(3,26,46,.9)] backdrop-blur">
+      <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-navy-900/90 p-3 shadow-[0_50px_120px_-40px_rgba(3,26,46,.9)] backdrop-blur">
         <div className="overflow-hidden rounded-[20px] border border-white/10 bg-[#071f36]">
           <div className="flex items-center gap-2 border-b border-white/10 bg-white/[0.04] px-4 py-2.5">
             <span className="h-2 w-2 rounded-full bg-rose-400/80" />
@@ -105,14 +105,14 @@ export function HeroVisual() {
                   { label: 'Revenue', value: 'UGX 86M', tone: 'text-emerald-300' },
                   { label: 'Uptime', value: '99.98%', tone: 'text-cyan-300' },
                 ].map((item) => (
-                  <div key={item.label} className="rounded-lg border border-white/8 bg-white/[0.035] p-2">
+                  <div key={item.label} className="rounded-lg border border-white/10 bg-white/[0.035] p-2">
                     <p className="font-mono text-[7px] uppercase tracking-widest text-white/35">{item.label}</p>
                     <p className={cn('mt-1 font-display text-[11px] font-semibold', item.tone)}>{item.value}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-3 rounded-xl border border-white/8 bg-white/[0.03] p-3">
+              <div className="mt-3 rounded-xl border border-white/10 bg-white/[0.03] p-3">
                 <div className="flex items-center justify-between">
                   <p className="font-mono text-[8px] uppercase tracking-widest text-white/40">Sprint velocity</p>
                   <span className="font-mono text-[8px] text-emerald-300">+18.4%</span>
