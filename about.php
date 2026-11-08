@@ -2,6 +2,7 @@
 require __DIR__ . '/config/config.php';
 
 $phone  = settings('company_phone', '+256772514889');
+$phoneAlt = settings('company_phone_alt', '+256730314979');
 $email  = settings('company_email', 'info@reagansoftinnovation.com');
 $waText = 'Hello Reagan Soft Innovation, I would like to enquire about a project.';
 
@@ -157,7 +158,7 @@ public_head([
         <div class="contact-list three">
           <div class="contact-item">
             <span class="ci-icon"><?= icon('phone') ?></span>
-            <div><b>Phone</b><span><a href="<?= e(phone_tel($phone)) ?>"><?= e(phone_display($phone, $phone)) ?></a></span></div>
+            <div><b>Phone</b><span><a href="<?= e(phone_tel($phone)) ?>"><?= e(phone_display($phone, $phone)) ?></a><?php if ($phoneAlt !== '' && $phoneAlt !== $phone): ?> &middot; <a href="<?= e(phone_tel($phoneAlt)) ?>"><?= e(phone_display($phoneAlt, $phoneAlt)) ?></a><?php endif; ?></span></div>
           </div>
           <div class="contact-item">
             <span class="ci-icon"><?= icon('chat') ?></span>

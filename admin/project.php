@@ -226,6 +226,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $decision = $_POST['decision'] ?? '';
         if (in_array($decision, ['cancelled', 'accepted', 'rejected'], true)) {
             $pdo->prepare('UPDATE quotations SET status = ? WHERE id = ? AND project_id = ?')->execute([$decision, $qid, $id]);
+            if ($decision === 'accepted') {
+                $qst = $pdo->prepare('SELECT total, quotation_no FROM quotations WHERE id = ? AND project_id = ?');
+                $qst->execute([$qid, $id]);
+                if ($quote = $qst->fetch()) {
+                    sync_first_payment_invoice($pdo, $id, (int)$project['client_id'], (float)$quote['total'], (string)$quote['quotation_no']);
+                }
+            }
             audit('quotation_updated', 'quotation', $qid, 'Quotation marked ' . $decision);
             flash('success', 'Quotation updated.');
         }

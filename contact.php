@@ -42,10 +42,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $phone = settings('company_phone', '+256772514889');
+$phoneAlt = settings('company_phone_alt', '+256730314979');
 
 public_head([
     'title'     => 'Contact Us | Reagan Soft Innovation Limited, Jinja, Uganda',
-    'desc'      => 'Contact Reagan Soft Innovation Limited in Jinja, Uganda. Phone +256 730 314 979. Send us a message about your website, software or business system project.',
+    'desc'      => 'Contact Reagan Soft Innovation Limited in Jinja, Uganda. Call +256 772 514 889 or +256 730 314 979, or WhatsApp us about your website, software or business system project.',
     'active'    => 'contact',
     'canonical' => 'contact.php',
 ]);
@@ -70,7 +71,7 @@ public_head([
         <div class="contact-list">
           <div class="contact-item">
             <span class="ci-icon"><?= icon('phone') ?></span>
-            <div><b>Phone</b><span><a href="<?= e(phone_tel($phone)) ?>"><?= e(phone_display($phone, $phone)) ?></a></span></div>
+            <div><b>Phone</b><span><a href="<?= e(phone_tel($phone)) ?>"><?= e(phone_display($phone, $phone)) ?></a><?php if ($phoneAlt !== '' && $phoneAlt !== $phone): ?> &middot; <a href="<?= e(phone_tel($phoneAlt)) ?>"><?= e(phone_display($phoneAlt, $phoneAlt)) ?></a><?php endif; ?></span></div>
           </div>
           <div class="contact-item">
             <span class="ci-icon"><?= icon('chat') ?></span>

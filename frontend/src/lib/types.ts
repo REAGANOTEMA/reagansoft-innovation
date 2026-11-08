@@ -24,6 +24,7 @@ export interface Settings {
   company_about: string;
   company_email: string;
   company_phone: string;
+  company_phone_alt?: string;
   company_whatsapp: string;
   company_address: string;
   company_founder: string;

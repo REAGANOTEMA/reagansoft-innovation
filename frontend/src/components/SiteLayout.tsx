@@ -69,6 +69,11 @@ export function SiteLayout() {
             <a href={`tel:${settings.company_phone.replace(/\s/g, '')}`} className="flex items-center gap-1.5 transition hover:text-white">
               <Phone className="h-3 w-3" /> {settings.company_phone}
             </a>
+            {settings.company_phone_alt && (
+              <a href={`tel:${settings.company_phone_alt.replace(/\s/g, '')}`} className="flex items-center gap-1.5 transition hover:text-white">
+                <Phone className="h-3 w-3" /> {settings.company_phone_alt}
+              </a>
+            )}
             <span className="flex items-center gap-1.5">
               <MapPin className="h-3 w-3" /> {settings.company_address}
             </span>
@@ -427,6 +432,13 @@ function Footer() {
                   <Phone className="mt-0.5 h-4 w-4 shrink-0 text-brand-300" /> {settings.company_phone}
                 </a>
               </li>
+              {settings.company_phone_alt && (
+                <li>
+                  <a href={`tel:${settings.company_phone_alt.replace(/\s/g, '')}`} className="flex gap-2.5 transition hover:text-white">
+                    <Phone className="mt-0.5 h-4 w-4 shrink-0 text-brand-300" /> {settings.company_phone_alt}
+                  </a>
+                </li>
+              )}
               <li>
                 <a href={`mailto:${settings.company_email}`} className="flex gap-2.5 transition hover:text-white">
                   <Mail className="mt-0.5 h-4 w-4 shrink-0 text-brand-300" /> {settings.company_email}

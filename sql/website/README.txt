@@ -2,35 +2,49 @@ Reagan Soft Innovation Limited
 WEBSITE DATABASE PACK
 Database: reagansoft_website
 
-This is the mirror of reagansoft_system. It has the same 17 tables and
-the same demo data, and is used by the public website and the mirror
-store. Keep it in step by importing this dump or by running
-tools\migrate.php.
+This is the mirror of reagansoft_system. It has exactly the same 17
+tables, indexes, foreign keys and demo data. The application reads and
+writes reagansoft_system; this database is the public/mirror copy.
 
-FILE
-reagansoft_website.sql   complete dump: 17 tables, indexes, foreign keys,
-                         seed data and 8 demo accounts
+FILES
+reagansoft_website.sql     Complete dump: 17 tables, indexes, foreign keys,
+                           seed data and 8 demo accounts.
+verify.sql                 Safe row-count / health check. Starts with
+                           USE reagansoft_website, so it never fails with
+                           "#1109 Unknown table 'users' in information_schema".
+upgrade-2026-11-08.sql     Safe, repeatable data upgrade (WhatsApp / call
+                           numbers and project-title text repair).
 
-IMPORT (into an empty database)
-1. Start Apache and MySQL (e.g. XAMPP).
-2. Create both databases and their MySQL logins:
-     C:\xampp\php\php.exe tools\setup-databases.php
-3. phpMyAdmin: click reagansoft_website in the left list, open Import,
-   choose reagansoft_website.sql and press Go.
-   Or from the project folder:
-     C:\xampp\mysql\bin\mysql.exe -u root reagansoft_website < sql\website\reagansoft_website.sql
-4. Verify everything:
-     C:\xampp\php\php.exe tools\db-check.php
+HOW TO IMPORT (phpMyAdmin)
+1. Start Apache and MySQL (XAMPP control panel).
+2. Click the target database in the left-hand list FIRST:
+      reagansoft_website
+3. Open the Import tab, choose reagansoft_website.sql, press Go.
+4. Open verify.sql in the SQL tab and run it. You should see 17 tables
+   and 8 users.
 
-Import into an EMPTY database. Do not re-import over existing tables.
-To rebuild from scratch, use the reinstall action in install.php, or drop
-the tables first.
+The dump starts with SET FOREIGN_KEY_CHECKS=0 and DROP TABLE IF EXISTS
+for every table, so it can be imported over an existing database
+without "#1050 Table already exists". Importing replaces the current
+contents of reagansoft_website, so take a backup first.
 
-WHY THERE IS NO CREATE USER HERE
-A .sql file containing CREATE USER fails with "#1227 Access denied" when it
-is imported through phpMyAdmin with a non-root account. This dump contains
-no CREATE USER, GRANT or USE statement, so it cannot trigger that error.
-tools\setup-databases.php creates and verifies both database accounts.
+If the database does not exist yet, create it first (utf8mb4 /
+utf8mb4_unicode_ci) or run:
+      C:\xampp\php\php.exe tools\setup-databases.php
+
+HOW TO IMPORT (command line, from the project folder)
+      C:\xampp\mysql\bin\mysql.exe -u root reagansoft_website < sql\website\reagansoft_website.sql
+
+WHY YOU SAW THESE ERRORS
+- "#1109 Unknown table 'users' in information_schema"
+  The check query was run while phpMyAdmin was showing the
+  information_schema database. Select reagansoft_website first, or run
+  verify.sql (it contains USE reagansoft_website).
+- "#1227 Access denied; you need the CREATE USER privilege"
+  The dump does NOT contain CREATE USER/GRANT. That error only appears
+  when the CREATE USER snippet from the README is pasted into a
+  non-root phpMyAdmin session. Use tools\setup-databases.php, or run
+  that snippet as the MySQL root user. Nothing in this folder needs it.
 
 APPLICATION LOGIN (config/config.php)
   database: reagansoft_website

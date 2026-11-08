@@ -139,6 +139,9 @@ export function Faq() {
                 <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-[12px] text-ink-soft">
                   <a href={`mailto:${settings.company_email}`} className="inline-flex items-center gap-2 hover:text-brand-700"><Mail className="h-3.5 w-3.5 text-brand-600" /> {settings.company_email}</a>
                   <a href={`tel:${settings.company_phone.replace(/\s/g, '')}`} className="inline-flex items-center gap-2 hover:text-brand-700"><Phone className="h-3.5 w-3.5 text-brand-600" /> {settings.company_phone}</a>
+                  {settings.company_phone_alt && (
+                    <a href={`tel:${settings.company_phone_alt.replace(/\s/g, '')}`} className="inline-flex items-center gap-2 hover:text-brand-700"><Phone className="h-3.5 w-3.5 text-brand-600" /> {settings.company_phone_alt}</a>
+                  )}
                   <a href={`https://wa.me/${settings.company_whatsapp.replace(/[^\d]/g, '')}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-brand-700"><MessageCircle className="h-3.5 w-3.5 text-brand-600" /> WhatsApp</a>
                 </div>
               </div>

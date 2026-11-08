@@ -3,6 +3,7 @@ import { ArrowRight, ArrowUpRight, Check, Compass, HeartHandshake, MapPin, Shiel
 import { useSite } from '../lib/site';
 import { usePageMeta } from '../lib/seo';
 import { asset } from '../lib/env';
+import { media } from '../lib/media';
 import { Reveal } from '../components/Reveal';
 import { SectionHeading, Badge } from '../components/UI';
 import { CloudInfraArt, IndustryGlyph, SecurityArt } from '../components/Graphics';
@@ -157,6 +158,35 @@ export function About() {
                 </div>
               </div>
             </Reveal>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-brand-100 bg-white py-14 sm:py-16">
+        <div className="container-x">
+          <div className="grid gap-4 sm:grid-cols-3">
+            {[
+              { key: 'design' as const, label: 'Design', text: 'Interfaces mapped to real workflows, not decoration.' },
+              { key: 'engineering' as const, label: 'Engineering', text: 'Senior developers who build and support the same code.' },
+              { key: 'languages' as const, label: 'Stack', text: 'Proven languages and frameworks chosen per project.' },
+            ].map((item, index) => (
+              <Reveal key={item.key} delay={index * 80}>
+                <figure className="group relative overflow-hidden rounded-3xl border border-brand-100 bg-brand-50/40 shadow-soft">
+                  <div className="aspect-[4/3] overflow-hidden">
+                    <img
+                      src={media(item.key)}
+                      alt={item.label === 'Design' ? 'UI and UX designers composing a custom website design' : item.label === 'Engineering' ? 'Reagansoft software engineers working at modern development workstations' : 'The programming languages and frameworks used by the Reagansoft team'}
+                      className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"
+                      loading="lazy"
+                    />
+                  </div>
+                  <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-950/85 to-transparent p-4 text-white">
+                    <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-brand-200">{item.label}</p>
+                    <p className="mt-1 text-[12.5px] leading-snug text-white/85">{item.text}</p>
+                  </figcaption>
+                </figure>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>

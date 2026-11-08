@@ -15,7 +15,7 @@ function settings(?string $key = null, ?string $default = ''): string {
             'company_phone' => '+256772514889',
             'company_phone_alt' => '+256730314979',
             'company_whatsapp' => '+256772514889',
-            'payment_mtn_number' => '+256730314979',
+            'payment_mtn_number' => '+256772514889',
             'currency' => 'UGX',
         ];
         try {
@@ -234,14 +234,122 @@ function next_doc_no(PDO $pdo, string $table, string $column, string $prefix): s
 }
 
 /* ------------------------------------------------------------------
- * Project deposit (the fixed "choose a program -> create account ->
- * pay" entry fee). Configurable under Admin -> Settings.
+ * Project deposit / first payment.
+ *
+ * The first payment is always half of the original project price:
+ *   - the approved quotation total, or
+ *   - the project budget when no quotation has been approved yet.
+ *
+ * Before a price exists (a brand-new request), the configurable fixed
+ * deposit is used as a booking fee. Configurable under Admin -> Settings.
  * ------------------------------------------------------------------ */
 const DEPOSIT_DEFAULT = 200000;
+const FIRST_PAYMENT_PERCENT = 50;
 
 function deposit_amount(): float {
     $v = (float)settings('project_deposit', (string)DEPOSIT_DEFAULT);
     return $v > 0 ? $v : DEPOSIT_DEFAULT;
+}
+
+/**
+ * The first payment for a known original price (half of it). Falls back
+ * to the configured fixed deposit while the project has not been priced.
+ */
+function first_payment_amount(?float $originalPrice): float {
+    if ($originalPrice !== null && $originalPrice > 0) {
+        return round($originalPrice * (FIRST_PAYMENT_PERCENT / 100), 2);
+    }
+    return deposit_amount();
+}
+
+/**
+ * Resolve the original price for a project: the latest accepted
+ * quotation, then any quotation, then the project budget.
+ */
+function project_original_price(PDO $pdo, int $projectId): ?float {
+    $st = $pdo->prepare("SELECT total FROM quotations WHERE project_id = ? AND status = 'accepted' ORDER BY id DESC LIMIT 1");
+    $st->execute([$projectId]);
+    $total = $st->fetchColumn();
+    if ($total !== false && (float)$total > 0) {
+        return (float)$total;
+    }
+
+    $st = $pdo->prepare('SELECT total FROM quotations WHERE project_id = ? ORDER BY id DESC LIMIT 1');
+    $st->execute([$projectId]);
+    $total = $st->fetchColumn();
+    if ($total !== false && (float)$total > 0) {
+        return (float)$total;
+    }
+
+    $st = $pdo->prepare('SELECT budget FROM projects WHERE id = ?');
+    $st->execute([$projectId]);
+    $budget = $st->fetchColumn();
+    if ($budget !== false && (float)$budget > 0) {
+        return (float)$budget;
+    }
+
+    return null;
+}
+
+/**
+ * Create or re-price a project's deposit invoice so the first payment is
+ * half of the original price. Invoices that already have a payment
+ * (pending or confirmed) are never changed, so submitted receipts stay
+ * valid. Returns the deposit invoice id, or null when no price exists.
+ */
+function sync_first_payment_invoice(PDO $pdo, int $projectId, int $clientId, ?float $originalPrice = null, string $label = ''): ?int {
+    $price = ($originalPrice !== null && $originalPrice > 0)
+        ? $originalPrice
+        : project_original_price($pdo, $projectId);
+
+    if ($price === null || $price <= 0) {
+        return null;
+    }
+
+    $target = first_payment_amount($price);
+    $existing = deposit_invoice_for($pdo, $projectId);
+
+    if ($existing === null) {
+        return issue_deposit_invoice($pdo, $projectId, $clientId, $target, $label);
+    }
+
+    $invId = (int)$existing['id'];
+
+    // Never rewrite a closed invoice.
+    if (in_array((string)$existing['status'], ['paid', 'cancelled'], true)) {
+        return $invId;
+    }
+
+    // The invoice total must always cover money already received or
+    // promised, so a booking deposit submitted at checkout is never lost.
+    $pst = $pdo->prepare("SELECT COALESCE(SUM(amount), 0) FROM payments WHERE invoice_id = ? AND status = 'pending'");
+    $pst->execute([$invId]);
+    $pending = (float)$pst->fetchColumn();
+    $paid = (float)$existing['amount_paid'];
+    $target = max($target, $paid + $pending);
+
+    if (abs((float)$existing['total'] - $target) < 0.01) {
+        return $invId;
+    }
+
+    $due = max(1, (int)settings('invoices_due_days', '14'));
+    $note = 'First payment — ' . FIRST_PAYMENT_PERCENT . '% of the project price'
+        . ($label !== '' ? ' (' . trim($label) . ')' : '') . '. The balance is due on delivery.';
+    $status = $paid >= $target ? 'paid' : ($paid > 0 ? 'partially_paid' : 'sent');
+
+    $pdo->prepare(
+        "UPDATE invoices
+            SET subtotal = ?, total = ?, due_date = DATE_ADD(CURDATE(), INTERVAL ? DAY), notes = ?, status = ?
+          WHERE id = ?"
+    )->execute([$target, $target, $due, $note, $status, $invId]);
+
+    $pdo->prepare('DELETE FROM invoice_items WHERE invoice_id = ?')->execute([$invId]);
+    $pdo->prepare('INSERT INTO invoice_items (invoice_id, description, quantity, unit_price) VALUES (?,?,1,?)')
+        ->execute([$invId, 'First payment (' . FIRST_PAYMENT_PERCENT . '%) — ' . ($label !== '' ? trim($label) : 'project price'), $target]);
+
+    audit('first_payment_priced', 'invoices', $invId, 'First payment set to ' . money($target, settings('currency')) . ' (half of ' . money($price, settings('currency')) . ')');
+
+    return $invId;
 }
 
 /**

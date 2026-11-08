@@ -144,3 +144,7 @@ Stack trace:
   IP: ::1  URI: /reagansoft-innovation/
 [2026-10-31 09:53:12] CSRF verification failed
   IP: 127.0.0.1  URI: /login.php
+[2026-11-08 11:26:45] CSRF verification failed
+  IP: ::1  URI: /reagansoft-innovation/login.php
+[2026-11-08 11:51:52] DB connection failed (root@localhost/reagansoft_test_system): SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: YES)
+  IP:   URI: 

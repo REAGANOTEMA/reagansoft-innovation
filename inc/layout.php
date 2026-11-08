@@ -520,6 +520,7 @@ function folio_scope(?string $requirements, int $limit = 4): string {
 
 function public_footer(): void {
     $phone = settings('company_phone', '+256772514889');
+    $phoneAlt = settings('company_phone_alt', '+256730314979');
     $email = settings('company_email', '');
     $address = settings('company_address', 'Jinja, Uganda');
     $fb = settings('company_fb', '');
@@ -612,7 +613,7 @@ function public_footer(): void {
     <div class="footer-col">
       <b>Contact</b>
       <p class="footer-contact"><span><?= icon('pin') ?></span> <?= e($address) ?></p>
-      <p class="footer-contact"><span><?= icon('phone') ?></span> <a href="<?= e(phone_tel($phone)) ?>"><?= e(phone_display($phone, $phone)) ?></a></p>
+      <p class="footer-contact"><span><?= icon('phone') ?></span> <a href="<?= e(phone_tel($phone)) ?>"><?= e(phone_display($phone, $phone)) ?></a><?php if ($phoneAlt !== '' && $phoneAlt !== $phone): ?> &middot; <a href="<?= e(phone_tel($phoneAlt)) ?>"><?= e(phone_display($phoneAlt, $phoneAlt)) ?></a><?php endif; ?></p>
       <p class="footer-contact"><span><?= icon('mail') ?></span> <a href="mailto:<?= e($email) ?>"><?= e($email) ?></a></p>
       <?php if (whatsapp_url() !== ''): ?>
         <p class="footer-contact"><span><?= icon('chat') ?></span> <a href="<?= e(whatsapp_url('Hello Reagan Soft Innovation, I would like to enquire about a project.')) ?>" target="_blank" rel="noopener">WhatsApp</a></p>

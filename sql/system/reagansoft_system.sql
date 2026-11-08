@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 07, 2026 at 08:57 AM
+-- Generation Time: Nov 08, 2026 at 10:54 AM
 -- Server version: 10.11.19-MariaDB
 -- PHP Version: 8.4.27
 
@@ -117,7 +117,7 @@ CREATE TABLE `invoices` (
 --
 
 INSERT INTO `invoices` (`id`, `invoice_no`, `project_id`, `client_id`, `quotation_id`, `due_date`, `subtotal`, `discount`, `tax_percent`, `total`, `amount_paid`, `status`, `is_deposit`, `notes`, `created_at`, `updated_at`) VALUES
-(1, 'INV-2026-0001', 3, 5, 1, '2026-11-19', 9800000.00, 0.00, 0.00, 9800000.00, 0.00, 'sent', 1, 'Deposit invoice for QT-2026-0001.', '2026-10-31 07:13:45', '2026-11-05 07:11:08'),
+(1, 'INV-2026-0001', 3, 5, 1, '2026-11-19', 4900000.00, 0.00, 0.00, 4900000.00, 0.00, 'sent', 1, 'First payment (50% deposit) for QT-2026-0001. Balance due on delivery.', '2026-10-31 07:13:45', '2026-11-05 07:11:08'),
 (2, 'INV-2026-0002', 1, 3, NULL, '2026-04-24', 8500000.00, 0.00, 0.00, 8500000.00, 8500000.00, 'paid', 0, 'Final payment for the Kireka Farm Supplies website.', '2026-10-31 07:13:45', '2026-10-31 07:13:45');
 
 -- --------------------------------------------------------
@@ -139,9 +139,8 @@ CREATE TABLE `invoice_items` (
 --
 
 INSERT INTO `invoice_items` (`id`, `invoice_id`, `description`, `quantity`, `unit_price`) VALUES
-(1, 1, 'E-commerce development (first phase)', 1.00, 4900000.00),
-(2, 1, 'Payment architecture setup', 1.00, 4900000.00),
-(3, 2, 'Company website development', 1.00, 8500000.00);
+(1, 1, 'E-commerce development (50% first payment)', 1.00, 4900000.00),
+(2, 2, 'Company website development', 1.00, 8500000.00);
 
 -- --------------------------------------------------------
 
@@ -260,13 +259,13 @@ CREATE TABLE `projects` (
 --
 
 INSERT INTO `projects` (`id`, `ref_no`, `client_id`, `service_id`, `assigned_to`, `title`, `description`, `requirements`, `website_url`, `deliverables`, `cover_art`, `budget`, `priority`, `status`, `progress`, `deadline`, `started_at`, `completed_at`, `submitted_at`, `updated_at`) VALUES
-(1, 'RSI-2026-00001', 3, 1, 1, 'Company Website ΓÇô Kireka Farm Supplies Ltd', 'A responsive company website that presents the farm supply catalogue, the company story and the contact details, with a lead-capture enquiry form and the SEO foundations a rural supplier needs to be found on Google.', 'Six information pages, enquiry form, WhatsApp integration, Google Map, photo gallery.', NULL, 'Website', 'agriculture', 8500000.00, 'normal', 'COMPLETED', 100, '2026-04-20', '2026-03-02 00:00:00', '2026-04-18 00:00:00', '2026-02-25 21:00:00', '2026-10-31 07:13:45'),
-(2, 'RSI-2026-00002', 4, 3, 2, 'Sales & Stock Management System ΓÇô Pearl Holdings Ltd', 'A custom management system for tracking sales, stock levels, suppliers and daily reports across the Pearl Holdings outlets in the Eastern region.', 'User roles for cashier and manager, product and stock modules, purchase tracking, daily sales reports, backup.', NULL, NULL, 'commerce', 14500000.00, 'high', 'IN_PROGRESS', 70, '2026-09-30', '2026-07-06 00:00:00', NULL, '2026-06-30 21:00:00', '2026-10-31 07:13:45'),
-(3, 'RSI-2026-00003', 5, 2, 2, 'Ecommerce Store ΓÇô Mulumba & Sons Traders', 'An online store for hardware and farm inputs with a product catalogue, cart, order management and mobile money ready payment architecture.', 'Product categories and search, cart and checkout, order dashboard, inventory, mobile money payment ready structure.', NULL, NULL, 'commerce', 9800000.00, 'normal', 'QUOTATION', 0, NULL, NULL, NULL, '2026-09-09 21:00:00', '2026-10-31 07:13:45'),
-(4, 'RSI-2026-00004', 6, 3, NULL, 'Customer Feedback Portal ΓÇô Agnes Nakato', 'A small portal where customers submit feedback and track the response, with a staff review dashboard.', 'Feedback form, automatic acknowledgements, staff review queue, simple analytics.', NULL, NULL, 'systems', 3500000.00, 'low', 'NEW', 0, NULL, NULL, NULL, '2026-09-19 21:00:00', '2026-10-31 07:13:45'),
-(5, 'RSI-2026-00005', 3, 8, 1, 'Brand Refresh & Business Cards ΓÇô Kireka Farm Supplies Ltd', 'Logo refresh, updated colour palette and print ready business cards and letterheads for the farm supply brand.', 'Two logo options, brand colours and typography, business cards, letterheads.', NULL, 'Branding', 'agriculture', 650000.00, 'normal', 'REVIEWING', 15, NULL, NULL, NULL, '2026-09-17 21:00:00', '2026-10-31 07:13:45'),
-(6, 'RSI-2026-00006', 7, 1, 2, 'Hotel Website, Booking System & Guest App ΓÇô Hotel Paradise on the Nile', 'A digital front desk for the hotel: a fast website for rooms and facilities, a booking and availability system the front office runs itself, and a guest app for enquiries, directions and offers.', 'Website with rooms, facilities, gallery and contact pages, online availability and booking enquiry system, front-desk reservation calendar, guest and staff logins, Android guest app, WhatsApp and Google Maps, gallery the hotel updates itself, SSL and nightly backups.', 'https://hotelparadiseonthenile.info', 'Website, Business system, Mobile apps', 'hospitality', 24000000.00, 'high', 'COMPLETED', 100, '2026-06-30', '2026-02-09 00:00:00', '2026-06-19 00:00:00', '2026-01-13 21:00:00', '2026-11-05 07:13:21'),
-(7, 'RSI-2026-00007', 8, 5, 1, 'Website, Student Portal & Apps ΓÇô Iganga School of Nursing and Midwifery', 'One digital home for the school: a public website for applicants and parents, a records and fees portal the staff use every day, and a mobile app that puts results, fees and announcements in a student\'s pocket.', 'Public website with programmes, fees structure and contacts, online application and enquiry form, student records and fees portal, staff andbursar logins, results and progress reports, Android app for results and school announcements, SMS and email alerts, Google Maps, SSL and nightly backups.', 'https://igangaschoolofnursingandmidwifery.ac.ug', 'Website, Business system, Mobile apps', 'education', 38000000.00, 'high', 'COMPLETED', 100, '2026-06-30', '2026-01-12 00:00:00', '2026-06-26 00:00:00', '2025-11-23 21:00:00', '2026-11-05 07:13:21');
+(1, 'RSI-2026-00001', 3, 1, 1, 'Company Website – Kireka Farm Supplies Ltd', 'A responsive company website that presents the farm supply catalogue, the company story and the contact details, with a lead-capture enquiry form and the SEO foundations a rural supplier needs to be found on Google.', 'Six information pages, enquiry form, WhatsApp integration, Google Map, photo gallery.', NULL, 'Website', 'agriculture', 8500000.00, 'normal', 'COMPLETED', 100, '2026-04-20', '2026-03-02 00:00:00', '2026-04-18 00:00:00', '2026-02-25 21:00:00', '2026-10-31 07:13:45'),
+(2, 'RSI-2026-00002', 4, 3, 2, 'Sales & Stock Management System – Pearl Holdings Ltd', 'A custom management system for tracking sales, stock levels, suppliers and daily reports across the Pearl Holdings outlets in the Eastern region.', 'User roles for cashier and manager, product and stock modules, purchase tracking, daily sales reports, backup.', NULL, NULL, 'commerce', 14500000.00, 'high', 'IN_PROGRESS', 70, '2026-09-30', '2026-07-06 00:00:00', NULL, '2026-06-30 21:00:00', '2026-10-31 07:13:45'),
+(3, 'RSI-2026-00003', 5, 2, 2, 'Ecommerce Store – Mulumba & Sons Traders', 'An online store for hardware and farm inputs with a product catalogue, cart, order management and mobile money ready payment architecture.', 'Product categories and search, cart and checkout, order dashboard, inventory, mobile money payment ready structure.', NULL, NULL, 'commerce', 9800000.00, 'normal', 'QUOTATION', 0, NULL, NULL, NULL, '2026-09-09 21:00:00', '2026-10-31 07:13:45'),
+(4, 'RSI-2026-00004', 6, 3, NULL, 'Customer Feedback Portal – Agnes Nakato', 'A small portal where customers submit feedback and track the response, with a staff review dashboard.', 'Feedback form, automatic acknowledgements, staff review queue, simple analytics.', NULL, NULL, 'systems', 3500000.00, 'low', 'NEW', 0, NULL, NULL, NULL, '2026-09-19 21:00:00', '2026-10-31 07:13:45'),
+(5, 'RSI-2026-00005', 3, 8, 1, 'Brand Refresh & Business Cards – Kireka Farm Supplies Ltd', 'Logo refresh, updated colour palette and print ready business cards and letterheads for the farm supply brand.', 'Two logo options, brand colours and typography, business cards, letterheads.', NULL, 'Branding', 'agriculture', 650000.00, 'normal', 'REVIEWING', 15, NULL, NULL, NULL, '2026-09-17 21:00:00', '2026-10-31 07:13:45'),
+(6, 'RSI-2026-00006', 7, 1, 2, 'Hotel Website, Booking System & Guest App – Hotel Paradise on the Nile', 'A digital front desk for the hotel: a fast website for rooms and facilities, a booking and availability system the front office runs itself, and a guest app for enquiries, directions and offers.', 'Website with rooms, facilities, gallery and contact pages, online availability and booking enquiry system, front-desk reservation calendar, guest and staff logins, Android guest app, WhatsApp and Google Maps, gallery the hotel updates itself, SSL and nightly backups.', 'https://hotelparadiseonthenile.info', 'Website, Business system, Mobile apps', 'hospitality', 24000000.00, 'high', 'COMPLETED', 100, '2026-06-30', '2026-02-09 00:00:00', '2026-06-19 00:00:00', '2026-01-13 21:00:00', '2026-11-05 07:13:21'),
+(7, 'RSI-2026-00007', 8, 5, 1, 'Website, Student Portal & Apps – Iganga School of Nursing and Midwifery', 'One digital home for the school: a public website for applicants and parents, a records and fees portal the staff use every day, and a mobile app that puts results, fees and announcements in a student\'s pocket.', 'Public website with programmes, fees structure and contacts, online application and enquiry form, student records and fees portal, staff andbursar logins, results and progress reports, Android app for results and school announcements, SMS and email alerts, Google Maps, SSL and nightly backups.', 'https://igangaschoolofnursingandmidwifery.ac.ug', 'Website, Business system, Mobile apps', 'education', 38000000.00, 'high', 'COMPLETED', 100, '2026-06-30', '2026-01-12 00:00:00', '2026-06-26 00:00:00', '2025-11-23 21:00:00', '2026-11-05 07:13:21');
 
 -- --------------------------------------------------------
 
@@ -481,7 +480,7 @@ INSERT INTO `settings` (`id`, `setting_key`, `setting_value`) VALUES
 (4, 'company_phone', '+256772514889'),
 (5, 'company_email', 'info@reagansoftinnovation.com'),
 (6, 'company_address', 'Jinja, Uganda'),
-(7, 'company_whatsapp', '+256730314979'),
+(7, 'company_whatsapp', '+256772514889'),
 (8, 'company_fb', ''),
 (9, 'company_x', ''),
 (10, 'company_linkedin', ''),
@@ -489,7 +488,7 @@ INSERT INTO `settings` (`id`, `setting_key`, `setting_value`) VALUES
 (12, 'currency', 'UGX'),
 (13, 'tax_percent', '0'),
 (14, 'invoices_due_days', '14'),
-(15, 'payment_mtn_number', '+256730314979'),
+(15, 'payment_mtn_number', '+256772514889'),
 (16, 'payment_airtel_number', ''),
 (17, 'payment_bank_details', ''),
 (18, 'payment_gateway_status', 'not_configured'),
@@ -500,7 +499,8 @@ INSERT INTO `settings` (`id`, `setting_key`, `setting_value`) VALUES
 (44, 'seo_keywords', 'software development Uganda, website design Jinja, school management system, hospital management system, POS Uganda, Reagansoft Innovation'),
 (45, 'site_announcement', ''),
 (46, 'support_email', 'support@reagansoftinnovation.com'),
-(47, 'newsletter_enabled', '1');
+(47, 'newsletter_enabled', '1'),
+(48, 'company_phone_alt', '+256730314979');
 
 -- --------------------------------------------------------
 
@@ -736,7 +736,7 @@ ALTER TABLE `invoices`
 -- AUTO_INCREMENT for table `invoice_items`
 --
 ALTER TABLE `invoice_items`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `newsletter_subscribers`

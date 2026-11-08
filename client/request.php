@@ -69,14 +69,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]);
             }
 
-            $deposit = deposit_amount();
+            $deposit = first_payment_amount($budget !== null && $budget > 0 ? (float)$budget : null);
             if ($deposit > 0) {
                 $label = '';
                 foreach ($services as $sv) {
                     if ((int)$sv['id'] === (int)$values['service_id']) { $label = (string)$sv['name']; break; }
                 }
                 $depositInv = issue_deposit_invoice($pdo, $projectId, (int)current_user()['id'], $deposit, $label);
-                notify((int)current_user()['id'], 'Project deposit', 'Your project deposit of ' . money($deposit, settings('currency')) . ' is due. Pay it from the Invoice tab to activate your project.', 'invoice', $projectId);
+                notify((int)current_user()['id'], 'First payment due', 'Your first payment of ' . money($deposit, settings('currency')) . ' (half of your project price) is due. Pay it from the Invoice tab to activate your project.', 'invoice', $projectId);
             }
 
             audit('request_submitted', 'project', $projectId, 'Request ' . $ref . ' submitted');

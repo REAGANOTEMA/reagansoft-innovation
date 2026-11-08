@@ -70,6 +70,14 @@ export function ServiceDetail() {
                 {service.delivery_days && <Badge tone="cyan"><Clock3 className="h-3 w-3" /> About {service.delivery_days} days</Badge>}
                 <Badge tone="green"><ShieldCheck className="h-3 w-3" /> Fixed scope before work</Badge>
               </div>
+              <div className="mt-7 overflow-hidden rounded-3xl border border-brand-100 bg-white shadow-soft">
+                <img
+                  src={serviceMedia(service.slug, service.icon)}
+                  alt={`${service.name} at Reagansoft Innovation`}
+                  className="aspect-[16/9] w-full object-cover"
+                  loading="eager"
+                />
+              </div>
             </div>
 
             <Reveal delay={100}>
@@ -199,6 +207,7 @@ export function ServiceDetail() {
                 </p>
                 <a href={`tel:${settings.company_phone.replace(/\s/g, '')}`} className="mt-4 block rounded-xl bg-brand-50 px-4 py-3 text-[12px] font-semibold text-brand-800">
                   {settings.company_phone}
+                  {settings.company_phone_alt && <span className="font-normal text-brand-600"> · {settings.company_phone_alt}</span>}
                 </a>
                 <a href={`mailto:${settings.company_email}`} className="mt-2 block rounded-xl bg-brand-50 px-4 py-3 text-[12px] font-semibold text-brand-800">
                   {settings.company_email}

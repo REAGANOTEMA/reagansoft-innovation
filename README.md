@@ -114,18 +114,27 @@ C:\xampp\mysql\bin\mysql.exe -u root reagansoft_website < sql\website\reagansoft
 
 Each file is a complete phpMyAdmin export of one database: all 17 tables, their
 indexes and foreign keys, plus the seed rows (8 demo accounts, 14 services,
-settings and sample projects). Import it into an **empty** database. Re-importing
-over existing tables is intentionally not supported — use the reinstall action in
-`install.php`, or drop the tables first.
+settings and sample projects). The dump starts with `SET FOREIGN_KEY_CHECKS=0`
+and `DROP TABLE IF EXISTS` for every table, so it can be imported over an
+existing database without `#1050 Table already exists` errors. **Importing
+replaces the current contents of that database** — take a backup first. The
+`install.php` one-click installer never rebuilds an existing database unless
+you explicitly choose **Reinstall database**.
 
 | File | Database |
 |------|----------|
 | `sql/system/reagansoft_system.sql` | `reagansoft_system` (active app) |
 | `sql/website/reagansoft_website.sql` | `reagansoft_website` (mirror) |
 
-There is no separate `01_SCHEMA` / `02_SEED` / `03_UPGRADE` / `04_VERIFY` split
-any more, and no generated copies to rebuild. If you edit a dump, re-test the
-import on an empty scratch database before shipping it.
+Each folder also contains safe helper files:
+
+| File | Purpose |
+|------|---------|
+| `verify.sql` | Starts with `USE <database>;`, then counts all 17 tables and checks the admin/whatsapp/phone settings. Run it while connected as root (or any user with access) to avoid `#1109 Unknown table 'users' in information_schema`. |
+| `upgrade-2026-11-08.sql` | Idempotent fix for live databases: corrects the project titles and the phone/WhatsApp/payment settings without touching other rows. Safe to run more than once. |
+
+If you edit a dump, re-test the import on an empty scratch database before
+shipping it.
 
 `CREATE USER` is deliberately **not** in any `.sql` file: importing it through
 phpMyAdmin as a non-root user fails with `#1227 Access denied`.

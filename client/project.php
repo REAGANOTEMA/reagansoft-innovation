@@ -74,6 +74,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect(app_url('client/project.php?id=' . $id . '&tab=quotation'));
         }
         $pdo->prepare('UPDATE quotations SET status = ? WHERE id = ?')->execute([$decision, $qid]);
+        if ($decision === 'accepted') {
+            sync_first_payment_invoice($pdo, $id, (int)$project['client_id'], (float)$quote['total'], (string)$quote['quotation_no']);
+        }
         audit('quotation_' . $decision, 'quotation', $qid, 'Client ' . $decision . ' ' . $quote['quotation_no']);
         notify_staff('Quotation ' . $decision, ($decision === 'accepted' ? 'Client accepted' : 'Client rejected') . ' quotation ' . $quote['quotation_no'] . ' for ' . $project['ref_no'], 'quotation', $id);
         flash('success', 'Quotation ' . ($decision === 'accepted' ? 'accepted.' : 'declined.'));

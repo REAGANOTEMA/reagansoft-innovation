@@ -108,6 +108,7 @@ export function Contact() {
             </a>
             <a href={`tel:${settings.company_phone.replace(/\s/g, '')}`} className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.05] px-4 py-3 text-[12.5px] text-white/70 backdrop-blur transition hover:bg-white/10 hover:text-white">
               <Phone className="h-4 w-4 text-brand-300" /> {settings.company_phone}
+              {settings.company_phone_alt && <span className="text-white/40">· {settings.company_phone_alt}</span>}
             </a>
             <a href={`https://wa.me/${settings.company_whatsapp.replace(/[^\d]/g, '')}`} target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.05] px-4 py-3 text-[12.5px] text-white/70 backdrop-blur transition hover:bg-white/10 hover:text-white">
               <MessageCircle className="h-4 w-4 text-brand-300" /> WhatsApp {settings.company_whatsapp}
@@ -222,7 +223,10 @@ export function Contact() {
                 <li className="flex gap-2.5"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" /> {settings.company_address}</li>
                 <li className="flex gap-2.5"><Clock3 className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" /> {settings.company_hours}</li>
                 <li className="flex gap-2.5"><Mail className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" /> {settings.company_email}</li>
-                <li className="flex gap-2.5"><Phone className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" /> {settings.company_phone}</li>
+                <li className="flex gap-2.5">
+                  <Phone className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" />
+                  <span>{settings.company_phone}{settings.company_phone_alt ? ` · ${settings.company_phone_alt}` : ''}</span>
+                </li>
               </ul>
               {settings.company_map_url && (
                 <a href={settings.company_map_url} target="_blank" rel="noreferrer" className="btn-ghost btn-sm mt-4 w-full">

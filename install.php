@@ -197,39 +197,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $pdo = rsi_connect(DB_NAME);
 
-            // 1b. Reinstall only: drop every table first. This is the one
-            //     destructive step, and it is why the import itself is
-            //     non-destructive.
-            if ($do === 'reinstall') {
-                rsi_drop_all_tables($pdo);
-                $log[] = 'Existing tables dropped — starting from an empty database.';
-            }
-
-            // 2. Full schema, seed data and upgrades in one import.
-            rsi_run_file($pdo, __DIR__ . '/sql/system/reagansoft_system.sql', $log, $errors);
-
-            // 4. Mirror database (reagansoft_website) — same schema and data.
-            //    Each database has its own account credentials. Optional: a
-            //    host account without a second database simply gets a note
-            //    instead of a failed installation.
-            $mirror = preg_replace('/[^A-Za-z0-9_]/', '', (string)DB_MIRROR);
-            if ($mirror !== '' && $mirror !== $ident) {
-                try {
-                    rsi_connect('', DB_MIRROR_USER, DB_MIRROR_PASS)->exec(
-                        'CREATE DATABASE IF NOT EXISTS `' . $mirror . '` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci'
-                    );
-                    $mpdo = rsi_connect($mirror, DB_MIRROR_USER, DB_MIRROR_PASS);
-                    if ($do === 'reinstall') {
-                        rsi_drop_all_tables($mpdo);
-                    }
-                    rsi_run_file($mpdo, __DIR__ . '/sql/website/reagansoft_website.sql', $mirror_log, $mirror_errors);
-                    $log[] = 'Mirror database `' . DB_MIRROR . '` is in step with `' . DB_NAME . '`.';
-                } catch (Throwable $e) {
-                    $mirror_errors[] = 'Mirror `' . DB_MIRROR . '`: ' . substr($e->getMessage(), 0, 200);
+            // A normal install must never overwrite a live database: the
+            // dumps start with DROP TABLE IF EXISTS, so importing them is a
+            // rebuild. Only the explicit reinstall action may do that.
+            if ($do !== 'reinstall' && $installed) {
+                $log[] = 'Database `' . DB_NAME . '` already contains tables — nothing was imported. '
+                    . 'Use “Reinstall database” if you really want to rebuild it from the demo dump.';
+            } else {
+                // 1b. Reinstall only: drop every table first.
+                if ($do === 'reinstall') {
+                    rsi_drop_all_tables($pdo);
+                    $log[] = 'Existing tables dropped — starting from an empty database.';
                 }
-            }
-            foreach ($mirror_errors as $mw) {
-                $warnings[] = $mw;
+
+                // 2. Full schema, seed data and upgrades in one import.
+                rsi_run_file($pdo, __DIR__ . '/sql/system/reagansoft_system.sql', $log, $errors);
+
+                // 4. Mirror database (reagansoft_website) — same schema and data.
+                //    Each database has its own account credentials. Optional: a
+                //    host account without a second database simply gets a note
+                //    instead of a failed installation.
+                $mirror = preg_replace('/[^A-Za-z0-9_]/', '', (string)DB_MIRROR);
+                if ($mirror !== '' && $mirror !== $ident) {
+                    try {
+                        rsi_connect('', DB_MIRROR_USER, DB_MIRROR_PASS)->exec(
+                            'CREATE DATABASE IF NOT EXISTS `' . $mirror . '` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci'
+                        );
+                        $mpdo = rsi_connect($mirror, DB_MIRROR_USER, DB_MIRROR_PASS);
+                        if ($do === 'reinstall') {
+                            rsi_drop_all_tables($mpdo);
+                        }
+                        rsi_run_file($mpdo, __DIR__ . '/sql/website/reagansoft_website.sql', $mirror_log, $mirror_errors);
+                        $log[] = 'Mirror database `' . DB_MIRROR . '` is in step with `' . DB_NAME . '`.';
+                    } catch (Throwable $e) {
+                        $mirror_errors[] = 'Mirror `' . DB_MIRROR . '`: ' . substr($e->getMessage(), 0, 200);
+                    }
+                }
+                foreach ($mirror_errors as $mw) {
+                    $warnings[] = $mw;
+                }
             }
 
             $installed = rsi_is_installed();

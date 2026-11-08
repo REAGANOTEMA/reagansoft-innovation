@@ -893,6 +893,9 @@ function admin_quotation_create(array $user): never
         $qid = (int)$pdo->lastInsertId();
         $ins = $pdo->prepare('INSERT INTO quotation_items (quotation_id, description, quantity, unit_price) VALUES (?,?,?,?)');
         foreach ($clean as [$desc, $qty, $price]) $ins->execute([$qid, $desc, $qty, $price]);
+        if ($status === 'accepted') {
+            sync_first_payment_invoice($pdo, $projectId, (int)$project['client_id'], (float)$total, $quoteNo);
+        }
         $pdo->commit();
     } catch (Throwable $e) {
         $pdo->rollBack();
@@ -911,16 +914,26 @@ function admin_quotation_update(string $id): never
     $data = api_body();
     $fields = [];
     $params = [];
+    $status = null;
     if (array_key_exists('status', $data)) {
+        $status = api_in_enum(api_string($data, 'status', 'Status', 20), ['draft', 'sent', 'accepted', 'rejected', 'expired', 'cancelled'], 'status');
         $fields[] = 'status = ?';
-        $params[] = api_in_enum(api_string($data, 'status', 'Status', 20), ['draft', 'sent', 'accepted', 'rejected', 'expired', 'cancelled'], 'status');
+        $params[] = $status;
     }
     if (array_key_exists('notes', $data)) { $fields[] = 'notes = ?'; $params[] = api_string($data, 'notes', 'Notes', 2000) ?: null; }
     if (array_key_exists('terms', $data)) { $fields[] = 'terms = ?'; $params[] = api_string($data, 'terms', 'Terms', 3000) ?: null; }
     if (array_key_exists('expiry_date', $data)) { $fields[] = 'expiry_date = ?'; $params[] = api_date($data, 'expiry_date'); }
     if (!$fields) throw new ApiException('No changes were supplied.', 422);
     $params[] = (int)$id;
-    db()->prepare('UPDATE quotations SET ' . implode(', ', $fields) . ' WHERE id = ?')->execute($params);
+    $pdo = db();
+    $pdo->prepare('UPDATE quotations SET ' . implode(', ', $fields) . ' WHERE id = ?')->execute($params);
+    if ($status === 'accepted') {
+        $st = $pdo->prepare('SELECT project_id, client_id, total, quotation_no FROM quotations WHERE id = ?');
+        $st->execute([(int)$id]);
+        if ($quote = $st->fetch()) {
+            sync_first_payment_invoice($pdo, (int)$quote['project_id'], (int)$quote['client_id'], (float)$quote['total'], (string)$quote['quotation_no']);
+        }
+    }
     audit('quotation_updated', 'quotations', (int)$id, 'Updated quotation #' . $id);
     api_ok(['updated' => true]);
 }
