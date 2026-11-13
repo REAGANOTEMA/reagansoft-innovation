@@ -4,8 +4,20 @@ import { asset } from './env';
  * Studio artwork used across the public site. Every file lives in
  * `/assets/img` and is referenced through the PHP-injected asset base,
  * so the same build works at the domain root or in a sub-folder.
+ *
+ * Photography is only used where it genuinely represents the section:
+ * product/marketing art for services, real team and leadership photos
+ * for the company pages, and hands-on studio imagery for the work pages.
  */
 export const MEDIA = {
+  homepageHero: 'Homepage-hero.jpg',
+  portfolioShowcase: 'Portfolio-showcase.jpg',
+  administration: 'Administration-system.jpg',
+  technology: 'Technology-graphics.jpg',
+  team: 'reagansoft-team.jpeg',
+  bike: 'company-bike.jpeg',
+  ceoIsrael: 'ceo-in-israel-with-his-friend.jpeg',
+  funders: 'our funders-with-ceo.jpeg',
   engineering:
     'programming-software-interface-device-engineers-application-company-project-space-professional-solutions-systems-117127167.webp',
   design:
@@ -18,6 +30,14 @@ export const MEDIA = {
 export type MediaKey = keyof typeof MEDIA;
 
 export const MEDIA_ALT: Record<MediaKey, string> = {
+  homepageHero: 'Reagansoft Innovation software engineers working in a modern technology studio',
+  portfolioShowcase: 'A curated showcase of digital products delivered by Reagansoft Innovation',
+  administration: 'Reagansoft administration system dashboard with live operational records',
+  technology: 'Technology graphics representing the Reagansoft engineering stack and infrastructure',
+  team: 'The Reagansoft Innovation team at the Jinja studio',
+  bike: 'The Reagansoft company Yamaha motorcycle finished in the company brand colours',
+  ceoIsrael: 'Reagansoft founder and CEO meeting a friend during a technology visit to Israel',
+  funders: 'Reagansoft funders and partners photographed together with the CEO',
   engineering: 'Reagansoft software engineers working at modern development workstations',
   design: 'UI and UX designers composing a custom website design',
   code: 'Clean, well-structured application source code on screen',
@@ -29,12 +49,21 @@ export function media(key: MediaKey): string {
   return asset(MEDIA[key]);
 }
 
+export function mediaAlt(key: MediaKey): string {
+  return MEDIA_ALT[key];
+}
+
 /** Picks the most relevant studio artwork for a service or sector. */
 export function serviceMedia(slug = '', icon = ''): string {
   const value = `${slug} ${icon}`.toLowerCase();
-  if (/brand|design|palette|ui|ux/.test(value)) return media('design');
+  if (/admin|dashboard|portal|management|record|system|erp|school|clinic|billing|invoice|receipt|finance|account/.test(value)) {
+    return media('administration');
+  }
+  if (/brand|design|palette|ui|ux|graphic/.test(value)) return media('design');
   if (/mobile|app|flutter|smartphone/.test(value)) return media('mobileCore');
-  if (/integration|api|language|stack|data|cloud|system/.test(value)) return media('languages');
-  if (/software|code|security|audit|maintenance|system/.test(value)) return media('code');
+  if (/ecommerce|commerce|store|shop|retail/.test(value)) return media('portfolioShowcase');
+  if (/website|web-design|business-website/.test(value)) return media('homepageHero');
+  if (/integration|api|language|stack|data|cloud|hosting|devops|automation|chat/.test(value)) return media('technology');
+  if (/software|code|security|audit|maintenance/.test(value)) return media('code');
   return media('engineering');
 }

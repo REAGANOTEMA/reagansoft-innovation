@@ -3,8 +3,9 @@ import { ArrowRight, ArrowUpRight, Check, Compass, HeartHandshake, MapPin, Shiel
 import { useSite } from '../lib/site';
 import { usePageMeta } from '../lib/seo';
 import { asset } from '../lib/env';
-import { media } from '../lib/media';
+import { media, MEDIA_ALT } from '../lib/media';
 import { Reveal } from '../components/Reveal';
+import { Tilt } from '../components/Tilt';
 import { SectionHeading, Badge } from '../components/UI';
 import { CloudInfraArt, IndustryGlyph, SecurityArt } from '../components/Graphics';
 
@@ -168,14 +169,14 @@ export function About() {
             {[
               { key: 'design' as const, label: 'Design', text: 'Interfaces mapped to real workflows, not decoration.' },
               { key: 'engineering' as const, label: 'Engineering', text: 'Senior developers who build and support the same code.' },
-              { key: 'languages' as const, label: 'Stack', text: 'Proven languages and frameworks chosen per project.' },
+              { key: 'technology' as const, label: 'Stack', text: 'Proven languages and frameworks chosen per project.' },
             ].map((item, index) => (
               <Reveal key={item.key} delay={index * 80}>
                 <figure className="group relative overflow-hidden rounded-3xl border border-brand-100 bg-brand-50/40 shadow-soft">
                   <div className="aspect-[4/3] overflow-hidden">
                     <img
                       src={media(item.key)}
-                      alt={item.label === 'Design' ? 'UI and UX designers composing a custom website design' : item.label === 'Engineering' ? 'Reagansoft software engineers working at modern development workstations' : 'The programming languages and frameworks used by the Reagansoft team'}
+                      alt={MEDIA_ALT[item.key]}
                       className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"
                       loading="lazy"
                     />
@@ -187,6 +188,123 @@ export function About() {
                 </figure>
               </Reveal>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-brand-100 bg-white py-20 sm:py-24">
+        <div className="container-x">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+            <Reveal>
+              <SectionHeading
+                eyebrow="People & partners"
+                title="The team, the relationships and the brand behind the work."
+                lead="Reagansoft is a people business before it is a software business. The studio grows through the team we keep, the partners who back us and the clients who trust us."
+              />
+            </Reveal>
+            <Reveal delay={100}>
+              <div className="shrink-0 rounded-2xl border border-brand-100 bg-brand-50/60 px-4 py-3 text-[11.5px] text-ink-muted">
+                <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-brand-600">Based in Jinja</p>
+                <p className="mt-1 font-semibold text-navy-900">Serving organisations across Uganda</p>
+              </div>
+            </Reveal>
+          </div>
+
+          <div className="mt-12 grid gap-4 lg:grid-cols-12">
+            <Reveal className="lg:col-span-7">
+              <figure className="group relative h-full overflow-hidden rounded-3xl border border-brand-100 bg-navy-950">
+                <img
+                  src={media('team')}
+                  alt={MEDIA_ALT.team}
+                  className="h-full min-h-[320px] w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/20 to-transparent" />
+                <figcaption className="absolute inset-x-0 bottom-0 p-6 text-white">
+                  <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-brand-300">The Reagansoft team · Jinja</p>
+                  <p className="mt-1 max-w-md font-display text-lg font-semibold">Designers, engineers and support staff in one studio.</p>
+                </figcaption>
+              </figure>
+            </Reveal>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:col-span-5 lg:grid-cols-1">
+              <Reveal delay={80}>
+                <figure className="group relative overflow-hidden rounded-3xl border border-brand-100 bg-navy-950">
+                  <img
+                    src={media('ceoIsrael')}
+                    alt={MEDIA_ALT.ceoIsrael}
+                    className="aspect-[16/9] w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-950/95 via-navy-950/40 to-transparent p-4 text-white">
+                    <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-brand-300">Leadership in the field</p>
+                    <p className="mt-1 text-[12px] font-semibold">Our CEO on a technology visit to Israel with a longtime friend.</p>
+                  </figcaption>
+                </figure>
+              </Reveal>
+
+              <Reveal delay={140}>
+                <figure className="group relative overflow-hidden rounded-3xl border border-brand-100 bg-navy-950">
+                  <img
+                    src={media('funders')}
+                    alt={MEDIA_ALT.funders}
+                    className="aspect-[16/9] w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-950/95 via-navy-950/40 to-transparent p-4 text-white">
+                    <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-brand-300">Partners & funders</p>
+                    <p className="mt-1 text-[12px] font-semibold">The people backing the studio, photographed with the CEO.</p>
+                  </figcaption>
+                </figure>
+              </Reveal>
+            </div>
+
+            <Reveal delay={100} className="lg:col-span-4">
+              <Tilt className="h-full">
+                <figure className="group relative h-full overflow-hidden rounded-3xl border border-brand-100 bg-navy-900">
+                  <img
+                    src={media('bike')}
+                    alt={MEDIA_ALT.bike}
+                    className="h-full min-h-[260px] w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-950/95 via-navy-950/30 to-transparent p-5 text-white">
+                    <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-brand-300">On the move</p>
+                    <p className="mt-1 text-[12px] font-semibold">Our Yamaha company motorcycle, finished in the Reagansoft colours.</p>
+                  </figcaption>
+                </figure>
+              </Tilt>
+            </Reveal>
+
+            <Reveal delay={160} className="lg:col-span-8">
+              <div className="flex h-full flex-col justify-center rounded-3xl border border-brand-100 bg-brand-50/50 p-7 sm:p-8">
+                <p className="eyebrow">More than a logo</p>
+                <h3 className="mt-3 font-display text-xl font-semibold text-navy-900 sm:text-2xl">
+                  A brand people meet in the field, not just on a screen.
+                </h3>
+                <p className="mt-3 max-w-2xl text-[13.5px] leading-relaxed text-ink-muted">
+                  Client visits, site surveys and training sessions happen across Jinja and the wider region. Our Yamaha is painted in
+                  the company colours so the team is recognisable on the road — and so the relationships behind the software stay
+                  visible.
+                </p>
+                <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                  {[
+                    ['People first', 'A senior, stable team that clients know by name.'],
+                    ['Backed well', 'Funders and partners who invest in long-term quality.'],
+                    ['Visible locally', 'A studio that shows up in person, not only online.'],
+                  ].map(([title, text]) => (
+                    <div key={title} className="rounded-2xl bg-white p-4">
+                      <p className="text-[12px] font-semibold text-brand-700">{title}</p>
+                      <p className="mt-1 text-[11.5px] leading-relaxed text-ink-muted">{text}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
           </div>
         </div>
       </section>

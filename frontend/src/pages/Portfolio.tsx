@@ -5,8 +5,10 @@ import { useApi } from '../lib/hooks';
 import { useSite } from '../lib/site';
 import { usePageMeta } from '../lib/seo';
 import { Reveal } from '../components/Reveal';
+import { Tilt } from '../components/Tilt';
 import { Badge, SectionHeading } from '../components/UI';
 import { ProjectCover } from '../components/Graphics';
+import { media, MEDIA_ALT } from '../lib/media';
 import { cn } from '../lib/cn';
 import { formatDate } from '../lib/format';
 import type { Project } from '../lib/types';
@@ -53,7 +55,7 @@ export function Portfolio() {
       <section className="relative overflow-hidden bg-navy-950 pb-20 pt-16 text-white sm:pt-20">
         <div className="aurora" />
         <div className="pointer-events-none absolute inset-0 bg-grid-dark opacity-35" />
-        <div className="container-x relative grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
+        <div className="container-x relative grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
           <div>
             <span className="eyebrow text-brand-300">Portfolio</span>
             <h1 className="h1 mt-4 max-w-3xl text-white">Work that is live, used and maintained.</h1>
@@ -62,17 +64,30 @@ export function Portfolio() {
               handed over by our team.
             </p>
           </div>
-          <div className="grid grid-cols-3 gap-3">
-            {[
-              ['Projects', stats.projects],
-              ['Completed', stats.completed],
-              ['Clients', stats.clients],
-            ].map(([label, value]) => (
-              <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.05] p-4 text-center backdrop-blur">
-                <p className="font-display text-2xl font-semibold text-white">{value}</p>
-                <p className="mt-1 font-mono text-[8px] uppercase tracking-[0.18em] text-white/40">{label}</p>
-              </div>
-            ))}
+          <div className="space-y-3">
+            <Reveal delay={100}>
+              <Tilt className="overflow-hidden rounded-2xl border border-white/15 bg-white/5 p-2">
+                <img
+                  src={media('portfolioShowcase')}
+                  alt={MEDIA_ALT.portfolioShowcase}
+                  className="aspect-[3/2] w-full rounded-xl object-cover"
+                  loading="eager"
+                  decoding="async"
+                />
+              </Tilt>
+            </Reveal>
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                ['Projects', stats.projects],
+                ['Completed', stats.completed],
+                ['Clients', stats.clients],
+              ].map(([label, value]) => (
+                <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.05] p-4 text-center backdrop-blur">
+                  <p className="font-display text-2xl font-semibold text-white">{value}</p>
+                  <p className="mt-1 font-mono text-[8px] uppercase tracking-[0.18em] text-white/40">{label}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

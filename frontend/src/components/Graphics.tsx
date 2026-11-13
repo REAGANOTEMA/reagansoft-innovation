@@ -102,7 +102,7 @@ export function HeroVisual() {
               <div className="mt-3 grid grid-cols-3 gap-2">
                 {[
                   { label: 'Active', value: '24', tone: 'text-brand-300' },
-                  { label: 'Revenue', value: 'UGX 86M', tone: 'text-emerald-300' },
+                  { label: 'QA passed', value: '36', tone: 'text-emerald-300' },
                   { label: 'Uptime', value: '99.98%', tone: 'text-cyan-300' },
                 ].map((item) => (
                   <div key={item.label} className="rounded-lg border border-white/10 bg-white/[0.035] p-2">

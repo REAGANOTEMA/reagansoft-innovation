@@ -21,6 +21,7 @@ import {
 import { useSite } from '../lib/site';
 import { usePageMeta } from '../lib/seo';
 import { Reveal } from '../components/Reveal';
+import { Tilt } from '../components/Tilt';
 import { ProjectCover, ServiceGlyph, IndustryGlyph } from '../components/Graphics';
 import { LiveShowcase } from '../components/LiveShowcase';
 import { Badge, SectionHeading } from '../components/UI';
@@ -224,8 +225,8 @@ export function Home() {
             <Reveal className="lg:col-span-7">
               <figure className="group relative h-full overflow-hidden rounded-3xl border border-brand-100 bg-navy-950">
                 <img
-                  src={media('engineering')}
-                  alt={MEDIA_ALT.engineering}
+                  src={media('team')}
+                  alt={MEDIA_ALT.team}
                   className="h-full min-h-[320px] w-full object-cover transition duration-700 group-hover:scale-[1.03]"
                   loading="lazy"
                   decoding="async"
@@ -234,7 +235,7 @@ export function Home() {
                 <figcaption className="absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-between gap-3 p-6 text-white">
                   <div>
                     <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-brand-300">Engineering floor · Jinja</p>
-                    <p className="mt-1 font-display text-lg font-semibold">Where the systems are built and tested.</p>
+                    <p className="mt-1 font-display text-lg font-semibold">The people who build and support your systems.</p>
                   </div>
                   <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.16em] text-white/80 backdrop-blur">
                     Live studio
@@ -301,15 +302,15 @@ export function Home() {
             <div className="mt-4 overflow-hidden rounded-3xl border border-brand-100 bg-navy-950">
               <div className="grid items-center gap-0 md:grid-cols-[0.9fr_1.1fr]">
                 <img
-                  src={media('languages')}
-                  alt={MEDIA_ALT.languages}
+                  src={media('technology')}
+                  alt={MEDIA_ALT.technology}
                   className="h-48 w-full object-cover md:h-full md:min-h-[180px]"
                   loading="lazy"
                   decoding="async"
                 />
                 <div className="p-6 text-white sm:p-8">
                   <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-white/60">
-                    <Layers3 className="h-3 w-3" /> The language we use
+                    <Layers3 className="h-3 w-3" /> The technology we use
                   </span>
                   <h3 className="mt-4 font-display text-xl font-semibold">Readable code, proven stacks.</h3>
                   <p className="mt-2 max-w-lg text-[12.5px] leading-relaxed text-white/55">
@@ -369,6 +370,68 @@ export function Home() {
                 </Link>
               </Reveal>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Administration system */}
+      <section className="relative overflow-hidden border-y border-brand-100 bg-brand-50/40 py-20 sm:py-24">
+        <div className="container-x">
+          <div className="grid items-center gap-12 lg:grid-cols-[0.92fr_1.08fr]">
+            <Reveal>
+              <SectionHeading
+                eyebrow="Reagansoft administration system"
+                title="One console for the whole operation."
+                lead="Projects, clients, quotations, invoices, payments, tasks and reports live in the same secure workspace — so every team sees the same truth."
+              />
+              <div className="mt-8 space-y-3">
+                {[
+                  { icon: Layers3, title: 'Project command centre', text: 'Milestones, tasks, files and progress behind one clear status view.' },
+                  { icon: CircleDollarSign, title: 'Finance you can audit', text: 'Quotations, invoices, receipts and expenses reconciled against real records.' },
+                  { icon: ShieldCheck, title: 'Role-based access', text: 'Clients, staff and administrators only see what their role permits.' },
+                  { icon: Workflow, title: 'Built around your workflow', text: 'Fields, stages and approvals shaped to how your organisation already works.' },
+                ].map((item) => (
+                  <div key={item.title} className="flex gap-3 rounded-2xl border border-brand-100 bg-white p-4">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-navy-900 text-brand-300">
+                      <item.icon className="h-5 w-5" />
+                    </span>
+                    <div>
+                      <p className="text-[13px] font-semibold text-navy-900">{item.title}</p>
+                      <p className="mt-0.5 text-[12px] leading-relaxed text-ink-muted">{item.text}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <Link to="/services/business-systems" className="btn-dark btn-sm mt-7">
+                Explore business systems <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </Reveal>
+
+            <Reveal delay={100}>
+              <Tilt className="relative">
+                <figure className="overflow-hidden rounded-3xl border border-brand-100 bg-white p-2.5 shadow-lift">
+                  <img
+                    src={media('administration')}
+                    alt={MEDIA_ALT.administration}
+                    className="aspect-[16/11] w-full rounded-2xl object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </figure>
+                <div className="absolute -bottom-5 left-5 right-5 grid grid-cols-3 gap-2 rounded-2xl border border-brand-100 bg-white/95 p-3 shadow-soft backdrop-blur sm:left-8 sm:right-8">
+                  {[
+                    ['Projects', stats.projects ? String(stats.projects) : 'Live'],
+                    ['Team roles', '3'],
+                    ['Audit trail', 'On'],
+                  ].map(([label, value]) => (
+                    <div key={label} className="text-center">
+                      <p className="font-mono text-[8px] uppercase tracking-[0.16em] text-ink-faint">{label}</p>
+                      <p className="mt-0.5 font-display text-[13px] font-semibold text-navy-900">{value}</p>
+                    </div>
+                  ))}
+                </div>
+              </Tilt>
+            </Reveal>
           </div>
         </div>
       </section>

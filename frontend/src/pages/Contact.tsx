@@ -7,6 +7,7 @@ import { useSite } from '../lib/site';
 import { useToast } from '../components/Toast';
 import { Field } from '../components/UI';
 import { ServiceGlyph } from '../components/Graphics';
+import { media, MEDIA_ALT } from '../lib/media';
 
 export function Contact() {
   usePageMeta(
@@ -234,6 +235,23 @@ export function Contact() {
                 </a>
               )}
             </div>
+
+            <figure className="overflow-hidden rounded-3xl border border-brand-100 bg-white">
+              <img
+                src={media('team')}
+                alt={MEDIA_ALT.team}
+                className="aspect-[4/3] w-full object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption className="p-5">
+                <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-brand-600">Visit us in Jinja</p>
+                <p className="mt-1 text-[12.5px] font-semibold text-navy-900">Meet the team before you commit.</p>
+                <p className="mt-1 text-[11.5px] leading-relaxed text-ink-muted">
+                  Prefer to talk in person? Arrange a studio visit and we will walk you through similar work.
+                </p>
+              </figcaption>
+            </figure>
 
             <div className="rounded-3xl border border-brand-100 bg-white p-6">
               <h3 className="font-display text-base font-semibold text-navy-900">What happens next</h3>

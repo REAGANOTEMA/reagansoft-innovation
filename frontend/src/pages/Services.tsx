@@ -46,8 +46,8 @@ export function Services() {
             </div>
             <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.05] backdrop-blur">
               <img
-                src={media('engineering')}
-                alt={MEDIA_ALT.engineering}
+                src={media('technology')}
+                alt={MEDIA_ALT.technology}
                 className="h-28 w-full object-cover opacity-80"
                 loading="lazy"
                 decoding="async"

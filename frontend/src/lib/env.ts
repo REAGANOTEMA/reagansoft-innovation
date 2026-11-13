@@ -16,7 +16,12 @@ export const LOGO = `${ASSET_BASE}/reagansoftinnovation-logo.jpeg`;
 export const FAVICON = `${ASSET_BASE}/reagansoftinnovation-logo-favicon.png`;
 
 export function asset(name: string): string {
-  return `${ASSET_BASE}/${name.replace(/^\//, '')}`;
+  const clean = name.replace(/^\//, '');
+  const path = clean
+    .split('/')
+    .map((segment) => encodeURIComponent(segment).replace(/%2F/gi, '/'))
+    .join('/');
+  return `${ASSET_BASE}/${path}`;
 }
 
 export function appUrl(path: string): string {

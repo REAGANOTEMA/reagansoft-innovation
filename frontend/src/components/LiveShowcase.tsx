@@ -13,6 +13,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { asset } from '../lib/env';
+import { MEDIA } from '../lib/media';
 import { cn } from '../lib/cn';
 import type { Service } from '../lib/types';
 
@@ -30,7 +31,7 @@ interface Slide {
 
 const slides: Slide[] = [
   {
-    image: 'hero1.webp',
+    image: MEDIA.homepageHero,
     channel: 'Web development',
     eyebrow: 'Channel 01 · Websites',
     title: 'Websites that ',
