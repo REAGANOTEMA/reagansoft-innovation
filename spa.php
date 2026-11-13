@@ -34,6 +34,9 @@ $inject = implode("\n    ", [
     '<meta name="rsi-base" content="' . htmlspecialchars($base, ENT_QUOTES, 'UTF-8') . '">',
     '<meta name="rsi-api-base" content="' . htmlspecialchars($apiBase, ENT_QUOTES, 'UTF-8') . '">',
     '<meta name="rsi-asset-base" content="' . htmlspecialchars($assetBase, ENT_QUOTES, 'UTF-8') . '">',
+    '<link rel="icon" type="image/png" href="' . htmlspecialchars($assetBase . '/reagansoftinnovation-logo-favicon.png', ENT_QUOTES, 'UTF-8') . '">',
+    '<link rel="apple-touch-icon" href="' . htmlspecialchars($assetBase . '/apple-180.png', ENT_QUOTES, 'UTF-8') . '">',
+    '<link rel="manifest" href="' . htmlspecialchars($assetBase . '/site.webmanifest', ENT_QUOTES, 'UTF-8') . '">',
 ]);
 
 $html = preg_replace('/<head>/i', "<head>\n    " . $inject . "\n", $html, 1) ?? $html;

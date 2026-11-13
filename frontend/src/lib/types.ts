@@ -30,10 +30,14 @@ export interface Settings {
   company_founder: string;
   company_hours?: string;
   company_map_url?: string;
+  company_legal_name?: string;
+  company_registration_no?: string;
+  company_registration_country?: string;
   company_fb?: string;
   company_linkedin?: string;
   company_x?: string;
   currency: string;
+  usd_rate?: string;
   project_deposit?: string;
   registration_open?: string;
   seo_keywords?: string;

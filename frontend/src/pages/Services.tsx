@@ -6,7 +6,8 @@ import { usePageMeta } from '../lib/seo';
 import { Reveal } from '../components/Reveal';
 import { SectionHeading } from '../components/UI';
 import { ServiceGlyph } from '../components/Graphics';
-import { serviceMedia, media, MEDIA_ALT } from '../lib/media';
+import { serviceMedia, media, MEDIA_ALT, STUDIO_REEL } from '../lib/media';
+import { CinemaBand } from '../components/CinemaBand';
 import { cn } from '../lib/cn';
 
 export function Services() {
@@ -65,6 +66,15 @@ export function Services() {
           </div>
         </div>
       </section>
+
+      <CinemaBand
+        eyebrow="Studio reel · Services"
+        title="From a single website to the system that runs the whole operation."
+        lead="See the kind of work behind each service line: engineering, management systems, integrations and long-term support."
+        slides={STUDIO_REEL}
+        to="/pricing"
+        cta="Compare starting prices"
+      />
 
       <section className="py-12 sm:py-16">
         <div className="container-x">

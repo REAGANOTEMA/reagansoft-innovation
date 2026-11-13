@@ -8,7 +8,8 @@ import { Reveal } from '../components/Reveal';
 import { Tilt } from '../components/Tilt';
 import { Badge, SectionHeading } from '../components/UI';
 import { ProjectCover } from '../components/Graphics';
-import { media, MEDIA_ALT } from '../lib/media';
+import { media, MEDIA_ALT, STUDIO_REEL } from '../lib/media';
+import { CinemaBand } from '../components/CinemaBand';
 import { cn } from '../lib/cn';
 import { formatDate } from '../lib/format';
 import type { Project } from '../lib/types';
@@ -91,6 +92,15 @@ export function Portfolio() {
           </div>
         </div>
       </section>
+
+      <CinemaBand
+        eyebrow="Studio reel · Work"
+        title="A closer look at the studio behind the case studies."
+        lead="The team, the tools and the operational systems that turn a brief into software people use every day."
+        slides={STUDIO_REEL}
+        to="/contact"
+        cta="Discuss a similar project"
+      />
 
       <section className="py-12 sm:py-16">
         <div className="container-x">

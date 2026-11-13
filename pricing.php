@@ -14,7 +14,7 @@ $bandService = [
 
 public_head([
     'title'     => 'Pricing | Reagan Soft Innovation Limited',
-    'desc'      => 'Honest pricing in Jinja, Uganda: professional websites from UGX 500,000 to UGX 10,000,000, automatic receipt systems from UGX 3,000,000 to UGX 10,000,000, web and mobile apps from UGX 10,000,000 and custom business systems from UGX 20,000,000 to UGX 40,000,000. Final quotes approved before work begins.',
+    'desc'      => 'Honest pricing in Jinja, Uganda: professional websites from UGX 5,000,000, automatic receipt systems from UGX 3,000,000, web and mobile apps from UGX 10,000,000 and custom business systems from UGX 40,000,000. USD guide prices shown at the current daily rate. Final quotes approved before work begins.',
     'active'    => 'pricing',
     'canonical' => 'pricing.php',
 ]);
@@ -24,7 +24,7 @@ public_head([
     <div class="pi-copy">
       <span class="eyebrow">Pricing</span>
       <h1>Honest ranges, agreed before we start.</h1>
-      <p class="lead">We work in clear pricing ranges: professional websites and ecommerce, automatic receipt and billing systems, apps for both web and mobile app stores, and larger custom business systems. Every project is secured with a fixed one time deposit of <strong style="color:var(--navy)"><?= money($deposit, $currency) ?></strong> (credited against your quotation). The final figure depends entirely on your requirements, and it is always written into a quotation that you approve before any development begins.</p>
+      <p class="lead">We work in clear pricing starting points: professional websites and ecommerce, automatic receipt and billing systems, apps for both web and mobile app stores, and larger custom business systems. Every project is secured with a fixed one time deposit of <strong style="color:var(--navy)"><?= money_both($deposit, $currency) ?></strong> (credited against your quotation). The final figure depends entirely on your requirements, and it is always written into a quotation that you approve before any development begins.</p>
     </div>
     <?= page_image('assets/img/hero3.webp', 3, 'Fixed starting prices, written quotation before we build'); ?>
   </div>
@@ -34,7 +34,7 @@ public_head([
   <div class="container">
     <span class="dr-icon"><?= icon('shield') ?></span>
     <div>
-      <b>How it works: choose a program → create your account → pay the <?= money($deposit, $currency) ?> deposit.</b>
+      <b>How it works: choose a program → create your account → pay the <?= money_both($deposit, $currency) ?> deposit.</b>
       <p>Your deposit secures your slot and is credited to your project. You only pay the balance after approving your written quotation, never before.</p>
     </div>
     <a class="btn btn-ghost btn-sm" href="<?= app_url('checkout.php') ?>">Start now <?= icon('arrow') ?></a>
@@ -50,7 +50,7 @@ public_head([
           <span class="eyebrow">Web Development</span>
           <h2>Professional websites &amp; ecommerce</h2>
           <p>Company websites, online stores, portfolios and web platforms, designed, built and launched for real results.</p>
-          <div class="pb-amount"><?= money(PRICE_WEBSITE_MIN, $currency) ?> <span class="pb-to">to</span> <?= money(PRICE_WEBSITE_MAX, $currency) ?></div>
+          <div class="pb-amount">From <?= money_both(PRICE_WEBSITE_MIN, $currency) ?></div>
           <a class="btn btn-primary" href="<?= app_url('checkout.php?service=' . (int)$bandService['websites']) ?>">Start a website project <?= icon('arrow') ?></a>
         </div>
         <div class="pb-factors">
@@ -124,7 +124,7 @@ public_head([
           <span class="eyebrow">Custom Business Systems</span>
           <h2>Systems, software &amp; automation</h2>
           <p>Client portals, management systems, dashboards and workflow automation for schools, hospitals, NGOs, government offices and companies, built around your real business processes.</p>
-          <div class="pb-amount"><?= money(PRICE_SYSTEM_MIN, $currency) ?> <span class="pb-to">to</span> <?= money(PRICE_SYSTEM_MAX, $currency) ?></div>
+          <div class="pb-amount">From <?= money_both(PRICE_SYSTEM_MIN, $currency) ?></div>
           <a class="btn btn-light" href="<?= app_url('checkout.php?service=' . (int)$bandService['systems']) ?>">Start a systems project <?= icon('arrow') ?></a>
         </div>
         <div class="pb-factors">

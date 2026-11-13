@@ -442,10 +442,10 @@ CREATE TABLE `services` (
 --
 
 INSERT INTO `services` (`id`, `name`, `slug`, `description`, `price_min`, `price_max`, `currency`, `pricing_type`, `price_note`, `features`, `delivery_days`, `icon`, `status`, `sort_order`, `created_at`) VALUES
-(1, 'Business Website Development', 'business-website', 'A professional, responsive company website with clear structure, contact integration, SEO foundations and a design that represents your brand.', 500000.00, 10000000.00, 'UGX', 'range', 'Professional websites', 'Custom responsive design for mobile, tablet and desktop\r\nContact & enquiry form\r\nWhatsApp and phone integration\r\nSearch engine friendly structure\r\nGoogle Map & business details\r\nTraining on how to manage content', 14, 'globe', 'active', 1, '2026-10-31 07:13:45'),
-(2, 'Ecommerce Development', 'ecommerce', 'Online stores with product catalogues, order management and a payment architecture ready for mobile money and bank integration.', 500000.00, 10000000.00, 'UGX', 'range', 'Websites & online stores', 'Product catalogue and categories\r\nShopping cart and checkout\r\nOrder management dashboard\r\nMobile money and bank payment ready architecture\r\nInventory management\r\nDelivery and order tracking', 30, 'cart', 'active', 2, '2026-10-31 07:13:45'),
-(3, 'Custom Business Systems', 'business-systems', 'Management systems built for schools, hospitals, NGOs, government offices and companies, with client portals, dashboards, workflow automation and database driven tools around your real business processes.', 20000000.00, 40000000.00, 'UGX', 'range', 'Custom business systems', 'Role based user access\r\nOnline fees, payments & mobile money\r\nDashboards and reports\r\nWorkflow automation\r\nSMS notifications\r\nUser training and handover', 30, 'cpu', 'active', 3, '2026-10-31 07:13:45'),
-(4, 'Software Development', 'software-dev', 'Custom web applications and internal business systems built with modern PHP/MySQL technology, secure by default and tailored to you.', 20000000.00, 40000000.00, 'UGX', 'range', 'Custom software & business systems', 'Requirements analysis\r\nCustom database design\r\nSecure authentication\r\nAdministration panels\r\nAPI and integration ready\r\nDeployment and support', 30, 'code-s', 'active', 4, '2026-10-31 07:13:45'),
+(1, 'Business Website Development', 'business-website', 'A professional, responsive company website with clear structure, contact integration, SEO foundations and a design that represents your brand.', 5000000.00, NULL, 'UGX', 'starting_from', 'Professional websites', 'Custom responsive design for mobile, tablet and desktop\r\nContact & enquiry form\r\nWhatsApp and phone integration\r\nSearch engine friendly structure\r\nGoogle Map & business details\r\nTraining on how to manage content', 14, 'globe', 'active', 1, '2026-10-31 07:13:45'),
+(2, 'Ecommerce Development', 'ecommerce', 'Online stores with product catalogues, order management and a payment architecture ready for mobile money and bank integration.', 5000000.00, NULL, 'UGX', 'starting_from', 'Websites & online stores', 'Product catalogue and categories\r\nShopping cart and checkout\r\nOrder management dashboard\r\nMobile money and bank payment ready architecture\r\nInventory management\r\nDelivery and order tracking', 30, 'cart', 'active', 2, '2026-10-31 07:13:45'),
+(3, 'Custom Business Systems', 'business-systems', 'Management systems built for schools, hospitals, NGOs, government offices and companies, with client portals, dashboards, workflow automation and database driven tools around your real business processes.', 40000000.00, NULL, 'UGX', 'starting_from', 'Management systems', 'Role based user access\r\nOnline fees, payments & mobile money\r\nDashboards and reports\r\nWorkflow automation\r\nSMS notifications\r\nUser training and handover', 30, 'cpu', 'active', 3, '2026-10-31 07:13:45'),
+(4, 'Software Development', 'software-dev', 'Custom web applications and internal business systems built with modern PHP/MySQL technology, secure by default and tailored to you.', 40000000.00, NULL, 'UGX', 'starting_from', 'Custom software & business systems', 'Requirements analysis\r\nCustom database design\r\nSecure authentication\r\nAdministration panels\r\nAPI and integration ready\r\nDeployment and support', 30, 'code-s', 'active', 4, '2026-10-31 07:13:45'),
 (5, 'Web & Mobile App Development', 'web-mobile-apps', 'Business apps built to work as a website, an Android app and an iOS app, prepared, tested and published to the Apple App Store and Google Play.', 10000000.00, NULL, 'UGX', 'starting_from', 'Apps for the App Store & Google Play', 'Web, Android & iOS builds\r\nApp Store & Google Play publication\r\nPush and SMS notifications\r\nMobile money & bank payments\r\nDashboards and admin panels\r\nTesting across devices', 30, 'mobile', 'active', 5, '2026-10-31 07:13:45'),
 (6, 'Receipt & Billing Automation', 'receipt-billing', 'Automatic receipt and invoice generation, so every sale prints or sends a professional receipt instantly, with totals, mobile money references and daily reports.', 3000000.00, 10000000.00, 'UGX', 'range', 'Automatic receipts & invoices', 'Automatic receipt printing and sending\r\nInvoice generation and numbering\r\nMobile money reference capture\r\nDaily cash & sales totals\r\nShop, school and clinic billing\r\nReport formats for daily and monthly use', 14, 'receipt', 'active', 6, '2026-10-31 07:13:45'),
 (7, 'Custom Digital Solutions', 'custom-solutions', 'A specific business problem that does not fit a ready made package? We design and build the right digital solution for it.', 0.00, NULL, 'UGX', 'contact_for_quote', 'Contact for a quote', 'Consultation and scoping\r\nFeasibility recommendation\r\nBespoke design and build\r\nTesting and quality assurance\r\nDeployment\r\nOngoing support', 21, 'layers', 'active', 7, '2026-10-31 07:13:45'),
@@ -474,7 +474,7 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`id`, `setting_key`, `setting_value`) VALUES
-(1, 'company_name', 'Reagan Soft Innovation Limited'),
+(1, 'company_name', 'Reagansoft Innovation Limited'),
 (2, 'company_tagline', 'Innovating today for a smarter tomorrow.'),
 (3, 'company_founder', 'Reagan Otema'),
 (4, 'company_phone', '+256772514889'),
@@ -492,7 +492,7 @@ INSERT INTO `settings` (`id`, `setting_key`, `setting_value`) VALUES
 (16, 'payment_airtel_number', ''),
 (17, 'payment_bank_details', ''),
 (18, 'payment_gateway_status', 'not_configured'),
-(19, 'project_deposit', '200000'),
+(19, 'project_deposit', '1000000'),
 (20, 'registration_open', '1'),
 (42, 'company_hours', 'Mon – Fri, 8:00am – 6:00pm EAT'),
 (43, 'company_map_url', 'https://www.google.com/maps/search/?api=1&query=Jinja%2C+Uganda'),
@@ -500,7 +500,11 @@ INSERT INTO `settings` (`id`, `setting_key`, `setting_value`) VALUES
 (45, 'site_announcement', ''),
 (46, 'support_email', 'support@reagansoftinnovation.com'),
 (47, 'newsletter_enabled', '1'),
-(48, 'company_phone_alt', '+256730314979');
+(48, 'company_phone_alt', '+256730314979'),
+(49, 'company_legal_name', 'ReaganSof Innovation'),
+(50, 'company_registration_no', '80048847119307'),
+(51, 'usd_rate', '3800'),
+(52, 'company_registration_country', 'Uganda');
 
 -- --------------------------------------------------------
 

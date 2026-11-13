@@ -4,39 +4,50 @@ import { useSite } from '../lib/site';
 import { usePageMeta } from '../lib/seo';
 import { Reveal } from '../components/Reveal';
 import { Badge, SectionHeading } from '../components/UI';
-import { money } from '../lib/format';
+import { CinemaBand } from '../components/CinemaBand';
+import { STUDIO_REEL } from '../lib/media';
+import { moneyBoth, usdRate } from '../lib/format';
 import { cn } from '../lib/cn';
 
-const tiers = [
+const tiers: Array<{
+  name: string;
+  tagline: string;
+  from: number | null;
+  unit: string;
+  description: string;
+  features: string[];
+  cta: string;
+  tone: 'light' | 'dark';
+}> = [
   {
-    name: 'Starter',
+    name: 'Website',
     tagline: 'Get online properly',
-    from: 500000,
+    from: 5000000,
     unit: 'project',
-    description: 'A focused website or brand presence for a small team that needs to look credible and be found.',
+    description: 'A focused website or online store for an organisation that needs to look credible, load fast and be found.',
     features: ['Up to 6 pages', 'Mobile-first design', 'Contact & enquiry forms', 'Basic SEO setup', 'Training walkthrough', '30-day launch support'],
     cta: 'Start with a website',
-    tone: 'light' as const,
+    tone: 'light',
   },
   {
-    name: 'Growth',
+    name: 'Management system',
     tagline: 'Run the operation',
-    from: 10000000,
+    from: 40000000,
     unit: 'project',
-    description: 'An ecommerce store, booking engine or internal system that replaces manual work and centralises data.',
+    description: 'A custom management system with dashboards, roles and workflows built around how your organisation actually operates.',
     features: ['Discovery & process mapping', 'Custom dashboards', 'Roles & permissions', 'Payments or SMS integration', 'Data migration', '90-day support window'],
-    cta: 'Scope a business system',
-    tone: 'dark' as const,
+    cta: 'Scope a management system',
+    tone: 'dark',
   },
   {
-    name: 'Enterprise',
+    name: 'Enterprise platform',
     tagline: 'Build the platform',
-    from: 20000000,
-    unit: 'project',
+    from: null,
+    unit: 'quote',
     description: 'Multi-module software, mobile apps and integrations for organisations with complex or regulated workflows.',
     features: ['Architecture & security review', 'Multi-role portals', 'Mobile or partner APIs', 'Automated reporting', 'Deployment & monitoring', 'Ongoing retainer option'],
     cta: 'Discuss a platform',
-    tone: 'light' as const,
+    tone: 'light',
   },
 ];
 
@@ -54,7 +65,9 @@ export function Pricing() {
   );
 
   const { services, settings } = useSite();
-  const deposit = money(settings.project_deposit ?? 200000, settings.currency);
+  const rate = usdRate(settings.usd_rate);
+  const deposit = moneyBoth(settings.project_deposit ?? 1000000, settings.currency, rate);
+  const maintenance = moneyBoth(150000, settings.currency, rate);
 
   return (
     <>
@@ -76,6 +89,15 @@ export function Pricing() {
         </div>
       </section>
 
+      <CinemaBand
+        eyebrow="Studio reel · Pricing"
+        title="Premium delivery without vague invoices."
+        lead="The reel shows what the investment pays for: a real team, working systems and support after launch."
+        slides={STUDIO_REEL}
+        to="/services"
+        cta="Explore the service lines"
+      />
+
       <section className="py-16 sm:py-20">
         <div className="container-x">
           <div className="grid gap-4 lg:grid-cols-3">
@@ -89,7 +111,7 @@ export function Pricing() {
                       : 'border-brand-100 bg-white shadow-soft',
                   )}
                 >
-                  {tier.name === 'Growth' && (
+                  {tier.name === 'Management system' && (
                     <span className="absolute -top-3 left-6 rounded-full bg-gold-500 px-3 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.16em] text-navy-950">
                       Most requested
                     </span>
@@ -99,9 +121,11 @@ export function Pricing() {
                   </p>
                   <h2 className={cn('mt-2 font-display text-xl font-semibold', tier.tone === 'dark' ? 'text-white' : 'text-navy-900')}>{tier.name}</h2>
                   <div className="mt-4">
-                    <span className={cn('font-mono text-[10px] uppercase tracking-wider', tier.tone === 'dark' ? 'text-white/40' : 'text-ink-faint')}>From</span>
-                    <p className={cn('mt-1 font-display text-3xl font-semibold', tier.tone === 'dark' ? 'text-white' : 'text-navy-900')}>
-                      {money(tier.from, settings.currency)}
+                    <span className={cn('font-mono text-[10px] uppercase tracking-wider', tier.tone === 'dark' ? 'text-white/40' : 'text-ink-faint')}>
+                      {tier.from === null ? 'Engagement' : 'From'}
+                    </span>
+                    <p className={cn('mt-1 font-display text-[1.7rem] font-semibold leading-tight', tier.tone === 'dark' ? 'text-white' : 'text-navy-900')}>
+                      {tier.from === null ? 'Custom quote' : moneyBoth(tier.from, settings.currency, rate)}
                     </p>
                   </div>
                   <p className={cn('mt-3 text-[12.5px] leading-relaxed', tier.tone === 'dark' ? 'text-white/55' : 'text-ink-muted')}>{tier.description}</p>
@@ -125,6 +149,7 @@ export function Pricing() {
           </div>
           <p className="mt-5 text-center text-[11px] text-ink-faint">
             Ranges are indicative and exclude third-party costs such as domain names, hosting, SMS credits and payment gateway fees.
+            USD figures are a guide at UGX {rate.toLocaleString('en-UG')} = $1; contracts are invoiced in UGX.
           </p>
         </div>
       </section>
@@ -234,7 +259,7 @@ export function Pricing() {
             <span className="eyebrow text-brand-300">Maintenance</span>
             <h2 className="h2 mt-3 text-white">After launch, keep it healthy.</h2>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/60">
-              Maintenance plans start from UGX 150,000 per month and cover updates, backups, monitoring and a monthly allowance for
+              Maintenance plans start from {maintenance} per month and cover updates, backups, monitoring and a monthly allowance for
               small changes. Bigger enhancements are quoted separately.
             </p>
           </div>

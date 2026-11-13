@@ -53,6 +53,65 @@ export function mediaAlt(key: MediaKey): string {
   return MEDIA_ALT[key];
 }
 
+export interface StudioSlide {
+  image: string;
+  alt: string;
+  label: string;
+  caption: string;
+}
+
+export const STUDIO_REEL: StudioSlide[] = [
+  {
+    image: MEDIA.homepageHero,
+    alt: MEDIA_ALT.homepageHero,
+    label: 'Engineering studio',
+    caption: 'Design, engineering and deployment under one accountable team in Jinja.',
+  },
+  {
+    image: MEDIA.administration,
+    alt: MEDIA_ALT.administration,
+    label: 'Management systems',
+    caption: 'Live dashboards, roles and workflows built around real operations.',
+  },
+  {
+    image: MEDIA.portfolioShowcase,
+    alt: MEDIA_ALT.portfolioShowcase,
+    label: 'Delivered work',
+    caption: 'Websites, commerce and internal platforms serving organisations across Uganda.',
+  },
+  {
+    image: MEDIA.technology,
+    alt: MEDIA_ALT.technology,
+    label: 'Systems & integrations',
+    caption: 'Payments, messaging, APIs and data flows connected securely.',
+  },
+  {
+    image: MEDIA.team,
+    alt: MEDIA_ALT.team,
+    label: 'The team',
+    caption: 'A local team you can meet, call and build with over the long term.',
+  },
+  {
+    image: MEDIA.bike,
+    alt: MEDIA_ALT.bike,
+    label: 'On the ground',
+    caption: 'Company transport in our colours, ready for client visits and site work.',
+  },
+  {
+    image: MEDIA.ceoIsrael,
+    alt: MEDIA_ALT.ceoIsrael,
+    label: 'Partnerships',
+    caption: 'Learning from technology partners beyond Uganda and bringing it home.',
+  },
+  {
+    image: MEDIA.funders,
+    alt: MEDIA_ALT.funders,
+    label: 'Backing the vision',
+    caption: 'Funders and partners photographed with the founder at the studio.',
+  },
+];
+
+
 /** Picks the most relevant studio artwork for a service or sector. */
 export function serviceMedia(slug = '', icon = ''): string {
   const value = `${slug} ${icon}`.toLowerCase();

@@ -5,6 +5,8 @@ import { usePageMeta } from '../lib/seo';
 import { useSite } from '../lib/site';
 import { Reveal } from '../components/Reveal';
 import { SectionHeading } from '../components/UI';
+import { CinemaBand } from '../components/CinemaBand';
+import { STUDIO_REEL } from '../lib/media';
 import { cn } from '../lib/cn';
 
 const faqs = [
@@ -20,8 +22,8 @@ const faqs = [
   {
     category: 'Pricing & payment',
     items: [
-      { q: 'How much does a project cost?', a: 'Websites start at UGX 500,000; business systems and custom software typically start at UGX 20,000,000. Every quote is itemised after discovery. See the pricing page for current service rates.' },
-      { q: 'What is the deposit?', a: 'Projects begin with a deposit from UGX 200,000, which reserves the delivery slot and covers discovery. The balance is staged across milestones and handover.' },
+      { q: 'How much does a project cost?', a: 'Websites start at UGX 5,000,000 (≈ $1,316); management systems start at UGX 40,000,000 (≈ $10,526). Every quote is itemised after discovery. See the pricing page for current service rates.' },
+      { q: 'What is the deposit?', a: 'Projects begin with a deposit from UGX 1,000,000 (≈ $263), which reserves the delivery slot and covers discovery. The balance is staged across milestones and handover.' },
       { q: 'How do I pay?', a: 'Bank transfer, MTN Mobile Money or Airtel Money. Official receipts are issued for every confirmed payment, and invoices are due within 14 days unless agreed otherwise.' },
       { q: 'Do you charge for changes?', a: 'Changes inside the agreed scope are included. New requirements are quoted before work starts, so you always approve the cost first.' },
     ],
@@ -38,7 +40,7 @@ const faqs = [
   {
     category: 'Support & security',
     items: [
-      { q: 'Do you offer maintenance?', a: 'Yes. Plans start from UGX 150,000 per month and cover updates, backups, monitoring and a monthly allowance for small changes. Larger work is quoted separately.' },
+      { q: 'Do you offer maintenance?', a: 'Yes. Plans start from UGX 150,000 (≈ $39) per month and cover updates, backups, monitoring and a monthly allowance for small changes. Larger work is quoted separately.' },
       { q: 'How is my data protected?', a: 'Role-based access, hashed passwords, audited actions, encrypted sessions and disciplined deployment checks are standard. Backups and restore steps are documented.' },
       { q: 'What if something breaks?', a: 'Contact support with the details. We triage quickly, restore service first where possible, then investigate and document the fix.' },
       { q: 'Can you integrate mobile money or card payments?', a: 'Yes, subject to provider availability and merchant onboarding. Integration scope, fees and testing are agreed before build.' },
@@ -73,6 +75,15 @@ export function Faq() {
           </p>
         </div>
       </section>
+
+      <CinemaBand
+        eyebrow="Studio reel · FAQ"
+        title="Still deciding? See how the studio actually works."
+        lead="The same team, tools and delivery rhythm behind every answer on this page."
+        slides={STUDIO_REEL}
+        to="/contact"
+        cta="Ask us directly"
+      />
 
       <section className="py-12 sm:py-16">
         <div className="container-x grid gap-10 lg:grid-cols-[240px_1fr]">

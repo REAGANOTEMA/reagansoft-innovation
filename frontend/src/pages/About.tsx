@@ -3,8 +3,9 @@ import { ArrowRight, ArrowUpRight, Check, Compass, HeartHandshake, MapPin, Shiel
 import { useSite } from '../lib/site';
 import { usePageMeta } from '../lib/seo';
 import { asset } from '../lib/env';
-import { media, MEDIA_ALT } from '../lib/media';
+import { media, MEDIA_ALT, STUDIO_REEL } from '../lib/media';
 import { Reveal } from '../components/Reveal';
+import { CinemaBand } from '../components/CinemaBand';
 import { Tilt } from '../components/Tilt';
 import { SectionHeading, Badge } from '../components/UI';
 import { CloudInfraArt, IndustryGlyph, SecurityArt } from '../components/Graphics';
@@ -72,6 +73,15 @@ export function About() {
           </Reveal>
         </div>
       </section>
+
+      <CinemaBand
+        eyebrow="Studio reel · About"
+        title="The people, the place and the work behind the software."
+        lead="A short reel of the team, the studio, the partnerships and the systems we build for organisations in Uganda."
+        slides={STUDIO_REEL}
+        to="/portfolio"
+        cta="See the delivered work"
+      />
 
       <section className="border-b border-brand-100 bg-white py-10">
         <div className="container-x grid grid-cols-2 gap-6 sm:grid-cols-4">

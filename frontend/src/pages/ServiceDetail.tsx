@@ -6,8 +6,9 @@ import { usePageMeta } from '../lib/seo';
 import { Reveal } from '../components/Reveal';
 import { Badge, ErrorBlock, LoadingBlock, SectionHeading } from '../components/UI';
 import { ServiceGlyph } from '../components/Graphics';
-import { serviceMedia } from '../lib/media';
-import { money } from '../lib/format';
+import { serviceMedia, STUDIO_REEL } from '../lib/media';
+import { CinemaBand } from '../components/CinemaBand';
+import { moneyBoth, usdRate } from '../lib/format';
 import type { Service } from '../lib/types';
 
 const included = [
@@ -22,6 +23,7 @@ const included = [
 export function ServiceDetail() {
   const { slug = '' } = useParams();
   const { services, settings } = useSite();
+  const rate = usdRate(settings.usd_rate);
   const fallback = services.find((item) => item.slug === slug);
   const { data, loading, error, reload } = useApi<{ service: Service; related: Service[] }>(`public/services/${encodeURIComponent(slug)}`);
 
@@ -94,12 +96,12 @@ export function ServiceDetail() {
                   {service.price_max && (
                     <div className="flex items-center justify-between gap-3">
                       <span className="text-ink-muted">Typical ceiling</span>
-                      <span className="font-semibold">{money(service.price_max, service.currency)}</span>
+                      <span className="font-semibold">{moneyBoth(service.price_max, service.currency, rate)}</span>
                     </div>
                   )}
                   <div className="flex items-center justify-between gap-3">
                     <span className="text-ink-muted">Deposit</span>
-                    <span className="font-semibold">{money(settings.project_deposit ?? 200000, settings.currency)}</span>
+                    <span className="font-semibold">{moneyBoth(settings.project_deposit ?? 1000000, settings.currency, rate)}</span>
                   </div>
                 </div>
 
@@ -117,6 +119,15 @@ export function ServiceDetail() {
           </div>
         </div>
       </section>
+
+      <CinemaBand
+        eyebrow={`Studio reel · ${service.name}`}
+        title="A delivery team, not a template."
+        lead="See the studio and the operational systems behind the service described on this page."
+        slides={STUDIO_REEL}
+        to="/portfolio"
+        cta="See delivered projects"
+      />
 
       <section className="py-16 sm:py-20">
         <div className="container-x grid gap-12 lg:grid-cols-[1.15fr_0.85fr]">

@@ -81,12 +81,12 @@ public_head([
     <div class="hero-pricing">
       <div class="hero-price-item">
         <span class="hp-label">Web Development</span>
-        <span class="hp-value"><?= e(settings('currency')) ?> <?= money_compact(PRICE_WEBSITE_MIN) ?> – <?= money_compact(PRICE_WEBSITE_MAX) ?></span>
+        <span class="hp-value">From <?= money_both(PRICE_WEBSITE_MIN, settings('currency')) ?></span>
         <span class="hp-sub">Professional websites &amp; online stores</span>
       </div>
       <div class="hero-price-item">
         <span class="hp-label">Business Systems</span>
-        <span class="hp-value"><?= e(settings('currency')) ?> <?= money_compact(PRICE_SYSTEM_MIN) ?> – <?= money_compact(PRICE_SYSTEM_MAX) ?></span>
+        <span class="hp-value">From <?= money_both(PRICE_SYSTEM_MIN, settings('currency')) ?></span>
         <span class="hp-sub">Custom systems &amp; software</span>
       </div>
     </div>
@@ -259,14 +259,14 @@ public_head([
   <div class="container">
     <div class="section-head">
       <div><span class="eyebrow">Transparent pricing</span><h2>Clear ranges. No surprises.</h2></div>
-      <p>Projects are secured with a fixed one time deposit of <?= money(deposit_amount(), settings('currency')) ?>, credited against your final quotation. As a custom studio we never promise a fixed price before reviewing your requirements. A written quotation is always approved by you first.</p>
+      <p>Projects are secured with a fixed one time deposit of <?= money_both(deposit_amount(), settings('currency')) ?>, credited against your final quotation. As a custom studio we never promise a fixed price before reviewing your requirements. A written quotation is always approved by you first.</p>
     </div>
     <div class="pricing-band">
       <div class="pband-card">
         <span class="card-icon"><?= icon('globe') ?></span>
         <h3>Professional Websites</h3>
         <p>Company websites, online stores and web platforms, scoped by pages, design, features and integrations.</p>
-        <div class="pband-amount"><?= money(PRICE_WEBSITE_MIN, settings('currency')) ?><span>–</span><?= money(PRICE_WEBSITE_MAX, settings('currency')) ?></div>
+        <div class="pband-amount">From <?= money_both(PRICE_WEBSITE_MIN, settings('currency')) ?></div>
         <a class="btn btn-primary" href="<?= app_url('checkout.php?service=' . (int)$bandService['websites']) ?>">Choose this program <?= icon('arrow') ?></a>
       </div>
       <div class="pband-card">
@@ -287,7 +287,7 @@ public_head([
         <span class="card-icon"><?= icon('cpu') ?></span>
         <h3>Custom Business Systems</h3>
         <p>Portals, management systems, dashboards and automation for schools, hospitals, NGOs and companies, scoped by modules, roles and workflows.</p>
-        <div class="pband-amount"><?= money(PRICE_SYSTEM_MIN, settings('currency')) ?><span>–</span><?= money(PRICE_SYSTEM_MAX, settings('currency')) ?></div>
+        <div class="pband-amount">From <?= money_both(PRICE_SYSTEM_MIN, settings('currency')) ?></div>
         <a class="btn btn-light" href="<?= app_url('checkout.php?service=' . (int)$bandService['systems']) ?>">Choose this program <?= icon('arrow') ?></a>
       </div>
     </div>

@@ -44,6 +44,32 @@ function money(mixed $amount, string $currency = 'UGX'): string {
     return number_format($amount, 0);
 }
 
+/**
+ * Approximate USD conversion for public pricing. The rate is stored in
+ * settings (`usd_rate`, UGX per USD) so it can be updated without a
+ * deployment; 3,800 is the documented launch rate.
+ */
+function usd_rate(): float {
+    static $rate = null;
+    if ($rate === null) {
+        $rate = (float)settings('usd_rate', '3800');
+        if ($rate <= 0) { $rate = 3800.0; }
+    }
+    return $rate;
+}
+
+function money_usd(mixed $ugx): string {
+    return '$' . number_format((float)$ugx / usd_rate(), 0);
+}
+
+/** "UGX 5,000,000 (≈ $1,316)" — used wherever a public price is shown. */
+function money_both(mixed $amount, string $currency = 'UGX'): string {
+    if (strtoupper($currency) !== 'UGX') {
+        return money($amount, $currency);
+    }
+    return money($amount, $currency) . ' (≈ ' . money_usd($amount) . ')';
+}
+
 function price_range(mixed $min, mixed $max, string $currency = 'UGX'): string {
     $min = (float)$min;
     $max = (float)$max;
@@ -58,8 +84,8 @@ function price_range(mixed $min, mixed $max, string $currency = 'UGX'): string {
  * These two ranges are the company's official pricing buckets. Every
  * price shown in the UI comes from this model (or the services table).
  * ------------------------------------------------------------------ */
-const PRICE_WEBSITE_MIN = 500000;        // professional websites & ecommerce
-const PRICE_WEBSITE_MAX = 10000000;
+const PRICE_WEBSITE_MIN = 5000000;        // professional websites & ecommerce
+const PRICE_WEBSITE_MAX = 5000000;
 
 const PRICE_APP_MIN     = 10000000;      // web & mobile apps, published ready
 const PRICE_APP_MAX     = 10000000;
@@ -67,7 +93,7 @@ const PRICE_APP_MAX     = 10000000;
 const PRICE_RECEIPT_MIN = 3000000;       // automatic receipt & billing systems
 const PRICE_RECEIPT_MAX = 10000000;
 
-const PRICE_SYSTEM_MIN  = 20000000;      // custom business systems & software
+const PRICE_SYSTEM_MIN  = 40000000;      // custom business systems & software (management systems)
 const PRICE_SYSTEM_MAX  = 40000000;
 
 function money_compact(float $amount): string {
@@ -98,14 +124,17 @@ function service_price_display(array $s, string $currency = ''): string {
     $max = (float)($s['price_max'] ?? 0);
     if ($type === 'contact_for_quote') return 'Contact for a quote';
     if ($type === 'range') {
-        return $max > $min ? money($min, $currency) . ' – ' . money($max, $currency) : money($min, $currency);
+        return $max > $min
+            ? money($min, $currency) . ' – ' . money($max, $currency) . ' (≈ ' . money_usd($min) . ' – ' . money_usd($max) . ')'
+            : money_both($min, $currency);
     }
-    return 'From ' . money($min, $currency);
+    return 'From ' . money_both($min, $currency);
 }
 
 /**
  * Compact, short price for tight spaces (chips, selects, small cards):
- *  range -> "UGX 500K – 10M"   starting_from -> "From UGX 250K"
+ *  range -> "UGX 3M – 10M (≈ $789 – $2,632)"
+ *  starting_from -> "From UGX 5M (≈ $1,316)"
  */
 function service_price_short(array $s, string $currency = ''): string {
     $currency = $currency !== '' ? $currency : settings('currency');
@@ -114,9 +143,11 @@ function service_price_short(array $s, string $currency = ''): string {
     $max = (float)($s['price_max'] ?? 0);
     if ($type === 'contact_for_quote') return 'Contact for a quote';
     if ($type === 'range') {
-        return $max > $min ? $currency . ' ' . money_compact($min) . ' – ' . money_compact($max) : $currency . ' ' . money_compact($min);
+        return $max > $min
+            ? $currency . ' ' . money_compact($min) . ' – ' . money_compact($max) . ' (≈ ' . money_usd($min) . ' – ' . money_usd($max) . ')'
+            : $currency . ' ' . money_compact($min) . ' (≈ ' . money_usd($min) . ')';
     }
-    return 'From ' . $currency . ' ' . money_compact($min);
+    return 'From ' . $currency . ' ' . money_compact($min) . ' (≈ ' . money_usd($min) . ')';
 }
 
 /**
@@ -243,7 +274,7 @@ function next_doc_no(PDO $pdo, string $table, string $column, string $prefix): s
  * Before a price exists (a brand-new request), the configurable fixed
  * deposit is used as a booking fee. Configurable under Admin -> Settings.
  * ------------------------------------------------------------------ */
-const DEPOSIT_DEFAULT = 200000;
+const DEPOSIT_DEFAULT = 1000000;
 const FIRST_PAYMENT_PERCENT = 50;
 
 function deposit_amount(): float {

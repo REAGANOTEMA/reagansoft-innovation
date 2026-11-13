@@ -3,6 +3,8 @@ import { ArrowRight, Check, ClipboardCheck, Code2, Compass, FileText, Handshake,
 import { usePageMeta } from '../lib/seo';
 import { Reveal } from '../components/Reveal';
 import { SectionHeading, Badge } from '../components/UI';
+import { CinemaBand } from '../components/CinemaBand';
+import { STUDIO_REEL } from '../lib/media';
 
 const steps = [
   {
@@ -79,6 +81,15 @@ export function Process() {
           </div>
         </div>
       </section>
+
+      <CinemaBand
+        eyebrow="Studio reel · Process"
+        title="The work is visible while it is being built."
+        lead="Weekly demos, shared boards and documented handover — the same rhythm on every project, whatever the size."
+        slides={STUDIO_REEL}
+        to="/contact"
+        cta="Book a discovery call"
+      />
 
       <section className="py-16 sm:py-20">
         <div className="container-x">

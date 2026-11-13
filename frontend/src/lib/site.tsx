@@ -15,7 +15,10 @@ const fallbackSettings: Settings = {
   company_founder: 'Reagan Otema',
   company_hours: 'Mon – Fri, 8:00am – 6:00pm EAT',
   company_map_url: 'https://www.google.com/maps/search/?api=1&query=Jinja%2C+Uganda',
+  company_legal_name: 'ReaganSof Innovation',
+  company_registration_no: '80048847119307',
   currency: 'UGX',
+  usd_rate: '3800',
   registration_open: '1',
   newsletter_enabled: '1',
 };

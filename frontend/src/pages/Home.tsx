@@ -25,7 +25,7 @@ import { Tilt } from '../components/Tilt';
 import { ProjectCover, ServiceGlyph, IndustryGlyph } from '../components/Graphics';
 import { LiveShowcase } from '../components/LiveShowcase';
 import { Badge, SectionHeading } from '../components/UI';
-import { money } from '../lib/format';
+import { moneyBoth, usdRate } from '../lib/format';
 import { media, MEDIA_ALT } from '../lib/media';
 
 const industries = [
@@ -79,6 +79,7 @@ export function Home() {
   );
 
   const { settings, services, portfolio, stats } = useSite();
+  const rate = usdRate(settings.usd_rate);
   const featured = services.slice(0, 6);
   const work = portfolio.slice(0, 3);
 
@@ -487,7 +488,7 @@ export function Home() {
             />
             <div className="mt-8 space-y-3">
               {[
-                { icon: CircleDollarSign, title: 'Transparent pricing', text: `Project deposits from ${money(settings.project_deposit ?? 200000, settings.currency)}, with a written scope before work starts.` },
+                { icon: CircleDollarSign, title: 'Transparent pricing', text: `Project deposits from ${moneyBoth(settings.project_deposit ?? 1000000, settings.currency, rate)}, with a written scope before work starts.` },
                 { icon: BadgeCheck, title: 'Quality gates', text: 'Peer review, responsive checks and a launch checklist on every release.' },
                 { icon: HeartHandshake, title: 'Local support', text: 'A team in Jinja you can call, meet or WhatsApp during working hours.' },
               ].map((item) => (
@@ -549,7 +550,7 @@ export function Home() {
           </Reveal>
           <div className="space-y-3">
             {[
-              { q: 'How much does a project cost?', a: 'It depends on scope. Websites typically start at UGX 500,000, while business systems and custom software are quoted after discovery. Every proposal is itemised.' },
+              { q: 'How much does a project cost?', a: `It depends on scope. Websites start at ${moneyBoth(5000000, settings.currency, rate)}, and management systems start at ${moneyBoth(40000000, settings.currency, rate)}. Every proposal is itemised.` },
               { q: 'How long will it take?', a: 'A focused website can be ready in 2–4 weeks. Management systems usually take 6–12 weeks, delivered in usable increments rather than one big reveal.' },
               { q: 'Do you support the system after launch?', a: 'Yes. Maintenance plans cover updates, backups, monitoring and small improvements, with a clear response window.' },
             ].map((item, index) => (

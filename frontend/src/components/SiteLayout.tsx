@@ -360,9 +360,15 @@ function Footer() {
       <div className="container-x relative py-16">
         <div className="grid gap-12 lg:grid-cols-[1.5fr_1fr_1fr_1.3fr]">
           <div>
-            <Logo dark />
+            <Logo dark variant="legacy" />
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/60">{settings.company_about}</p>
             <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.22em] text-brand-300">{settings.company_tagline}</p>
+            <p className="mt-4 flex flex-wrap items-center gap-2 text-[10.5px] text-white/40">
+              <span className="rounded-full border border-white/15 px-2.5 py-1 font-mono uppercase tracking-[0.12em]">
+                URSB Reg. No. {settings.company_registration_no ?? '80048847119307'}
+              </span>
+              <span>Registered in {settings.company_registration_country ?? 'Uganda'}</span>
+            </p>
             <div className="mt-6 flex items-center gap-2">
               {settings.company_fb && (
                 <a href={settings.company_fb} target="_blank" rel="noreferrer" className="grid h-9 w-9 place-items-center rounded-full border border-white/15 text-white/60 transition hover:border-brand-400 hover:text-white" aria-label="Facebook">
@@ -471,8 +477,13 @@ function Footer() {
         </div>
 
         <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pt-6 text-[11px] text-white/40 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} {settings.company_name}. All rights reserved.</p>
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+          <div className="text-center sm:text-left">
+            <p>© {new Date().getFullYear()} {settings.company_name}. All rights reserved.</p>
+            <p className="mt-1 font-mono text-[9.5px] uppercase tracking-[0.14em] text-white/30">
+              Registered as {settings.company_legal_name ?? 'ReaganSof Innovation'} · URSB No. {settings.company_registration_no ?? '80048847119307'}
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 sm:justify-end">
             <a href={appUrl('/privacy.php')} className="transition hover:text-white">Privacy</a>
             <a href={appUrl('/terms.php')} className="transition hover:text-white">Terms</a>
             <a href={appUrl('/refund.php')} className="transition hover:text-white">Refunds</a>

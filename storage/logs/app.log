@@ -154,3 +154,27 @@ Stack trace:
   IP: ::1  URI: /reagansoft-innovation/api/v1/public/site
 [2026-11-13 11:40:55] DB connection failed (reagansoft_system@localhost/reagansoft_system): SQLSTATE[HY000] [1045] Access denied for user 'reagansoft_system'@'localhost' (using password: YES)
   IP: ::1  URI: /reagansoft-innovation/api/v1/public/portfolio
+[2026-11-13 11:52:41] DB connection failed (reagansoft_system@localhost/reagansoft_system): SQLSTATE[HY000] [1045] Access denied for user 'reagansoft_system'@'localhost' (using password: YES)
+  IP: ::1  URI: /reagansoft-innovation/api/v1/public/site
+[2026-11-13 11:56:07] DB connection failed (reagansoft_system@localhost/reagansoft_system): SQLSTATE[HY000] [1045] Access denied for user 'reagansoft_system'@'localhost' (using password: YES)
+  IP: ::1  URI: /reagansoft-innovation/api/v1/public/site
+[2026-11-13 11:56:29] DB connection failed (reagansoft_system@localhost/reagansoft_system): SQLSTATE[HY000] [1045] Access denied for user 'reagansoft_system'@'localhost' (using password: YES)
+  IP:   URI: 
+[2026-11-13 11:58:46] DB connection failed (reagansoft_system@localhost/reagansoft_system): SQLSTATE[HY000] [1045] Access denied for user 'reagansoft_system'@'localhost' (using password: YES)
+  IP: ::1  URI: /reagansoft-innovation/api/v1/public/site
+[2026-11-13 11:59:03] DB connection failed (reagansoft_system@localhost/reagansoft_system): SQLSTATE[HY000] [1045] Access denied for user 'reagansoft_system'@'localhost' (using password: YES)
+  IP: ::1  URI: /reagansoft-innovation/api/v1/public/site
+[2026-11-13 12:11:34] DB connection failed (reagansoft_system@localhost/reagansoft_system): SQLSTATE[HY000] [1044] Access denied for user 'reagansoft_system'@'localhost' to database 'reagansoft_system'
+  IP: ::1  URI: /reagansoft-innovation/api/v1/public/site
+[2026-11-13 12:12:23] DB connection failed (reagansoft_system@localhost/reagansoft_system): SQLSTATE[HY000] [1044] Access denied for user 'reagansoft_system'@'localhost' to database 'reagansoft_system'
+  IP: ::1  URI: /reagansoft-innovation/api/v1/public/site
+[2026-11-13 12:15:41] DB connection failed (reagansoft_system@localhost/reagansoft_system): SQLSTATE[HY000] [1044] Access denied for user 'reagansoft_system'@'localhost' to database 'reagansoft_system'
+  IP:   URI: 
+[2026-11-13 12:15:42] DB connection failed (reagansoft_system@localhost/reagansoft_system): SQLSTATE[HY000] [1044] Access denied for user 'reagansoft_system'@'localhost' to database 'reagansoft_system'
+  IP:   URI: 
+[2026-11-13 12:16:08] DB connection failed (reagansoft_system@localhost/reagansoft_system): SQLSTATE[HY000] [1044] Access denied for user 'reagansoft_system'@'localhost' to database 'reagansoft_system'
+  IP:   URI: 
+[2026-11-13 12:26:31] API registration: SQLSTATE[HY000]: General error: 1364 Field 'id' doesn't have a default value
+  IP: ::1  URI: /reagansoft-innovation/api/v1/auth/register
+[2026-11-13 12:26:32] api login audit: SQLSTATE[HY000]: General error: 1364 Field 'id' doesn't have a default value
+  IP: ::1  URI: /reagansoft-innovation/api/v1/auth/login

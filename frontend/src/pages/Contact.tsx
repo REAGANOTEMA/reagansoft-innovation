@@ -7,7 +7,8 @@ import { useSite } from '../lib/site';
 import { useToast } from '../components/Toast';
 import { Field } from '../components/UI';
 import { ServiceGlyph } from '../components/Graphics';
-import { media, MEDIA_ALT } from '../lib/media';
+import { CinemaBand } from '../components/CinemaBand';
+import { media, MEDIA_ALT, STUDIO_REEL } from '../lib/media';
 
 export function Contact() {
   usePageMeta(
@@ -117,6 +118,15 @@ export function Contact() {
           </div>
         </div>
       </section>
+
+      <CinemaBand
+        eyebrow="Studio reel · Contact"
+        title="Meet the team before the first meeting."
+        lead="A quick look at the studio, the people and the work you will be working with."
+        slides={STUDIO_REEL}
+        to="/about"
+        cta="More about the studio"
+      />
 
       <section className="py-14 sm:py-20">
         <div className="container-x grid gap-10 lg:grid-cols-[1.25fr_0.75fr]">

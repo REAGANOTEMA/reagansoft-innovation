@@ -3,6 +3,25 @@ export function money(amount: number | string | null | undefined, currency = 'UG
   return `${currency} ${new Intl.NumberFormat('en-UG', { maximumFractionDigits: 0 }).format(Number.isFinite(value) ? value : 0)}`;
 }
 
+/** UGX per USD. Kept in sync with the `usd_rate` setting in the database. */
+export const DEFAULT_USD_RATE = 3800;
+
+export function usdRate(value?: string | number | null): number {
+  const rate = Number(value ?? DEFAULT_USD_RATE);
+  return Number.isFinite(rate) && rate > 0 ? rate : DEFAULT_USD_RATE;
+}
+
+export function usd(amount: number | string | null | undefined, rate = DEFAULT_USD_RATE): string {
+  const value = Number(amount ?? 0);
+  return `$${new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(Number.isFinite(value) ? value / usdRate(rate) : 0)}`;
+}
+
+/** "UGX 5,000,000 (≈ $1,316)" — every public UGX price gets a USD guide. */
+export function moneyBoth(amount: number | string | null | undefined, currency = 'UGX', rate = DEFAULT_USD_RATE): string {
+  if (currency.toUpperCase() !== 'UGX') return money(amount, currency);
+  return `${money(amount, currency)} (≈ ${usd(amount, rate)})`;
+}
+
 export function compactMoney(amount: number | string | null | undefined): string {
   const value = Number(amount ?? 0);
   if (Math.abs(value) >= 1_000_000) return `${(value / 1_000_000).toFixed(value % 1_000_000 === 0 ? 0 : 1)}M`;
