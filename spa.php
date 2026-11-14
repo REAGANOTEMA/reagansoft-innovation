@@ -27,6 +27,18 @@ if ($base === '.' || $base === '/') {
 
 $assetBase = $base . '/assets/img';
 $apiBase = $base . '/api/v1';
+
+$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$forwardedProto = strtolower(trim(explode(',', (string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''))[0]));
+if (in_array($forwardedProto, ['http', 'https'], true)) {
+    $scheme = $forwardedProto;
+}
+$host = preg_replace('/[^A-Za-z0-9.\-:\[\]]/', '', (string) ($_SERVER['HTTP_HOST'] ?? 'reagansoftinnovation.com'));
+$origin = $scheme . '://' . $host;
+$absoluteAssetBase = $origin . $assetBase;
+$currentPath = strtok((string) ($_SERVER['REQUEST_URI'] ?? '/'), '?');
+$canonicalUrl = $origin . $currentPath;
+
 $html = (string) file_get_contents($build);
 
 $inject = implode("\n    ", [
@@ -38,10 +50,12 @@ $inject = implode("\n    ", [
     '<link rel="icon" type="image/png" sizes="16x16" href="' . htmlspecialchars($assetBase . '/favicon-16.png', ENT_QUOTES, 'UTF-8') . '">',
     '<link rel="apple-touch-icon" sizes="180x180" href="' . htmlspecialchars($assetBase . '/apple-180.png', ENT_QUOTES, 'UTF-8') . '">',
     '<link rel="manifest" href="' . htmlspecialchars($assetBase . '/site.webmanifest', ENT_QUOTES, 'UTF-8') . '">',
-    '<meta property="og:image" content="' . htmlspecialchars($assetBase . '/og-image.jpg', ENT_QUOTES, 'UTF-8') . '">',
+    '<meta property="og:url" content="' . htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8') . '">',
+    '<meta property="og:image" content="' . htmlspecialchars($absoluteAssetBase . '/og-image.jpg', ENT_QUOTES, 'UTF-8') . '">',
     '<meta property="og:image:width" content="1200">',
     '<meta property="og:image:height" content="630">',
     '<meta name="twitter:card" content="summary_large_image">',
+    '<meta name="twitter:image" content="' . htmlspecialchars($absoluteAssetBase . '/og-image.jpg', ENT_QUOTES, 'UTF-8') . '">',
     '<meta name="apple-mobile-web-app-capable" content="yes">',
     '<meta name="apple-mobile-web-app-status-bar-style" content="default">',
     '<meta name="apple-mobile-web-app-title" content="Reagansoft">',
