@@ -4,7 +4,7 @@ import { usePageMeta } from '../lib/seo';
 import { Logo } from '../components/Logo';
 
 export function NotFound() {
-  usePageMeta('Page not found — Reagansoft Innovation');
+  usePageMeta('Page not found, Reagansoft Innovation');
   return (
     <div className="relative flex min-h-[70vh] items-center justify-center overflow-hidden bg-navy-950 px-6 py-20 text-white">
       <div className="aurora" />

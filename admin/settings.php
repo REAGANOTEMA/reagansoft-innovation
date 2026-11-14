@@ -106,7 +106,7 @@ dashboard_head(['title' => 'Settings', 'active' => 'settings', 'crumb' => 'Setti
         <input type="checkbox" name="registration_open" value="1" <?= $cfg['registration_open'] === '1' ? 'checked' : '' ?>><span class="small">Allow new client registrations</span>
       </label></div>
     </div>
-    <div class="form-note">Tax and due days are defaults — quotations and invoices can override these per document.</div>
+    <div class="form-note">Tax and due days are defaults, quotations and invoices can override these per document.</div>
   </section>
 
   <section class="panel">

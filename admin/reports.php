@@ -74,7 +74,7 @@ dashboard_head(['title' => 'Reports', 'active' => 'reports', 'crumb' => 'Reports
 
 <div class="report-grid">
   <section class="panel">
-    <div class="panel-head"><h3>Confirmed revenue — <?= $year ?></h3><a class="small" href="<?= app_url('admin/invoices.php') ?>">View invoices</a></div>
+    <div class="panel-head"><h3>Confirmed revenue, <?= $year ?></h3><a class="small" href="<?= app_url('admin/invoices.php') ?>">View invoices</a></div>
     <?php if ($monthly): ?>
       <div class="table-wrap">
         <table class="table">
@@ -114,7 +114,7 @@ dashboard_head(['title' => 'Reports', 'active' => 'reports', 'crumb' => 'Reports
         <tbody>
           <?php foreach ($topClients as $tc): ?>
             <tr>
-              <td><span class="row-title"><?= e($tc['full_name']) ?></span><div class="row-sub"><?= e($tc['company'] ?? '—') ?></div></td>
+              <td><span class="row-title"><?= e($tc['full_name']) ?></span><div class="row-sub"><?= e($tc['company'] ?? '-') ?></div></td>
               <td><?= (int)$tc['projects'] ?></td>
               <td><?= money($tc['invoiced'], $currency) ?></td>
               <td><b><?= money($tc['paid'], $currency) ?></b></td>

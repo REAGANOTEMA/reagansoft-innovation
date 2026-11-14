@@ -1,14 +1,30 @@
 import { Link } from 'react-router-dom';
-import { LOGO_NEW, LOGO_OLD } from '../lib/env';
+import { LOGO_NEW, LOGO_NEW_WHITE, LOGO_REAL, LOGO_REAL_WHITE } from '../lib/env';
 
-export function Logo({ dark = false, compact = false, variant = 'new' }: { dark?: boolean; compact?: boolean; variant?: 'new' | 'legacy' }) {
-  const src = variant === 'legacy' ? LOGO_OLD : LOGO_NEW;
+type LogoVariant = 'new' | 'real';
+
+export function Logo({
+  dark = false,
+  compact = false,
+  variant = 'new',
+}: {
+  dark?: boolean;
+  compact?: boolean;
+  variant?: LogoVariant;
+}) {
+  const isReal = variant === 'real';
+  const src = isReal ? (dark ? LOGO_REAL_WHITE : LOGO_REAL) : dark ? LOGO_NEW_WHITE : LOGO_NEW;
+
   return (
-    <Link to="/" className="group inline-flex items-center gap-3" aria-label="Reagansoft Innovation Limited — Home">
-      <span className="relative grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-2xl bg-white shadow-[0_10px_24px_-10px_rgba(8,59,102,.45)] ring-1 ring-brand-100">
-        <img src={src} alt="" width={44} height={44} className="h-full w-full object-cover" />
-      </span>
-      {!compact && (
+    <Link to="/" className="group inline-flex items-center gap-3" aria-label="Reagansoft Innovation Limited, Home">
+      <img
+        src={src}
+        alt={compact ? 'Reagansoft Innovation Limited' : ''}
+        width={isReal ? 210 : 48}
+        height={isReal ? 144 : 48}
+        className={isReal ? 'h-20 w-auto max-w-[210px] shrink-0 object-contain' : 'h-12 w-12 shrink-0 object-contain'}
+      />
+      {!compact && !isReal && (
         <span className="leading-tight">
           <span className={`block font-display text-[15px] font-semibold tracking-tight ${dark ? 'text-white' : 'text-navy-900'}`}>
             Reagansoft <span className="text-brand-500">Innovation</span>

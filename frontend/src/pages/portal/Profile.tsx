@@ -9,7 +9,7 @@ import { formatDate, initials } from '../../lib/format';
 import type { User } from '../../lib/types';
 
 export function PortalProfile({ scope = 'portal' }: { scope?: 'portal' | 'console' }) {
-  usePageMeta(scope === 'console' ? 'Profile — Reagansoft console' : 'Profile — Reagansoft client portal');
+  usePageMeta(scope === 'console' ? 'Profile, Reagansoft console' : 'Profile, Reagansoft client portal');
   const { user, setUser } = useAuth();
   const { push } = useToast();
 

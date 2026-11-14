@@ -4,7 +4,7 @@ require __DIR__ . '/config/config.php';
 $services = db()->query("SELECT * FROM services WHERE status='active' ORDER BY sort_order, id")->fetchAll();
 
 public_head([
-    'title'     => 'Services & Pricing | Reagan Soft Innovation Limited',
+    'title'     => 'Services & Pricing | Reagansoft Innovation Limited',
     'desc'      => 'Web development, business systems, ecommerce, software development, branding and website maintenance in Jinja and across Uganda. Clear services and starting prices.',
     'active'    => 'services',
     'canonical' => 'services.php',

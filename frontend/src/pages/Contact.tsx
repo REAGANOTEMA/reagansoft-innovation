@@ -12,7 +12,7 @@ import { media, MEDIA_ALT, STUDIO_REEL } from '../lib/media';
 
 export function Contact() {
   usePageMeta(
-    'Contact Reagansoft Innovation — Start a project in Uganda',
+    'Contact Reagansoft Innovation, Start a project in Uganda',
     'Tell us about your project. Reagansoft Innovation is based in Jinja, Uganda and works with organisations across the country.',
   );
 
@@ -101,7 +101,7 @@ export function Contact() {
             <span className="eyebrow text-brand-300">Contact</span>
             <h1 className="h1 mt-4 max-w-3xl text-white">Tell us what is slowing you down.</h1>
             <p className="mt-5 max-w-2xl text-[1.02rem] leading-relaxed text-white/65">
-              Share the problem, the current process and any deadline. We will reply with next steps — usually within one working day.
+              Share the problem, the current process and any deadline. We will reply with next steps, usually within one working day.
             </p>
           </div>
           <div className="space-y-2.5">
@@ -187,9 +187,9 @@ export function Contact() {
                     <select className="input" value={form.budget} onChange={(event) => update('budget', event.target.value)}>
                       <option value="">Prefer to discuss</option>
                       <option value="Under UGX 1M">Under UGX 1M</option>
-                      <option value="UGX 1M – 5M">UGX 1M – 5M</option>
-                      <option value="UGX 5M – 15M">UGX 5M – 15M</option>
-                      <option value="UGX 15M – 40M">UGX 15M – 40M</option>
+                      <option value="UGX 1M - 5M">UGX 1M - 5M</option>
+                      <option value="UGX 5M - 15M">UGX 5M - 15M</option>
+                      <option value="UGX 15M - 40M">UGX 15M - 40M</option>
                       <option value="Above UGX 40M">Above UGX 40M</option>
                     </select>
                   </Field>

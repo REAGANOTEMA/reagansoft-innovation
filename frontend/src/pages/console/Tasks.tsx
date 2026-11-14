@@ -18,7 +18,7 @@ interface StaffRow {
 }
 
 export function ConsoleTasks() {
-  usePageMeta('Tasks — Reagansoft console');
+  usePageMeta('Tasks, Reagansoft console');
   const { push } = useToast();
   const [status, setStatus] = useState('');
   const [page, setPage] = useState(1);
@@ -150,7 +150,7 @@ function CreateTaskModal({ open, onClose, projects, staff, onCreated }: { open: 
         <Field label="Project *" className="sm:col-span-2">
           <select className="input" value={form.project_id} onChange={(event) => setForm({ ...form, project_id: event.target.value })} required>
             <option value="">Select a project…</option>
-            {projects.map((project) => <option key={project.id} value={project.id}>{project.ref_no} — {project.title}</option>)}
+            {projects.map((project) => <option key={project.id} value={project.id}>{project.ref_no}, {project.title}</option>)}
           </select>
         </Field>
         <Field label="Task title *" className="sm:col-span-2"><input className="input" value={form.title} onChange={(event) => setForm({ ...form, title: event.target.value })} required /></Field>

@@ -13,7 +13,7 @@
  * WHERE THEY ARRIVE FROM
  *   ?next=<path>   the page they were trying to pay from. It is
  *                  validated by billing_safe_next() before it is used,
- *                  so it can only ever be a path on this site — see
+ *                  so it can only ever be a path on this site, see
  *                  the note on that function for why '//host' is
  *                  rejected as well as 'https://host'.
  *
@@ -85,7 +85,7 @@ $wasBlocked = $missing !== [];
   </div>
 <?php elseif (billing_schema_ready()): ?>
   <div class="alert success billing-ok-note">
-    <b><?= icon('check') ?> All set — you can pay.</b>
+    <b><?= icon('check') ?> All set, you can pay.</b>
     <p>Your invoices will be raised to the details below. Keep them accurate, and update them here if anything changes.</p>
   </div>
 <?php endif; ?>

@@ -85,8 +85,8 @@ $capabilities = [
 ];
 
 public_head([
-    'title'     => 'Our Work | Projects by Reagan Soft Innovation Limited',
-    'desc'      => 'Delivered websites, business systems and mobile apps by Reagan Soft Innovation Limited in Jinja, Uganda — with live links you can open and the full scope of each build.',
+    'title'     => 'Our Work | Projects by Reagansoft Innovation Limited',
+    'desc'      => 'Delivered websites, business systems and mobile apps by Reagansoft Innovation Limited in Jinja, Uganda, with live links you can open and the full scope of each build.',
     'active'    => 'portfolio',
     'canonical' => 'portfolio.php',
 ]);

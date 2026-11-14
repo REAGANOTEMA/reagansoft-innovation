@@ -20,7 +20,7 @@ if (!is_file($build)) {
 }
 
 $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '/spa.php');
-$base = rtrim(str_replace('/spa.php', '', $scriptName), '/');
+$base = rtrim(str_replace('\\', '/', dirname($scriptName)), '/');
 if ($base === '.' || $base === '/') {
     $base = '';
 }
@@ -34,9 +34,18 @@ $inject = implode("\n    ", [
     '<meta name="rsi-base" content="' . htmlspecialchars($base, ENT_QUOTES, 'UTF-8') . '">',
     '<meta name="rsi-api-base" content="' . htmlspecialchars($apiBase, ENT_QUOTES, 'UTF-8') . '">',
     '<meta name="rsi-asset-base" content="' . htmlspecialchars($assetBase, ENT_QUOTES, 'UTF-8') . '">',
-    '<link rel="icon" type="image/png" href="' . htmlspecialchars($assetBase . '/reagansoftinnovation-logo-favicon.png', ENT_QUOTES, 'UTF-8') . '">',
-    '<link rel="apple-touch-icon" href="' . htmlspecialchars($assetBase . '/apple-180.png', ENT_QUOTES, 'UTF-8') . '">',
+    '<link rel="icon" type="image/png" sizes="32x32" href="' . htmlspecialchars($assetBase . '/favicon-32.png', ENT_QUOTES, 'UTF-8') . '">',
+    '<link rel="icon" type="image/png" sizes="16x16" href="' . htmlspecialchars($assetBase . '/favicon-16.png', ENT_QUOTES, 'UTF-8') . '">',
+    '<link rel="apple-touch-icon" sizes="180x180" href="' . htmlspecialchars($assetBase . '/apple-180.png', ENT_QUOTES, 'UTF-8') . '">',
     '<link rel="manifest" href="' . htmlspecialchars($assetBase . '/site.webmanifest', ENT_QUOTES, 'UTF-8') . '">',
+    '<meta property="og:image" content="' . htmlspecialchars($assetBase . '/og-image.jpg', ENT_QUOTES, 'UTF-8') . '">',
+    '<meta property="og:image:width" content="1200">',
+    '<meta property="og:image:height" content="630">',
+    '<meta name="twitter:card" content="summary_large_image">',
+    '<meta name="apple-mobile-web-app-capable" content="yes">',
+    '<meta name="apple-mobile-web-app-status-bar-style" content="default">',
+    '<meta name="apple-mobile-web-app-title" content="Reagansoft">',
+    '<meta name="mobile-web-app-capable" content="yes">',
 ]);
 
 $html = preg_replace('/<head>/i', "<head>\n    " . $inject . "\n", $html, 1) ?? $html;
@@ -46,4 +55,9 @@ header('Cache-Control: no-cache, must-revalidate');
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: SAMEORIGIN');
 header('Referrer-Policy: strict-origin-when-cross-origin');
+header('Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()');
+if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
+    header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
+}
 echo $html;
+

@@ -1,0 +1,106 @@
+# Reagansoft Innovation Limited - Nginx server block
+#
+# Use this when the host runs Nginx instead of Apache/LiteSpeed. The
+# root .htaccess still covers Apache and LiteSpeed; Nginx ignores it.
+#
+# 1. Point `root` at the folder that contains index.php and app/.
+# 2. Set `server_name` and the PHP-FPM socket for the host.
+# 3. Terminate HTTPS here. Service workers and the install prompt only
+#    work on HTTPS (localhost is the only exception).
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name example.com www.example.com;
+
+    # Keep the canonical HTTPS origin. Remove this block if TLS is
+    # terminated by a proxy in front of Nginx.
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name example.com www.example.com;
+
+    ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
+
+    root /var/www/reagansoft-innovation;
+    index index.php index.html;
+    charset utf-8;
+    client_max_body_size 12m;
+
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()" always;
+
+    # Private source, config, SQL dumps and tooling. The same folders are
+    # blocked in .htaccess for Apache/LiteSpeed.
+    location ~ ^/(config|inc|storage|database|system|website|sql|frontend|tools)/ {
+        return 403;
+    }
+    location ~ /\.(git|svn|hg) {
+        return 403;
+    }
+    location ~* \.(sql|md|log|env|ini|bak|old|swp|yaml|yml|original)$ {
+        return 403;
+    }
+
+    # Service worker must always be revalidated so updates are picked up.
+    location = /sw.js {
+        add_header Cache-Control "no-cache, no-store, must-revalidate" always;
+        try_files $uri =404;
+    }
+
+    # Some Nginx mime.types files still miss the PWA manifest type.
+    location ~ \.webmanifest$ {
+        default_type application/manifest+json;
+        add_header Cache-Control "public, max-age=86400" always;
+        try_files $uri =404;
+    }
+
+    # Modern image and font types; harmless on hosts that already know them.
+    location ~* \.(webp|avif|woff2)$ {
+        types {
+            image/webp webp;
+            image/avif avif;
+            font/woff2 woff2;
+        }
+        expires 30d;
+        add_header Cache-Control "public" always;
+        try_files $uri =404;
+    }
+
+    # Fingerprinted Vite bundles can be cached for a year.
+    location ^~ /app/assets/ {
+        expires 1y;
+        add_header Cache-Control "public, immutable" always;
+        try_files $uri =404;
+    }
+
+    location ^~ /assets/ {
+        expires 30d;
+        add_header Cache-Control "public" always;
+        try_files $uri =404;
+    }
+
+    # BrowserRouter deep links and the site root go to the PHP shell.
+    location / {
+        try_files $uri $uri/ /spa.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        try_files $uri =404;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param HTTPS on;
+        # Match the installed PHP version. Debian/Ubuntu example:
+        fastcgi_pass unix:/run/php/php8.1-fpm.sock;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}

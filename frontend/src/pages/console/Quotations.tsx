@@ -15,7 +15,7 @@ import type { Project, Quotation } from '../../lib/types';
 const statuses = ['draft', 'sent', 'accepted', 'rejected', 'expired', 'cancelled'];
 
 export function ConsoleQuotations() {
-  usePageMeta('Quotations — Reagansoft console');
+  usePageMeta('Quotations, Reagansoft console');
   const { settings } = useSite();
   const { push } = useToast();
   const [params] = useSearchParams();
@@ -229,7 +229,7 @@ function CreateQuotationModal({
           <Field label="Project *" className="sm:col-span-2">
             <select className="input" value={form.project_id} onChange={(event) => setForm({ ...form, project_id: event.target.value })} required>
               <option value="">Select a project…</option>
-              {projects.map((project) => <option key={project.id} value={project.id}>{project.ref_no} — {project.title} ({project.client_name})</option>)}
+              {projects.map((project) => <option key={project.id} value={project.id}>{project.ref_no}, {project.title} ({project.client_name})</option>)}
             </select>
           </Field>
           <Field label="Status"><select className="input" value={form.status} onChange={(event) => setForm({ ...form, status: event.target.value })}>{statuses.map((item) => <option key={item} value={item}>{quotationStatus(item).label}</option>)}</select></Field>

@@ -24,7 +24,7 @@ function iconFor(type: string) {
 }
 
 export function ConsoleNotifications() {
-  usePageMeta('Notifications — Reagansoft console');
+  usePageMeta('Notifications, Reagansoft console');
   const { push } = useToast();
   const { data, loading, error, reload } = useApi<Payload>('admin/notifications');
   const [busy, setBusy] = useState(false);

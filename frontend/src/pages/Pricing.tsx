@@ -60,7 +60,7 @@ const factors = [
 
 export function Pricing() {
   usePageMeta(
-    'Pricing — Transparent software project costs | Reagansoft Innovation',
+    'Pricing, Transparent software project costs | Reagansoft Innovation',
     'Understand Reagansoft Innovation pricing: website packages, business systems, custom software, deposits, payment milestones and maintenance.',
   );
 
@@ -78,7 +78,7 @@ export function Pricing() {
           <span className="eyebrow text-brand-300">Pricing</span>
           <h1 className="h1 mt-4 max-w-3xl text-white">Honest numbers, before the work starts.</h1>
           <p className="mt-5 max-w-2xl text-[1.02rem] leading-relaxed text-white/65">
-            Software is not a commodity, so we do not pretend one price fits every brief. These are the real starting points — and
+            Software is not a commodity, so we do not pretend one price fits every brief. These are the real starting points, and
             exactly how we get from them to a fixed, itemised quote.
           </p>
           <div className="mt-7 flex flex-wrap gap-2">
@@ -200,7 +200,7 @@ export function Pricing() {
       <section className="py-16 sm:py-20">
         <div className="container-x grid gap-12 lg:grid-cols-2">
           <Reveal>
-            <SectionHeading eyebrow="What changes the price" title="Four variables, no mystery." lead="We will always show you which of these is driving the cost — and what can be deferred to a later phase." />
+            <SectionHeading eyebrow="What changes the price" title="Four variables, no mystery." lead="We will always show you which of these is driving the cost, and what can be deferred to a later phase." />
             <div className="mt-7 grid gap-3 sm:grid-cols-2">
               {factors.map((factor) => (
                 <div key={factor.title} className="rounded-2xl border border-brand-100 bg-white p-4">
@@ -228,7 +228,7 @@ export function Pricing() {
               <ol className="mt-5 space-y-4">
                 {[
                   ['Deposit', `${deposit} to reserve the slot and begin discovery.`, 'Due on acceptance'],
-                  ['Milestone 1', 'Design or first working module accepted.', 'Typically 30–40%'],
+                  ['Milestone 1', 'Design or first working module accepted.', 'Typically 30-40%'],
                   ['Milestone 2', 'Core build complete and tested.', 'Typically 30%'],
                   ['Handover', 'Training, documentation and go-live.', 'Balance on launch'],
                 ].map(([title, text, meta], index) => (
@@ -284,7 +284,7 @@ export function Pricing() {
         <div className="container-x">
           <div className="flex flex-col items-center gap-4 rounded-3xl border border-brand-100 bg-brand-50/50 px-6 py-10 text-center">
             <h2 className="h2 max-w-2xl text-navy-900">Want a number for your specific brief?</h2>
-            <p className="max-w-xl text-sm text-ink-muted">Share the essentials and we will respond with a written estimate — usually within one working day.</p>
+            <p className="max-w-xl text-sm text-ink-muted">Share the essentials and we will respond with a written estimate, usually within one working day.</p>
             <div className="flex flex-wrap justify-center gap-3">
               <Link to="/contact" className="btn-primary">Request a quote <ArrowRight className="h-4 w-4" /></Link>
               <Link to="/faq" className="btn-ghost">Read the FAQ</Link>

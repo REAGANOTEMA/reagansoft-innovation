@@ -1,6 +1,6 @@
 <?php
 /**
- * Reagan Soft Innovation Limited — layout renderers.
+ * Reagansoft Innovation Limited, layout renderers.
  * Loaded from inc/functions.php.
  */
 
@@ -26,7 +26,7 @@ function public_head(array $page = []): void {
     $title = page_title($page);
     $active = $page['active'] ?? '';
     $canon = app_url($page['canonical'] ?? '');
-    $ogImage = app_url('assets/img/reagansoftinnovation-logo.jpeg');
+    $ogImage = app_url('assets/img/og-image.jpg');
     ?>
 <!doctype html>
 <html lang="en">
@@ -36,7 +36,8 @@ function public_head(array $page = []): void {
 <title><?= e($title) ?></title>
 <meta name="description" content="<?= e($desc) ?>">
 <meta name="theme-color" content="#083b66">
-<link rel="icon" type="image/png" href="<?= app_url('assets/img/reagansoftinnovation-logo-favicon.png') ?>">
+<link rel="icon" type="image/png" sizes="32x32" href="<?= app_url('assets/img/favicon-32.png') ?>">
+<link rel="icon" type="image/png" sizes="16x16" href="<?= app_url('assets/img/favicon-16.png') ?>">
 <link rel="apple-touch-icon" sizes="180x180" href="<?= app_url('assets/img/apple-180.png') ?>">
 <?php if ($canon): ?><link rel="canonical" href="<?= e($canon) ?>"><?php endif; ?>
 <?php if ($page['robots'] ?? true): ?><meta name="robots" content="index, follow"><?php else: ?><meta name="robots" content="noindex, nofollow"><?php endif; ?>
@@ -56,9 +57,9 @@ function public_head(array $page = []): void {
 <a class="skip-link" href="#main">Skip to main content</a>
 <header class="topbar" id="topbar">
   <div class="container nav">
-    <a class="brand" href="<?= app_url('index.php') ?>" aria-label="Reagan Soft Innovation Limited, Home">
-      <img src="<?= app_url('assets/img/reagansoftinnovation-logo.jpeg') ?>" alt="" width="40" height="40">
-      <span class="brand-text">Reagan Soft <b>Innovation</b><small class="brand-tagline"><?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></small></span>
+    <a class="brand" href="<?= app_url('index.php') ?>" aria-label="Reagansoft Innovation Limited, Home">
+      <img src="<?= app_url('assets/img/reagansoftinnovation-logo-new.png') ?>" alt="" width="48" height="48">
+      <span class="brand-text">Reagansoft <b>Innovation</b><small class="brand-tagline"><?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></small></span>
     </a>
     <button class="menu" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav">
       <span class="menu-icon"></span>
@@ -84,12 +85,12 @@ function public_head(array $page = []): void {
 /* ------------------------------------------------------------------
  * Tidy framed image used inside page headers (HUD corners + caption).
  * Inner pages carry their visual as a designed in-page image, never
- * as a full-bleed hero — the home page owns the hero treatment.
+ * as a full-bleed hero, the home page owns the hero treatment.
  * ------------------------------------------------------------------ */
 function page_image(string $src, int $idx, string $cap = '', string $alt = '', string $loading = 'eager'): string
 {
     if ($alt === '') {
-        $alt = 'Reagan Soft Innovation Limited — ' . ($cap !== '' ? $cap : 'Jinja, Uganda');
+        $alt = 'Reagansoft Innovation Limited, ' . ($cap !== '' ? $cap : 'Jinja, Uganda');
     }
     $n = min(max($idx, 1), 6);
     return '<figure class="page-img">'
@@ -97,7 +98,7 @@ function page_image(string $src, int $idx, string $cap = '', string $alt = '', s
         . '<img src="' . e(app_url($src)) . '" alt="' . e($alt) . '" width="1200" height="675" loading="' . e($loading) . '" decoding="async">'
         . '<span class="pi-c c1"></span><span class="pi-c c2"></span><span class="pi-c c3"></span><span class="pi-c c4"></span>'
         . '</div>'
-        . '<figcaption class="page-img-cap"><span class="pi-led"></span><span>' . e($cap !== '' ? $cap : 'Reagan Soft Innovation · Jinja, Uganda') . '</span></figcaption>'
+        . '<figcaption class="page-img-cap"><span class="pi-led"></span><span>' . e($cap !== '' ? $cap : 'Reagansoft Innovation · Jinja, Uganda') . '</span></figcaption>'
         . '</figure>';
 }
 
@@ -108,7 +109,7 @@ function page_image(string $src, int $idx, string $cap = '', string $alt = '', s
  * photographed, and nothing in it claims to be a picture of the
  * client's site. Three drawn layers stack up:
  *
- *   1. folio_scene()   a sector backdrop — the trade, not the software:
+ *   1. folio_scene()   a sector backdrop, the trade, not the software:
  *                      a school hill, a Nile sunset, a furrow field, a
  *                      clinic cross, a shop front, a delivery route.
  *   2. folio_devices() the delivery itself, and the part every project
@@ -192,7 +193,7 @@ function folio_art_key(array $p): string {
 }
 
 /* ------------------------------------------------------------------
- * Layer 1 — the sector backdrop.
+ * Layer 1, the sector backdrop.
  *
  * Every scene is one 360x180 band, anchored to the bottom edge so it
  * crops rather than floats when the cover is narrow. Only the sun or
@@ -312,7 +313,7 @@ function folio_scene(string $key): string {
 }
 
 /* ------------------------------------------------------------------
- * Layer 2 — the delivery: a browser window and the app beside it.
+ * Layer 2, the delivery: a browser window and the app beside it.
  *
  * Drawn once, used by every project, because it is the part of each
  * build that is genuinely the same: a website the client opens in a
@@ -582,8 +583,7 @@ function public_footer(): void {
   <div class="container footer-grid">
     <div class="footer-brand">
       <a class="brand" href="<?= app_url('index.php') ?>">
-        <img src="<?= app_url('assets/img/reagansoftinnovation-logo.jpeg') ?>" alt="Reagan Soft Innovation logo" width="96" height="96">
-        <span class="brand-text">Reagan Soft <b>Innovation</b></span>
+        <img src="<?= app_url('assets/img/real-reagansoft-logo-white.png') ?>" alt="Reagansoft Innovation Limited" width="210" height="144">
       </a>
       <p class="footer-tagline"><?= icon('rocket') ?> <?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></p>
       <p><?= e(settings('company_about', 'Software development company based in Jinja, Uganda.')) ?></p>
@@ -616,7 +616,7 @@ function public_footer(): void {
       <p class="footer-contact"><span><?= icon('phone') ?></span> <a href="<?= e(phone_tel($phone)) ?>"><?= e(phone_display($phone, $phone)) ?></a><?php if ($phoneAlt !== '' && $phoneAlt !== $phone): ?> &middot; <a href="<?= e(phone_tel($phoneAlt)) ?>"><?= e(phone_display($phoneAlt, $phoneAlt)) ?></a><?php endif; ?></p>
       <p class="footer-contact"><span><?= icon('mail') ?></span> <a href="mailto:<?= e($email) ?>"><?= e($email) ?></a></p>
       <?php if (whatsapp_url() !== ''): ?>
-        <p class="footer-contact"><span><?= icon('chat') ?></span> <a href="<?= e(whatsapp_url('Hello Reagan Soft Innovation, I would like to enquire about a project.')) ?>" target="_blank" rel="noopener">WhatsApp</a></p>
+        <p class="footer-contact"><span><?= icon('chat') ?></span> <a href="<?= e(whatsapp_url('Hello Reagansoft Innovation, I would like to enquire about a project.')) ?>" target="_blank" rel="noopener">WhatsApp</a></p>
       <?php endif; ?>
       <div class="footer-social">
         <?php if ($fb): ?><a href="<?= e($fb) ?>" target="_blank" rel="noopener" aria-label="Facebook"><?= icon_social('fb') ?></a><?php endif; ?>
@@ -632,7 +632,7 @@ function public_footer(): void {
     </div>
   </div>
 </footer>
-<?php $wa = whatsapp_url('Hello Reagan Soft Innovation, I would like to enquire about a project.'); ?>
+<?php $wa = whatsapp_url('Hello Reagansoft Innovation, I would like to enquire about a project.'); ?>
 <?php if ($wa !== ''): ?>
 <a class="wa-float" href="<?= e($wa) ?>" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp">
   <?= icon_social('whatsapp') ?><span>Chat with us</span>
@@ -703,7 +703,8 @@ function dashboard_head(array $page = []): void {
 <meta name="description" content="Client and operations portal for <?= e(settings('company_name', APP_NAME)) ?>.">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#083b66">
-<link rel="icon" type="image/png" href="<?= app_url('assets/img/reagansoftinnovation-logo-favicon.png') ?>">
+<link rel="icon" type="image/png" sizes="32x32" href="<?= app_url('assets/img/favicon-32.png') ?>">
+<link rel="icon" type="image/png" sizes="16x16" href="<?= app_url('assets/img/favicon-16.png') ?>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500;600;700;800&display=swap">
@@ -717,8 +718,8 @@ function dashboard_head(array $page = []): void {
   <aside class="sidebar" id="sidebar" aria-label="Portal navigation">
     <div class="sidebar-brand">
       <a class="brand" href="<?= $loginUrl ?>">
-        <img src="<?= app_url('assets/img/reagansoftinnovation-logo.jpeg') ?>" alt="" width="38" height="38">
-        <span class="brand-text">Reagan Soft <b>Innovation</b></span>
+        <img src="<?= app_url('assets/img/reagansoftinnovation-logo-new-white.png') ?>" alt="" width="40" height="40">
+        <span class="brand-text">Reagansoft <b>Innovation</b></span>
       </a>
     </div>
     <nav class="side-nav">
@@ -843,3 +844,4 @@ function payment_instructions_html(): string {
     echo '</div>';
     return (string)ob_get_clean();
 }
+

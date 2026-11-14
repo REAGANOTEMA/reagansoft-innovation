@@ -1,6 +1,6 @@
 <?php
 /**
- * Reagan Soft Innovation Limited — application bootstrap.
+ * Reagansoft Innovation Limited, application bootstrap.
  *
  * Every page loads this file first. It sets up the secure session,
  * security headers, error handling, database connection and the
@@ -100,7 +100,7 @@ function rsi_request_host(): string {
     $candidates = [(string)($_SERVER['HTTP_X_FORWARDED_HOST'] ?? ''), (string)($_SERVER['HTTP_HOST'] ?? '')];
     foreach ($candidates as $candidate) {
         $host = trim(explode(',', $candidate)[0]);
-        // host, optional port, optional bracketed IPv6 literal — nothing else
+        // host, optional port, optional bracketed IPv6 literal, nothing else
         if ($host !== '' && preg_match('/^\[?[A-Za-z0-9._-]+\]?(?::[0-9]{1,5})?$/', $host) === 1) {
             return $host;
         }
@@ -125,7 +125,7 @@ function rsi_base_path(): string {
 /* ------------------------------------------------------------------
  * Application constants (override via environment in production)
  * ------------------------------------------------------------------ */
-define('APP_NAME', 'Reagan Soft Innovation Limited');
+define('APP_NAME', 'Reagansoft Innovation Limited');
 define('APP_SHORT', 'RSI');
 define('APP_URL', rtrim(rsi_env('RSI_APP_URL') ?: rsi_request_scheme() . '://' . rsi_request_host() . rsi_base_path(), '/'));
 define('APP_FOUNDER', 'Reagan Otema');
@@ -159,8 +159,8 @@ define('APP_VERSION', '2.0.0');
  *
  * The mirror database is the reason this exists. With the usual
  * `getenv('RSI_DB_MIRROR') ?: 'reagansoft_website'`, setting the variable
- * to an empty string — the documented way to switch the mirror off on a
- * single-database host — was falsy, so PHP fell back to the default and
+ * to an empty string, the documented way to switch the mirror off on a
+ * single-database host, was falsy, so PHP fell back to the default and
  * the mirror stayed switched on. rsi_env() returns '' for an empty
  * string, and DB_MIRROR's default is then never reached.
  *
@@ -410,6 +410,6 @@ function can_use_admin_console(): bool {
 require_once __DIR__ . '/../inc/functions.php';
 // The payment-details gate. Loaded after functions.php because it uses
 // phone_digits(), settings() and e(), and it must be available to every
-// page that can take money — checkout.php, client/project.php and
+// page that can take money, checkout.php, client/project.php and
 // client/billing.php.
 require_once __DIR__ . '/../inc/billing.php';

@@ -31,7 +31,7 @@ export function ServiceDetail() {
   const related = data?.related ?? services.filter((item) => item.slug !== slug).slice(0, 3);
 
   usePageMeta(
-    service ? `${service.name} — Reagansoft Innovation` : 'Service — Reagansoft Innovation',
+    service ? `${service.name}, Reagansoft Innovation` : 'Service, Reagansoft Innovation',
     service?.description,
   );
 

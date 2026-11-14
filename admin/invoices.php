@@ -139,7 +139,7 @@ dashboard_head(['title' => 'Invoices', 'active' => 'invoices', 'crumb' => 'Invoi
               <td class="small"><?= e($pp['invoice_no']) ?></td>
               <td class="small"><?= e($pp['client_name']) ?></td>
               <td class="small"><?= e(ucwords(str_replace('_', ' ', $pp['method']))) ?></td>
-              <td class="small"><?= e($pp['reference'] ?? '—') ?></td>
+              <td class="small"><?= e($pp['reference'] ?? '-') ?></td>
               <td><b><?= money($pp['amount'], $currency) ?></b></td>
               <td class="small"><?= time_ago($pp['created_at']) ?></td>
               <td style="min-width:160px">
@@ -196,7 +196,7 @@ dashboard_head(['title' => 'Invoices', 'active' => 'invoices', 'crumb' => 'Invoi
               <td><b><?= money($i['total'], $currency) ?></b></td>
               <td class="small"><?= money($i['amount_paid'], $currency) ?></td>
               <td class="small"><?= money($outstanding, $currency) ?></td>
-              <td class="small"><?= $i['due_date'] ? fmt_date($i['due_date']) : '—' ?></td>
+              <td class="small"><?= $i['due_date'] ? fmt_date($i['due_date']) : '-' ?></td>
               <td><?= status_badge($i['status']) ?></td>
               <td style="min-width:170px">
                 <div style="display:flex;gap:6px;flex-wrap:wrap">
@@ -215,7 +215,7 @@ dashboard_head(['title' => 'Invoices', 'active' => 'invoices', 'crumb' => 'Invoi
             </tr>
             <div class="modal-backdrop" id="pay-modal-<?= (int)$i['id'] ?>">
               <div class="modal">
-                <div class="modal-head"><h3>Record payment — <?= e($i['invoice_no']) ?></h3><button type="button" class="modal-close" data-modal-close="pay-modal-<?= (int)$i['id'] ?>" aria-label="Close"><?= icon('close') ?></button></div>
+                <div class="modal-head"><h3>Record payment, <?= e($i['invoice_no']) ?></h3><button type="button" class="modal-close" data-modal-close="pay-modal-<?= (int)$i['id'] ?>" aria-label="Close"><?= icon('close') ?></button></div>
                 <form method="post">
                   <?= csrf_field() ?>
                   <input type="hidden" name="action" value="record_payment">

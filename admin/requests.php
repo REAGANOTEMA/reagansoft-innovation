@@ -39,7 +39,7 @@ dashboard_head(['title' => 'Requests Queue', 'active' => 'requests', 'crumb' => 
           <p class="muted small" style="flex-grow:1"><?= e(truncate($r['description'], 180)) ?></p>
           <div class="kv" style="padding:6px 0"><span>Client</span><span><?= e($r['client_name']) ?> <?= e($r['company'] ?? '') ?></span></div>
           <div class="kv" style="padding:6px 0"><span>Contact</span><span><?= e($r['phone']) ?></span></div>
-          <div class="kv" style="padding:6px 0"><span>Budget</span><span><?= $r['budget'] !== null ? money($r['budget'], settings('currency')) : '—' ?></span></div>
+          <div class="kv" style="padding:6px 0"><span>Budget</span><span><?= $r['budget'] !== null ? money($r['budget'], settings('currency')) : '-' ?></span></div>
           <div class="kv" style="padding:6px 0"><span>Priority</span><span><?= priority_badge($r['priority']) ?></span></div>
           <a class="btn btn-primary btn-block mt-2" href="<?= app_url('admin/project.php?id=' . (int)$r['id']) ?>">Review &amp; respond <?= icon('arrow') ?></a>
         </div>

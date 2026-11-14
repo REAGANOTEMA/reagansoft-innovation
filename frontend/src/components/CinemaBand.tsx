@@ -20,7 +20,7 @@ interface CinemaBandProps {
   cta?: string;
 }
 
-const DURATION = 6500;
+const DURATION = 4200;
 
 export function CinemaBand({ eyebrow = 'Studio reel', title, lead, slides, to, cta }: CinemaBandProps) {
   const [active, setActive] = useState(0);
@@ -33,6 +33,7 @@ export function CinemaBand({ eyebrow = 'Studio reel', title, lead, slides, to, c
 
   useEffect(() => {
     if (paused || slides.length < 2) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const timer = window.setTimeout(() => setActive((current) => (current + 1) % slides.length), DURATION);
     return () => window.clearTimeout(timer);
   }, [active, paused, slides.length]);

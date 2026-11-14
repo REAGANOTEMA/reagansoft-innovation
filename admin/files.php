@@ -86,7 +86,7 @@ dashboard_head(['title' => 'Files', 'active' => 'files', 'crumb' => 'Files']);
   <div class="field" style="margin:0"><label class="visually-hidden" for="folder">Project</label>
     <select class="select" id="folder" name="folder">
       <option value="">All projects</option>
-      <?php foreach ($projects as $p): ?><option value="<?= (int)$p['id'] ?>" <?= $folder === (string)$p['id'] ? 'selected' : '' ?>><?= e($p['ref_no']) ?> — <?= e(truncate($p['title'], 40)) ?></option><?php endforeach; ?>
+      <?php foreach ($projects as $p): ?><option value="<?= (int)$p['id'] ?>" <?= $folder === (string)$p['id'] ? 'selected' : '' ?>><?= e($p['ref_no']) ?>, <?= e(truncate($p['title'], 40)) ?></option><?php endforeach; ?>
     </select>
   </div>
   <button class="btn btn-ghost" type="submit"><?= icon('search') ?> Filter</button>

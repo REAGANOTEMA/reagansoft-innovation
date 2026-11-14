@@ -10,7 +10,7 @@ import { cn } from '../../lib/cn';
 import type { User } from '../../lib/types';
 
 export function ConsoleUsers() {
-  usePageMeta('Users — Reagansoft console');
+  usePageMeta('Users, Reagansoft console');
   const { push } = useToast();
   const { data, loading, error, reload } = useApi<User[]>('admin/users');
   const [createOpen, setCreateOpen] = useState(false);

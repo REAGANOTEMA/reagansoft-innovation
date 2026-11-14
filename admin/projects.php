@@ -99,7 +99,7 @@ dashboard_head(['title' => 'Projects', 'active' => 'projects', 'crumb' => 'Proje
                 <a class="row-title" href="<?= app_url('admin/project.php?id=' . (int)$p['id']) ?>"><?= e($p['title']) ?></a>
                 <div class="row-sub"><?= e($p['ref_no']) ?> · <?= e($p['service'] ?? 'General') ?></div>
               </td>
-              <td><b class="small"><?= e($p['client_name']) ?></b><div class="row-sub"><?= e($p['company'] ?? '—') ?></div></td>
+              <td><b class="small"><?= e($p['client_name']) ?></b><div class="row-sub"><?= e($p['company'] ?? '-') ?></div></td>
               <td><?= status_badge($p['status']) ?></td>
               <td><?= priority_badge($p['priority']) ?></td>
               <td style="min-width:120px"><div class="progress"><span style="width:<?= max(0, min(100, (int)$p['progress'])) ?>%"></span></div><small class="muted"><?= (int)$p['progress'] ?>%</small></td>

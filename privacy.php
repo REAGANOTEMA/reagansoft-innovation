@@ -2,8 +2,8 @@
 require __DIR__ . '/config/config.php';
 
 public_head([
-    'title'     => 'Privacy Policy | Reagan Soft Innovation Limited',
-    'desc'      => 'How Reagan Soft Innovation Limited collects, uses, protects and stores your personal data when you use our website, contact us or use our client portal.',
+    'title'     => 'Privacy Policy | Reagansoft Innovation Limited',
+    'desc'      => 'How Reagansoft Innovation Limited collects, uses, protects and stores your personal data when you use our website, contact us or use our client portal.',
     'active'    => 'legal',
     'canonical' => 'privacy.php',
 ]);
@@ -25,7 +25,7 @@ public_head([
       <p class="muted">Last updated: 23 September 2026</p>
 
       <h2>Who we are</h2>
-      <p>Reagan Soft Innovation Limited is a software company based in Jinja, Uganda. We build websites, business systems, ecommerce stores and custom software for businesses in Uganda and beyond. When you see "we", "us" or "our" in this policy, it means Reagan Soft Innovation Limited.</p>
+      <p>Reagansoft Innovation Limited is a software company based in Jinja, Uganda. We build websites, business systems, ecommerce stores and custom software for businesses in Uganda and beyond. When you see "we", "us" or "our" in this policy, it means Reagansoft Innovation Limited.</p>
 
       <h2>Information we collect</h2>
       <p>We only collect what we genuinely need to serve you:</p>

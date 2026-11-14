@@ -1,6 +1,6 @@
 <?php
 /**
- * Client portal endpoints — authenticated client role.
+ * Client portal endpoints, authenticated client role.
  */
 
 declare(strict_types=1);
@@ -253,7 +253,7 @@ function client_create_project(array $user): never
     }
 
     audit('project_requested', 'projects', $pid, 'New request ' . $ref . ': ' . $title);
-    notify_staff('New project request', $user['full_name'] . ' submitted ' . $ref . ' — ' . $title, 'project', $pid);
+    notify_staff('New project request', $user['full_name'] . ' submitted ' . $ref . ', ' . $title, 'project', $pid);
     notify((int)$user['id'], 'Request received', 'Your request ' . $ref . ' has been received and is being reviewed.', 'success', $pid);
 
     $st = $pdo->prepare('SELECT * FROM projects WHERE id = ?');

@@ -82,7 +82,7 @@ dashboard_head(['title' => 'Clients', 'active' => 'clients', 'crumb' => 'Clients
           </div>
           <div class="row-sub" style="margin-bottom:8px"><?= e($c['company'] ?: 'Individual') ?> · since <?= fmt_date($c['created_at'], 'M Y') ?></div>
           <div class="kv" style="padding:6px 0"><span>Email</span><span><?= e($c['email']) ?></span></div>
-          <div class="kv" style="padding:6px 0"><span>Phone</span><span><?= e($c['phone'] ?: '—') ?></span></div>
+          <div class="kv" style="padding:6px 0"><span>Phone</span><span><?= e($c['phone'] ?: '-') ?></span></div>
           <div class="kv" style="padding:6px 0"><span>Projects</span><span><?= (int)$c['project_count'] ?> (<?= (int)$c['active_count'] ?> active)</span></div>
           <div class="kv" style="padding:6px 0"><span>Invoiced</span><span><?= money($c['invoiced'], $currency) ?></span></div>
           <div class="kv" style="padding:6px 0"><span>Paid</span><span><?= money($c['paid'], $currency) ?></span></div>

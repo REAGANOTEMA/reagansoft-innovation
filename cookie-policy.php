@@ -2,8 +2,8 @@
 require __DIR__ . '/config/config.php';
 
 public_head([
-    'title'     => 'Cookie Policy | Reagan Soft Innovation Limited',
-    'desc'      => 'How Reagan Soft Innovation Limited uses cookies and similar technologies on its website and client portal.',
+    'title'     => 'Cookie Policy | Reagansoft Innovation Limited',
+    'desc'      => 'How Reagansoft Innovation Limited uses cookies and similar technologies on its website and client portal.',
     'active'    => 'legal',
     'canonical' => 'cookie-policy.php',
 ]);

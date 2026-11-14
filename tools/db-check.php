@@ -1,6 +1,6 @@
 <?php
 /**
- * Reagan Soft Innovation Limited — database health check (CLI only).
+ * Reagansoft Innovation Limited, database health check (CLI only).
  *
  * Tells you, in one command, whether the database is reachable,
  * whether the schema is complete, whether the seed data is there
@@ -55,7 +55,7 @@ try {
     line('Charset / collation', (string)$pdo->query('SELECT @@character_set_connection')->fetchColumn() . ' / ' . (string)$pdo->query('SELECT @@collation_connection')->fetchColumn());
     line('Live connection', db_is_connected() ? 'yes' : 'no', db_is_connected() ? 'ok' : 'bad');
 } catch (Throwable $e) {
-    line('Connection', 'FAILED — ' . $e->getMessage(), 'bad');
+    line('Connection', 'FAILED, ' . $e->getMessage(), 'bad');
     echo "\nNothing else can be checked until the database is reachable.\n";
     exit(1);
 }
@@ -85,7 +85,7 @@ try {
     line('Privileges', 'could not be read: ' . $e->getMessage(), 'warn');
 }
 
-line('CREATE DATABASE', 'not attempted (it is optional — see the README hosting notes)', 'ok');
+line('CREATE DATABASE', 'not attempted (it is optional, see the README hosting notes)', 'ok');
 
 /* ------------------------------------------------------------------ */
 head('Schema (expect 17 tables)');
@@ -190,7 +190,7 @@ if (DB_MIRROR === '' || DB_MIRROR === DB_NAME) {
             }
         }
     } catch (Throwable $e) {
-        line('Mirror', 'unreachable — ' . $e->getMessage(), 'warn');
+        line('Mirror', 'unreachable, ' . $e->getMessage(), 'warn');
     }
 }
 

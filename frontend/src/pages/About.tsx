@@ -19,14 +19,14 @@ const principles = [
 
 const milestones = [
   { year: 'The start', title: 'A studio in Jinja', text: 'Reagansoft began with a simple observation: local organisations were being sold websites they could not maintain or grow.' },
-  { year: 'The shift', title: 'From pages to platforms', text: 'Client demand moved from brochures to systems — stock, billing, school records, bookings and payments.' },
+  { year: 'The shift', title: 'From pages to platforms', text: 'Client demand moved from brochures to systems, stock, billing, school records, bookings and payments.' },
   { year: 'Today', title: 'A full delivery partner', text: 'We now cover strategy, design, engineering, deployment, training and long-term support across Uganda.' },
   { year: 'Next', title: 'Deeper integration', text: 'Our roadmap focuses on data, automation and secure integrations that connect the tools businesses already use.' },
 ];
 
 export function About() {
   usePageMeta(
-    'About Reagansoft Innovation — Software studio in Jinja, Uganda',
+    'About Reagansoft Innovation, Software studio in Jinja, Uganda',
     'Meet the team behind Reagansoft Innovation Limited: a Ugandan software studio building websites, business systems and mobile apps with long-term support.',
   );
 
@@ -114,7 +114,7 @@ export function About() {
               </p>
               <p>
                 That is why we spend time on discovery before writing code. We look at the spreadsheets, the notebooks, the WhatsApp
-                groups and the workarounds — then design something simpler and more dependable.
+                groups and the workarounds, then design something simpler and more dependable.
               </p>
               <p>
                 We are deliberately small and senior. The people who scope your project are the same people who build it, test it and
@@ -298,7 +298,7 @@ export function About() {
                 </h3>
                 <p className="mt-3 max-w-2xl text-[13.5px] leading-relaxed text-ink-muted">
                   Client visits, site surveys and training sessions happen across Jinja and the wider region. Our Yamaha is painted in
-                  the company colours so the team is recognisable on the road — and so the relationships behind the software stay
+                  the company colours so the team is recognisable on the road, and so the relationships behind the software stay
                   visible.
                 </p>
                 <div className="mt-6 grid gap-3 sm:grid-cols-3">

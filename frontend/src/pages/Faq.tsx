@@ -13,7 +13,7 @@ const faqs = [
   {
     category: 'Working with us',
     items: [
-      { q: 'What kind of organisations do you work with?', a: 'Schools, hotels, farms, clinics, traders, NGOs and growing businesses. If you have a process that needs to be more reliable, we can help — the size of the organisation matters less than the clarity of the problem.' },
+      { q: 'What kind of organisations do you work with?', a: 'Schools, hotels, farms, clinics, traders, NGOs and growing businesses. If you have a process that needs to be more reliable, we can help, the size of the organisation matters less than the clarity of the problem.' },
       { q: 'Do you work with clients outside Jinja?', a: 'Yes. Most collaboration happens online, and we travel for discovery, training or launch when it adds value. We have served clients across Uganda.' },
       { q: 'Who owns the code and data?', a: 'You do. On final payment we hand over the source code, database access, hosting credentials and documentation. There is no lock-in.' },
       { q: 'Can you take over a project someone else started?', a: 'Often, yes. We start with a technical review and a written assessment of what is salvageable, what needs rebuilding and what it will cost. We will not pretend a rescue is cheaper than it is.' },
@@ -31,7 +31,7 @@ const faqs = [
   {
     category: 'Delivery',
     items: [
-      { q: 'How long does a project take?', a: 'A focused website usually takes 2–4 weeks. Business systems and custom platforms typically run 6–12 weeks, delivered in usable increments rather than one final reveal.' },
+      { q: 'How long does a project take?', a: 'A focused website usually takes 2-4 weeks. Business systems and custom platforms typically run 6-12 weeks, delivered in usable increments rather than one final reveal.' },
       { q: 'How will I know progress is happening?', a: 'You get a shared board, weekly demo links and a named lead who answers directly. Nothing important is hidden until launch.' },
       { q: 'What happens at launch?', a: 'We test key flows, migrate data, train your team, deploy and stay close during a stabilisation window. A rollback plan is prepared before go-live.' },
       { q: 'Do you provide training?', a: 'Yes. Every delivery includes a practical walkthrough, written guidance and, where useful, recorded sessions for new staff.' },
@@ -50,7 +50,7 @@ const faqs = [
 
 export function Faq() {
   usePageMeta(
-    'FAQ — Working with Reagansoft Innovation',
+    'FAQ, Working with Reagansoft Innovation',
     'Answers about scope, pricing, delivery, support, ownership and security when working with Reagansoft Innovation in Uganda.',
   );
 
@@ -70,7 +70,7 @@ export function Faq() {
           <span className="eyebrow text-brand-300">FAQ</span>
           <h1 className="h1 mt-4 max-w-3xl text-white">Questions we hear before every project.</h1>
           <p className="mt-5 max-w-2xl text-[1.02rem] leading-relaxed text-white/65">
-            Clear answers on scope, money, delivery and support. If yours is not here, ask directly — we answer honestly, even when
+            Clear answers on scope, money, delivery and support. If yours is not here, ask directly, we answer honestly, even when
             the answer is “not yet”.
           </p>
         </div>

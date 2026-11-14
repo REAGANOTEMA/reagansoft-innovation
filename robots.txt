@@ -1,7 +1,10 @@
 User-agent: *
 Allow: /
-Disallow: /client/
 Disallow: /admin/
+Disallow: /client/
+Disallow: /portal/
+Disallow: /console/
+Disallow: /api/
 Disallow: /uploads/
 Disallow: /storage/
 Disallow: /config/
@@ -9,8 +12,10 @@ Disallow: /inc/
 Disallow: /sql/
 Disallow: /tools/
 Disallow: /frontend/
+Disallow: /login
 Disallow: /login.php
+Disallow: /register
 Disallow: /register.php
 Disallow: /logout.php
 
-Sitemap: http://localhost/reagansoft-innovation/sitemap.xml
+Sitemap: https://reagansoftinnovation.com/sitemap.xml

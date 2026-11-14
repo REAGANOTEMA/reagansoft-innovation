@@ -10,7 +10,7 @@ import { Field, Spinner } from '../components/UI';
 import { HeroVisual } from '../components/Graphics';
 
 export function Login() {
-  usePageMeta('Sign in — Reagansoft client portal', 'Sign in to track projects, invoices and messages with Reagansoft Innovation.');
+  usePageMeta('Sign in, Reagansoft client portal', 'Sign in to track projects, invoices and messages with Reagansoft Innovation.');
   const { user, login, loading } = useAuth();
   const { settings } = useSite();
   const navigate = useNavigate();

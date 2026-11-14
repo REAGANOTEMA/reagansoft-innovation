@@ -11,7 +11,7 @@ import type { Project } from '../../lib/types';
 const statuses = ['', 'NEW', 'REVIEWING', 'QUOTATION', 'APPROVED', 'IN_PROGRESS', 'WAITING_FOR_CLIENT', 'TESTING', 'COMPLETED', 'CANCELLED'];
 
 export function PortalProjects() {
-  usePageMeta('My projects — Reagansoft client portal');
+  usePageMeta('My projects, Reagansoft client portal');
   const [params, setParams] = useSearchParams();
   const [query, setQuery] = useState(params.get('q') ?? '');
   const [status, setStatus] = useState(params.get('status') ?? '');

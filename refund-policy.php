@@ -2,8 +2,8 @@
 require __DIR__ . '/config/config.php';
 
 public_head([
-    'title'     => 'Refund & Cancellation Policy | Reagan Soft Innovation Limited',
-    'desc'      => 'How refunds and cancellations work at Reagan Soft Innovation Limited, including deposits, work in progress and delivered projects.',
+    'title'     => 'Refund & Cancellation Policy | Reagansoft Innovation Limited',
+    'desc'      => 'How refunds and cancellations work at Reagansoft Innovation Limited, including deposits, work in progress and delivered projects.',
     'active'    => 'legal',
     'canonical' => 'refund-policy.php',
 ]);

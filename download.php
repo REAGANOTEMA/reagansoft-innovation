@@ -1,7 +1,7 @@
 <?php
 /**
  * Protected project file download.
- * Files are never served directly from the web root — access is always
+ * Files are never served directly from the web root, access is always
  * verified here against the current user's role and project ownership.
  */
 require __DIR__ . '/config/config.php';

@@ -1,4 +1,4 @@
-Reagan Soft Innovation Limited
+Reagansoft Innovation Limited
 SYSTEM DATABASE PACK
 Database: reagansoft_system
 
@@ -7,49 +7,64 @@ projects, tasks, files, messages, quotations, invoices, payments,
 expenses, services, contact messages, settings and audit logs.
 
 FILES
-reagansoft_system.sql      Complete dump: 17 tables, indexes, foreign keys,
-                           seed data and 8 demo accounts.
-verify.sql                 Safe row-count / health check. Starts with
-                           USE reagansoft_system, so it never fails with
-                           "#1109 Unknown table 'users' in information_schema".
-upgrade-2026-11-08.sql     Safe, repeatable data upgrade (WhatsApp / call
-                           numbers and project-title text repair).
+reagansoft_system.sql   Complete, repeatable dump: 17 tables, indexes,
+                        foreign keys, seed data and 8 demo accounts.
+                        The file selects reagansoft_system itself, creates
+                        tables only when missing and inserts seed rows with
+                        INSERT IGNORE.
 
 HOW TO IMPORT (phpMyAdmin)
-1. Start Apache and MySQL (XAMPP control panel).
-2. Click the target database in the left-hand list FIRST:
-      reagansoft_system
+1. Start Apache and MySQL.
+2. Open phpMyAdmin. You do not need to preselect a database: the dump
+   contains its own USE statement.
 3. Open the Import tab, choose reagansoft_system.sql, press Go.
-4. Open verify.sql in the SQL tab and run it. You should see 17 tables
-   and 8 users.
-
-The dump starts with SET FOREIGN_KEY_CHECKS=0 and DROP TABLE IF EXISTS
-for every table, so it can be imported over an existing database
-without "#1050 Table already exists". Importing replaces the current
-contents of reagansoft_system, so take a backup first.
+4. The import finishes with no errors, even when the tables or demo rows
+   already exist. No table is dropped and no existing row is deleted.
 
 If the database does not exist yet, create it first (utf8mb4 /
 utf8mb4_unicode_ci) or run:
       C:\xampp\php\php.exe tools\setup-databases.php
 
 HOW TO IMPORT (command line, from the project folder)
-      C:\xampp\mysql\bin\mysql.exe -u root reagansoft_system < sql\system\reagansoft_system.sql
+      C:\xampp\mysql\bin\mysql.exe -u root --default-character-set=utf8mb4 < sql\system\reagansoft_system.sql
 
-WHY YOU SAW THESE ERRORS
-- "#1109 Unknown table 'users' in information_schema"
-  The check query was run while phpMyAdmin was showing the
-  information_schema database. Select reagansoft_system first, or run
-  verify.sql (it contains USE reagansoft_system).
-- "#1227 Access denied; you need the CREATE USER privilege"
-  The dump does NOT contain CREATE USER/GRANT. That error only appears
-  when the CREATE USER snippet from the README is pasted into a
-  non-root phpMyAdmin session. Use tools\setup-databases.php, or run
-  that snippet as the MySQL root user. Nothing in this folder needs it.
+WHY YOU SAW "Table 'activity_logs' already exists"
+Both database packs contain a table called activity_logs, and that is
+correct: the two databases are separate. The old export had no
+CREATE DATABASE and no USE statement, so importing both files into the
+same selected database tried to create activity_logs twice. The dump in
+this folder now starts with:
+
+      CREATE DATABASE IF NOT EXISTS `reagansoft_system` ...;
+      USE `reagansoft_system`;
+
+so it always lands in the right database. The website pack does the
+same for reagansoft_website. Importing them in any order is safe.
+
+REPAIRING AN EXISTING TABLE
+If an earlier import stopped halfway and activity_logs has no primary
+key, no AUTO_INCREMENT or no indexes, run:
+
+      C:\xampp\php\php.exe tools\repair-databases.php
+
+It checks both databases, adds only the missing columns, primary key,
+AUTO_INCREMENT, indexes and foreign key, then tests INSERT and SELECT
+inside a rolled-back transaction. It never drops a table and never
+deletes a record. Add --dry-run to preview the changes.
+
+OLDER TEXT WITH EN DASHES
+If an existing database still shows en dashes in project titles or the
+company opening hours (they came from the original demo export), run:
+
+      C:\xampp\mysql\bin\mysql.exe -u root --default-character-set=utf8mb4 < sql\normalize-text.sql
+
+It only replaces those characters with plain hyphens and is safe to run
+more than once.
 
 APPLICATION LOGIN (config/config.php)
   database: reagansoft_system
   user    : reagansoft_system
-  password: f.o9Wv2dP5Tmv]?+
+  password: see config/config.php (change it before production)
 
 DEMO PORTAL ACCOUNTS - password for every account: Reagan@2026
   admin@reagansoft.com                              Administrator
@@ -61,4 +76,4 @@ DEMO PORTAL ACCOUNTS - password for every account: Reagan@2026
   info@hotelparadiseonthenile.co.ug                 Client
   info@igangaschoolofnursingandmidwifery.ac.ug      Client
 
-Change every password after the first sign-in.
+Change every demo password after the first sign-in.

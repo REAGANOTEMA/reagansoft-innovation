@@ -1,6 +1,6 @@
 <?php
 /**
- * Reagan Soft Innovation Limited — database & account bootstrapper (CLI only).
+ * Reagansoft Innovation Limited, database & account bootstrapper (CLI only).
  *
  * Creates both databases and both MySQL accounts, sets their passwords to
  * the values in config/config.php and grants each account full access to
@@ -63,7 +63,7 @@ function quoteLiteral(PDO $pdo, string $value): string
     return $pdo->quote($value);
 }
 
-echo "\nReagan Soft Innovation — database setup\n";
+echo "\nReagansoft Innovation, database setup\n";
 echo str_repeat('=', 42) . "\n\n";
 
 /* 1. Connect as the administrator. */

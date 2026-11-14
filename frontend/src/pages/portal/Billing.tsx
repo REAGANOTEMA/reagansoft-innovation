@@ -44,7 +44,7 @@ const groupTitles: Record<string, string> = {
 };
 
 export function PortalBilling() {
-  usePageMeta('Billing details — Reagansoft client portal');
+  usePageMeta('Billing details, Reagansoft client portal');
   const { push } = useToast();
   const { setUser } = useAuth();
   const { data, loading, error, reload } = useApi<BillingPayload>('client/billing');
@@ -213,7 +213,7 @@ export function PortalBilling() {
               />
               <span className="text-[11.5px] leading-relaxed text-ink-muted">
                 I confirm these billing details are accurate and I accept the payment and invoicing terms.
-                {data.terms_accepted && <span className="mt-0.5 block font-semibold text-emerald-700">Accepted earlier — no action needed.</span>}
+                {data.terms_accepted && <span className="mt-0.5 block font-semibold text-emerald-700">Accepted earlier, no action needed.</span>}
               </span>
             </label>
             {fieldErrors.billing_terms_accepted && <p className="mt-1 text-[10.5px] text-rose-600">{fieldErrors.billing_terms_accepted}</p>}

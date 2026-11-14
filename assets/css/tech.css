@@ -1,5 +1,5 @@
 /* ============================================================
-   Reagan Soft Innovation Limited — Engineering Design Layer
+   Reagansoft Innovation Limited, Engineering Design Layer
    3D · blueprint grids · HUD readouts · scanlines · orbits
    Loaded after style.css. Keeps the white/navy professional base
    and adds a "built by engineers" finishing layer.
@@ -257,8 +257,8 @@
 .folio-card:hover .folio-glyph { transform: translateY(-2px); }
 .folio-glyph { transition: transform .28s cubic-bezier(.22,.61,.36,1), box-shadow .28s ease; }
 
-/* A visitor who asked for less motion still gets the cover — it is
-   content, not decoration — they just do not get it moving. */
+/* A visitor who asked for less motion still gets the cover, it is
+   content, not decoration, they just do not get it moving. */
 @media (prefers-reduced-motion: reduce) {
   .folio-scene, .folio-devices, .folio-glyph, .folio-card, .folio-live .fl-go { transition: none; }
   .folio-card:hover .folio-scene,
@@ -347,12 +347,11 @@
 .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr 1.25fr; gap: 44px; }
 .footer-brand .brand { gap: 20px; }
 .footer-brand .brand img {
-  width: 96px; height: 96px; border-radius: 22px; flex-shrink: 0;
-  border: 1px solid rgba(143,216,255,.32);
-  box-shadow: 0 12px 32px rgba(0,0,0,.38), 0 0 0 6px rgba(143,216,255,.06);
-  transition: box-shadow .25s ease, transform .25s ease;
+  width: auto; height: 104px; max-width: 230px; flex-shrink: 0;
+  object-fit: contain;
+  transition: transform .25s ease;
 }
-.footer-brand .brand:hover img { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,.45), 0 0 0 8px rgba(143,216,255,.12); }
+.footer-brand .brand:hover img { transform: translateY(-2px); }
 .footer-brand .brand-text { font-size: 22px; letter-spacing: -.01em; }
 .footer-brand p { max-width: 320px; }
 @media (max-width: 1024px) { .footer-grid { grid-template-columns: 1.6fr 1fr 1fr 1fr; } }
@@ -493,7 +492,7 @@
 }
 
 /* ============================================================
-   Home hero — full crossfade slider layer
+   Home hero, full crossfade slider layer
    (composes on top of the .hero/.hero-inner base in style.css)
    ============================================================ */
 .hero-slider {
@@ -619,18 +618,18 @@
 
 @media (max-width: 1024px) {
   .footer-grid { grid-template-columns: 1.6fr 1fr 1fr; gap: 34px; }
-  .footer-brand .brand img { width: 74px; height: 74px; border-radius: 18px; }
+  .footer-brand .brand img { height: 84px; width: auto; }
 }
 @media (max-width: 860px) {
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 30px; }
 }
 @media (max-width: 640px) {
   .footer-grid { grid-template-columns: 1fr; gap: 26px; }
-  .footer-brand .brand img { width: 62px; height: 62px; border-radius: 16px; }
+  .footer-brand .brand img { height: 70px; width: auto; }
   .footer-brand .brand-text { font-size: 19px; }
   .footer-col > b { margin-bottom: 6px; }
 }
 @media (max-width: 360px) {
   .footer-grid { gap: 22px; }
-  .footer-brand .brand img { width: 54px; height: 54px; }
+  .footer-brand .brand img { height: 60px; width: auto; }
 }

@@ -1,4 +1,4 @@
-/* Reagan Soft Innovation Limited — front-end interactions */
+/* Reagansoft Innovation Limited, front-end interactions */
 (function () {
   'use strict';
 
@@ -155,7 +155,7 @@
        Each card carries data-kit="website system apps" (written by
        folio_kit_list), so a chip is a plain substring test. With
        JavaScript off, every chip is a no-op button and the full grid
-       stays on the page — the filter is an addition to the gallery,
+       stays on the page, the filter is an addition to the gallery,
        never the thing that makes it work. */
     (function folioFilter() {
       var bar = document.querySelector('[data-folio-filter]');
@@ -202,7 +202,7 @@
   });
 
   /* ============================================================
-     ENGINEERING LAYER — 3D FX, blueprint grids, HUD, counters
+     ENGINEERING LAYER, 3D FX, blueprint grids, HUD, counters
      Injected on every public page so no per-page markup needed.
      ============================================================ */
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -575,7 +575,7 @@
      *   2. keep the progress meter and the "still needed" list honest
      *      as they type, so submitting is never a surprise;
      *   3. show the number we will actually call, so a typo in a phone
-     *      number — the usual reason a payment sits unconfirmed — is
+     *      number, the usual reason a payment sits unconfirmed, is
      *      visible before they hand over money rather than after.
      * The server re-checks all of it. This only saves them the
      * round-trip of finding out they were wrong. */
@@ -668,13 +668,13 @@
           bPhoneEcho.textContent = 'We will call ' + bGrouped(d) + '.';
           bPhoneEcho.className = 'phone-echo ok';
         } else {
-          bPhoneEcho.textContent = 'Keep typing — we need at least 9 digits.';
+          bPhoneEcho.textContent = 'Keep typing, we need at least 9 digits.';
           bPhoneEcho.className = 'phone-echo warn';
         }
       }
 
       function bRefresh() {
-        /* Count the required units only — the same list billing_missing()
+        /* Count the required units only, the same list billing_missing()
          * reads on the server. Counting the optional questions as well
          * would leave an individual with no TIN and no NIN stuck at 91%
          * having answered everything actually asked of them, and the

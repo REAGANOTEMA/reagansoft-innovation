@@ -1,38 +1,48 @@
 Options -Indexes -MultiViews
 DirectoryIndex index.php index.html
 
-# Make sure modern image formats are served with a correct MIME type.
-# Apache 2.4 ships without AVIF in mime.types, so without this line the
-# hero artwork is delivered with an empty Content-Type and some browsers
-# refuse to paint it.
+# Correct MIME types for modern media and the PWA manifest. Apache ships
+# without several of these, and a manifest delivered as text/plain or
+# application/octet-stream makes the install prompt fail.
 AddType image/avif .avif
 AddType image/webp .webp
 AddType image/svg+xml .svg
+AddType application/manifest+json .webmanifest
+AddType font/woff2 .woff2
+AddType font/woff .woff
+AddType video/mp4 .mp4
+AddType video/webm .webm
 
-# Protect sensitive files
-<FilesMatch "\.(sql|md|log|env|json|yaml|yml|ini|txt|bak|old|swp)$">
+# Never serve source, database dumps, logs or editor debris. robots.txt is
+# deliberately not listed here: it must stay readable for crawlers.
+<FilesMatch "\.(sql|md|log|env|ini|bak|old|swp|yaml|yml)$">
   Require all denied
 </FilesMatch>
 
-<FilesMatch "^(README|composer)\.(md|json)$">
+<FilesMatch "^(composer\.json|package\.json|package-lock\.json|composer\.lock|tsconfig.*\.json)$">
   Require all denied
 </FilesMatch>
 
-# Never let a browser read the override files themselves
 <FilesMatch "^\.htaccess$">
   Require all denied
 </FilesMatch>
 
+# Installers are only needed once. Keep them off the public web after setup;
+# run them from the server console or temporarily re-enable this block if a
+# fresh installation is genuinely required.
+<FilesMatch "^(install|create_admin)\.php$">
+  Require all denied
+</FilesMatch>
+
 # Block web access to configuration, code, private data, SQL dumps and
-# command-line tools. Each of those folders also carries its own
-# .htaccess, so the block survives even if this file is replaced.
+# command-line tools. Each of those folders also carries its own .htaccess,
+# so the block survives even if this file is replaced.
 #
-# This rule is written relative to this folder on purpose. The old
-# version was anchored with ^/ and therefore only worked when the app
-# sat in the web root — under http://localhost/reagansoft-innovation/
-# it matched nothing, leaving config/ reachable.
+# Written relative to this folder on purpose: it works whether the app is
+# at the domain root or under /reagansoft-innovation/.
 RewriteEngine On
 RewriteRule ^(?:config|inc|storage|database|system|website|sql|frontend|tools)(?:/|$) - [R=403,L]
+RewriteRule (^|/)\.(git|svn|hg)(/|$) - [R=403,L]
 
 # React SPA. Real files and folders (api, admin, client, uploads, *.php,
 # app assets) keep serving directly. Everything else, including the site
@@ -42,14 +52,39 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ spa.php [L]
 
-# Security headers (also applied in PHP for non-Apache setups)
+# Static assets can be cached hard because Vite fingerprints file names.
+# HTML is never cached, so a redeploy is visible immediately.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType image/avif "access plus 30 days"
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType image/svg+xml "access plus 30 days"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType text/css "access plus 7 days"
+  ExpiresByType application/javascript "access plus 7 days"
+  ExpiresByType application/manifest+json "access plus 1 day"
+</IfModule>
+
+# Security headers for static files (PHP pages also send these).
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+  <FilesMatch "\.html$">
+    Header always set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "\.(webmanifest|css|js)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+  <FilesMatch "^sw\.js$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+  </FilesMatch>
 </IfModule>
 
-# No pretty-URL routing is used — every page is a real file, so unknown
-# paths should produce a genuine 404 rather than a silent fallback.
+# Unknown paths are handled by the SPA rewrite above, so this only fires
+# if the build is missing.
 ErrorDocument 404 "Page not found."

@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Replace the base URL with the production domain on deployment. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>http://localhost/reagansoft-innovation/index.php</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>http://localhost/reagansoft-innovation/about.php</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>http://localhost/reagansoft-innovation/services.php</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>http://localhost/reagansoft-innovation/pricing.php</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>http://localhost/reagansoft-innovation/process.php</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>http://localhost/reagansoft-innovation/portfolio.php</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>http://localhost/reagansoft-innovation/contact.php</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>http://localhost/reagansoft-innovation/faq.php</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>http://localhost/reagansoft-innovation/privacy.php</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>http://localhost/reagansoft-innovation/terms.php</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>http://localhost/reagansoft-innovation/refund-policy.php</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>http://localhost/reagansoft-innovation/cookie-policy.php</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
+  <url><loc>https://reagansoftinnovation.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://reagansoftinnovation.com/about</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://reagansoftinnovation.com/services</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://reagansoftinnovation.com/pricing</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://reagansoftinnovation.com/process</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://reagansoftinnovation.com/portfolio</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://reagansoftinnovation.com/contact</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://reagansoftinnovation.com/faq</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://reagansoftinnovation.com/privacy.php</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://reagansoftinnovation.com/terms.php</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://reagansoftinnovation.com/refund-policy.php</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://reagansoftinnovation.com/cookie-policy.php</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
 </urlset>

@@ -8,8 +8,8 @@ $errors = [];
 
 // The payment gate reads the same name, email, phone, company and
 // address this page edits, so the two must not disagree about who
-// holds the authority. Payment details are edited in one place —
-// client/billing.php — and this page only points at it.
+// holds the authority. Payment details are edited in one place -
+// client/billing.php, and this page only points at it.
 $billingOutstanding = billing_schema_ready() ? billing_missing($user) : [];
 $billingReady = billing_schema_ready() && $billingOutstanding === [];
 
@@ -116,7 +116,7 @@ dashboard_head(['title' => 'My Profile', 'active' => 'profile', 'crumb' => 'Prof
       <div class="field">
         <label for="avatar">Profile photo (optional)</label>
         <input class="input" id="avatar" type="file" name="avatar" accept=".png,.jpg,.jpeg,.gif,.webp">
-        <div class="form-note">PNG, JPG, GIF or WebP — max 10 MB.</div>
+        <div class="form-note">PNG, JPG, GIF or WebP, max 10 MB.</div>
       </div>
       <button class="btn btn-primary" type="submit"><?= icon('check') ?> Save changes</button>
     </form>

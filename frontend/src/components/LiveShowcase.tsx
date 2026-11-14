@@ -36,7 +36,7 @@ const slides: Slide[] = [
     eyebrow: 'Channel 01 · Websites',
     title: 'Websites that ',
     accent: 'earn their keep',
-    lead: 'A fast, secure website built around your business — designed to look right on every screen and still working properly years after launch.',
+    lead: 'A fast, secure website built around your business, designed to look right on every screen and still working properly years after launch.',
     to: '/services/business-website',
     cta: 'Explore website development',
     alt: 'Modern website development at Reagansoft Innovation',
@@ -58,7 +58,7 @@ const slides: Slide[] = [
     eyebrow: 'Channel 03 · Applications',
     title: 'One app, ',
     accent: 'every screen',
-    lead: 'Business apps delivered for the browser, Android and iOS together — prepared, tested and published with your team.',
+    lead: 'Business apps delivered for the browser, Android and iOS together, prepared, tested and published with your team.',
     to: '/services/web-mobile-apps',
     cta: 'View app development',
     alt: 'Web and mobile application engineering',
@@ -98,7 +98,7 @@ const slides: Slide[] = [
   },
 ];
 
-const DURATION = 7000;
+const DURATION = 4500;
 
 export function LiveShowcase({ services, stats }: { services: Service[]; stats: { projects: number; clients: number; services: number } }) {
   const [active, setActive] = useState(0);
@@ -120,6 +120,7 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
 
   useEffect(() => {
     if (paused) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     timer.current = window.setTimeout(() => setActive((current) => (current + 1) % slides.length), DURATION);
     return () => {
       if (timer.current) window.clearTimeout(timer.current);

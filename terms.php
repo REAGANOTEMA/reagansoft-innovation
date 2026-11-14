@@ -2,8 +2,8 @@
 require __DIR__ . '/config/config.php';
 
 public_head([
-    'title'     => 'Terms & Conditions | Reagan Soft Innovation Limited',
-    'desc'      => 'The terms and conditions that apply when you register an account, request a project, accept a quotation or use the services of Reagan Soft Innovation Limited.',
+    'title'     => 'Terms & Conditions | Reagansoft Innovation Limited',
+    'desc'      => 'The terms and conditions that apply when you register an account, request a project, accept a quotation or use the services of Reagansoft Innovation Limited.',
     'active'    => 'legal',
     'canonical' => 'terms.php',
 ]);
@@ -28,7 +28,7 @@ public_head([
       <p>By creating a client account, sending a request, accepting a quotation or paying an invoice, you agree to these terms and conditions. If you do not agree with any part of them, please do not use our services. These terms are enforced under the laws of the Republic of Uganda.</p>
 
       <h2>2. About us</h2>
-      <p>Reagan Soft Innovation Limited is a software company based in <?= e(settings('company_address', 'Jinja, Uganda')) ?>. We design and build websites, business systems, ecommerce stores, custom software and related digital services.</p>
+      <p>Reagansoft Innovation Limited is a software company based in <?= e(settings('company_address', 'Jinja, Uganda')) ?>. We design and build websites, business systems, ecommerce stores, custom software and related digital services.</p>
 
       <h2>3. Client account</h2>
       <p>You are responsible for keeping your account details accurate and your password safe. Anything done from your account is treated as done by you. One person or business may maintain one account unless we agree otherwise in writing.</p>

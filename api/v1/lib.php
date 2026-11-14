@@ -1,6 +1,6 @@
 <?php
 /**
- * Reagan Soft Innovation Limited — REST API helpers (v1).
+ * Reagansoft Innovation Limited, REST API helpers (v1).
  *
  * Shared by every API route. Uses the existing application configuration,
  * PDO connection, session, CSRF tokens, audit trail and upload validation.

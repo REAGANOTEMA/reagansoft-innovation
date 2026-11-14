@@ -13,7 +13,7 @@ import type { Payment } from '../../lib/types';
 const statuses = ['pending', 'confirmed', 'rejected'];
 
 export function ConsolePayments() {
-  usePageMeta('Payments — Reagansoft console');
+  usePageMeta('Payments, Reagansoft console');
   const { push } = useToast();
   const [status, setStatus] = useState('pending');
   const [page, setPage] = useState(1);
@@ -69,7 +69,7 @@ export function ConsolePayments() {
                       </div>
                       <p className="mt-1 text-[11.5px] text-ink-muted">{payment.client_name} · {payment.invoice_no} · {payment.project}</p>
                       <p className="text-[10.5px] text-ink-faint">
-                        {paymentMethod(payment.method)} · ref {payment.reference ?? '—'} · submitted {formatDate(payment.created_at, true)}
+                        {paymentMethod(payment.method)} · ref {payment.reference ?? '-'} · submitted {formatDate(payment.created_at, true)}
                       </p>
                       {payment.notes && <p className="mt-1 text-[10.5px] text-ink-muted">{payment.notes}</p>}
                     </div>

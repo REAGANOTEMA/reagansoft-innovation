@@ -354,7 +354,7 @@ dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' =>
   <div>
     <a class="small" href="<?= app_url('admin/projects.php') ?>"><?= icon('arrow-l') ?> Back to projects</a>
     <h2><?= e($project['title']) ?></h2>
-    <p class="sub"><?= e($project['ref_no']) ?> · <?= e($project['client_name']) ?><?= $project['company'] ? ' — ' . e($project['company']) : '' ?> · <?= e($project['service'] ?? 'General') ?></p>
+    <p class="sub"><?= e($project['ref_no']) ?> · <?= e($project['client_name']) ?><?= $project['company'] ? ', ' . e($project['company']) : '' ?> · <?= e($project['service'] ?? 'General') ?></p>
   </div>
   <div class="actions"><?= status_badge($project['status']) ?> <?= priority_badge($project['priority']) ?></div>
 </div>
@@ -409,7 +409,7 @@ dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' =>
     <section class="panel">
       <div class="panel-head"><h3>Client</h3></div>
       <div class="kv"><span>Name</span><span><?= e($project['client_name']) ?></span></div>
-      <div class="kv"><span>Company</span><span><?= e($project['company'] ?? '—') ?></span></div>
+      <div class="kv"><span>Company</span><span><?= e($project['company'] ?? '-') ?></span></div>
       <div class="kv"><span>Email</span><span><?= e($project['email']) ?></span></div>
       <div class="kv"><span>Phone</span><span><?= e($project['phone']) ?></span></div>
       <div class="kv"><span>Description</span><span style="font-weight:500"><?= e(truncate($project['description'], 140)) ?></span></div>
@@ -452,7 +452,7 @@ dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' =>
                 <td><?= status_badge($t['status']) ?></td>
                 <td style="min-width:120px"><div class="progress"><span style="width:<?= max(0, min(100, (int)$t['progress'])) ?>%"></span></div><small class="muted"><?= (int)$t['progress'] ?>%</small></td>
                 <td><?= priority_badge($t['priority']) ?></td>
-                <td class="muted small"><?= $t['due_date'] ? fmt_date($t['due_date']) : '—' ?></td>
+                <td class="muted small"><?= $t['due_date'] ? fmt_date($t['due_date']) : '-' ?></td>
                 <td class="actions-cell">
                   <button class="btn btn-ghost btn-sm" type="button" data-modal-open="task-edit-<?= (int)$t['id'] ?>">Edit</button>
                   <form method="post" data-confirm="Delete this task? This cannot be undone.">
@@ -613,7 +613,7 @@ dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' =>
         <div class="field"><label for="msg">Message</label><textarea class="textarea" id="msg" name="message" required maxlength="5000" placeholder="Write a reply to the client or an internal note for the team…"></textarea></div>
         <div class="field">
           <label style="display:flex;gap:9px;align-items:center;font-weight:600;cursor:pointer">
-            <input type="checkbox" name="is_internal" value="1" style="width:17px;height:17px"> Internal note — hidden from the client
+            <input type="checkbox" name="is_internal" value="1" style="width:17px;height:17px"> Internal note, hidden from the client
           </label>
         </div>
         <button class="btn btn-primary" type="submit"><?= icon('send') ?> Send</button>

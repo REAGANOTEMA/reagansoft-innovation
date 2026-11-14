@@ -7,7 +7,7 @@ import { formatDate, titleCase } from '../../lib/format';
 import type { AuditLog } from '../../lib/types';
 
 export function ConsoleAudit() {
-  usePageMeta('Audit log — Reagansoft console');
+  usePageMeta('Audit log, Reagansoft console');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const q = useDebounced(search);
@@ -45,9 +45,9 @@ export function ConsoleAudit() {
                     <td className="whitespace-nowrap text-[10.5px] text-ink-faint">{formatDate(row.created_at, true)}</td>
                     <td className="text-[11px] font-medium text-navy-900">{row.full_name ?? 'System'}</td>
                     <td><span className="rounded-full bg-brand-50 px-2 py-0.5 font-mono text-[9.5px] font-semibold text-brand-700">{titleCase(row.action.replace(/_/g, ' '))}</span></td>
-                    <td className="text-[11px] text-ink-muted">{row.details ?? '—'}</td>
-                    <td className="font-mono text-[10px] text-ink-faint">{row.entity_type ? `${row.entity_type}${row.entity_id ? ` #${row.entity_id}` : ''}` : '—'}</td>
-                    <td className="font-mono text-[10px] text-ink-faint">{row.ip_address ?? '—'}</td>
+                    <td className="text-[11px] text-ink-muted">{row.details ?? '-'}</td>
+                    <td className="font-mono text-[10px] text-ink-faint">{row.entity_type ? `${row.entity_type}${row.entity_id ? ` #${row.entity_id}` : ''}` : '-'}</td>
+                    <td className="font-mono text-[10px] text-ink-faint">{row.ip_address ?? '-'}</td>
                   </tr>
                 ))}
               </tbody>

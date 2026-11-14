@@ -2,23 +2,64 @@
   "name": "Reagansoft Innovation Limited",
   "short_name": "Reagansoft",
   "description": "Software engineering, websites, management systems and mobile apps built in Jinja, Uganda.",
+  "id": "../../",
   "start_url": "../../",
   "scope": "../../",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
+  "orientation": "any",
+  "lang": "en",
+  "dir": "ltr",
   "background_color": "#ffffff",
   "theme_color": "#062a4a",
+  "categories": ["business", "productivity", "developer"],
   "icons": [
     {
       "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "apple-180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Services",
+      "short_name": "Services",
+      "url": "../../services"
+    },
+    {
+      "name": "Client portal",
+      "short_name": "Portal",
+      "url": "../../login"
+    },
+    {
+      "name": "Contact",
+      "short_name": "Contact",
+      "url": "../../contact"
     }
   ]
 }

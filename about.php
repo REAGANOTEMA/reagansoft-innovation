@@ -4,11 +4,11 @@ require __DIR__ . '/config/config.php';
 $phone  = settings('company_phone', '+256772514889');
 $phoneAlt = settings('company_phone_alt', '+256730314979');
 $email  = settings('company_email', 'info@reagansoftinnovation.com');
-$waText = 'Hello Reagan Soft Innovation, I would like to enquire about a project.';
+$waText = 'Hello Reagansoft Innovation, I would like to enquire about a project.';
 
 public_head([
     'title'     => 'About Us | Software Development Company in Jinja, Uganda',
-    'desc'      => 'About Reagan Soft Innovation Limited, a software and web development company in Jinja, Uganda founded by Reagan Otema. We build websites, business systems and custom software.',
+    'desc'      => 'About Reagansoft Innovation Limited, a software and web development company in Jinja, Uganda founded by Reagan Otema. We build websites, business systems and custom software.',
     'active'    => 'about',
     'canonical' => 'about.php',
 ]);
@@ -18,7 +18,7 @@ public_head([
     <div class="pi-copy">
       <span class="eyebrow">About us</span>
       <h1>A software company built on clarity and delivery.</h1>
-      <p class="lead">Reagan Soft Innovation Limited helps organisations in Uganda and beyond turn everyday business processes into practical, reliable digital products.</p>
+      <p class="lead">Reagansoft Innovation Limited helps organisations in Uganda and beyond turn everyday business processes into practical, reliable digital products.</p>
     </div>
     <?= page_image('assets/img/hero1.webp', 1, 'Software that is built properly and kept working') ?>
   </div>
@@ -57,11 +57,11 @@ public_head([
       <figure class="studio-media">
         <div class="studio-frame">
           <img src="<?= app_url('assets/img/computer-portrait.webp') ?>" width="900" height="1200"
-               alt="The Reagan Soft Innovation development workstation in the Jinja office"
+               alt="The Reagansoft Innovation development workstation in the Jinja office"
                loading="lazy" decoding="async">
           <span class="studio-glow" aria-hidden="true"></span>
         </div>
-        <figcaption><span class="pi-led"></span>Reagan Soft Innovation development workstation in the Jinja office</figcaption>
+        <figcaption><span class="pi-led"></span>Reagansoft Innovation development workstation in the Jinja office</figcaption>
       </figure>
       <div class="studio-body">
         <span class="eyebrow">Our studio</span>
@@ -87,7 +87,7 @@ public_head([
   <div class="container">
     <div class="section-head">
       <div><span class="eyebrow">Meet the founder</span><h2>Reagan Otema, the hands behind the code.</h2></div>
-      <p>Reagan started Reagan Soft Innovation to give Uganda's businesses software that is secure, well built and actually maintained.</p>
+      <p>Reagan started Reagansoft Innovation to give Uganda's businesses software that is secure, well built and actually maintained.</p>
     </div>
     <div class="about-grid">
       <div class="founder-card">
@@ -99,8 +99,7 @@ public_head([
           <h3>Reagan Otema</h3>
           <p>Reagan founded the company around a simple principle: software that is built properly, priced clearly and kept working long after launch, instead of being built once and abandoned.</p>
           <div class="founder-brand">
-            <img src="<?= app_url('assets/img/reagansoftinnovation-logo.jpeg') ?>" alt="Reagan Soft Innovation logo" width="52" height="52">
-            <span class="brand-text">Reagan Soft <b>Innovation</b></span>
+            <img src="<?= app_url('assets/img/real-reagansoft-logo-white.png') ?>" alt="Reagansoft Innovation Limited" width="180" height="124">
           </div>
           <div class="founder-contact">
             <span><?= icon('phone') ?><a href="<?= e(phone_tel($phone)) ?>"><?= e(phone_display($phone, $phone)) ?></a></span>
@@ -178,3 +177,5 @@ public_head([
   </div>
 </section>
 <?php public_footer(); ?>
+
+

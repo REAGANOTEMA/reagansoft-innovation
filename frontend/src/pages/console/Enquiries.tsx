@@ -16,7 +16,7 @@ const filters = [
 ] as const;
 
 export function ConsoleEnquiries() {
-  usePageMeta('Enquiries — Reagansoft console');
+  usePageMeta('Enquiries, Reagansoft console');
   const { push } = useToast();
   const [filter, setFilter] = useState('');
   const [page, setPage] = useState(1);

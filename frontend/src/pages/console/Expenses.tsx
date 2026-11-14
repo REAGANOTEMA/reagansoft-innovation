@@ -12,7 +12,7 @@ import type { Expense, Project } from '../../lib/types';
 const categories = ['Software', 'Hosting', 'Hardware', 'Transport', 'Marketing', 'Salaries', 'Utilities', 'Office', 'Other'];
 
 export function ConsoleExpenses() {
-  usePageMeta('Expenses — Reagansoft console');
+  usePageMeta('Expenses, Reagansoft console');
   const { push } = useToast();
   const [category, setCategory] = useState('');
   const [page, setPage] = useState(1);
@@ -72,9 +72,9 @@ export function ConsoleExpenses() {
                     <td className="text-[10.5px] text-ink-faint">{formatDate(expense.expense_date)}</td>
                     <td className="text-[11.5px] font-medium text-navy-900">{expense.description}</td>
                     <td className="text-[11px] text-ink-muted">{expense.category}</td>
-                    <td className="text-[11px] text-ink-muted">{expense.project ?? '—'}</td>
-                    <td className="font-mono text-[10px] text-ink-faint">{expense.reference ?? '—'}</td>
-                    <td className="text-[10.5px] text-ink-muted">{expense.recorder ?? '—'}</td>
+                    <td className="text-[11px] text-ink-muted">{expense.project ?? '-'}</td>
+                    <td className="font-mono text-[10px] text-ink-faint">{expense.reference ?? '-'}</td>
+                    <td className="text-[10.5px] text-ink-muted">{expense.recorder ?? '-'}</td>
                     <td className="text-right font-mono text-[11px] font-semibold text-navy-900">{money(expense.amount, expense.currency)}</td>
                     <td><button type="button" onClick={() => remove(expense)} className="rounded-lg p-1.5 text-ink-faint hover:bg-rose-50 hover:text-rose-600" aria-label="Delete expense"><Trash2 className="h-3.5 w-3.5" /></button></td>
                   </tr>
@@ -128,7 +128,7 @@ function CreateExpenseModal({ open, onClose, projects, onCreated }: { open: bool
         <Field label="Category"><select className="input" value={form.category} onChange={(event) => setForm({ ...form, category: event.target.value })}>{categories.map((item) => <option key={item} value={item}>{item}</option>)}</select></Field>
         <Field label="Amount *"><input className="input" type="number" min="1" step="0.01" value={form.amount} onChange={(event) => setForm({ ...form, amount: event.target.value })} required /></Field>
         <Field label="Date"><input className="input" type="date" value={form.expense_date} onChange={(event) => setForm({ ...form, expense_date: event.target.value })} /></Field>
-        <Field label="Project"><select className="input" value={form.project_id} onChange={(event) => setForm({ ...form, project_id: event.target.value })}><option value="">Not project-specific</option>{projects.map((project) => <option key={project.id} value={project.id}>{project.ref_no} — {project.title}</option>)}</select></Field>
+        <Field label="Project"><select className="input" value={form.project_id} onChange={(event) => setForm({ ...form, project_id: event.target.value })}><option value="">Not project-specific</option>{projects.map((project) => <option key={project.id} value={project.id}>{project.ref_no}, {project.title}</option>)}</select></Field>
         <Field label="Reference"><input className="input" value={form.reference} onChange={(event) => setForm({ ...form, reference: event.target.value })} /></Field>
         <Field label="Notes" className="sm:col-span-2"><textarea className="input min-h-[70px]" value={form.notes} onChange={(event) => setForm({ ...form, notes: event.target.value })} /></Field>
       </form>

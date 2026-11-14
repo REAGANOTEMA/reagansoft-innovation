@@ -19,7 +19,7 @@ const sections = [
 ] as const;
 
 export function ConsoleSettings() {
-  usePageMeta('Settings — Reagansoft console');
+  usePageMeta('Settings, Reagansoft console');
   const { push } = useToast();
   const { refresh: refreshSite } = useSite();
   const { data, loading, error, reload } = useApi<SettingsMap>('admin/settings');

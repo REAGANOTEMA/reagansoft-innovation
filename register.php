@@ -71,12 +71,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
             $uid = (int)db()->lastInsertId();
             audit('client_registered', 'users', $uid, 'New client account created');
-            notify($uid, 'Welcome to Reagan Soft Innovation', 'Your client account is ready. You can now send your first project request.', 'success');
+            notify($uid, 'Welcome to Reagansoft Innovation', 'Your client account is ready. You can now send your first project request.', 'success');
 
             // Sign them straight in. They have just proved they know
             // this email address and chosen this password, so making
             // them type it a second time on the very next screen is
-            // pure friction — and on a phone it is the step people
+            // pure friction, and on a phone it is the step people
             // abandon. The session is set up exactly as login.php does
             // it, including the id regeneration, so there is only one
             // definition of "signed in" in this application.
@@ -107,14 +107,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 public_head([
-    'title'  => 'Client Registration | Reagan Soft Innovation Limited',
-    'desc'   => 'Create a free client account with Reagan Soft Innovation Limited to submit project requests, track progress and manage files.',
+    'title'  => 'Client Registration | Reagansoft Innovation Limited',
+    'desc'   => 'Create a free client account with Reagansoft Innovation Limited to submit project requests, track progress and manage files.',
     'robots' => false,
 ]);
 ?>
 <section class="auth-page" style="border-top:1px solid var(--line)">
   <div class="auth-card">
-    <a class="brand" href="<?= app_url('') ?>"><img src="<?= app_url('assets/img/reagansoftinnovation-logo.jpeg') ?>" alt="Reagan Soft Innovation logo"><span class="brand-text">Reagan Soft <b>Innovation</b><small class="brand-tagline"><?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></small></span></a>
+    <a class="brand" href="<?= app_url('') ?>"><img src="<?= app_url('assets/img/reagansoftinnovation-logo-new.png') ?>" alt="Reagansoft Innovation logo"><span class="brand-text">Reagansoft <b>Innovation</b><small class="brand-tagline"><?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></small></span></a>
     <h2>Create your client account</h2>
     <p class="auth-sub">Use accurate contact details so our team can reach you.</p>
     <?php if ($errors): foreach ($errors as $err): ?><div class="alert" role="alert"><?= e($err) ?></div><?php endforeach; endif; ?>

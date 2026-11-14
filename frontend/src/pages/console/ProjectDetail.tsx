@@ -58,7 +58,7 @@ export function ConsoleProjectDetail() {
   const [sending, setSending] = useState(false);
   const [uploading, setUploading] = useState(false);
 
-  usePageMeta(data?.project ? `${data.project.title} — Reagansoft console` : 'Project — Reagansoft console');
+  usePageMeta(data?.project ? `${data.project.title}, Reagansoft console` : 'Project, Reagansoft console');
 
   if (loading) return <LoadingBlock label="Loading project…" />;
   if (error || !data) return <ErrorBlock message={error || 'Project not found.'} onRetry={reload} />;
@@ -283,7 +283,7 @@ export function ConsoleProjectDetail() {
             <p className="mt-2 text-[12.5px] font-semibold text-navy-900">{project.client_name}</p>
             <p className="text-[11px] text-ink-muted">{project.company ?? 'Individual'}</p>
             <p className="mt-1 text-[11px] text-ink-muted">{project.client_email}</p>
-            <p className="text-[11px] text-ink-muted">{project.client_phone ?? '—'}</p>
+            <p className="text-[11px] text-ink-muted">{project.client_phone ?? '-'}</p>
             <Link to={`/console/clients/${project.client_id}`} className="btn-ghost btn-sm mt-3 w-full">Open client <ArrowRight className="h-3.5 w-3.5" /></Link>
           </section>
 

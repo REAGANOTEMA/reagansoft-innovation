@@ -40,7 +40,7 @@
  *
  * Uganda first, then the region we actually trade with, then the
  * diaspora markets our clients live in. 'Other' is offered rather
- * than left off, so nobody is boxed into a list — the gate only cares
+ * than left off, so nobody is boxed into a list, the gate only cares
  * that the field was answered deliberately.
  * ------------------------------------------------------------------ */
 function billing_countries(): array
@@ -70,7 +70,7 @@ function billing_is_business(array $user): bool
  *
  * An install that predates the gate has no such columns, and the
  * obvious failure mode is to treat "column absent" as "nothing
- * missing" — which would quietly switch the gate OFF for exactly the
+ * missing", which would quietly switch the gate OFF for exactly the
  * clients who need it. So an absent column is reported as NOT ready,
  * and the pages show an administrator-facing note instead of a form.
  *
@@ -130,7 +130,7 @@ function billing_required_columns(): array
  * takes, and whether it is required for this particular client.
  *
  * `required` is computed rather than hard-coded, because it depends on
- * the payer type — see billing_is_business().
+ * the payer type, see billing_is_business().
  * ------------------------------------------------------------------ */
 function billing_requirements(array $user): array
 {
@@ -184,7 +184,7 @@ function billing_requirements(array $user): array
             'required' => $isBusiness, 'business_only' => true, 'autocomplete' => 'off',
             'placeholder' => 'e.g. 1002456789',
             'why' => 'Issued by Uganda Revenue Authority. It lets us raise a tax invoice you can claim.',
-            'hint' => 'On your URA PIN card. Businesses only — leave blank if you are paying as an individual.',
+            'hint' => 'On your URA PIN card. Businesses only, leave blank if you are paying as an individual.',
         ],
         [
             'key' => 'national_id', 'group' => 'identity', 'type' => 'text',
@@ -221,7 +221,7 @@ function billing_requirements(array $user): array
 
 /* ------------------------------------------------------------------
  * The terms tick, kept apart from the field list because it is not a
- * stored value — it is the moment the client agreed.
+ * stored value, it is the moment the client agreed.
  * ------------------------------------------------------------------ */
 function billing_terms_accepted(array $user): bool
 {
@@ -271,7 +271,7 @@ function billing_complete(array $user): bool
  * billing_missing(). That is the point: the meter and the gate have to
  * be reading the same list, or the bar promises a 100% that the gate
  * will not honour. Counting optional fields too would be the bug this
- * exacts — an individual who has no TIN and no NIN could fill in every
+ * exacts, an individual who has no TIN and no NIN could fill in every
  * question asked of them and still be told they were not done.
  *
  * The terms tick is counted as one more step, because it is the last
@@ -330,7 +330,7 @@ function billing_validate(array $user, array $post): array
 
     $fullName = $get('full_name');
     if ($fullName === '') {
-        $errors['full_name'] = 'Please enter your full name — it goes on your invoice.';
+        $errors['full_name'] = 'Please enter your full name, it goes on your invoice.';
     } elseif (mb_strlen($fullName) > 150) {
         $errors['full_name'] = 'That name is too long. Please use 150 characters or fewer.';
     } else {
@@ -394,7 +394,7 @@ function billing_validate(array $user, array $post): array
     // Company and TIN are only demanded from a business. When someone
     // switches to 'individual' the browser hides those inputs, so they
     // are not posted and we must carry the stored value forward
-    // instead of wiping it — a sole trader is not permanently an
+    // instead of wiping it, a sole trader is not permanently an
     // individual, and silently deleting their trading name would be a
     // nasty surprise.
     $posted = static fn (string $k): bool => array_key_exists($k, $post);
@@ -556,7 +556,7 @@ function billing_save(PDO $pdo, array $user, array $clean): void
  *
  * Only same-site absolute paths. `//evil.example` is rejected as well
  * as `https://evil.example`, because browsers treat a protocol-relative
- * URL as a different origin — that is the whole trick, and checking
+ * URL as a different origin, that is the whole trick, and checking
  * only for a leading slash would wave it straight through.
  * ------------------------------------------------------------------ */
 function billing_safe_next(?string $next, string $fallback): string
@@ -578,7 +578,7 @@ function billing_safe_next(?string $next, string $fallback): string
  * Where the client is right now, as a path this app can redirect to.
  *
  * REQUEST_URI is used rather than a rebuilt app_url() because it
- * already carries the deployment's base path — the app may live in a
+ * already carries the deployment's base path, the app may live in a
  * subdirectory, in which case a hand-built '/client/project.php'
  * would point outside the app. billing_safe_next() then vets it, which
  * also disposes of a crafted request target such as '//evil.host/x'.
@@ -638,7 +638,7 @@ function billing_form_html(array $user, array $errors = [], string $submitLabel 
         'location' => ['Where you are', 'Used for delivery, for your contract, and to work out how to take your payment.'],
     ];
     $requirements = billing_requirements($user);
-    // A terms error means the tick is outstanding right now — either the
+    // A terms error means the tick is outstanding right now, either the
     // first time, or because the client just changed a field that reaches
     // the invoice. The box has to come back in that case, or the form would
     // demand a tick it does not let anyone give.
@@ -665,7 +665,7 @@ function billing_form_html(array $user, array $errors = [], string $submitLabel 
       <?php if ($errors): ?>
         <div class="alert billing-summary-errors" role="alert">
           <b><?= icon('flag') ?> <?= count($errors) === 1 ? 'One thing to fix' : count($errors) . ' things to fix' ?></b>
-          <p>We could not save your details yet. <?= count($errors) === 1 ? 'Fix the field' : 'Fix the fields' ?> marked below and try again — everything you have typed is kept.</p>
+          <p>We could not save your details yet. <?= count($errors) === 1 ? 'Fix the field' : 'Fix the fields' ?> marked below and try again, everything you have typed is kept.</p>
         </div>
       <?php endif; ?>
 
@@ -698,7 +698,7 @@ function billing_form_html(array $user, array $errors = [], string $submitLabel 
                   </label>
                   <label class="choice" for="<?= e($id) ?>_individual">
                     <input type="radio" id="<?= e($id) ?>_individual" name="<?= e($name) ?>" value="individual" <?= $value === 'individual' ? 'checked' : '' ?>>
-                    <span class="choice-box"><b>Just me</b><small>No registered business — I am paying for myself.</small></span>
+                    <span class="choice-box"><b>Just me</b><small>No registered business, I am paying for myself.</small></span>
                   </label>
                 </div>
                 <div class="form-note"><?= e($item['why']) ?></div>
@@ -775,7 +775,7 @@ function billing_form_html(array $user, array $errors = [], string $submitLabel 
 
 /* ------------------------------------------------------------------
  * When the columns are missing. An administrator note, not a client
- * one — a client cannot fix a missing migration.
+ * one, a client cannot fix a missing migration.
  * ------------------------------------------------------------------ */
 function billing_schema_notice_html(): void
 {
@@ -835,7 +835,7 @@ function billing_lock_notice_html(array $user, string $returnTo, string $lead = 
       <a class="btn btn-primary btn-block" href="<?= e(app_url('client/billing.php?next=' . urlencode($returnTo))) ?>">
         <?= icon('edit') ?> Complete my details<?= $missing ? ' (' . count($missing) . ' left)' : '' ?>
       </a>
-      <p class="small muted center mt-2 mb-0"><?= icon('lock') ?> Your payment is not lost — you will come straight back here.</p>
+      <p class="small muted center mt-2 mb-0"><?= icon('lock') ?> Your payment is not lost, you will come straight back here.</p>
     </section>
     <?php
 }

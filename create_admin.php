@@ -1,6 +1,6 @@
 <?php
 /**
- * Reagan Soft Innovation Limited — secure admin bootstrap.
+ * Reagansoft Innovation Limited, secure admin bootstrap.
  *
  * SECURITY: this script must be DELETED after the admin account is created.
  * It refuses to run when the database already contains an active admin,
@@ -58,12 +58,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$blocked) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Install · Reagan Soft Innovation</title>
+<title>Install · Reagansoft Innovation</title>
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="auth-page">
 <div class="auth-card">
-  <a class="brand" href="index.php"><img src="assets/img/reagansoftinnovation-logo.jpeg" alt="Reagan Soft Innovation logo"><span class="brand-text">Reagan Soft <b>Innovation</b><small class="brand-tagline">Innovating today for a smarter tomorrow.</small></span></a>
+  <a class="brand" href="index.php"><img src="assets/img/reagansoftinnovation-logo-new.png" alt="Reagansoft Innovation logo"><span class="brand-text">Reagansoft <b>Innovation</b><small class="brand-tagline">Innovating today for a smarter tomorrow.</small></span></a>
   <h2>Create administrator</h2>
   <p class="auth-sub">One-time setup. This page is disabled once an admin exists.</p>
 

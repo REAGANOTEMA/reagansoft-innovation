@@ -43,7 +43,7 @@ const values = [
   {
     icon: Compass,
     title: 'Built around your operation',
-    text: 'We start with how your organisation actually works — then design the system, not the other way round.',
+    text: 'We start with how your organisation actually works, then design the system, not the other way round.',
   },
   {
     icon: Workflow,
@@ -58,7 +58,7 @@ const values = [
   {
     icon: LifeBuoy,
     title: 'We stay after launch',
-    text: 'Monitoring, maintenance and improvements are part of the relationship — not an afterthought.',
+    text: 'Monitoring, maintenance and improvements are part of the relationship, not an afterthought.',
   },
 ];
 
@@ -74,7 +74,7 @@ const stack = ['React', 'TypeScript', 'PHP 8', 'MySQL', 'Tailwind CSS', 'Flutter
 
 export function Home() {
   usePageMeta(
-    'Reagansoft Innovation Limited — Software studio in Jinja, Uganda',
+    'Reagansoft Innovation Limited, Software studio in Jinja, Uganda',
     'Reagansoft Innovation designs and builds websites, business systems, ecommerce, mobile apps and custom software for organisations across Uganda.',
   );
 
@@ -315,7 +315,7 @@ export function Home() {
                   </span>
                   <h3 className="mt-4 font-display text-xl font-semibold">Readable code, proven stacks.</h3>
                   <p className="mt-2 max-w-lg text-[12.5px] leading-relaxed text-white/55">
-                    TypeScript, React, PHP 8, MySQL and Flutter — chosen because they are reliable to run, easy to hire for and simple
+                    TypeScript, React, PHP 8, MySQL and Flutter, chosen because they are reliable to run, easy to hire for and simple
                     to maintain long after handover.
                   </p>
                   <div className="mt-4 flex flex-wrap gap-2">
@@ -383,7 +383,7 @@ export function Home() {
               <SectionHeading
                 eyebrow="Reagansoft administration system"
                 title="One console for the whole operation."
-                lead="Projects, clients, quotations, invoices, payments, tasks and reports live in the same secure workspace — so every team sees the same truth."
+                lead="Projects, clients, quotations, invoices, payments, tasks and reports live in the same secure workspace, so every team sees the same truth."
               />
               <div className="mt-8 space-y-3">
                 {[
@@ -471,7 +471,7 @@ export function Home() {
               <Link to="/process" className="btn-primary btn-sm">
                 See the full process <ArrowRight className="h-3.5 w-3.5" />
               </Link>
-              <span className="text-[12px] text-white/40">Typical first release: 3–10 weeks depending on scope.</span>
+              <span className="text-[12px] text-white/40">Typical first release: 3-10 weeks depending on scope.</span>
             </div>
           </Reveal>
         </div>
@@ -484,7 +484,7 @@ export function Home() {
             <SectionHeading
               eyebrow="Our commitments"
               title="Clear terms. Real accountability."
-              lead="The things clients tell us matter most — written down and treated as part of the product."
+              lead="The things clients tell us matter most, written down and treated as part of the product."
             />
             <div className="mt-8 space-y-3">
               {[
@@ -551,7 +551,7 @@ export function Home() {
           <div className="space-y-3">
             {[
               { q: 'How much does a project cost?', a: `It depends on scope. Websites start at ${moneyBoth(5000000, settings.currency, rate)}, and management systems start at ${moneyBoth(40000000, settings.currency, rate)}. Every proposal is itemised.` },
-              { q: 'How long will it take?', a: 'A focused website can be ready in 2–4 weeks. Management systems usually take 6–12 weeks, delivered in usable increments rather than one big reveal.' },
+              { q: 'How long will it take?', a: 'A focused website can be ready in 2-4 weeks. Management systems usually take 6-12 weeks, delivered in usable increments rather than one big reveal.' },
               { q: 'Do you support the system after launch?', a: 'Yes. Maintenance plans cover updates, backups, monitoring and small improvements, with a clear response window.' },
             ].map((item, index) => (
               <Reveal key={item.q} delay={index * 60}>
@@ -581,7 +581,7 @@ export function Home() {
                 </span>
                 <h2 className="h2 mt-5 text-white">Let's build something your team will actually use.</h2>
                 <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/60">
-                  Tell us what is slowing you down. We will come back with a clear, honest plan — and a realistic budget.
+                  Tell us what is slowing you down. We will come back with a clear, honest plan, and a realistic budget.
                 </p>
                 <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
                   <Link to="/contact" className="btn-primary">

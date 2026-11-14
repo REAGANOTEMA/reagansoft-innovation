@@ -24,7 +24,7 @@ function iconFor(type: string) {
 }
 
 export function PortalNotifications() {
-  usePageMeta('Notifications — Reagansoft client portal');
+  usePageMeta('Notifications, Reagansoft client portal');
   const { push } = useToast();
   const { data, loading, error, reload } = useApi<Payload>('client/notifications');
   const [busy, setBusy] = useState(false);

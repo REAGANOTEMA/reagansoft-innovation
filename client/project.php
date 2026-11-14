@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'submit_payment') {
         // The gate. Checked on the server, not just by hiding the form,
         // because the absence of an input is not a control anyone can
-        // rely on — this endpoint can be posted to directly.
+        // rely on, this endpoint can be posted to directly.
         billing_require_complete($userForGate, billing_return_here());
 
         $invId = (int)($_POST['invoice_id'] ?? 0);
@@ -212,7 +212,7 @@ dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' =>
       <?php if ($project['status'] === 'WAITING_FOR_CLIENT'):
         $hint = 'We are waiting for information or confirmation from you. Please check your messages.';
       elseif ($project['status'] === 'QUOTATION'):
-        $hint = 'A quotation is ready for your review — open the Quotation tab to respond.';
+        $hint = 'A quotation is ready for your review, open the Quotation tab to respond.';
       else:
         $hint = '';
       endif; ?>
@@ -233,7 +233,7 @@ dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' =>
                 <td><?= status_badge($t['status']) ?></td>
                 <td style="min-width:130px"><div class="progress"><span style="width:<?= max(0, min(100, (int)$t['progress'])) ?>%"></span></div><small class="muted"><?= (int)$t['progress'] ?>%</small></td>
                 <td><?= priority_badge($t['priority']) ?></td>
-                <td class="muted small"><?= $t['due_date'] ? fmt_date($t['due_date']) : '—' ?></td>
+                <td class="muted small"><?= $t['due_date'] ? fmt_date($t['due_date']) : '-' ?></td>
               </tr>
             <?php endforeach; ?>
           </tbody>
@@ -363,7 +363,7 @@ dashboard_head(['title' => $project['title'], 'active' => 'projects', 'crumb' =>
       </div>
       <?php if ($inv['notes']): ?><p class="muted small"><?= nl2br(e($inv['notes'])) ?></p><?php endif; ?>
       <?php if ($outstanding > 0 && !in_array($inv['status'], ['paid', 'cancelled'], true)): ?>
-        <p class="muted small"><strong>How to pay</strong> — send the amount using any option below, then submit the payment form so our team can confirm it.</p>
+        <p class="muted small"><strong>How to pay</strong>, send the amount using any option below, then submit the payment form so our team can confirm it.</p>
         <?= payment_instructions_html() ?>
         <?php if (!billing_complete($userForGate)): ?>
           <?php

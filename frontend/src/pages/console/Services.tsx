@@ -37,7 +37,7 @@ function blankForm(currency: string): ServiceForm {
 }
 
 export function ConsoleServices() {
-  usePageMeta('Services — Reagansoft console');
+  usePageMeta('Services, Reagansoft console');
   const { settings } = useSite();
   const { push } = useToast();
   const { data, loading, error, reload } = useApi<Service[]>('admin/services');

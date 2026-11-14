@@ -10,7 +10,7 @@ import { Logo } from '../components/Logo';
 import { Field, Spinner } from '../components/UI';
 
 export function Register() {
-  usePageMeta('Create a client account — Reagansoft Innovation', 'Create a Reagansoft client account to submit project requests and track delivery.');
+  usePageMeta('Create a client account, Reagansoft Innovation', 'Create a Reagansoft client account to submit project requests and track delivery.');
   const { user, register, loading } = useAuth();
   const { settings } = useSite();
   const navigate = useNavigate();

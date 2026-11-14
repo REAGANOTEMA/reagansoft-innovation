@@ -1,11 +1,11 @@
 <?php
 /**
- * Reagan Soft Innovation Limited — one-click database installer.
+ * Reagansoft Innovation Limited, one-click database installer.
  *
  * Creates reagansoft_system from sql/system/reagansoft_system.sql, then
  * builds the reagansoft_website mirror from sql/website/reagansoft_website.sql.
  * Reads its connection settings from config/config.php (edit those, or set the
- * RSI_DB_* environment variables) — so the same file works on XAMPP and on a
+ * RSI_DB_* environment variables), so the same file works on XAMPP and on a
  * hosted server.
  *
  * DELETE THIS FILE once installation is complete.
@@ -128,7 +128,7 @@ function rsi_run_file(PDO $pdo, string $file, array &$log, array &$errors): int
 {
     $sql = @file_get_contents($file);
     if ($sql === false || trim($sql) === '') {
-        $errors[] = 'Could not read ' . basename($file) . ' — make sure the sql/ folder came with the project.';
+        $errors[] = 'Could not read ' . basename($file) . ', make sure the sql/ folder came with the project.';
         return 0;
     }
     $count = 0;
@@ -138,7 +138,7 @@ function rsi_run_file(PDO $pdo, string $file, array &$log, array &$errors): int
             $count++;
         } catch (PDOException $e) {
             $errors[] = basename($file) . ': ' . substr($e->getMessage(), 0, 220)
-                . ' — ' . substr(preg_replace('/\s+/', ' ', $stmt), 0, 120);
+                . ', ' . substr(preg_replace('/\s+/', ' ', $stmt), 0, 120);
         }
     }
     $log[] = basename($file) . ' imported (' . $count . ' statements).';
@@ -192,7 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 );
                 $log[] = 'Database `' . DB_NAME . '` is ready.';
             } catch (PDOException $e) {
-                $log[] = 'No CREATE DATABASE privilege — using the existing `' . DB_NAME . '`.';
+                $log[] = 'No CREATE DATABASE privilege, using the existing `' . DB_NAME . '`.';
             }
 
             $pdo = rsi_connect(DB_NAME);
@@ -201,19 +201,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // dumps start with DROP TABLE IF EXISTS, so importing them is a
             // rebuild. Only the explicit reinstall action may do that.
             if ($do !== 'reinstall' && $installed) {
-                $log[] = 'Database `' . DB_NAME . '` already contains tables — nothing was imported. '
+                $log[] = 'Database `' . DB_NAME . '` already contains tables, nothing was imported. '
                     . 'Use “Reinstall database” if you really want to rebuild it from the demo dump.';
             } else {
                 // 1b. Reinstall only: drop every table first.
                 if ($do === 'reinstall') {
                     rsi_drop_all_tables($pdo);
-                    $log[] = 'Existing tables dropped — starting from an empty database.';
+                    $log[] = 'Existing tables dropped, starting from an empty database.';
                 }
 
                 // 2. Full schema, seed data and upgrades in one import.
                 rsi_run_file($pdo, __DIR__ . '/sql/system/reagansoft_system.sql', $log, $errors);
 
-                // 4. Mirror database (reagansoft_website) — same schema and data.
+                // 4. Mirror database (reagansoft_website), same schema and data.
                 //    Each database has its own account credentials. Optional: a
                 //    host account without a second database simply gets a note
                 //    instead of a failed installation.
@@ -271,8 +271,9 @@ header('Content-Type: text/html; charset=utf-8');
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Install · Reagan Soft Innovation Limited</title>
-<link rel="icon" type="image/png" href="assets/img/reagansoftinnovation-logo-favicon.png">
+<title>Install · Reagansoft Innovation Limited</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500;600;700;800&display=swap">
@@ -351,7 +352,7 @@ header('Content-Type: text/html; charset=utf-8');
     </div>
 
     <h1>Set up your database</h1>
-    <p class="lead" style="font-size:15.5px">This installer creates <b><?= e(DB_NAME) ?></b> from the <b>sql/system/</b> dump and loads the services, settings and demo accounts<?= DB_MIRROR !== '' && DB_MIRROR !== DB_NAME ? ', then builds the <b>' . e(DB_MIRROR) . '</b> mirror from the <b>sql/website/</b> dump' : '' ?>. Running it again is safe — it never deletes anything.</p>
+    <p class="lead" style="font-size:15.5px">This installer creates <b><?= e(DB_NAME) ?></b> from the <b>sql/system/</b> dump and loads the services, settings and demo accounts<?= DB_MIRROR !== '' && DB_MIRROR !== DB_NAME ? ', then builds the <b>' . e(DB_MIRROR) . '</b> mirror from the <b>sql/website/</b> dump' : '' ?>. Running it again is safe, it never deletes anything.</p>
 
     <div class="meta-grid">
       <div class="meta-item"><small>Database</small><b><?= e(DB_NAME) ?></b></div>
@@ -443,3 +444,4 @@ header('Content-Type: text/html; charset=utf-8');
 </div>
 </body>
 </html>
+

@@ -1,5 +1,5 @@
 /* ============================================================
-   Reagan Soft Innovation Limited — Design System
+   Reagansoft Innovation Limited, Design System
    Palette: White · Professional Deep Blue · Light Blue
    ============================================================ */
 :root {
@@ -118,14 +118,14 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .nav { height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; color: var(--navy); font-size: 18px; }
-.brand img { width: 54px; height: 54px; border-radius: 13px; box-shadow: 0 4px 14px rgba(8, 59, 102, .18); border: 1px solid rgba(10, 123, 206, .25); }
-.topbar .brand img { width: 58px; height: 58px; border-radius: 14px; }
+.brand img { width: 54px; height: 54px; object-fit: contain; flex-shrink: 0; }
+.topbar .brand img { width: 58px; height: 58px; }
 .brand b { color: var(--blue); font-weight: 800; }
 .brand-text { line-height: 1.2; }
 .brand-tagline { display: block; margin-top: 2px; font-size: 9.5px; font-weight: 700; letter-spacing: .4px; color: var(--blue-700); font-style: italic; white-space: nowrap; }
-.sidebar-brand .brand img { width: 48px; height: 48px; border-radius: 12px; }
-.footer-brand .brand img { width: 56px; height: 56px; border-radius: 14px; }
-.info-card .brand img { width: 60px; height: 60px; border-radius: 15px; }
+.sidebar-brand .brand img { width: 40px; height: 40px; object-fit: contain; }
+.footer-brand .brand img { width: auto; height: 72px; max-width: 220px; object-fit: contain; }
+.info-card .brand img { width: 60px; height: 60px; object-fit: contain; }
 .links { display: flex; gap: 26px; align-items: center; font-weight: 600; color: var(--ink-2); font-size: 15px; }
 .links a { color: inherit; padding: 6px 2px; position: relative; }
 .links a:hover { color: var(--blue); }
@@ -305,7 +305,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .founder-info h3 { color: #fff; margin-bottom: 10px; font-size: 24px; }
 .founder-info p { color: #cfe0ef; font-size: 14.5px; margin-bottom: 16px; }
 .founder-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; color: #fff; font-size: 15px; margin-bottom: 14px; }
-.founder-brand img { width: 52px; height: 52px; border-radius: 13px; box-shadow: 0 6px 16px rgba(0,0,0,.3); }
+.founder-brand img { width: auto; height: 64px; max-width: 180px; object-fit: contain; }
 .founder-brand b { color: #7fd0ff; }
 .founder-contact { display: grid; gap: 6px; font-size: 13px; color: #9db6cc; }
 .founder-contact span { display: inline-flex; align-items: center; gap: 7px; }
@@ -647,7 +647,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible, .icon-btn:focus-vi
   border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); padding: 36px;
 }
 .auth-card .brand { justify-content: center; margin: 0 auto 18px; }
-.auth-card .brand img { width: 46px; height: 46px; }
+.auth-card .brand img { width: 54px; height: 54px; object-fit: contain; }
 .auth-card h2 { text-align: center; margin-bottom: 6px; }
 .auth-sub { text-align: center; color: var(--muted); font-size: 14.5px; margin: 0 0 22px; }
 .auth-foot { text-align: center; font-size: 14px; color: var(--muted); margin-top: 20px; }
@@ -695,7 +695,7 @@ fieldset { border: 0; padding: 0; margin: 0; }
 }
 .sidebar-brand { padding: 18px 18px 16px; border-bottom: 1px solid rgba(255,255,255,.1); }
 .sidebar-brand .brand { color: #fff; }
-.sidebar-brand .brand img { width: 36px; height: 36px; }
+.sidebar-brand .brand img { width: 40px; height: 40px; object-fit: contain; }
 .sidebar-brand .brand-text { font-size: 14.5px; line-height: 1.2; }
 .side-nav { flex-grow: 1; padding: 14px 12px; overflow-y: auto; display: grid; gap: 3px; align-content: start; }
 .side-nav a {
@@ -941,8 +941,8 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .hero-tag .dot { animation: pulseDot 2.2s ease-in-out infinite; }
 .portal-card { animation: floaty 7s ease-in-out infinite; }
 
-.brand img, .sidebar-brand .brand img, .footer-brand .brand img { transition: transform .35s cubic-bezier(.2, .8, .3, 1.2), box-shadow .35s ease; }
-.brand:hover img, .info-card .brand:hover img { transform: scale(1.07) rotate(-3deg); box-shadow: 0 8px 22px rgba(8, 59, 102, .28); }
+.brand img, .sidebar-brand .brand img, .footer-brand .brand img { transition: transform .35s cubic-bezier(.2, .8, .3, 1.2); }
+.brand:hover img, .info-card .brand:hover img { transform: scale(1.04); }
 
 .card::after, .price-card::after, .value-card::after, .stat::after {
   content: ''; position: absolute; top: 0; left: -60%; width: 40%; height: 100%;
@@ -1106,7 +1106,7 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .price-card .btn { margin-top: 20px; }
 
 /* ============================================================
-   Portfolio — the delivered work
+   Portfolio, the delivered work
    ============================================================ */
 .folio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; align-items: stretch; }
 .folio-card {
@@ -1227,7 +1227,7 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .folio-cover.tone-4 { background: linear-gradient(140deg, #e9f4fd 0%, #d1e6f7 100%); }
 .folio-cover.is-featured { color: #7fd0ff; background: linear-gradient(140deg, #0a3f6e 0%, #083b66 55%, #062f54 100%); border-bottom-color: rgba(10,63,110,.9); }
 
-/* Layer 1 — the sector backdrop, anchored to the bottom edge. */
+/* Layer 1, the sector backdrop, anchored to the bottom edge. */
 .folio-scene {
   position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%;
   pointer-events: none;
@@ -1246,7 +1246,7 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .fs-mark { fill: currentColor; opacity: .17; }
 .fs-mark-in { fill: #fff; opacity: .85; }
 
-/* Layer 2 — the delivery: a browser window and the app beside it. */
+/* Layer 2, the delivery: a browser window and the app beside it. */
 .folio-devices {
   position: absolute; right: -2%; bottom: -3%; z-index: 1;
   width: 76%; max-width: 330px; height: auto;
@@ -1496,7 +1496,7 @@ fieldset { border: 0; padding: 0; margin: 0; }
 
 /* ============================================================
    Pricing architecture (2026)
-   Authoritative ranges: websites 500K–10M · systems 20M–40M
+   Authoritative ranges: websites 500K-10M · systems 20M-40M
    ============================================================ */
 
 /* Homepage pricing band */
@@ -1713,13 +1713,13 @@ fieldset { border: 0; padding: 0; margin: 0; }
 }
 
 /* ============================================================
-   Small-screen pass — every public page, not just the gallery
+   Small-screen pass, every public page, not just the gallery
    ============================================================
    A phone is not a narrow desktop. Three things go wrong most often
    and are cheap to fix once, here, rather than page by page:
 
-     1. Long unbroken strings — a domain, a reference number, an
-        email — push the layout wider than the screen and leave the
+     1. Long unbroken strings, a domain, a reference number, an
+        email, push the layout wider than the screen and leave the
         whole page scrolling sideways.
      2. Anything tappable is smaller than a fingertip, because the
         desktop size was designed for a mouse.
@@ -1783,10 +1783,10 @@ fieldset { border: 0; padding: 0; margin: 0; }
    and the progress meter both share.
 
    Two rules run through all of it:
-     · the state a client is in is shown before it is asked about —
+     · the state a client is in is shown before it is asked about -
        the meter and the checklist update as they type, so nothing
        here is a surprise on submit;
-     · nothing that blocks them is a dead end — every blocked state
+     · nothing that blocks them is a dead end, every blocked state
        carries the button that unblocks it.
    ============================================================ */
 
@@ -1847,7 +1847,7 @@ fieldset { border: 0; padding: 0; margin: 0; }
 
 /* ---------- Field states ---------- */
 /* Used by the payer-type switch to take a question away without
-   taking the answer with it — see the note in app.js. */
+   taking the answer with it, see the note in app.js. */
 .is-hidden { display: none !important; }
 .field .opt { font-weight: 600; color: var(--faint); font-size: 12px; margin-left: 4px; }
 .field.has-error .input,
@@ -2020,7 +2020,7 @@ fieldset { border: 0; padding: 0; margin: 0; }
 }
 
 /* The meter animates as they type, which is a nicety rather than
-   information — drop it for anyone who has asked for less movement. */
+   information, drop it for anyone who has asked for less movement. */
 @media (prefers-reduced-motion: reduce) {
   .bm-fill, .choice-box, .terms-tick, .bl-tick { transition: none; }
 }
@@ -2056,7 +2056,7 @@ fieldset { border: 0; padding: 0; margin: 0; }
 
 /* --- Selects and inputs must not out-grow their container ---
    A <select> is sized by its widest option, so a long project or client
-   name ("RSI-2026-00004 — Customer Feedback Portal") pushed the toolbar
+   name ("RSI-2026-00004, Customer Feedback Portal") pushed the toolbar
    off the side of a 320px screen. */
 .select, .input, .textarea {
   max-width: 100%;

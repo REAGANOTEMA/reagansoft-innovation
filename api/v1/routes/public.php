@@ -1,6 +1,6 @@
 <?php
 /**
- * Public website endpoints — no authentication required.
+ * Public website endpoints, no authentication required.
  */
 
 declare(strict_types=1);

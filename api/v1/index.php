@@ -1,6 +1,6 @@
 <?php
 /**
- * Reagan Soft Innovation Limited — REST API v1 front controller.
+ * Reagansoft Innovation Limited, REST API v1 front controller.
  *
  * Request:
  *   GET  /api/v1/public/site

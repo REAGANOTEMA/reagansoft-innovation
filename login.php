@@ -76,14 +76,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 public_head([
-    'title'  => 'Client Login | Reagan Soft Innovation Limited',
-    'desc'   => 'Sign in to your Reagan Soft Innovation client portal to track projects, requests, tasks, files and messages.',
+    'title'  => 'Client Login | Reagansoft Innovation Limited',
+    'desc'   => 'Sign in to your Reagansoft Innovation client portal to track projects, requests, tasks, files and messages.',
     'robots' => false,
 ]);
 ?>
 <section class="auth-page" style="border-top:1px solid var(--line)">
   <div class="auth-card">
-    <a class="brand" href="<?= app_url('') ?>"><img src="<?= app_url('assets/img/reagansoftinnovation-logo.jpeg') ?>" alt="Reagan Soft Innovation logo"><span class="brand-text">Reagan Soft <b>Innovation</b><small class="brand-tagline"><?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></small></span></a>
+    <a class="brand" href="<?= app_url('') ?>"><img src="<?= app_url('assets/img/reagansoftinnovation-logo-new.png') ?>" alt="Reagansoft Innovation logo"><span class="brand-text">Reagansoft <b>Innovation</b><small class="brand-tagline"><?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></small></span></a>
     <h2>Welcome back</h2>
     <p class="auth-sub">Sign in to track your projects and requests.</p>
     <?php if ($error): ?><div class="alert" role="alert"><?= e($error) ?></div><?php endif; ?>

@@ -79,7 +79,7 @@ dashboard_head([
           <tbody>
             <?php foreach ($recentRequests as $r): ?>
               <tr>
-                <td><b><?= e($r['client_name']) ?></b><div class="row-sub"><?= e($r['company'] ?? '—') ?></div></td>
+                <td><b><?= e($r['client_name']) ?></b><div class="row-sub"><?= e($r['company'] ?? '-') ?></div></td>
                 <td><a class="row-title" href="<?= app_url('admin/project.php?id=' . (int)$r['id']) ?>"><?= e($r['title']) ?></a><div class="row-sub"><?= e($r['ref_no']) ?> · <?= e($r['service'] ?? 'General') ?></div></td>
                 <td><?= status_badge($r['status']) ?></td>
                 <td class="muted small"><?= time_ago($r['created_at']) ?></td>

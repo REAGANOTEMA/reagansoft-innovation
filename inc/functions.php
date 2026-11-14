@@ -1,6 +1,6 @@
 <?php
 /**
- * Reagan Soft Innovation Limited — shared helpers.
+ * Reagansoft Innovation Limited, shared helpers.
  * Loaded from config/config.php.
  */
 
@@ -62,7 +62,7 @@ function money_usd(mixed $ugx): string {
     return '$' . number_format((float)$ugx / usd_rate(), 0);
 }
 
-/** "UGX 5,000,000 (≈ $1,316)" — used wherever a public price is shown. */
+/** "UGX 5,000,000 (≈ $1,316)", used wherever a public price is shown. */
 function money_both(mixed $amount, string $currency = 'UGX'): string {
     if (strtoupper($currency) !== 'UGX') {
         return money($amount, $currency);
@@ -74,7 +74,7 @@ function price_range(mixed $min, mixed $max, string $currency = 'UGX'): string {
     $min = (float)$min;
     $max = (float)$max;
     if ($max > 0 && $max > $min) {
-        return ltrim(money($min, $currency), $currency . ' ') . ' – ' . money($max, $currency);
+        return ltrim(money($min, $currency), $currency . ' ') . ' - ' . money($max, $currency);
     }
     return money($min, $currency);
 }
@@ -113,7 +113,7 @@ function pricing_type_label(string $type): string {
 
 /**
  * Full, readable price for a service row, driven by the services table:
- *  range            -> "UGX 500,000 – UGX 10,000,000"
+ *  range            -> "UGX 500,000 - UGX 10,000,000"
  *  starting_from    -> "From UGX 250,000"
  *  contact_for_quote -> "Contact for a quote"
  */
@@ -125,7 +125,7 @@ function service_price_display(array $s, string $currency = ''): string {
     if ($type === 'contact_for_quote') return 'Contact for a quote';
     if ($type === 'range') {
         return $max > $min
-            ? money($min, $currency) . ' – ' . money($max, $currency) . ' (≈ ' . money_usd($min) . ' – ' . money_usd($max) . ')'
+            ? money($min, $currency) . ' - ' . money($max, $currency) . ' (≈ ' . money_usd($min) . ' - ' . money_usd($max) . ')'
             : money_both($min, $currency);
     }
     return 'From ' . money_both($min, $currency);
@@ -133,7 +133,7 @@ function service_price_display(array $s, string $currency = ''): string {
 
 /**
  * Compact, short price for tight spaces (chips, selects, small cards):
- *  range -> "UGX 3M – 10M (≈ $789 – $2,632)"
+ *  range -> "UGX 3M - 10M (≈ $789 - $2,632)"
  *  starting_from -> "From UGX 5M (≈ $1,316)"
  */
 function service_price_short(array $s, string $currency = ''): string {
@@ -144,7 +144,7 @@ function service_price_short(array $s, string $currency = ''): string {
     if ($type === 'contact_for_quote') return 'Contact for a quote';
     if ($type === 'range') {
         return $max > $min
-            ? $currency . ' ' . money_compact($min) . ' – ' . money_compact($max) . ' (≈ ' . money_usd($min) . ' – ' . money_usd($max) . ')'
+            ? $currency . ' ' . money_compact($min) . ' - ' . money_compact($max) . ' (≈ ' . money_usd($min) . ' - ' . money_usd($max) . ')'
             : $currency . ' ' . money_compact($min) . ' (≈ ' . money_usd($min) . ')';
     }
     return 'From ' . $currency . ' ' . money_compact($min) . ' (≈ ' . money_usd($min) . ')';
@@ -180,15 +180,15 @@ function service_id_by_slug(string $slug): int {
 
 function fmt_date(?string $date, string $format = 'd M Y'): string {
     if (!$date) {
-        return '—';
+        return '-';
     }
     $ts = strtotime($date);
-    return $ts ? date($format, $ts) : '—';
+    return $ts ? date($format, $ts) : '-';
 }
 
 function time_ago(?string $datetime): string {
     if (!$datetime) {
-        return '—';
+        return '-';
     }
     $ts = strtotime($datetime);
     $diff = time() - $ts;
@@ -212,9 +212,9 @@ function truncate(string $text, int $length = 90): string {
  * predates a column. A column added to the schema after the site went
  * live does NOT exist on the table that is already there unless the
  * dump was re-imported or the column was added manually. Rather than
- * have the Work page query a column the database does not have — which
+ * have the Work page query a column the database does not have, which
  * would throw, be swallowed by the page's own try/catch and leave the
- * gallery mysteriously empty — the page asks first and builds its
+ * gallery mysteriously empty, the page asks first and builds its
  * query from the answer.
  *
  * The answer is cached per request, because a page never needs to ask
@@ -364,7 +364,7 @@ function sync_first_payment_invoice(PDO $pdo, int $projectId, int $clientId, ?fl
     }
 
     $due = max(1, (int)settings('invoices_due_days', '14'));
-    $note = 'First payment — ' . FIRST_PAYMENT_PERCENT . '% of the project price'
+    $note = 'First payment, ' . FIRST_PAYMENT_PERCENT . '% of the project price'
         . ($label !== '' ? ' (' . trim($label) . ')' : '') . '. The balance is due on delivery.';
     $status = $paid >= $target ? 'paid' : ($paid > 0 ? 'partially_paid' : 'sent');
 
@@ -376,7 +376,7 @@ function sync_first_payment_invoice(PDO $pdo, int $projectId, int $clientId, ?fl
 
     $pdo->prepare('DELETE FROM invoice_items WHERE invoice_id = ?')->execute([$invId]);
     $pdo->prepare('INSERT INTO invoice_items (invoice_id, description, quantity, unit_price) VALUES (?,?,1,?)')
-        ->execute([$invId, 'First payment (' . FIRST_PAYMENT_PERCENT . '%) — ' . ($label !== '' ? trim($label) : 'project price'), $target]);
+        ->execute([$invId, 'First payment (' . FIRST_PAYMENT_PERCENT . '%), ' . ($label !== '' ? trim($label) : 'project price'), $target]);
 
     audit('first_payment_priced', 'invoices', $invId, 'First payment set to ' . money($target, settings('currency')) . ' (half of ' . money($price, settings('currency')) . ')');
 
@@ -394,7 +394,7 @@ function issue_deposit_invoice(PDO $pdo, int $projectId, int $clientId, float $a
     }
     $due   = max(1, (int)settings('invoices_due_days', '14'));
     $no    = next_doc_no($pdo, 'invoices', 'invoice_no', 'INV-' . date('Y') . '-');
-    $desc  = trim($label) !== '' ? 'Project registration & deposit — ' . trim($label) : 'Project registration & initial deposit';
+    $desc  = trim($label) !== '' ? 'Project registration & deposit, ' . trim($label) : 'Project registration & initial deposit';
     $ins = $pdo->prepare(
         "INSERT INTO invoices (invoice_no, project_id, client_id, due_date, subtotal, discount, tax_percent, total, amount_paid, status, is_deposit, notes)
          VALUES (?,?,?,DATE_ADD(CURDATE(), INTERVAL ? DAY),?,0,0,?,0,'sent',1,?)"
@@ -727,7 +727,7 @@ function icon(string $name, string $class = ''): string {
 
 /* ------------------------------------------------------------------
  * Simple email abstraction.
- * Returns false when SMTP mail is not configured — it never pretends
+ * Returns false when SMTP mail is not configured, it never pretends
  * delivery works. Contact submissions are always stored in the DB.
  * ------------------------------------------------------------------ */
 function rs_mail(string $to, string $subject, string $body): bool {

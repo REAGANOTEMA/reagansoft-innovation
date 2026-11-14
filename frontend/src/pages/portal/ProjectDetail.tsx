@@ -60,7 +60,7 @@ export function PortalProjectDetail() {
   const [viewInvoice, setViewInvoice] = useState<Invoice | null>(null);
   const [payInvoice, setPayInvoice] = useState<Invoice | null>(null);
 
-  usePageMeta(data?.project ? `${data.project.title} — Reagansoft portal` : 'Project — Reagansoft portal');
+  usePageMeta(data?.project ? `${data.project.title}, Reagansoft portal` : 'Project, Reagansoft portal');
 
   if (loading) return <LoadingBlock label="Loading project…" />;
   if (error || !data) return <ErrorBlock message={error || 'Project not found.'} onRetry={reload} />;

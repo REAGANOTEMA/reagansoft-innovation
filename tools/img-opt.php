@@ -1,6 +1,6 @@
 <?php
 /**
- * Reagan Soft Innovation Limited — image auditor (CLI only).
+ * Reagansoft Innovation Limited, image auditor (CLI only).
  *
  * Checks assets/img without guessing, so a deleted or oversized file
  * can never reach the site again:
@@ -8,10 +8,10 @@
  *   php tools/img-opt.php        report only (safe, read-only)
  *
  * What it reports
- *   1. referenced but missing  — a broken <img> or CSS url()
- *   2. present but unreferenced — dead weight to delete
- *   3. oversized               — over 300 KB, or wider than 2000 px
- *   4. unused image variables  — slides in index.php that were dropped
+ *   1. referenced but missing , a broken <img> or CSS url()
+ *   2. present but unreferenced, dead weight to delete
+ *   3. oversized              , over 300 KB, or wider than 2000 px
+ *   4. unused image variables , slides in index.php that were dropped
  *
  * It never writes, moves or deletes anything.
  */
@@ -75,7 +75,7 @@ echo "\nBroken references (used in code, file is gone)\n";
 echo str_repeat('-', 62) . "\n";
 $broken = array_diff_key($referenced, $onDisk);
 if (!$broken) {
-    echo "  none — every image referenced in the code exists.\n";
+    echo "  none, every image referenced in the code exists.\n";
 } else {
     foreach ($broken as $name => $files) {
         $problems++;
@@ -91,7 +91,7 @@ echo "\nUnreferenced images (on disk, not used anywhere)\n";
 echo str_repeat('-', 62) . "\n";
 $unused = array_diff_key($onDisk, $referenced);
 if (!$unused) {
-    echo "  none — every file in assets/img is in use.\n";
+    echo "  none, every file in assets/img is in use.\n";
 } else {
     $total = 0;
     foreach ($unused as $name => $file) {
@@ -118,7 +118,7 @@ foreach ($onDisk as $name => $file) {
         printf("  LARGE    %-38s %8.1f KB  %s\n", $name, $kb, $wh);
     }
 }
-if (!$big) { echo "  none — all images are web-ready.\n"; }
+if (!$big) { echo "  none, all images are web-ready.\n"; }
 
 /* ------------------------------------------------------------------ */
 echo "\nApple touch icon\n";

@@ -21,7 +21,7 @@ interface PortfolioPayload {
 
 export function Portfolio() {
   usePageMeta(
-    'Our work — Case studies & delivered systems | Reagansoft Innovation',
+    'Our work, Case studies & delivered systems | Reagansoft Innovation',
     'Explore completed Reagansoft Innovation projects across education, hospitality, agriculture and commerce.',
   );
 

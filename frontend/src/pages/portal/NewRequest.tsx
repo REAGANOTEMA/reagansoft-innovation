@@ -11,7 +11,7 @@ import { money } from '../../lib/format';
 import type { Project } from '../../lib/types';
 
 export function NewRequest() {
-  usePageMeta('New project request — Reagansoft client portal');
+  usePageMeta('New project request, Reagansoft client portal');
   const { services, settings } = useSite();
   const { user } = useAuth();
   const { push } = useToast();
@@ -91,17 +91,17 @@ export function NewRequest() {
               <select className="input" value={form.service_id} onChange={(event) => update('service_id', event.target.value)}>
                 <option value="">Not sure / custom</option>
                 {services.map((service) => (
-                  <option key={service.id} value={service.id}>{service.name} — {service.price_short}</option>
+                  <option key={service.id} value={service.id}>{service.name}, {service.price_short}</option>
                 ))}
               </select>
             </Field>
 
             <Field label="Priority" error={errors.priority}>
               <select className="input" value={form.priority} onChange={(event) => update('priority', event.target.value)}>
-                <option value="low">Low — exploring options</option>
-                <option value="normal">Normal — planned</option>
-                <option value="high">High — needed soon</option>
-                <option value="urgent">Urgent — time critical</option>
+                <option value="low">Low, exploring options</option>
+                <option value="normal">Normal, planned</option>
+                <option value="high">High, needed soon</option>
+                <option value="urgent">Urgent, time critical</option>
               </select>
             </Field>
 

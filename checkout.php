@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     /* ---- Step 4: the deposit itself ----
      * billing_require_complete() is the gate. It is checked here on the
      * server and not merely hidden in the interface, because a form
-     * field being absent is not a security control — anyone can post
+     * field being absent is not a security control, anyone can post
      * to this endpoint directly. */
     if ((string)($_POST['action'] ?? '') === 'checkout_deposit') {
         billing_require_complete($user, $continueTarget);
@@ -140,8 +140,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 public_head([
-    'title'     => 'Start Your Project | Reagan Soft Innovation Limited',
-    'desc'      => 'Choose a program, secure your project with a one time deposit and get your software built by Reagan Soft Innovation Limited in Jinja, Uganda.',
+    'title'     => 'Start Your Project | Reagansoft Innovation Limited',
+    'desc'      => 'Choose a program, secure your project with a one time deposit and get your software built by Reagansoft Innovation Limited in Jinja, Uganda.',
     'active'    => 'checkout',
     'robots'    => false,
 ]);
@@ -249,14 +249,14 @@ public_head([
         <?php if (!$loggedIn): ?>
           <section class="panel checkout-auth">
             <div class="panel-head"><h3><?= icon('user') ?> One more step: sign in</h3></div>
-            <p>You chose <strong><?= e($service['name'] ?? 'a custom software project') ?></strong>. To submit your deposit and start your project, sign back in or create a free client account — it only takes a minute.</p>
+            <p>You chose <strong><?= e($service['name'] ?? 'a custom software project') ?></strong>. To submit your deposit and start your project, sign back in or create a free client account, it only takes a minute.</p>
             <a class="btn btn-primary btn-block" href="<?= e($loginUrl) ?>"><?= icon('lock') ?> Sign in &amp; continue</a>
             <a class="btn btn-outline btn-block" href="<?= e($registerUrl) ?>"><?= icon('plus') ?> Create a client account</a>
             <p class="small muted center mt-2 mb-0">You will land back on this exact step, ready to pay your <strong><?= money($deposit, $currency) ?></strong> deposit.</p>
           </section>
         <?php elseif (!$detailsDone): ?>
         <section class="panel checkout-form billing-step-panel">
-          <div class="panel-head"><h3><?= icon('name') ?> Step 3 — confirm your payment details</h3></div>
+          <div class="panel-head"><h3><?= icon('name') ?> Step 3, confirm your payment details</h3></div>
           <p class="small muted">We cannot take your deposit until we know who is paying. This takes about a minute, it is asked once, and you will come straight back here to finish your deposit.</p>
           <?php
           billing_form_html(
@@ -269,7 +269,7 @@ public_head([
         </section>
         <?php else: ?>
         <section class="panel checkout-form">
-          <div class="panel-head"><h3><?= icon('send') ?> Step 4 — submit deposit &amp; start</h3></div>
+          <div class="panel-head"><h3><?= icon('send') ?> Step 4, submit deposit &amp; start</h3></div>
           <?php billing_summary_html($user); ?>
           <form method="post" novalidate>
             <?= csrf_field() ?>

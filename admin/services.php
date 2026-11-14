@@ -106,7 +106,7 @@ dashboard_head(['title' => 'Services', 'active' => 'services', 'crumb' => 'Servi
       <div class="form-row">
         <div class="field"><label for="pricing_type">Pricing type</label>
           <select class="select" id="pricing_type" name="pricing_type">
-            <?php foreach (['range' => 'Range (min – max)', 'starting_from' => 'Starting from (min only)', 'contact_for_quote' => 'Contact for a quote'] as $k => $v): ?>
+            <?php foreach (['range' => 'Range (min - max)', 'starting_from' => 'Starting from (min only)', 'contact_for_quote' => 'Contact for a quote'] as $k => $v): ?>
               <option value="<?= $k ?>" <?= ($edit['pricing_type'] ?? 'range') === $k ? 'selected' : '' ?>><?= $v ?></option>
             <?php endforeach; ?>
           </select>
@@ -151,7 +151,7 @@ dashboard_head(['title' => 'Services', 'active' => 'services', 'crumb' => 'Servi
             <tr>
               <td><span class="row-title"><?= e($s['name']) ?></span><div class="row-sub"><?= e($s['slug']) ?> · <span class="badge gray"><?= e(pricing_type_label($s['pricing_type'])) ?></span></div></td>
               <td><b><?= e(service_price_display($s, $currency)) ?></b></td>
-              <td class="small"><?= $s['delivery_days'] ? (int)$s['delivery_days'] . ' days+' : '—' ?></td>
+              <td class="small"><?= $s['delivery_days'] ? (int)$s['delivery_days'] . ' days+' : '-' ?></td>
               <td class="small"><?= (int)$s['sort_order'] ?></td>
               <td><?= status_badge($s['status']) ?></td>
               <td style="min-width:170px">

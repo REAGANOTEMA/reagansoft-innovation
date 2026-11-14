@@ -28,7 +28,7 @@ interface StaffRow {
 const statuses = ['NEW', 'REVIEWING', 'QUOTATION', 'APPROVED', 'IN_PROGRESS', 'WAITING_FOR_CLIENT', 'TESTING', 'COMPLETED', 'CANCELLED'];
 
 export function ConsoleProjects() {
-  usePageMeta('Projects — Reagansoft console');
+  usePageMeta('Projects, Reagansoft console');
   const { services, settings } = useSite();
   const { push } = useToast();
   const [query, setQuery] = useState('');
@@ -142,7 +142,7 @@ export function ConsoleProjects() {
                           <span className="font-mono text-[9px] text-brand-700">{project.progress}%</span>
                         </div>
                       </td>
-                      <td className="text-[10.5px] text-ink-muted">{project.deadline ? formatDate(project.deadline) : '—'}</td>
+                      <td className="text-[10.5px] text-ink-muted">{project.deadline ? formatDate(project.deadline) : '-'}</td>
                       <td>
                         <Link to={`/console/projects/${project.id}`} className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-brand-700">
                           Open <ArrowUpRight className="h-3 w-3" />
@@ -255,7 +255,7 @@ function CreateProjectModal({
         <Field label="Client *" error={errors.client_id} className="sm:col-span-2">
           <select className="input" value={form.client_id} onChange={(event) => update('client_id', event.target.value)} required>
             <option value="">Select a client…</option>
-            {clients.map((client) => <option key={client.id} value={client.id}>{client.full_name}{client.company ? ` — ${client.company}` : ''}</option>)}
+            {clients.map((client) => <option key={client.id} value={client.id}>{client.full_name}{client.company ? `, ${client.company}` : ''}</option>)}
           </select>
         </Field>
         <Field label="Title *" error={errors.title} className="sm:col-span-2">

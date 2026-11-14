@@ -21,6 +21,7 @@ import { api } from '../lib/api';
 import { appUrl } from '../lib/env';
 import { useToast } from './Toast';
 import { ServiceGlyph } from './Graphics';
+import { InstallApp } from './InstallApp';
 import { cn } from '../lib/cn';
 
 const navLinks = [
@@ -79,7 +80,7 @@ export function SiteLayout() {
             </span>
           </div>
           <div className="flex items-center gap-5">
-            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">Mon – Fri · 8:00 – 18:00 EAT</span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">Mon - Fri · 8:00 - 18:00 EAT</span>
             {isStaff ? (
               <Link to="/console" className="font-semibold text-brand-300 transition hover:text-white">
                 Staff console
@@ -118,6 +119,7 @@ export function SiteLayout() {
       </main>
 
       <Footer />
+      <InstallApp />
     </div>
   );
 }
@@ -360,7 +362,7 @@ function Footer() {
       <div className="container-x relative py-16">
         <div className="grid gap-12 lg:grid-cols-[1.5fr_1fr_1fr_1.3fr]">
           <div>
-            <Logo dark variant="legacy" />
+            <Logo dark variant="real" compact />
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/60">{settings.company_about}</p>
             <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.22em] text-brand-300">{settings.company_tagline}</p>
             <p className="mt-4 flex flex-wrap items-center gap-2 text-[10.5px] text-white/40">

@@ -23,7 +23,7 @@ interface Overview {
 }
 
 export function PortalOverview() {
-  usePageMeta('Client portal — Reagansoft Innovation');
+  usePageMeta('Client portal, Reagansoft Innovation');
   const { user } = useAuth();
   const { data, loading, error, reload } = useApi<Overview>('client/overview');
 
@@ -38,7 +38,7 @@ export function PortalOverview() {
       <PageHeader
         eyebrow="Client portal"
         title={`Welcome back${firstName ? `, ${firstName}` : ''}.`}
-        description="Everything about your projects, invoices and updates with Reagansoft — in one place."
+        description="Everything about your projects, invoices and updates with Reagansoft, in one place."
         actions={
           <>
             <Link to="/portal/request" className="btn-primary btn-sm"><PlusCircle className="h-3.5 w-3.5" /> New request</Link>

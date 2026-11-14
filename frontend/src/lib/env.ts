@@ -12,11 +12,17 @@ export const API_BASE = meta('rsi-api-base') || `${APP_BASE}/api/v1`;
 /** Absolute public image base. */
 export const ASSET_BASE = meta('rsi-asset-base') || `${APP_BASE}/assets/img`;
 
-/** Current brand mark (header, sign-in, app icon). */
-export const LOGO_NEW = `${ASSET_BASE}/reagansoftinnovation-logo-new.jpeg`;
+/** Current brand mark (header, sign-in, app icon), transparent background. */
+export const LOGO_NEW = `${ASSET_BASE}/reagansoftinnovation-logo-new.png`;
 
-/** Original company mark, retained for the footer. */
-export const LOGO_OLD = `${ASSET_BASE}/reagansoftinnovation-logo.jpeg`;
+/** White version of the current mark for dark surfaces. */
+export const LOGO_NEW_WHITE = `${ASSET_BASE}/reagansoftinnovation-logo-new-white.png`;
+
+/** Real company mark for footers and brand panels, transparent background. */
+export const LOGO_REAL = `${ASSET_BASE}/real-reagansoft-logo.png`;
+
+/** White version of the real mark for dark surfaces. */
+export const LOGO_REAL_WHITE = `${ASSET_BASE}/real-reagansoft-logo-white.png`;
 
 export const LOGO = LOGO_NEW;
 export const FAVICON = `${ASSET_BASE}/reagansoftinnovation-logo-favicon.png`;

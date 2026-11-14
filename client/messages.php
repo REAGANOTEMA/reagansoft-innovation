@@ -39,7 +39,7 @@ dashboard_head(['title' => 'Messages', 'active' => 'messages', 'crumb' => 'Messa
                 <div class="row-sub"><?= e($t['ref_no']) ?></div>
               </td>
               <td><?= (int)$t['others'] > 0 ? '<span class="badge blue">' . (int)$t['others'] . ' from the team</span>' : '<span class="muted small">None</span>' ?></td>
-              <td class="muted small"><?= $t['last_at'] ? time_ago($t['last_at']) : '—' ?></td>
+              <td class="muted small"><?= $t['last_at'] ? time_ago($t['last_at']) : '-' ?></td>
               <td><a class="btn btn-ghost btn-sm" href="<?= app_url('client/project.php?id=' . (int)$t['project_id'] . '&tab=messages') ?>">Open <?= icon('arrow') ?></a></td>
             </tr>
           <?php endforeach; ?>

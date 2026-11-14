@@ -94,7 +94,7 @@ dashboard_head(['title' => 'Quotations', 'active' => 'quotations', 'crumb' => 'Q
           <?php foreach ($quotes as $qu): ?>
             <tr>
               <td><a class="row-title" href="<?= app_url('admin/project.php?id=' . (int)$qu['project_id'] . '&tab=quotation') ?>"><?= e($qu['quotation_no']) ?></a><div class="row-sub">Issued <?= fmt_date($qu['issued_on']) ?></div></td>
-              <td><b class="small"><?= e($qu['client_name']) ?></b><div class="row-sub"><?= e($qu['company'] ?? '—') ?></div></td>
+              <td><b class="small"><?= e($qu['client_name']) ?></b><div class="row-sub"><?= e($qu['company'] ?? '-') ?></div></td>
               <td class="small"><?= e(truncate($qu['project_title'], 38)) ?><div class="row-sub"><?= e($qu['project_ref']) ?></div></td>
               <td><b><?= money($qu['total'], $currency) ?></b></td>
               <td class="small"><?= fmt_date($qu['expiry_date']) ?></td>

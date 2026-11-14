@@ -5,7 +5,7 @@ $deposit = deposit_amount();
 
 public_head([
     'title'     => 'Our Process | How We Deliver Software in Jinja, Uganda',
-    'desc'      => 'From choosing a program to delivery: create your account, secure your project with a one time deposit, then follow your website or business system from request to handover with Reagan Soft Innovation Limited.',
+    'desc'      => 'From choosing a program to delivery: create your account, secure your project with a one time deposit, then follow your website or business system from request to handover with Reagansoft Innovation Limited.',
     'active'    => 'process',
     'canonical' => 'process.php',
 ]);
@@ -21,7 +21,7 @@ public_head([
         <a class="btn btn-ghost" href="<?= app_url('pricing.php') ?>">See programs &amp; pricing</a>
       </div>
     </div>
-    <?= page_image('assets/img/code.jpg', 2, 'One lifecycle, tracked from request to handover', 'Clean application source code reviewed during the Reagan Soft Innovation delivery process') ?>
+    <?= page_image('assets/img/code.jpg', 2, 'One lifecycle, tracked from request to handover', 'Clean application source code reviewed during the Reagansoft Innovation delivery process') ?>
   </div>
 </section>
 

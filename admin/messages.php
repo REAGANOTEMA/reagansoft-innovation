@@ -105,12 +105,12 @@ dashboard_head(['title' => 'Messages', 'active' => 'messages', 'crumb' => 'Messa
           <select class="select" id="project_id" name="project_id" required>
             <option value="">Select project…</option>
             <?php $projects = $pdo->query("SELECT p.id, p.ref_no, p.title, u.full_name AS client_name FROM projects p JOIN users u ON u.id = p.client_id WHERE p.status NOT IN ('CANCELLED') ORDER BY p.submitted_at DESC")->fetchAll(); ?>
-            <?php foreach ($projects as $p): ?><option value="<?= (int)$p['id'] ?>"><?= e($p['ref_no']) ?> — <?= e(truncate($p['title'], 50)) ?> (<?= e($p['client_name']) ?>)</option><?php endforeach; ?>
+            <?php foreach ($projects as $p): ?><option value="<?= (int)$p['id'] ?>"><?= e($p['ref_no']) ?>, <?= e(truncate($p['title'], 50)) ?> (<?= e($p['client_name']) ?>)</option><?php endforeach; ?>
           </select>
         </div>
         <div class="field"><label for="message">Message *</label><textarea class="textarea" id="message" name="message" required rows="4" placeholder="Write your reply to the client…"></textarea></div>
         <label class="check" style="margin:10px 0">
-          <input type="checkbox" name="is_internal" value="1"><span class="small">Internal note — visible only to staff (the client will not see it)</span>
+          <input type="checkbox" name="is_internal" value="1"><span class="small">Internal note, visible only to staff (the client will not see it)</span>
         </label>
         <button class="btn btn-primary" type="submit"><?= icon('send') ?> Send message</button>
       </form>

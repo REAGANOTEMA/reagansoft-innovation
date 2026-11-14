@@ -19,7 +19,7 @@ const filters = [
 type FilterKey = (typeof filters)[number]['key'];
 
 export function PortalInvoices() {
-  usePageMeta('Invoices — Reagansoft client portal');
+  usePageMeta('Invoices, Reagansoft client portal');
   const { data, loading, error, reload } = useApi<Invoice[]>('client/invoices');
   const [filter, setFilter] = useState<FilterKey>('all');
   const [viewInvoice, setViewInvoice] = useState<Invoice | null>(null);

@@ -17,7 +17,7 @@ interface ReportData {
 }
 
 export function ConsoleReports() {
-  usePageMeta('Reports — Reagansoft console');
+  usePageMeta('Reports, Reagansoft console');
   const { data, loading, error, reload } = useApi<ReportData>('admin/reports');
 
   if (loading) return <LoadingBlock label="Building reports…" />;

@@ -17,7 +17,7 @@ export function ProjectDetail() {
   const project = data ?? fallback;
 
   usePageMeta(
-    project ? `${project.title} — Case study | Reagansoft Innovation` : 'Case study — Reagansoft Innovation',
+    project ? `${project.title}, Case study | Reagansoft Innovation` : 'Case study, Reagansoft Innovation',
     project?.description,
   );
 

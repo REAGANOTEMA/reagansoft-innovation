@@ -16,7 +16,7 @@ export function usd(amount: number | string | null | undefined, rate = DEFAULT_U
   return `$${new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(Number.isFinite(value) ? value / usdRate(rate) : 0)}`;
 }
 
-/** "UGX 5,000,000 (≈ $1,316)" — every public UGX price gets a USD guide. */
+/** "UGX 5,000,000 (≈ $1,316)", every public UGX price gets a USD guide. */
 export function moneyBoth(amount: number | string | null | undefined, currency = 'UGX', rate = DEFAULT_USD_RATE): string {
   if (currency.toUpperCase() !== 'UGX') return money(amount, currency);
   return `${money(amount, currency)} (≈ ${usd(amount, rate)})`;
@@ -30,7 +30,7 @@ export function compactMoney(amount: number | string | null | undefined): string
 }
 
 export function formatDate(value: string | null | undefined, withTime = false): string {
-  if (!value) return '—';
+  if (!value) return '-';
   const date = new Date(value.replace(' ', 'T'));
   if (Number.isNaN(date.getTime())) return value;
   return date.toLocaleDateString('en-GB', {
@@ -42,7 +42,7 @@ export function formatDate(value: string | null | undefined, withTime = false): 
 }
 
 export function timeAgo(value: string | null | undefined): string {
-  if (!value) return '—';
+  if (!value) return '-';
   const date = new Date(value.replace(' ', 'T'));
   if (Number.isNaN(date.getTime())) return value;
   const diff = Math.floor((Date.now() - date.getTime()) / 1000);

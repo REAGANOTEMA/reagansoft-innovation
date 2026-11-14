@@ -13,7 +13,7 @@ $bandService = [
 ];
 
 public_head([
-    'title'     => 'Pricing | Reagan Soft Innovation Limited',
+    'title'     => 'Pricing | Reagansoft Innovation Limited',
     'desc'      => 'Honest pricing in Jinja, Uganda: professional websites from UGX 5,000,000, automatic receipt systems from UGX 3,000,000, web and mobile apps from UGX 10,000,000 and custom business systems from UGX 40,000,000. USD guide prices shown at the current daily rate. Final quotes approved before work begins.',
     'active'    => 'pricing',
     'canonical' => 'pricing.php',

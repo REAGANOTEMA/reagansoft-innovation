@@ -24,7 +24,7 @@ interface ClientRow {
 }
 
 export function ConsoleClients() {
-  usePageMeta('Clients — Reagansoft console');
+  usePageMeta('Clients, Reagansoft console');
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
   const [createOpen, setCreateOpen] = useState(false);
@@ -76,11 +76,11 @@ export function ConsoleClients() {
                     </td>
                     <td>
                       <span className="block text-[11px] text-ink-muted">{client.email}</span>
-                      <span className="text-[10px] text-ink-faint">{client.phone ?? '—'}</span>
+                      <span className="text-[10px] text-ink-faint">{client.phone ?? '-'}</span>
                     </td>
-                    <td className="text-[11px] text-ink-muted">{[client.city, client.country].filter(Boolean).join(', ') || '—'}</td>
+                    <td className="text-[11px] text-ink-muted">{[client.city, client.country].filter(Boolean).join(', ') || '-'}</td>
                     <td className="text-right font-mono text-[11px] text-navy-900">{client.project_count}</td>
-                    <td className="text-right font-mono text-[11px] font-semibold text-navy-900">{Number(client.outstanding) > 0 ? money(client.outstanding) : '—'}</td>
+                    <td className="text-right font-mono text-[11px] font-semibold text-navy-900">{Number(client.outstanding) > 0 ? money(client.outstanding) : '-'}</td>
                     <td><Badge tone={client.active ? 'green' : 'gray'}>{client.active ? 'Active' : 'Inactive'}</Badge></td>
                     <td className="text-[10.5px] text-ink-faint">{client.last_login_at ? timeAgo(client.last_login_at) : 'Never'}</td>
                     <td><Link to={`/console/clients/${client.id}`} className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-brand-700">Open <ArrowUpRight className="h-3 w-3" /></Link></td>

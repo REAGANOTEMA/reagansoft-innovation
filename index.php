@@ -1,4 +1,20 @@
 <?php
+/*
+ * The public experience is the React application built into /app.
+ *
+ * On a correctly configured Apache/LiteSpeed host the root .htaccess
+ * rewrites the site root to spa.php before this file runs. Some shared
+ * hosts ignore .htaccess or upload it late, so this fallback makes the
+ * root behave identically either way: if the build exists, serve it.
+ * The original server-rendered homepage is still available at
+ * index.php?legacy=1 and through every *.php page.
+ */
+$spaBuild = __DIR__ . '/app/index.html';
+if (is_file($spaBuild) && !isset($_GET['legacy'])) {
+    require __DIR__ . '/spa.php';
+    exit;
+}
+
 require __DIR__ . '/config/config.php';
 
 $pdo = db();
@@ -24,13 +40,13 @@ $bandService = [
 
 public_head([
     'title'     => 'Software Development & Digital Solutions in Jinja, Uganda',
-    'desc'      => 'Reagan Soft Innovation Limited builds professional websites, business systems, ecommerce and custom software in Jinja, Uganda. Start your project through our secure client portal.',
+    'desc'      => 'Reagansoft Innovation Limited builds professional websites, business systems, ecommerce and custom software in Jinja, Uganda. Start your project through our secure client portal.',
     'active'    => 'home',
     'canonical' => 'index.php',
 ]);
 ?>
 <section class="hero" id="home">
-  <h1 class="visually-hidden">Reagan Soft Innovation Limited &mdash; software development and digital solutions in Jinja, Uganda</h1>
+  <h1 class="visually-hidden">Reagansoft Innovation Limited &mdash; software development and digital solutions in Jinja, Uganda</h1>
   <div class="hero-slider" id="heroSlider" role="region" aria-roledescription="carousel" aria-label="What we build for you">
     <div class="hero-slides">
       <?php
@@ -52,7 +68,7 @@ public_head([
           $hSvc = $hSlug !== '' ? service_id_by_slug($hSlug) : 0; ?>
         <div class="hero-slide<?= $si === 0 ? ' s-active' : '' ?>" data-slide data-label="<?= e($hTag) ?>">
           <img class="hero-bg" src="<?= app_url($hImg) ?>" width="1200" height="675"
-               alt="<?= e($hTag) ?> &mdash; Reagan Soft Innovation Limited, digital solutions in Jinja, Uganda"
+               alt="<?= e($hTag) ?> &mdash; Reagansoft Innovation Limited, digital solutions in Jinja, Uganda"
                loading="<?= $si === 0 ? 'eager' : 'lazy' ?>" fetchpriority="<?= $si === 0 ? 'high' : 'auto' ?>" decoding="<?= $si === 0 ? 'sync' : 'async' ?>">
           <div class="hero-overlay" aria-hidden="true"></div>
           <div class="hero-grain" aria-hidden="true"></div>
@@ -135,7 +151,7 @@ public_head([
 <section class="section section-soft">
   <div class="container">
     <div class="split-banner">
-      <div class="split-media"><img src="<?= app_url('assets/img/codes-banner.webp') ?>" alt="Clean code written by the Reagan Soft Innovation team"><span class="split-shine" aria-hidden="true"></span></div>
+      <div class="split-media"><img src="<?= app_url('assets/img/codes-banner.webp') ?>" alt="Clean code written by the Reagansoft Innovation team"><span class="split-shine" aria-hidden="true"></span></div>
       <div class="split-body">
         <span class="eyebrow">Clean code, on purpose</span>
         <h2>Code that is built to be looked after, not just launched.</h2>
@@ -160,7 +176,7 @@ public_head([
     <div class="studio-grid">
       <figure class="studio-tile studio-tile-lg">
         <img src="<?= app_url('assets/img/programming-software-interface-device-engineers-application-company-project-space-professional-solutions-systems-117127167.webp') ?>"
-             alt="Reagan Soft Innovation engineers working at modern development workstations"
+             alt="Reagansoft Innovation engineers working at modern development workstations"
              width="800" height="533" loading="lazy" decoding="async">
         <figcaption><span>Engineering floor &middot; Jinja</span><b>Where the systems are built and tested.</b></figcaption>
       </figure>
@@ -185,7 +201,7 @@ public_head([
     </div>
     <div class="studio-band">
       <img src="<?= app_url('assets/img/the-language-we-use.jpg') ?>"
-           alt="The programming languages and frameworks used by the Reagan Soft Innovation team"
+           alt="The programming languages and frameworks used by the Reagansoft Innovation team"
            width="1200" height="720" loading="lazy" decoding="async">
       <div class="studio-band-body">
         <span class="eyebrow" style="color:#7fd0ff">The language we use</span>
@@ -273,7 +289,7 @@ public_head([
         <span class="card-icon"><?= icon('receipt') ?></span>
         <h3>Receipt &amp; Billing Automation</h3>
         <p>Automatic receipt and invoice generation, payment records and simple accounting for shops, schools and service businesses.</p>
-        <div class="pband-amount"><?= money(PRICE_RECEIPT_MIN, settings('currency')) ?><span>–</span><?= money(PRICE_RECEIPT_MAX, settings('currency')) ?></div>
+        <div class="pband-amount"><?= money(PRICE_RECEIPT_MIN, settings('currency')) ?><span>-</span><?= money(PRICE_RECEIPT_MAX, settings('currency')) ?></div>
         <a class="btn btn-primary" href="<?= app_url('checkout.php?service=' . (int)$bandService['receipts']) ?>">Choose this program <?= icon('arrow') ?></a>
       </div>
       <div class="pband-card">
@@ -298,7 +314,7 @@ public_head([
   <div class="container">
     <div class="about-grid">
       <div>
-        <span class="eyebrow">About Reagan Soft Innovation</span>
+        <span class="eyebrow">About Reagansoft Innovation</span>
         <h2>Built in Jinja. Designed for real businesses.</h2>
         <p class="lead mb-2"><?= e(settings('company_about', 'We help organisations turn ideas and everyday business processes into practical digital products.')) ?></p>
         <p class="muted">We keep things simple: you always see what was requested, what is being worked on, what has been completed and what comes next, all from your own portal.</p>
@@ -310,15 +326,14 @@ public_head([
       <div class="founder-stack">
         <div class="founder-card">
           <div class="founder-photo">
-            <img src="<?= app_url('assets/img/founder.webp') ?>" alt="Reagan Otema, founder of Reagan Soft Innovation Limited">
+            <img src="<?= app_url('assets/img/founder.webp') ?>" alt="Reagan Otema, founder of Reagansoft Innovation Limited">
           </div>
           <div class="founder-info">
             <span class="founder-role">Founder &amp; Lead Developer</span>
             <h3>Reagan Otema</h3>
             <p>Reagan leads the design and development on every project himself, and makes sure each one is built to be looked after, not just launched.</p>
             <div class="founder-brand">
-              <img src="<?= app_url('assets/img/reagansoftinnovation-logo.jpeg') ?>" alt="Reagan Soft Innovation logo" width="52" height="52">
-              <span class="brand-text">Reagan Soft <b>Innovation</b></span>
+              <img src="<?= app_url('assets/img/real-reagansoft-logo-white.png') ?>" alt="Reagansoft Innovation Limited" width="180" height="124">
             </div>
             <div class="founder-contact">
               <span><?= icon('phone') ?><?= e(settings('company_phone', '+256772514889')) ?><?php $phoneAltHome = settings('company_phone_alt', ''); ?><?= $phoneAltHome !== '' ? ' · ' . e($phoneAltHome) : '' ?></span>
@@ -347,3 +362,4 @@ public_head([
   </div>
 </section>
 <?php public_footer(); ?>
+

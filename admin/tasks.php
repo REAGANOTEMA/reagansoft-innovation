@@ -94,7 +94,7 @@ dashboard_head(['title' => 'Tasks', 'active' => 'tasks', 'crumb' => 'Tasks']);
   <div>
     <span class="eyebrow">Task board</span>
     <h2>All project tasks</h2>
-    <p class="sub">Every task across every project — see what is due and what needs attention.</p>
+    <p class="sub">Every task across every project, see what is due and what needs attention.</p>
   </div>
 </div>
 
@@ -125,7 +125,7 @@ dashboard_head(['title' => 'Tasks', 'active' => 'tasks', 'crumb' => 'Tasks']);
       <div class="field"><label for="project_id">Project *</label>
         <select class="select" id="project_id" name="project_id" required>
           <option value="">Select project…</option>
-          <?php foreach ($projects as $p): ?><option value="<?= (int)$p['id'] ?>"><?= e($p['ref_no']) ?> — <?= e(truncate($p['title'], 60)) ?></option><?php endforeach; ?>
+          <?php foreach ($projects as $p): ?><option value="<?= (int)$p['id'] ?>"><?= e($p['ref_no']) ?>, <?= e(truncate($p['title'], 60)) ?></option><?php endforeach; ?>
         </select>
       </div>
       <div class="field"><label for="title">Task title *</label><input class="input" id="title" name="title" required maxlength="190" placeholder="e.g. Prepare home page design"></div>
@@ -160,7 +160,7 @@ dashboard_head(['title' => 'Tasks', 'active' => 'tasks', 'crumb' => 'Tasks']);
               <td><a class="row-title" href="<?= app_url('admin/project.php?id=' . (int)$t['project_id'] . '&tab=tasks') ?>"><?= e(truncate($t['project_title'], 42)) ?></a><div class="row-sub"><?= e($t['ref_no']) ?></div></td>
               <td class="small"><?= e($t['assignee_name'] ?? 'Unassigned') ?></td>
               <td><span class="tag"><?= e(ucfirst($t['priority'])) ?></span></td>
-              <td class="small"><?= $t['due_date'] ? fmt_date($t['due_date']) : '—' ?></td>
+              <td class="small"><?= $t['due_date'] ? fmt_date($t['due_date']) : '-' ?></td>
               <td><?= status_badge($t['status']) ?></td>
               <td style="min-width:150px">
                 <form method="post" style="display:flex;gap:6px;align-items:center">

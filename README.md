@@ -1,7 +1,7 @@
-# Reagan Soft Innovation Limited — Website + Client Portal
+# Reagansoft Innovation Limited, Website + Client Portal
 
 A professional white / deep-blue / light-blue business website with a full PHP + MySQL
-client & admin project-management portal for **Reagan Soft Innovation Limited**
+client & admin project-management portal for **Reagansoft Innovation Limited**
 (Jinja, Uganda). The app uses two databases:
 
 ```
@@ -9,7 +9,7 @@ reagansoft_system      <- active app database (accounts, projects, billing)
 reagansoft_website     <- identical mirror kept on the same host account
 ```
 
-Both are named after the company — `reagansoft_*` — and each has its own login
+Both are named after the company, `reagansoft_*`, and each has its own login
 credentials in `config/config.php`. `install.php` builds the system database from
 `sql/system/reagansoft_system.sql` and the website database from
 `sql/website/reagansoft_website.sql`. The app reads and writes only
@@ -18,16 +18,16 @@ credentials in `config/config.php`. `install.php` builds the system database fro
 ## What's included
 
 **Public site**
-- Responsive homepage, services, pricing (UGX ranges up to 10M websites / 20M systems),
+- Responsive homepage, services, pricing (UGX ranges up to 10M websites / 40M systems),
   portfolio, about and contact pages
-- Real Reagan Soft Innovation logo across nav, footer, login, favicon and social share image
+- Real Reagansoft Innovation logo across nav, footer, login, favicon and social share image
 - Company motto, *"Innovating today for a smarter tomorrow."*
 - Legal pages (Privacy, Terms, Refund, Cookie Policy); WhatsApp/phone/email/social links;
   database-backed contact form
 - Engineering look: blueprint grid heroes, HUD readouts, particle network, 3D card tilt,
   scroll reveals, count-up stats (Space Grotesk / Inter / JetBrains Mono)
 
-**Client flow — Order → Choose a program → Sign in / Register → Pay**
+**Client flow, Order → Choose a program → Sign in / Register → Pay**
 1. Pick a program on the home/services/pricing pages → "Choose this program".
 2. Review the plan and the one-time deposit on `checkout.php` (a guest gets a
    "Sign in &nbsp;·&nbsp; Create account" gate at the end).
@@ -86,7 +86,7 @@ Vite writes the production bundle to `../app`, which the root URL serves via
 
 ## Installation
 
-**Recommended — web installer (one click)**
+**Recommended, web installer (one click)**
 1. Start Apache + MySQL in the XAMPP control panel.
 2. Run `C:\xampp\php\php.exe tools\setup-databases.php` once. It creates both
    databases and both MySQL logins (a non-root phpMyAdmin session cannot run
@@ -97,41 +97,41 @@ Vite writes the production bundle to `../app`, which the root URL serves via
    `sql/website/reagansoft_website.sql`.
 4. **Delete `install.php`** afterwards.
 
-**Alternative — phpMyAdmin**
+**Alternative, phpMyAdmin**
 1. Create the two databases (or run `tools\setup-databases.php`).
 2. Click `reagansoft_system` in the left-hand list → **Import** →
    `sql/system/reagansoft_system.sql` → **Go**.
 3. Click `reagansoft_website` → **Import** →
    `sql/website/reagansoft_website.sql` → **Go**.
 
-**Alternative — command line** (run from the project folder)
+**Alternative, command line** (run from the project folder)
 ```bash
-C:\xampp\mysql\bin\mysql.exe -u root reagansoft_system  < sql\system\reagansoft_system.sql
-C:\xampp\mysql\bin\mysql.exe -u root reagansoft_website < sql\website\reagansoft_website.sql
+C:\xampp\mysql\bin\mysql.exe -u root --default-character-set=utf8mb4 < sql\system\reagansoft_system.sql
+C:\xampp\mysql\bin\mysql.exe -u root --default-character-set=utf8mb4 < sql\website\reagansoft_website.sql
 ```
 
 ### The SQL dumps
 
-Each file is a complete phpMyAdmin export of one database: all 17 tables, their
+Each file is a complete, repeatable export of one database: all 17 tables, their
 indexes and foreign keys, plus the seed rows (8 demo accounts, 14 services,
-settings and sample projects). The dump starts with `SET FOREIGN_KEY_CHECKS=0`
-and `DROP TABLE IF EXISTS` for every table, so it can be imported over an
-existing database without `#1050 Table already exists` errors. **Importing
-replaces the current contents of that database** — take a backup first. The
-`install.php` one-click installer never rebuilds an existing database unless
-you explicitly choose **Reinstall database**.
+settings and sample projects). Both files start with `SET FOREIGN_KEY_CHECKS=0`,
+`SET NAMES utf8mb4`, `CREATE DATABASE IF NOT EXISTS` and `USE`, then use
+`CREATE TABLE IF NOT EXISTS` and `INSERT IGNORE`. Importing them in any order is
+safe: nothing is dropped and no existing row is overwritten. **Existing data is
+kept**, so take a backup before a first import on a live host.
 
 | File | Database |
 |------|----------|
 | `sql/system/reagansoft_system.sql` | `reagansoft_system` (active app) |
 | `sql/website/reagansoft_website.sql` | `reagansoft_website` (mirror) |
 
-Each folder also contains safe helper files:
+Each folder has a `README.txt` with the same instructions. Two helpers cover
+older installations:
 
 | File | Purpose |
 |------|---------|
-| `verify.sql` | Starts with `USE <database>;`, then counts all 17 tables and checks the admin/whatsapp/phone settings. Run it while connected as root (or any user with access) to avoid `#1109 Unknown table 'users' in information_schema`. |
-| `upgrade-2026-11-08.sql` | Idempotent fix for live databases: corrects the project titles and the phone/WhatsApp/payment settings without touching other rows. Safe to run more than once. |
+| `tools/repair-databases.php` | Adds only the missing columns, primary key, AUTO_INCREMENT, indexes and `activity_logs` foreign key, then verifies INSERT/SELECT in a rolled-back transaction. Add `--dry-run` to preview. |
+| `sql/normalize-text.sql` | Replaces en dashes in project titles and opening hours with plain hyphens. Safe to run more than once. |
 
 If you edit a dump, re-test the import on an empty scratch database before
 shipping it.
@@ -157,7 +157,7 @@ why no `.sql` file can trigger `#1227 Access denied`.
 
 `db-check.php` is the quickest way to answer "is the database right?" after an
 import; it prints a `FAIL` line per problem and exits non-zero. `img-opt.php`
-should report *"Images are healthy"* — run it after swapping any artwork.
+should report *"Images are healthy"*, run it after swapping any artwork.
 
 ## Deploying to shared hosting (cPanel / Plesk)
 
@@ -184,7 +184,7 @@ databases you selected.
    or use the `RSI_DB_*` environment variables.
 6. Open `install.php` once to confirm, then **delete `install.php` and
    `create_admin.php`**.
-7. Run `php tools/db-check.php` if you have SSH — it prints the connected
+7. Run `php tools/db-check.php` if you have SSH, it prints the connected
    user, the database actually in use, the mirror state and privileges.
 
 **Single-database hosts:** the mirror database is optional. Switch it off with
@@ -192,7 +192,7 @@ either of these (setting the environment variable to an empty value works on
 Linux/Apache; editing the constant works everywhere):
 
 ```php
-define('DB_MIRROR', '');   // config/config.php — simplest
+define('DB_MIRROR', '');   // config/config.php, simplest
 ```
 ```
 RSI_DB_MIRROR=             // empty value on the server
@@ -200,11 +200,52 @@ RSI_DB_MIRROR=             // empty value on the server
 
 `db-check.php` then reports `Mirror disabled` instead of an access error.
 
-## Configuration — two databases, separate credentials
+## Web server rules (Apache, LiteSpeed, Nginx, IIS)
+
+The site needs one rule set per server type. Nothing else changes:
+
+| Server | File to use | Notes |
+|--------|-------------|-------|
+| Apache 2.4 / LiteSpeed | `.htaccess` (already in the root) | Serves the SPA, blocks source folders, sets PWA MIME types and cache headers. `AllowOverride All` must be enabled. |
+| Nginx | `deploy/nginx.conf.example` | Nginx ignores `.htaccess`; copy the `server` block into `sites-available`, set `root`, `server_name` and the PHP-FPM socket. |
+| IIS / Windows hosting | `deploy/web.config` | Copy to the site root as `web.config`; the host must already have the PHP handler configured. |
+
+After uploading a rebuilt `app/`, the root URL, any deep link (`/about`,
+`/services/...`) and `/api/v1/public/site` must all return `200`. Static
+assets, `sw.js` and `assets/img/site.webmanifest` must return `200` as well.
+
+## Install as an app (PWA)
+
+The public site is installable on Android, iPhone/iPad, Windows, macOS and
+Linux. Requirements are already in the repo:
+
+- `assets/img/site.webmanifest` - name, colours, shortcuts, 192/512 and
+  maskable icons.
+- `sw.js` at the web root - offline shell, cached assets, network-only API.
+- Apple tags and the manifest link injected by `spa.php`.
+- Service worker registration in `frontend/src/main.tsx` (production build).
+
+**Install**
+
+- **Android (Chrome/Edge/Samsung Internet):** open the site, tap the install
+  banner or menu -> **Install app / Add to Home screen**.
+- **iPhone/iPad (Safari):** Share -> **Add to Home Screen**. iOS uses the
+  Apple touch icon and standalone display.
+- **Windows/Linux (Chrome/Edge):** install icon in the address bar, or menu ->
+  **Install Reagansoft**.
+- **macOS (Safari 17+ / Chrome):** File -> **Add to Dock**, or the install icon
+  in the address bar.
+
+Install prompts only appear on **HTTPS**, never on a plain-HTTP domain.
+`localhost` is the exception for testing. If the prompt does not appear,
+confirm the manifest returns `application/manifest+json`, `sw.js` returns
+JavaScript and the page has no console errors.
+
+## Configuration, two databases, separate credentials
 
 All settings live in `config/config.php`. The active database and the mirror
 each have their own user and password. Either edit the constants or set
-environment variables — no other file changes anywhere in the app:
+environment variables, no other file changes anywhere in the app:
 
 | Variable                | Default                          |
 |-------------------------|----------------------------------|
@@ -216,7 +257,7 @@ environment variables — no other file changes anywhere in the app:
 | `RSI_DB_MIRROR`         | `reagansoft_website`             |
 | `RSI_DB_MIRROR_USER`    | `reagansoft_website`             |
 | `RSI_DB_MIRROR_PASS`    | *(set in `config/config.php`)*   |
-| `RSI_DEBUG`             | *(unset — hides error details)*  |
+| `RSI_DEBUG`             | *(unset, hides error details)*  |
 
 The system user needs privileges on `reagansoft_system`; the website user needs
 privileges on `reagansoft_website`. To create both on a local XAMPP install:
@@ -245,7 +286,7 @@ Ensure `uploads/` is writable by PHP; `storage/logs/` is created automatically.
 
 ## Demo accounts (seeded)
 
-Password for **every** account below: `Reagan@2026` — change these in production!
+Password for **every** account below: `Reagan@2026`, change these in production!
 
 | Role   | Email                     | Notes                              |
 |--------|---------------------------|------------------------------------|
@@ -259,7 +300,7 @@ Password for **every** account below: `Reagan@2026` — change these in producti
 
 The hotel signs in to the client portal and can see project **RSI-2026-00006**
 (website & booking enquiry) with its three tasks and message thread. Every row is
-a **placeholder** — edit the account in Admin → Clients, or change the seed rows
+a **placeholder**, edit the account in Admin → Clients, or change the seed rows
 in `sql/system/reagansoft_system.sql` (and the website mirror), then re-import
 into an empty database before going live.
 
@@ -270,12 +311,20 @@ company/payment details under **Admin → Settings**.
 - HTTPS + real domain. `RSI_APP_URL` is detected from the request (scheme, host and
   install path, including `X-Forwarded-Proto`/`X-Forwarded-Host` behind a proxy);
   set it explicitly only when the site must advertise a different canonical origin.
+- Upload the root `.htaccess` (Apache/LiteSpeed), or use `deploy/nginx.conf.example`
+  / `deploy/web.config` on those servers. Deploying only `app/` without the root
+  rules makes deep links return 404 and hides the PWA.
+- Upload `sw.js`, `assets/img/site.webmanifest`, `icon-192.png`, `icon-512.png`
+  and both `icon-maskable-*.png` files. Keep HTTPS enabled so the install prompt
+  can appear.
 - Change every demo password and the `RSI_DB_*` credentials.
 - Delete `install.php` (and `create_admin.php`) from the server.
 - Keep `uploads/` out of the public root; `uploads/.htaccess` already blocks
   script execution there.
-- Schedule database + uploads backups; wire email/SMS/WhatsApp (`inc/functions.php` → `rs_mail()`).
+- Schedule database + uploads backups; wire email/SMS/WhatsApp (`inc/functions.php` -> `rs_mail()`).
 - Integrate MTN MoMo only with the company's merchant credentials. MTN is also
   the WhatsApp number; Airtel is for voice calls only.
+- Run `php tools/repair-databases.php` and `sql/normalize-text.sql` if the live
+  databases came from an older import.
 - Run `php tools/db-check.php` after any import.
 - Review Privacy/Terms/Cookie/Refund policy content before going live.

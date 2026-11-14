@@ -118,7 +118,7 @@ dashboard_head(['title' => 'New Request', 'active' => 'request', 'crumb' => 'New
       <select class="select" id="service_id" name="service_id">
         <option value="0">Select a service (optional)</option>
         <?php foreach ($services as $s): ?>
-          <option value="<?= (int)$s['id'] ?>" <?= $values['service_id'] === (string)$s['id'] || $preselect === (int)$s['id'] ? 'selected' : '' ?>><?= e($s['name']) ?> — <?= e(service_price_short($s, settings('currency'))) ?></option>
+          <option value="<?= (int)$s['id'] ?>" <?= $values['service_id'] === (string)$s['id'] || $preselect === (int)$s['id'] ? 'selected' : '' ?>><?= e($s['name']) ?>, <?= e(service_price_short($s, settings('currency'))) ?></option>
         <?php endforeach; ?>
       </select>
     </div>
@@ -143,7 +143,7 @@ dashboard_head(['title' => 'New Request', 'active' => 'request', 'crumb' => 'New
       </div>
       <div class="field"><label for="attachment">Supporting file</label>
         <input class="input" id="attachment" type="file" name="attachment" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.png,.jpg,.jpeg,.gif,.webp,.zip">
-        <div class="form-note">PDF, Word, Excel, PowerPoint, TXT, CSV, images or ZIP — max 10 MB.</div>
+        <div class="form-note">PDF, Word, Excel, PowerPoint, TXT, CSV, images or ZIP, max 10 MB.</div>
       </div>
     </div>
 

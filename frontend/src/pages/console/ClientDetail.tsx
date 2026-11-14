@@ -33,7 +33,7 @@ export function ConsoleClientDetail() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
 
-  usePageMeta(data?.client ? `${data.client.full_name} — Reagansoft console` : 'Client — Reagansoft console');
+  usePageMeta(data?.client ? `${data.client.full_name}, Reagansoft console` : 'Client, Reagansoft console');
 
   useEffect(() => {
     if (!data) return;

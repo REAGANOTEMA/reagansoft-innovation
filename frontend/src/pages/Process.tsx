@@ -19,7 +19,7 @@ const steps = [
     icon: FileText,
     step: '02',
     title: 'Design',
-    duration: 'Weeks 1–2',
+    duration: 'Weeks 1-2',
     text: 'Information architecture, wireframes and a visual direction. We review together before a single line of production code is written.',
     deliverables: ['Sitemap / flow', 'Wireframes', 'UI direction', 'Acceptance checklist'],
   },
@@ -27,7 +27,7 @@ const steps = [
     icon: Code2,
     step: '03',
     title: 'Build',
-    duration: 'Weeks 2–8',
+    duration: 'Weeks 2-8',
     text: 'Weekly increments on a shared board, with demo links you can click. Feedback is collected in one place and prioritised openly.',
     deliverables: ['Working increments', 'Weekly demo', 'Issue log', 'Staging environment'],
   },
@@ -52,13 +52,13 @@ const steps = [
 const cadence = [
   { icon: MessageSquare, title: 'One channel', text: 'A shared WhatsApp or email thread for decisions, so nothing important lives in someone’s memory.' },
   { icon: Users, title: 'One owner', text: 'A named lead on our side who knows your project and answers directly.' },
-  { icon: ShieldCheck, title: 'One source of truth', text: 'A live board for tasks, bugs and change requests — visible to both teams.' },
+  { icon: ShieldCheck, title: 'One source of truth', text: 'A live board for tasks, bugs and change requests, visible to both teams.' },
   { icon: Handshake, title: 'No silent changes', text: 'Anything outside the agreed scope is quoted and approved before it is built.' },
 ];
 
 export function Process() {
   usePageMeta(
-    'Our process — How Reagansoft delivers software projects',
+    'Our process, How Reagansoft delivers software projects',
     'A transparent five-stage delivery process: discovery, design, build, launch and support. See what happens at each stage.',
   );
 
@@ -85,7 +85,7 @@ export function Process() {
       <CinemaBand
         eyebrow="Studio reel · Process"
         title="The work is visible while it is being built."
-        lead="Weekly demos, shared boards and documented handover — the same rhythm on every project, whatever the size."
+        lead="Weekly demos, shared boards and documented handover, the same rhythm on every project, whatever the size."
         slides={STUDIO_REEL}
         to="/contact"
         cta="Book a discovery call"

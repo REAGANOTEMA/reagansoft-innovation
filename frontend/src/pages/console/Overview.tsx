@@ -44,7 +44,7 @@ interface OverviewData {
 }
 
 export function ConsoleOverview() {
-  usePageMeta('Console overview — Reagansoft Innovation');
+  usePageMeta('Console overview, Reagansoft Innovation');
   const { user } = useAuth();
   const { data, loading, error, reload } = useApi<OverviewData>('admin/overview');
 

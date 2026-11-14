@@ -5,14 +5,14 @@ import { useSite } from '../lib/site';
 import { usePageMeta } from '../lib/seo';
 import { Reveal } from '../components/Reveal';
 import { SectionHeading } from '../components/UI';
-import { ServiceGlyph } from '../components/Graphics';
+import { CloudInfraArt, ServiceGlyph } from '../components/Graphics';
 import { serviceMedia, media, MEDIA_ALT, STUDIO_REEL } from '../lib/media';
 import { CinemaBand } from '../components/CinemaBand';
 import { cn } from '../lib/cn';
 
 export function Services() {
   usePageMeta(
-    'Services — Websites, business systems, apps & security | Reagansoft Innovation',
+    'Services, Websites, business systems, apps & security | Reagansoft Innovation',
     'Explore Reagansoft Innovation services: business websites, ecommerce, custom systems, mobile apps, billing automation, branding, maintenance and cybersecurity.',
   );
 
@@ -42,7 +42,7 @@ export function Services() {
               <h1 className="h1 max-w-3xl text-white">Everything you need to run and grow digitally.</h1>
               <p className="mt-5 max-w-2xl text-[1.02rem] leading-relaxed text-white/65">
                 Fourteen focused service lines, delivered by one accountable team. Start with a single website or bring us the whole
-                operation — the standard does not change.
+                operation, the standard does not change.
               </p>
             </div>
             <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.05] backdrop-blur">
@@ -75,6 +75,38 @@ export function Services() {
         to="/pricing"
         cta="Compare starting prices"
       />
+
+      <section className="relative overflow-hidden bg-navy-950 py-16 text-white sm:py-20">
+        <div className="aurora opacity-60" />
+        <div className="pointer-events-none absolute inset-0 bg-grid-dark opacity-25" />
+        <div className="container-x relative grid gap-10 lg:grid-cols-[1fr_0.95fr] lg:items-center">
+          <Reveal>
+            <span className="eyebrow text-brand-300">Engineering stack</span>
+            <h2 className="h2 mt-4 max-w-xl text-white">One stack, chosen for the long run.</h2>
+            <p className="mt-4 max-w-xl text-[14.5px] leading-relaxed text-white/60">
+              We keep the stack deliberately practical: React and TypeScript for the interface, PHP 8 and MySQL for the
+              service layer, and REST APIs where systems need to talk to each other. That makes the work easier to host,
+              easier to hand over and easier for another developer to maintain later.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {['React', 'TypeScript', 'PHP 8', 'MySQL', 'REST APIs', 'Docker', 'Linux', 'Git'].map((tool) => (
+                <span key={tool} className="rounded-full border border-white/12 bg-white/[0.04] px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-white/55">
+                  {tool}
+                </span>
+              ))}
+            </div>
+            <p className="mt-5 max-w-lg text-[11.5px] leading-relaxed text-white/35">
+              We choose tools per project, not by trend. If a simpler stack will run more reliably for your team, we will say so
+              before the quote is written.
+            </p>
+          </Reveal>
+          <Reveal delay={120}>
+            <div className="overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.06] p-3 shadow-[0_40px_100px_-40px_rgba(0,0,0,.8)] backdrop-blur">
+              <CloudInfraArt className="rounded-[20px]" />
+            </div>
+          </Reveal>
+        </div>
+      </section>
 
       <section className="py-12 sm:py-16">
         <div className="container-x">
@@ -178,7 +210,7 @@ export function Services() {
       <section className="border-t border-brand-100 bg-brand-50/40 py-16">
         <div className="container-x grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <Reveal>
-            <SectionHeading eyebrow="Not on the list?" title="Most of our best work started as a custom request." lead="If your problem does not fit a package, we will scope it from scratch — integrations, migrations, internal tools or something entirely new." />
+            <SectionHeading eyebrow="Not on the list?" title="Most of our best work started as a custom request." lead="If your problem does not fit a package, we will scope it from scratch, integrations, migrations, internal tools or something entirely new." />
             <Link to="/contact" className="btn-dark btn-sm mt-6">
               Describe the problem <ArrowRight className="h-3.5 w-3.5" />
             </Link>

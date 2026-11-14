@@ -4,11 +4,10 @@
 # the door, so a future change to that list cannot turn into a shell.
 Options -Indexes -ExecCGI
 
-# The root .htaccess hides .txt/.csv/.log everywhere to keep stray notes
-# private, which would also hide a project file a client legitimately
-# uploaded. Re-allow exactly the extensions the uploader accepts
-# (ALLOWED_EXTENSIONS in inc/functions.php) — nothing else, and no
-# scripts. Add a type in both places or it will be refused here.
+# The root .htaccess blocks scripts and private source folders everywhere.
+# Re-allow exactly the document, image and archive extensions the uploader
+# accepts (ALLOWED_EXTENSIONS in inc/functions.php), and nothing else. Add a
+# type in both places or it will be refused here.
 <IfModule mod_authz_core.c>
   <FilesMatch "(?i)\.(pdf|doc|docx|xls|xlsx|ppt|pptx|txt|csv|png|jpe?g|gif|webp|zip)$">
     Require all granted

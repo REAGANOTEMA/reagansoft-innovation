@@ -53,7 +53,7 @@ if (DB_MIRROR !== '' && DB_MIRROR !== DB_NAME) {
     $targets[] = ['db' => DB_MIRROR, 'file' => 'sql/website/reagansoft_website.sql'];
 }
 
-echo "Reagan Soft Innovation - database installer\n";
+echo "Reagansoft Innovation - database installer\n";
 echo str_repeat('=', 52) . "\n";
 
 function run_sql_file(string $mysql, string $user, string $pass, string $path, string $db = ''): array

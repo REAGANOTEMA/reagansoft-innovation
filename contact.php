@@ -45,8 +45,8 @@ $phone = settings('company_phone', '+256772514889');
 $phoneAlt = settings('company_phone_alt', '+256730314979');
 
 public_head([
-    'title'     => 'Contact Us | Reagan Soft Innovation Limited, Jinja, Uganda',
-    'desc'      => 'Contact Reagan Soft Innovation Limited in Jinja, Uganda. Call +256 772 514 889 or +256 730 314 979, or WhatsApp us about your website, software or business system project.',
+    'title'     => 'Contact Us | Reagansoft Innovation Limited, Jinja, Uganda',
+    'desc'      => 'Contact Reagansoft Innovation Limited in Jinja, Uganda. Call +256 772 514 889 or +256 730 314 979, or WhatsApp us about your website, software or business system project.',
     'active'    => 'contact',
     'canonical' => 'contact.php',
 ]);
@@ -75,7 +75,7 @@ public_head([
           </div>
           <div class="contact-item">
             <span class="ci-icon"><?= icon('chat') ?></span>
-            <div><b>WhatsApp</b><span><?= whatsapp_link('Chat with us on WhatsApp', 'Hello Reagan Soft Innovation, I would like to enquire about a project.', '', '') ?></span></div>
+            <div><b>WhatsApp</b><span><?= whatsapp_link('Chat with us on WhatsApp', 'Hello Reagansoft Innovation, I would like to enquire about a project.', '', '') ?></span></div>
           </div>
           <div class="contact-item">
             <span class="ci-icon"><?= icon('pin') ?></span>

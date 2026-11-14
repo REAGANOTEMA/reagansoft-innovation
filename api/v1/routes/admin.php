@@ -1,6 +1,6 @@
 <?php
 /**
- * Administration console endpoints — authenticated staff/admin roles.
+ * Administration console endpoints, authenticated staff/admin roles.
  * Admins additionally receive destructive/configuration permissions.
  */
 

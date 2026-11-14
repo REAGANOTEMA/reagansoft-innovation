@@ -125,9 +125,9 @@ dashboard_head(['title' => 'Users', 'active' => 'users', 'crumb' => 'Users']);
             <tr>
               <td><span class="row-title"><?= e($u['full_name']) ?><?= (int)$u['id'] === (int)$me['id'] ? ' <span class="badge blue">You</span>' : '' ?></span><div class="row-sub"><?= e($u['email']) ?></div></td>
               <td><?= $u['role'] === 'admin' ? '<span class="badge violet">Admin</span>' : ($u['role'] === 'staff' ? '<span class="badge sky">Staff</span>' : '<span class="badge gray">Client</span>') ?></td>
-              <td class="small"><?php if (!empty($u['phone'])): ?><a href="<?= e(phone_tel($u['phone'])) ?>"><?= e($u['phone']) ?></a><?php else: ?><span class="muted">—</span><?php endif; ?></td>
-              <td class="small"><?= e($u['company'] ?? '—') ?></td>
-              <td class="small"><?= $u['role'] === 'client' ? (int)$u['project_count'] : '—' ?></td>
+              <td class="small"><?php if (!empty($u['phone'])): ?><a href="<?= e(phone_tel($u['phone'])) ?>"><?= e($u['phone']) ?></a><?php else: ?><span class="muted">-</span><?php endif; ?></td>
+              <td class="small"><?= e($u['company'] ?? '-') ?></td>
+              <td class="small"><?= $u['role'] === 'client' ? (int)$u['project_count'] : '-' ?></td>
               <td class="small"><?= $u['last_login_at'] ? time_ago($u['last_login_at']) : 'Never' ?></td>
               <td><?= $u['active'] ? '<span class="badge green">Active</span>' : '<span class="badge red">Suspended</span>' ?></td>
               <td>
@@ -139,7 +139,7 @@ dashboard_head(['title' => 'Users', 'active' => 'users', 'crumb' => 'Users']);
                     <input type="hidden" name="active" value="<?= $u['active'] ? '0' : '1' ?>">
                     <button class="btn btn-ghost btn-sm" type="submit"><?= $u['active'] ? 'Deactivate' : 'Activate' ?></button>
                   </form>
-                <?php else: ?><span class="muted small">—</span><?php endif; ?>
+                <?php else: ?><span class="muted small">-</span><?php endif; ?>
               </td>
             </tr>
           <?php endforeach; ?>

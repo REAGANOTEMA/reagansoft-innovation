@@ -2,7 +2,7 @@
 require __DIR__ . '/config/config.php';
 
 $faqs = [
-    ['How do I start a project with Reagan Soft Innovation?',
+    ['How do I start a project with Reagansoft Innovation?',
      'Create a free client account, then submit a New Request from your dashboard. Include a description, your budget, any requirements and supporting files. We review it and respond with a plan and a written quotation.'],
     ['What does a quotation include?',
      'A quotation lists every line item with quantities and unit prices, plus the total, any discount or tax, and our terms and expiry date. You approve it in your client portal before development begins.'],
@@ -16,13 +16,13 @@ $faqs = [
      'PDF, Word, Excel, PowerPoint, TXT, CSV, images (PNG/JPG/GIF/WebP) and ZIP files up to 10 MB. Files are stored privately and are only visible to your project participants.'],
     ['Do you offer website maintenance?',
      'Yes. We offer maintenance plans covering security updates, backups, content changes and technical support on a recurring basis.'],
-    ['Where is Reagan Soft Innovation based?',
+    ['Where is Reagansoft Innovation based?',
      'We are based in Jinja, Uganda, and work with clients across the country and beyond.'],
 ];
 
 public_head([
-    'title'     => 'FAQ | Reagan Soft Innovation Limited',
-    'desc'      => 'Frequently asked questions about working with Reagan Soft Innovation Limited: requests, quotations, progress, payments, maintenance and more.',
+    'title'     => 'FAQ | Reagansoft Innovation Limited',
+    'desc'      => 'Frequently asked questions about working with Reagansoft Innovation Limited: requests, quotations, progress, payments, maintenance and more.',
     'active'    => 'faq',
     'canonical' => 'faq.php',
 ]);
