@@ -45,6 +45,71 @@ function ScrollToTop() {
   return null;
 }
 
+/** A thin gradient progress rail pinned above the header. */
+function ScrollProgress() {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const height = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(height > 0 ? Math.min(1, window.scrollY / height) : 0);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, []);
+
+  return (
+    <div className="pointer-events-none fixed inset-x-0 top-0 z-[70] h-[3px] bg-transparent" aria-hidden="true">
+      <div
+        className="h-full origin-left bg-gradient-to-r from-brand-400 via-cyan-300 to-brand-500 shadow-[0_0_16px_rgba(30,158,232,.75)] transition-[width] duration-150 ease-out"
+        style={{ width: `${progress * 100}%` }}
+      />
+    </div>
+  );
+}
+
+/** Persistent quick-contact + back-to-top stack, available on every page. */
+function FloatingActions() {
+  const { settings } = useSite();
+  const waNumber = settings.company_whatsapp.replace(/\D/g, '') || settings.company_phone.replace(/\D/g, '');
+  const wa = `https://wa.me/${waNumber}`;
+
+  return (
+    <div className="no-print fixed bottom-4 left-4 z-[65] flex flex-col items-start gap-2 sm:bottom-6 sm:left-6">
+      <button
+        type="button"
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        aria-label="Back to top"
+        className="grid h-10 w-10 place-items-center rounded-full border border-brand-100 bg-white/95 text-navy-800 shadow-soft backdrop-blur transition hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-700"
+      >
+        <ArrowUp className="h-4 w-4" />
+      </button>
+      <a
+        href={`tel:${settings.company_phone.replace(/\s/g, '')}`}
+        aria-label="Call Reagansoft Innovation"
+        className="grid h-10 w-10 place-items-center rounded-full border border-brand-100 bg-white/95 text-navy-800 shadow-soft backdrop-blur transition hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-700"
+      >
+        <Phone className="h-4 w-4" />
+      </a>
+      <a
+        href={wa}
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Chat on WhatsApp"
+        className="group relative grid h-12 w-12 place-items-center rounded-full bg-emerald-500 text-white shadow-[0_16px_36px_-14px_rgba(16,185,129,.8)] transition hover:-translate-y-0.5 hover:bg-emerald-400"
+      >
+        <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400/40 motion-reduce:animate-none" aria-hidden="true" />
+        <MessageCircle className="relative h-5 w-5" />
+      </a>
+    </div>
+  );
+}
+
 export function SiteLayout() {
   const [scrolled, setScrolled] = useState(false);
   const { settings, services } = useSite();
@@ -64,6 +129,7 @@ export function SiteLayout() {
   return (
     <div className="flex min-h-screen flex-col bg-white">
       <ScrollToTop />
+      <ScrollProgress />
 
       <div className="hidden border-b border-white/10 bg-navy-950 text-white/60 lg:block">
         <div className="container-x flex h-9 items-center justify-between text-[11px]">
@@ -124,6 +190,7 @@ export function SiteLayout() {
 
       <Footer />
       <InstallApp />
+      <FloatingActions />
     </div>
   );
 }
@@ -222,14 +289,19 @@ function Header({ scrolled }: { scrolled: boolean }) {
                       </Link>
                     ))}
                   </div>
-                  <div className="mt-2 flex items-center justify-between rounded-2xl bg-navy-900 px-4 py-3">
+                  <div className="mt-2 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-navy-900 px-4 py-3">
                     <div>
                       <p className="text-[12px] font-semibold text-white">Not sure where to start?</p>
                       <p className="text-[11px] text-white/55">Book a free 30-minute discovery call.</p>
                     </div>
-                    <Link to="/contact" className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-[11px] font-semibold text-navy-900">
-                      Talk to us <ArrowUpRight className="h-3 w-3" />
-                    </Link>
+                    <div className="flex items-center gap-2">
+                      <Link to="/services" className="inline-flex items-center gap-1 rounded-full border border-white/20 px-3 py-1.5 text-[11px] font-semibold text-white/80 transition hover:border-white/40 hover:text-white">
+                        All services
+                      </Link>
+                      <Link to="/contact" className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-[11px] font-semibold text-navy-900">
+                        Talk to us <ArrowUpRight className="h-3 w-3" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -621,6 +693,7 @@ function Footer() {
             <a href={appUrl('/privacy.php')} className="inline-flex min-h-[32px] items-center transition hover:text-white">Privacy</a>
             <a href={appUrl('/terms.php')} className="inline-flex min-h-[32px] items-center transition hover:text-white">Terms</a>
             <a href={appUrl('/refund-policy.php')} className="inline-flex min-h-[32px] items-center transition hover:text-white">Refunds</a>
+            <a href={appUrl('/cookie-policy.php')} className="inline-flex min-h-[32px] items-center transition hover:text-white">Cookies</a>
             <Link to="/login" className="inline-flex min-h-[32px] items-center transition hover:text-white">Client login</Link>
             <button
               type="button"

@@ -214,11 +214,15 @@ export function ProjectCover({ cover, className }: { cover?: string | null; clas
 
   return (
     <div
-      className={cn('relative overflow-hidden rounded-2xl', className)}
+      className={cn(
+        'relative overflow-hidden rounded-2xl transition duration-500 group-hover:shadow-[0_30px_70px_-30px_rgba(10,123,206,.7)] group-hover:ring-1 group-hover:ring-brand-400/40',
+        className,
+      )}
       style={{ background: `linear-gradient(135deg, ${colors.from}, ${colors.to})` }}
       aria-hidden="true"
     >
       <div className="absolute inset-0 bg-grid-dark opacity-60" />
+      <div className="screen-sheen" />
       <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full blur-2xl" style={{ background: `${colors.accent}33` }} />
       <svg viewBox="0 0 400 240" className="relative h-full w-full" role="presentation">
         <defs>

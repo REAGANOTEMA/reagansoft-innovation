@@ -247,13 +247,15 @@ export function Contact() {
             </div>
 
             <figure className="overflow-hidden rounded-3xl border border-brand-100 bg-white">
-              <img
-                src={media('team')}
-                alt={MEDIA_ALT.team}
-                className="aspect-[4/3] w-full object-cover"
-                loading="lazy"
-                decoding="async"
-              />
+              <div className="media-glow overflow-hidden">
+                <img
+                  src={media('team')}
+                  alt={MEDIA_ALT.team}
+                  className="aspect-[4/3] w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
               <figcaption className="p-5">
                 <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-brand-600">Visit us in Jinja</p>
                 <p className="mt-1 text-[12.5px] font-semibold text-navy-900">Meet the team before you commit.</p>

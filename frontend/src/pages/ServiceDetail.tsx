@@ -72,7 +72,7 @@ export function ServiceDetail() {
                 {service.delivery_days && <Badge tone="cyan"><Clock3 className="h-3 w-3" /> About {service.delivery_days} days</Badge>}
                 <Badge tone="green"><ShieldCheck className="h-3 w-3" /> Fixed scope before work</Badge>
               </div>
-              <div className="mt-7 overflow-hidden rounded-3xl border border-brand-100 bg-white shadow-soft">
+              <div className="media-glow mt-7 overflow-hidden rounded-3xl border border-brand-100 bg-white shadow-soft">
                 <img
                   src={serviceMedia(service.slug, service.icon)}
                   alt={`${service.name} at Reagansoft Innovation`}

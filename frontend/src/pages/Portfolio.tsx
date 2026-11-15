@@ -67,7 +67,7 @@ export function Portfolio() {
           </div>
           <div className="space-y-3">
             <Reveal delay={100}>
-              <Tilt className="overflow-hidden rounded-2xl border border-white/15 bg-white/5 p-2">
+              <Tilt className="media-glow overflow-hidden rounded-2xl border border-white/15 bg-white/5 p-2">
                 <img
                   src={media('portfolioShowcase')}
                   alt={MEDIA_ALT.portfolioShowcase}

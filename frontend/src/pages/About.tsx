@@ -62,7 +62,9 @@ export function About() {
           <Reveal delay={120}>
             <div className="relative">
               <div className="overflow-hidden rounded-[28px] border border-white/15 bg-white/5 p-2 backdrop-blur">
-                <img src={asset('founder.webp')} alt={`${settings.company_founder}, founder of Reagansoft Innovation`} className="h-[380px] w-full rounded-[22px] object-cover object-top" />
+                <div className="media-glow overflow-hidden rounded-[22px]">
+                  <img src={asset('founder.webp')} alt={`${settings.company_founder}, founder of Reagansoft Innovation`} className="h-[380px] w-full object-cover object-top" />
+                </div>
               </div>
               <div className="absolute -bottom-5 left-5 right-5 rounded-2xl border border-white/15 bg-white/95 p-4 text-navy-900 shadow-lift">
                 <p className="font-display text-sm font-semibold">{settings.company_founder}</p>
@@ -183,7 +185,7 @@ export function About() {
             ].map((item, index) => (
               <Reveal key={item.key} delay={index * 80}>
                 <figure className="group relative overflow-hidden rounded-3xl border border-brand-100 bg-brand-50/40 shadow-soft">
-                  <div className="aspect-[4/3] overflow-hidden">
+                  <div className="media-glow aspect-[4/3] overflow-hidden">
                     <img
                       src={media(item.key)}
                       alt={MEDIA_ALT[item.key]}
@@ -222,7 +224,7 @@ export function About() {
 
           <div className="mt-12 grid gap-4 lg:grid-cols-12">
             <Reveal className="lg:col-span-7">
-              <figure className="group relative h-full overflow-hidden rounded-3xl border border-brand-100 bg-navy-950">
+              <figure className="media-glow group relative h-full overflow-hidden rounded-3xl border border-brand-100 bg-navy-950">
                 <img
                   src={media('team')}
                   alt={MEDIA_ALT.team}
@@ -240,7 +242,7 @@ export function About() {
 
             <div className="grid gap-4 sm:grid-cols-2 lg:col-span-5 lg:grid-cols-1">
               <Reveal delay={80}>
-                <figure className="group relative overflow-hidden rounded-3xl border border-brand-100 bg-navy-950">
+                <figure className="media-glow group relative overflow-hidden rounded-3xl border border-brand-100 bg-navy-950">
                   <img
                     src={media('ceoIsrael')}
                     alt={MEDIA_ALT.ceoIsrael}
@@ -256,7 +258,7 @@ export function About() {
               </Reveal>
 
               <Reveal delay={140}>
-                <figure className="group relative overflow-hidden rounded-3xl border border-brand-100 bg-navy-950">
+                <figure className="media-glow group relative overflow-hidden rounded-3xl border border-brand-100 bg-navy-950">
                   <img
                     src={media('funders')}
                     alt={MEDIA_ALT.funders}
@@ -274,7 +276,7 @@ export function About() {
 
             <Reveal delay={100} className="lg:col-span-4">
               <Tilt className="h-full">
-                <figure className="group relative h-full overflow-hidden rounded-3xl border border-brand-100 bg-navy-900">
+                <figure className="media-glow group relative h-full overflow-hidden rounded-3xl border border-brand-100 bg-navy-900">
                   <img
                     src={media('bike')}
                     alt={MEDIA_ALT.bike}

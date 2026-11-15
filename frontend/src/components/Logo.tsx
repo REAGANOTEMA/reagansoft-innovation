@@ -22,7 +22,11 @@ export function Logo({
         alt={compact ? 'Reagansoft Innovation Limited' : ''}
         width={isReal ? 210 : 48}
         height={isReal ? 144 : 48}
-        className={isReal ? 'h-20 w-auto max-w-[210px] shrink-0 object-contain' : 'h-12 w-12 shrink-0 object-contain'}
+        className={
+          isReal
+            ? 'h-20 w-auto max-w-[210px] shrink-0 object-contain drop-shadow-[0_2px_18px_rgba(30,158,232,.22)] transition duration-500 group-hover:drop-shadow-[0_2px_26px_rgba(30,158,232,.5)]'
+            : 'h-12 w-12 shrink-0 object-contain drop-shadow-[0_2px_14px_rgba(30,158,232,.22)] transition duration-500 group-hover:scale-105 group-hover:drop-shadow-[0_2px_22px_rgba(30,158,232,.55)]'
+        }
       />
       {!compact && !isReal && (
         <span className="leading-tight">

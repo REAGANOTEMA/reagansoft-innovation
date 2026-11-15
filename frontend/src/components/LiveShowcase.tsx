@@ -174,7 +174,11 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
       ))}
 
       <div className="pointer-events-none absolute inset-0 bg-grid-dark opacity-20" />
+      <div className="screen-scan absolute inset-0" />
+      <div className="screen-sheen" />
       <div className="aurora opacity-70" />
+      <div aria-hidden="true" className="pointer-events-none absolute -left-24 top-1/3 h-72 w-72 rounded-full bg-brand-500/20 blur-3xl glow-orb" />
+      <div aria-hidden="true" className="pointer-events-none absolute -right-24 bottom-10 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl glow-orb" />
 
       {/* Broadcast bar */}
       <div className="relative z-20 border-b border-white/10 bg-navy-950/35 backdrop-blur">
@@ -211,7 +215,7 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
 
             <h1 className="h1 mt-5 text-white sm:mt-6">
               {slide.title}
-              <span className="bg-gradient-to-r from-brand-300 via-cyan-300 to-brand-400 bg-clip-text text-transparent">{slide.accent}</span>
+              <span className="text-gradient">{slide.accent}</span>
             </h1>
 
             <p className="mt-5 max-w-xl text-[1rem] leading-relaxed text-white/65 sm:mt-6 sm:text-[1.1rem]">{slide.lead}</p>
@@ -225,28 +229,33 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
               </Link>
             </div>
 
-            <div className="mt-7 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.05] p-2.5 backdrop-blur lg:hidden">
-              <img key={slide.image} src={asset(slide.image)} alt="" className="h-16 w-20 shrink-0 rounded-xl object-cover" />
+            <Link
+              to={slide.to}
+              className="group mt-7 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.05] p-2.5 backdrop-blur transition hover:border-brand-400/50 hover:bg-white/[0.08] lg:hidden"
+            >
+              <span className="media-glow relative h-16 w-20 shrink-0 overflow-hidden rounded-xl">
+                <img key={slide.image} src={asset(slide.image)} alt="" className="h-full w-full object-cover" />
+              </span>
               <div className="min-w-0 flex-1">
                 <p className="font-mono text-[8px] uppercase tracking-[0.2em] text-brand-300">Now showing</p>
                 <p className="mt-1 truncate font-display text-[13px] font-semibold text-white">{slide.channel}</p>
                 <p className="mt-0.5 truncate text-[10px] text-white/45">Jinja, Uganda · engineering studio</p>
               </div>
               <span className="shrink-0 rounded-full bg-emerald-400/10 px-2 py-1 font-mono text-[8px] uppercase tracking-widest text-emerald-300">on air</span>
-            </div>
+            </Link>
 
-            <dl className="mt-7 grid max-w-lg grid-cols-3 gap-2.5 border-t border-white/10 pt-5 sm:mt-10 sm:gap-4 sm:pt-6">
+            <div className="mt-7 grid max-w-lg grid-cols-3 gap-2.5 border-t border-white/10 pt-5 sm:mt-10 sm:gap-4 sm:pt-6">
               {[
-                { label: 'Projects delivered', value: `${stats.projects || 7}+` },
-                { label: 'Organisations served', value: `${stats.clients || 6}+` },
-                { label: 'Service lines', value: `${stats.services || services.length || 14}` },
+                { label: 'Projects delivered', value: `${stats.projects || 7}+`, to: '/portfolio' },
+                { label: 'Organisations served', value: `${stats.clients || 6}+`, to: '/about' },
+                { label: 'Service lines', value: `${stats.services || services.length || 14}`, to: '/services' },
               ].map((item) => (
-                <div key={item.label}>
-                  <dt className="font-mono text-[8px] uppercase leading-relaxed tracking-[0.14em] text-white/35 sm:text-[9px] sm:tracking-[0.18em]">{item.label}</dt>
-                  <dd className="mt-1 font-display text-xl font-semibold text-white sm:text-2xl">{item.value}</dd>
-                </div>
+                <Link key={item.label} to={item.to} className="group">
+                  <p className="font-mono text-[8px] uppercase leading-relaxed tracking-[0.14em] text-white/35 transition group-hover:text-brand-200 sm:text-[9px] sm:tracking-[0.18em]">{item.label}</p>
+                  <p className="mt-1 font-display text-xl font-semibold text-white transition group-hover:text-brand-300 sm:text-2xl">{item.value}</p>
+                </Link>
               ))}
-            </dl>
+            </div>
           </div>
 
           <div className="relative hidden lg:block">
@@ -259,18 +268,23 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
                   </span>
                 </div>
 
-                <div className="mt-3 overflow-hidden rounded-xl border border-white/10">
+                <Link to={slide.to} className="media-glow group relative mt-3 block overflow-hidden rounded-xl border border-white/10">
                   <img key={slide.image} src={asset(slide.image)} alt="" className="h-44 w-full object-cover" />
-                </div>
+                  <span className="absolute inset-0 z-[6] grid place-items-center bg-navy-950/25 opacity-0 transition group-hover:opacity-100">
+                    <span className="grid h-11 w-11 place-items-center rounded-full border border-white/40 bg-white/15 text-white backdrop-blur">
+                      <ArrowUpRight className="h-5 w-5" />
+                    </span>
+                  </span>
+                </Link>
 
                 <div className="mt-3 flex items-center justify-between gap-3">
                   <div>
-                    <p className="font-display text-sm font-semibold text-white">{slide.channel}</p>
+                    <Link to={slide.to} className="font-display text-sm font-semibold text-white transition hover:text-brand-300">{slide.channel}</Link>
                     <p className="mt-0.5 text-[10px] text-white/40">Jinja, Uganda · engineering studio</p>
                   </div>
-                  <span className="grid h-9 w-9 place-items-center rounded-full border border-white/15 bg-white/5 text-brand-300">
+                  <Link to={slide.to} aria-label={`Open ${slide.channel}`} className="grid h-9 w-9 place-items-center rounded-full border border-white/15 bg-white/5 text-brand-300 transition hover:border-brand-400/60 hover:text-white">
                     <ShieldCheck className="h-4 w-4" />
-                  </span>
+                  </Link>
                 </div>
 
                 <div className="mt-4 space-y-2">
@@ -287,6 +301,12 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
                       <ArrowUpRight className="h-3 w-3 text-white/30 transition group-hover:text-brand-300" />
                     </Link>
                   ))}
+                  <Link
+                    to="/services"
+                    className="mt-1 flex items-center justify-center gap-1 rounded-lg border border-brand-400/30 bg-brand-500/10 px-3 py-2 text-[10.5px] font-semibold text-brand-200 transition hover:border-brand-400/60 hover:bg-brand-500/20 hover:text-white"
+                  >
+                    View all {services.length || 14} services <ArrowRight className="h-3 w-3" />
+                  </Link>
                 </div>
               </div>
 

@@ -46,13 +46,15 @@ export function Services() {
               </p>
             </div>
             <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.05] backdrop-blur">
-              <img
-                src={media('technology')}
-                alt={MEDIA_ALT.technology}
-                className="h-28 w-full object-cover opacity-80"
-                loading="lazy"
-                decoding="async"
-              />
+              <div className="media-glow overflow-hidden">
+                <img
+                  src={media('technology')}
+                  alt={MEDIA_ALT.technology}
+                  className="h-28 w-full object-cover opacity-80"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
               <div className="p-5">
                 <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/40">How pricing works</p>
                 <p className="mt-2 text-[13px] leading-relaxed text-white/65">
@@ -144,7 +146,7 @@ export function Services() {
             {filtered.map((service, index) => (
               <Reveal key={service.id} delay={Math.min(index, 6) * 50}>
                 <div className="card card-hover group flex h-full flex-col p-6">
-                  <div className="mb-5 overflow-hidden rounded-2xl">
+                  <div className="media-glow mb-5 overflow-hidden rounded-2xl">
                     <img
                       src={serviceMedia(service.slug, service.icon)}
                       alt={`${service.name} by Reagansoft Innovation`}

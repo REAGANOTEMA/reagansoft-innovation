@@ -94,9 +94,13 @@ export function Home() {
             <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/35">Sectors we serve</span>
             <div className="flex flex-1 flex-wrap items-center gap-x-6 gap-y-2">
               {industries.map((industry) => (
-                <span key={industry.key} className="inline-flex items-center gap-2 text-[12px] font-medium text-white/55">
-                  <IndustryGlyph kind={industry.key} /> {industry.label}
-                </span>
+                <Link
+                  key={industry.key}
+                  to="/services"
+                  className="group inline-flex items-center gap-2 text-[12px] font-medium text-white/55 transition hover:text-white"
+                >
+                  <span className="transition group-hover:text-brand-300"><IndustryGlyph kind={industry.key} /></span> {industry.label}
+                </Link>
               ))}
             </div>
             <span className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-white/30">
@@ -224,7 +228,7 @@ export function Home() {
 
           <div className="mt-12 grid gap-4 lg:grid-cols-12">
             <Reveal className="lg:col-span-7">
-              <figure className="group relative h-full overflow-hidden rounded-3xl border border-brand-100 bg-navy-950">
+              <figure className="media-glow group relative h-full overflow-hidden rounded-3xl border border-brand-100 bg-navy-950">
                 <img
                   src={media('team')}
                   alt={MEDIA_ALT.team}
@@ -247,7 +251,7 @@ export function Home() {
 
             <div className="grid gap-4 sm:grid-cols-2 lg:col-span-5">
               <Reveal delay={80}>
-                <figure className="group relative h-full overflow-hidden rounded-3xl border border-brand-100 bg-brand-50">
+                <figure className="media-glow group relative h-full overflow-hidden rounded-3xl border border-brand-100 bg-brand-50">
                   <img
                     src={media('design')}
                     alt={MEDIA_ALT.design}
@@ -263,7 +267,7 @@ export function Home() {
               </Reveal>
 
               <Reveal delay={140}>
-                <figure className="group relative h-full overflow-hidden rounded-3xl border border-brand-100 bg-brand-50">
+                <figure className="media-glow group relative h-full overflow-hidden rounded-3xl border border-brand-100 bg-brand-50">
                   <img
                     src={media('code')}
                     alt={MEDIA_ALT.code}
@@ -280,13 +284,15 @@ export function Home() {
 
               <Reveal delay={200} className="sm:col-span-2">
                 <figure className="group relative overflow-hidden rounded-3xl border border-brand-100 bg-white p-4 sm:flex sm:items-center sm:gap-5">
-                  <img
-                    src={media('mobileCore')}
-                    alt={MEDIA_ALT.mobileCore}
-                    className="h-36 w-full rounded-2xl object-cover sm:h-24 sm:w-24 sm:shrink-0"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  <span className="media-glow block overflow-hidden rounded-2xl sm:w-24 sm:shrink-0">
+                    <img
+                      src={media('mobileCore')}
+                      alt={MEDIA_ALT.mobileCore}
+                      className="h-36 w-full object-cover sm:h-24 sm:w-full"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </span>
                   <figcaption className="mt-3 sm:mt-0">
                     <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-brand-600">Mobile core</p>
                     <p className="mt-1 font-display text-[13.5px] font-semibold text-navy-900">One product, every screen.</p>
@@ -300,7 +306,7 @@ export function Home() {
           </div>
 
           <Reveal delay={160}>
-            <div className="mt-4 overflow-hidden rounded-3xl border border-brand-100 bg-navy-950">
+            <div className="media-glow mt-4 overflow-hidden rounded-3xl border border-brand-100 bg-navy-950">
               <div className="grid items-center gap-0 md:grid-cols-[0.9fr_1.1fr]">
                 <img
                   src={media('technology')}
@@ -411,13 +417,15 @@ export function Home() {
             <Reveal delay={100}>
               <Tilt className="relative">
                 <figure className="overflow-hidden rounded-3xl border border-brand-100 bg-white p-2.5 shadow-lift">
-                  <img
-                    src={media('administration')}
-                    alt={MEDIA_ALT.administration}
-                    className="aspect-[16/11] w-full rounded-2xl object-cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  <div className="media-glow overflow-hidden rounded-2xl">
+                    <img
+                      src={media('administration')}
+                      alt={MEDIA_ALT.administration}
+                      className="aspect-[16/11] w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
                 </figure>
                 <div className="absolute -bottom-5 left-5 right-5 grid grid-cols-3 gap-2 rounded-2xl border border-brand-100 bg-white/95 p-3 shadow-soft backdrop-blur sm:left-8 sm:right-8">
                   {[

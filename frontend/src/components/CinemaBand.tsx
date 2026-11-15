@@ -70,6 +70,9 @@ export function CinemaBand({ eyebrow = 'Studio reel', title, lead, slides, to, c
         <div className="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/85 to-navy-950/35" />
         <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/25 to-navy-950/50" />
         <div className="pointer-events-none absolute inset-0 bg-grid-dark opacity-20" />
+        <div className="screen-scan absolute inset-0" />
+        <div className="screen-sheen" />
+        <div aria-hidden="true" className="pointer-events-none absolute -right-16 top-1/4 h-64 w-64 rounded-full bg-brand-500/20 blur-3xl glow-orb" />
       </div>
 
       <div className="container-x relative flex min-h-[450px] flex-col justify-between gap-6 py-7 sm:min-h-[470px] sm:py-9">
