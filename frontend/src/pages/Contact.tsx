@@ -105,15 +105,15 @@ export function Contact() {
             </p>
           </div>
           <div className="space-y-2.5">
-            <a href={`mailto:${settings.company_email}`} className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.05] px-4 py-3 text-[12.5px] text-white/70 backdrop-blur transition hover:bg-white/10 hover:text-white">
-              <Mail className="h-4 w-4 text-brand-300" /> {settings.company_email}
+            <a href={`mailto:${settings.company_email}`} className="flex min-w-0 items-center gap-3 rounded-xl border border-white/10 bg-white/[0.05] px-4 py-3 text-[12.5px] text-white/70 backdrop-blur transition hover:bg-white/10 hover:text-white">
+              <Mail className="h-4 w-4 shrink-0 text-brand-300" /> <span className="break-anywhere">{settings.company_email}</span>
             </a>
-            <a href={`tel:${settings.company_phone.replace(/\s/g, '')}`} className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.05] px-4 py-3 text-[12.5px] text-white/70 backdrop-blur transition hover:bg-white/10 hover:text-white">
-              <Phone className="h-4 w-4 text-brand-300" /> {settings.company_phone}
+            <a href={`tel:${settings.company_phone.replace(/\s/g, '')}`} className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-white/10 bg-white/[0.05] px-4 py-3 text-[12.5px] text-white/70 backdrop-blur transition hover:bg-white/10 hover:text-white">
+              <Phone className="h-4 w-4 shrink-0 text-brand-300" /> {settings.company_phone}
               {settings.company_phone_alt && <span className="text-white/40">· {settings.company_phone_alt}</span>}
             </a>
-            <a href={`https://wa.me/${settings.company_whatsapp.replace(/[^\d]/g, '')}`} target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.05] px-4 py-3 text-[12.5px] text-white/70 backdrop-blur transition hover:bg-white/10 hover:text-white">
-              <MessageCircle className="h-4 w-4 text-brand-300" /> WhatsApp {settings.company_whatsapp}
+            <a href={`https://wa.me/${settings.company_whatsapp.replace(/[^\d]/g, '')}`} target="_blank" rel="noreferrer" className="flex min-w-0 items-center gap-3 rounded-xl border border-white/10 bg-white/[0.05] px-4 py-3 text-[12.5px] text-white/70 backdrop-blur transition hover:bg-white/10 hover:text-white">
+              <MessageCircle className="h-4 w-4 shrink-0 text-brand-300" /> <span className="break-anywhere">WhatsApp {settings.company_whatsapp}</span>
             </a>
           </div>
         </div>

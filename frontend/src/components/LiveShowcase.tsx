@@ -146,7 +146,7 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
 
   return (
     <section
-      className="relative flex min-h-[640px] flex-col overflow-hidden bg-navy-950 text-white sm:min-h-[700px] lg:min-h-[760px]"
+      className="relative flex min-h-[560px] flex-col overflow-hidden bg-navy-950 text-white sm:min-h-[700px] lg:min-h-[760px]"
       aria-roledescription="carousel"
       aria-label="Reagansoft live showcase"
       onMouseEnter={() => setPaused(true)}
@@ -198,7 +198,7 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
         </div>
       </div>
 
-      <div className="container-x relative z-10 flex flex-1 flex-col justify-center py-14 lg:py-20">
+      <div className="container-x relative z-10 flex flex-1 flex-col justify-center py-10 sm:py-14 lg:py-20">
         <div className="grid items-center gap-12 lg:grid-cols-[1.08fr_0.92fr]">
           <div key={active} className="max-w-2xl">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-brand-200 backdrop-blur">
@@ -209,31 +209,41 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
               {slide.eyebrow}
             </span>
 
-            <h1 className="h1 mt-6 text-white">
+            <h1 className="h1 mt-5 text-white sm:mt-6">
               {slide.title}
               <span className="bg-gradient-to-r from-brand-300 via-cyan-300 to-brand-400 bg-clip-text text-transparent">{slide.accent}</span>
             </h1>
 
-            <p className="mt-6 max-w-xl text-[1.02rem] leading-relaxed text-white/65 sm:text-[1.1rem]">{slide.lead}</p>
+            <p className="mt-5 max-w-xl text-[1rem] leading-relaxed text-white/65 sm:mt-6 sm:text-[1.1rem]">{slide.lead}</p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link to={slide.to} className="btn-primary">
+            <div className="mt-7 flex flex-col gap-3 min-[420px]:flex-row min-[420px]:flex-wrap min-[420px]:items-center">
+              <Link to={slide.to} className="btn-primary justify-center">
                 {slide.cta} <ArrowRight className="h-4 w-4" />
               </Link>
-              <Link to="/portfolio" className="btn inline-flex border border-white/20 bg-white/5 text-white backdrop-blur hover:bg-white/10">
+              <Link to="/portfolio" className="btn inline-flex justify-center border border-white/20 bg-white/5 text-white backdrop-blur hover:bg-white/10">
                 Watch our work <ArrowUpRight className="h-4 w-4" />
               </Link>
             </div>
 
-            <dl className="mt-10 grid max-w-lg grid-cols-3 gap-4 border-t border-white/10 pt-6">
+            <div className="mt-7 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.05] p-2.5 backdrop-blur lg:hidden">
+              <img key={slide.image} src={asset(slide.image)} alt="" className="h-16 w-20 shrink-0 rounded-xl object-cover" />
+              <div className="min-w-0 flex-1">
+                <p className="font-mono text-[8px] uppercase tracking-[0.2em] text-brand-300">Now showing</p>
+                <p className="mt-1 truncate font-display text-[13px] font-semibold text-white">{slide.channel}</p>
+                <p className="mt-0.5 truncate text-[10px] text-white/45">Jinja, Uganda · engineering studio</p>
+              </div>
+              <span className="shrink-0 rounded-full bg-emerald-400/10 px-2 py-1 font-mono text-[8px] uppercase tracking-widest text-emerald-300">on air</span>
+            </div>
+
+            <dl className="mt-7 grid max-w-lg grid-cols-3 gap-2.5 border-t border-white/10 pt-5 sm:mt-10 sm:gap-4 sm:pt-6">
               {[
                 { label: 'Projects delivered', value: `${stats.projects || 7}+` },
                 { label: 'Organisations served', value: `${stats.clients || 6}+` },
                 { label: 'Service lines', value: `${stats.services || services.length || 14}` },
               ].map((item) => (
                 <div key={item.label}>
-                  <dt className="font-mono text-[9px] uppercase tracking-[0.18em] text-white/35">{item.label}</dt>
-                  <dd className="mt-1 font-display text-2xl font-semibold text-white">{item.value}</dd>
+                  <dt className="font-mono text-[8px] uppercase leading-relaxed tracking-[0.14em] text-white/35 sm:text-[9px] sm:tracking-[0.18em]">{item.label}</dt>
+                  <dd className="mt-1 font-display text-xl font-semibold text-white sm:text-2xl">{item.value}</dd>
                 </div>
               ))}
             </dl>

@@ -99,7 +99,7 @@ export function Home() {
                 </span>
               ))}
             </div>
-            <span className="hidden items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-white/30 sm:flex">
+            <span className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-white/30">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Open for Q1 2027
             </span>
           </div>

@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>mobile check</title>
+<style>body{margin:0;font:12px monospace}iframe{width:390px;height:844px;border:0}pre{white-space:pre-wrap}</style>
+</head>
+<body>
+<pre id="out">loading</pre>
+<iframe id="f"></iframe>
+<script>
+const f = document.getElementById('f');
+const out = document.getElementById('out');
+const params = new URLSearchParams(location.search);
+const target = params.get('url') || 'http://localhost/reagansoft-innovation/';
+f.src = target;
+
+function measure(doc, win, label) {
+  const vw = win.innerWidth;
+  const de = doc.documentElement;
+  const body = doc.body;
+  const all = Array.from(doc.querySelectorAll('body *'));
+  const overflow = all.map((el) => {
+    const r = el.getBoundingClientRect();
+    return {
+      tag: el.tagName.toLowerCase(),
+      cls: String(el.className || '').replace(/\s+/g, ' ').slice(0, 100),
+      left: Math.round(r.left),
+      right: Math.round(r.right),
+      width: Math.round(r.width),
+      text: String(el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 70),
+    };
+  }).filter((x) => x.width > 0 && (x.right > vw + 2 || x.left < -2)).slice(0, 50);
+  const clipped = all.map((el) => {
+    if (!el.clientWidth || !el.clientHeight) return null;
+    const style = win.getComputedStyle(el);
+    if (style.overflow === 'visible' && style.overflowX === 'visible') return null;
+    if (el.scrollWidth > el.clientWidth + 2) {
+      return {
+        tag: el.tagName.toLowerCase(),
+        cls: String(el.className || '').replace(/\s+/g, ' ').slice(0, 100),
+        scrollWidth: el.scrollWidth,
+        clientWidth: el.clientWidth,
+        text: String(el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 70),
+      };
+    }
+    return null;
+  }).filter(Boolean).slice(0, 30);
+  const footer = doc.querySelector('footer');
+  let footerInfo = null;
+  if (footer) {
+    const fr = footer.getBoundingClientRect();
+    const kids = Array.from(footer.querySelectorAll(':scope > *, :scope > * > *')).slice(0, 30).map((el) => {
+      const r = el.getBoundingClientRect();
+      return {
+        tag: el.tagName.toLowerCase(),
+        cls: String(el.className || '').replace(/\s+/g, ' ').slice(0, 90),
+        left: Math.round(r.left), right: Math.round(r.right), top: Math.round(r.top), width: Math.round(r.width), height: Math.round(r.height),
+        text: String(el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 55),
+      };
+    });
+    footerInfo = { top: Math.round(fr.top), width: Math.round(fr.width), height: Math.round(fr.height), scrollWidth: footer.scrollWidth, kids };
+  }
+  return { label, url: win.location.href, vw, docScrollWidth: de.scrollWidth, bodyScrollWidth: body.scrollWidth, overflow, clipped, footer: footerInfo };
+}
+
+function run() {
+  try {
+    const doc = f.contentDocument;
+    const win = f.contentWindow;
+    const first = measure(doc, win, 'home-390');
+    f.style.width = '360px';
+    setTimeout(() => {
+      const second = measure(doc, win, 'home-360');
+      out.textContent = JSON.stringify([first, second], null, 2);
+    }, 800);
+  } catch (e) {
+    out.textContent = 'ERR ' + e.stack;
+  }
+}
+f.addEventListener('load', () => setTimeout(run, 4500));
+</script>
+</body>
+</html>

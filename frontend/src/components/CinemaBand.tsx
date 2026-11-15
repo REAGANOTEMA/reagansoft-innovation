@@ -72,7 +72,7 @@ export function CinemaBand({ eyebrow = 'Studio reel', title, lead, slides, to, c
         <div className="pointer-events-none absolute inset-0 bg-grid-dark opacity-20" />
       </div>
 
-      <div className="container-x relative flex min-h-[430px] flex-col justify-between py-7 sm:min-h-[470px] sm:py-9">
+      <div className="container-x relative flex min-h-[450px] flex-col justify-between gap-6 py-7 sm:min-h-[470px] sm:py-9">
         <div className="flex flex-wrap items-center justify-between gap-3 text-[10px] uppercase tracking-[0.2em] text-white/45">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3 py-1.5 font-mono font-semibold text-brand-200 backdrop-blur">
             <Radio className="h-3 w-3" /> {eyebrow}
@@ -82,7 +82,7 @@ export function CinemaBand({ eyebrow = 'Studio reel', title, lead, slides, to, c
           </span>
         </div>
 
-        <div className="grid gap-8 pb-3 lg:grid-cols-[1fr_auto] lg:items-end">
+        <div className="grid gap-6 pb-2 sm:gap-8 sm:pb-3 lg:grid-cols-[1fr_auto] lg:items-end">
           <div key={active} className="max-w-2xl">
             <span className="inline-flex rounded-full bg-brand-500/15 px-3 py-1 font-mono text-[9.5px] font-bold uppercase tracking-[0.18em] text-brand-200 ring-1 ring-brand-400/30">
               {slide.label}
@@ -94,13 +94,13 @@ export function CinemaBand({ eyebrow = 'Studio reel', title, lead, slides, to, c
               {slide.caption}
             </p>
             {to && cta && (
-              <Link to={to} className="btn mt-5 border border-white/20 bg-white/5 text-white backdrop-blur hover:bg-white/10">
+              <Link to={to} className="btn mt-5 w-full justify-center border border-white/20 bg-white/5 text-white backdrop-blur hover:bg-white/10 min-[420px]:w-auto">
                 {cta} <ArrowRight className="h-4 w-4" />
               </Link>
             )}
           </div>
 
-          <div className="flex items-center gap-2 lg:flex-col lg:items-end">
+          <div className="flex flex-wrap items-center gap-2 lg:flex-col lg:items-end">
             <div className="flex items-center gap-2">
               <button
                 type="button"

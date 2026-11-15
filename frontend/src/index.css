@@ -15,12 +15,61 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
   @apply bg-white text-ink antialiased;
   font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-  overflow-x: hidden;
+  /* `clip` keeps sticky/fixed positioning working while still preventing
+     decorative layers from creating a horizontal scrollbar on phones. */
+  overflow-x: clip;
+  min-width: 320px;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
+
+/* Long emails, phone numbers and references should never push a card wide. */
+.break-anywhere {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Respect notches and home indicators on modern phones. */
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+.safe-bottom {
+  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+}
+.safe-x {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Comfortable, predictable tap targets on touch screens. */
+@media (hover: none) and (pointer: coarse) {
+  .btn,
+  .btn-primary,
+  .btn-dark,
+  .btn-ghost,
+  .btn-gold {
+    min-height: 44px;
+  }
+  .svc-btn,
+  .side-link,
+  a,
+  button,
+  select,
+  summary {
+    touch-action: manipulation;
+  }
 }
 
 ::selection {
@@ -48,7 +97,7 @@ body {
 
 @layer components {
   .container-x {
-    @apply mx-auto w-full max-w-[1200px] px-5 sm:px-7 lg:px-8;
+    @apply mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8;
   }
 
   .eyebrow {
