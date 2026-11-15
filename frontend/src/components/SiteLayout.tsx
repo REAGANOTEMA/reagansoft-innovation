@@ -184,7 +184,7 @@ export function SiteLayout() {
         </div>
       )}
 
-      <main key={location.pathname} className="flex-1">
+      <main key={location.pathname} className="page-enter flex-1">
         <Outlet />
       </main>
 

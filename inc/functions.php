@@ -592,6 +592,182 @@ function upload_file(array $file): array {
     ];
 }
 
+/**
+ * Validates an uploaded image, crops it (avatars) or fits it (branding),
+ * and stores the result as a PNG under uploads/<subdir>/<year>/.
+ * Falls back to storing the validated original when GD is unavailable.
+ */
+function upload_image(array $file, string $subdir = 'avatars', int $max = 512, bool $square = true): array
+{
+    $fail = static fn(string $message): array => [
+        'ok' => false, 'error' => $message, 'path' => '', 'url' => '', 'mime' => '', 'size' => 0,
+    ];
+
+    if (!isset($file['error']) || is_array($file['error'])) {
+        return $fail('No image was selected.');
+    }
+    if ((int)$file['error'] === UPLOAD_ERR_NO_FILE) {
+        return $fail('No image was selected.');
+    }
+    if ((int)$file['error'] !== UPLOAD_ERR_OK) {
+        return $fail('The image could not be uploaded (error code ' . (int)$file['error'] . ').');
+    }
+    if ((int)$file['size'] <= 0) {
+        return $fail('The image file is empty.');
+    }
+    if ((int)$file['size'] > MAX_UPLOAD_BYTES) {
+        return $fail('Image is too large. Maximum allowed is ' . (MAX_UPLOAD_BYTES / 1048576) . ' MB.');
+    }
+
+    $info = @getimagesize((string)$file['tmp_name']);
+    if ($info === false || (int)$info[0] < 1 || (int)$info[1] < 1) {
+        return $fail('That file is not a valid image. Use PNG, JPG, GIF or WebP.');
+    }
+    $width = (int)$info[0];
+    $height = (int)$info[1];
+    $type = (int)$info[2];
+
+    $types = [
+        IMAGETYPE_JPEG => ['jpg', 'image/jpeg', 'imagecreatefromjpeg'],
+        IMAGETYPE_PNG  => ['png', 'image/png', 'imagecreatefrompng'],
+        IMAGETYPE_GIF  => ['gif', 'image/gif', 'imagecreatefromgif'],
+        IMAGETYPE_WEBP => ['webp', 'image/webp', 'imagecreatefromwebp'],
+    ];
+    if (!isset($types[$type])) {
+        return $fail('That image type is not supported. Use PNG, JPG, GIF or WebP.');
+    }
+
+    $safeSubdir = preg_replace('/[^a-z0-9_-]/i', '', $subdir);
+    if ($safeSubdir === '') {
+        $safeSubdir = 'avatars';
+    }
+    $year = date('Y');
+    $dir = UPLOAD_DIR . $safeSubdir . '/' . $year;
+    if (!is_dir($dir) && !mkdir($dir, 0775, true) && !is_dir($dir)) {
+        return $fail('Could not create the upload directory.');
+    }
+
+    $canProcess = function_exists('imagecreatetruecolor')
+        && function_exists('imagecopyresampled')
+        && function_exists($types[$type][2]);
+    $ext = $canProcess ? 'png' : $types[$type][0];
+    $mime = $canProcess ? 'image/png' : $types[$type][1];
+
+    $stored = bin2hex(random_bytes(16)) . '.' . $ext;
+    $dest = $dir . '/' . $stored;
+    $processed = false;
+
+    if ($canProcess) {
+        $src = @$types[$type][2]((string)$file['tmp_name']);
+        if ($src !== false && $src !== null) {
+            if ($square) {
+                $side = min($width, $height);
+                $sourceX = (int)(($width - $side) / 2);
+                $sourceY = (int)(($height - $side) / 2);
+                $outSize = max(16, min($max, $side));
+                $dst = imagecreatetruecolor($outSize, $outSize);
+                imagealphablending($dst, false);
+                imagesavealpha($dst, true);
+                imagefilledrectangle($dst, 0, 0, $outSize, $outSize, imagecolorallocatealpha($dst, 0, 0, 0, 127));
+                $processed = imagecopyresampled($dst, $src, 0, 0, $sourceX, $sourceY, $outSize, $outSize, $side, $side);
+            } else {
+                $scale = min(1, $max / max($width, $height));
+                $outW = max(1, (int)round($width * $scale));
+                $outH = max(1, (int)round($height * $scale));
+                $dst = imagecreatetruecolor($outW, $outH);
+                imagealphablending($dst, false);
+                imagesavealpha($dst, true);
+                imagefilledrectangle($dst, 0, 0, $outW, $outH, imagecolorallocatealpha($dst, 0, 0, 0, 127));
+                $processed = imagecopyresampled($dst, $src, 0, 0, 0, 0, $outW, $outH, $width, $height);
+            }
+            if ($processed) {
+                $processed = imagepng($dst, $dest, 7);
+            }
+            imagedestroy($dst);
+            imagedestroy($src);
+        }
+    }
+
+    if (!$processed) {
+        // Processing failed (or GD is unavailable): keep the validated
+        // original bytes, but make sure the extension/mime still match.
+        if ($ext === 'png' && $types[$type][0] !== 'png') {
+            @unlink($dest);
+            $ext = $types[$type][0];
+            $mime = $types[$type][1];
+            $stored = preg_replace('/\.png$/', '', $stored) . '.' . $ext;
+            $dest = $dir . '/' . $stored;
+        }
+        if (!move_uploaded_file((string)$file['tmp_name'], $dest)) {
+            return $fail('The image could not be stored. Please try again.');
+        }
+    }
+
+    $rel = $safeSubdir . '/' . $year . '/' . $stored;
+    return [
+        'ok'    => true,
+        'error' => '',
+        'path'  => $rel,
+        'url'   => app_url('uploads/' . $rel),
+        'mime'  => $mime,
+        'size'  => (int)(@filesize($dest) ?: 0),
+    ];
+}
+
+/** Remove a previously stored avatar or branding image, never anything outside uploads/. */
+function delete_upload(?string $rel): void
+{
+    $rel = str_replace('\\', '/', trim((string)$rel));
+    if ($rel === '' || str_contains($rel, '..') || !preg_match('#^(avatars|branding)/#', $rel)) {
+        return;
+    }
+    $root = realpath(UPLOAD_DIR);
+    $abs = realpath(UPLOAD_DIR . $rel);
+    if ($root === false || $abs === false || !str_starts_with($abs, $root)) {
+        return;
+    }
+    if (is_file($abs)) {
+        @unlink($abs);
+    }
+}
+
+/** Public URL for a stored avatar path, or '' when the user has no photo. */
+function avatar_url(?string $path): string
+{
+    $path = str_replace('\\', '/', trim((string)$path));
+    if ($path === '') {
+        return '';
+    }
+    if (preg_match('#^https?://#i', $path)) {
+        return $path;
+    }
+    return app_url('uploads/' . ltrim($path, '/'));
+}
+
+/**
+ * Brand logo URL, settings-driven with the shipped asset as fallback.
+ * Variants: new (mark) / real (full company mark); dark for dark surfaces.
+ */
+function logo_url(string $variant = 'new', bool $dark = false): string
+{
+    $variant = $variant === 'real' ? 'real' : 'new';
+    $key = $variant === 'real'
+        ? ($dark ? 'logo_real_dark' : 'logo_real')
+        : ($dark ? 'logo_mark_dark' : 'logo_mark');
+    $custom = trim(settings($key, ''));
+    if ($custom !== '') {
+        if (preg_match('#^https?://#i', $custom)) {
+            return $custom;
+        }
+        return app_url('uploads/' . ltrim(str_replace('\\', '/', $custom), '/'));
+    }
+    $file = $variant === 'real'
+        ? ($dark ? 'real-reagansoft-logo-white.png' : 'real-reagansoft-logo.png')
+        : ($dark ? 'reagansoftinnovation-logo-new-white.png' : 'reagansoftinnovation-logo-new.png');
+    return app_url('assets/img/' . $file);
+}
+
+/** Keep the file size formatting next to the upload helpers. */
 function pretty_size(int $bytes): string {
     if ($bytes >= 1048576) return number_format($bytes / 1048576, 1) . ' MB';
     if ($bytes >= 1024) return number_format($bytes / 1024, 0) . ' KB';
@@ -819,12 +995,19 @@ function phone_tel(?string $num): string {
  * payment numbers so WhatsApp, MTN and the call lines can differ.
  */
 function whatsapp_number_raw(): string {
-    return phone_digits(settings('company_whatsapp', ''));
+    foreach ([settings('company_whatsapp', ''), settings('payment_mtn_number', ''), settings('company_phone', '')] as $candidate) {
+        $digits = phone_digits($candidate);
+        if ($digits !== '') {
+            return $digits;
+        }
+    }
+    return '';
 }
 
 /** The number as a visitor should read it (local format). */
 function whatsapp_number_display(): string {
-    return phone_display(settings('company_whatsapp', ''));
+    $digits = whatsapp_number_raw();
+    return $digits === '' ? '' : phone_display($digits);
 }
 
 function whatsapp_url(string $text = ''): string {

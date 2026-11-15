@@ -437,6 +437,183 @@ canvas {
   animation: kenburns 11s ease-out both;
 }
 
+/* ------------------------------------------------------------------ */
+/* Lively carousel captions, tickers and broadcast details.            */
+/* ------------------------------------------------------------------ */
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.slide-rise {
+  opacity: 0;
+  animation: riseIn 0.65s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.slide-delay-1 { animation-delay: 0.06s; }
+.slide-delay-2 { animation-delay: 0.13s; }
+.slide-delay-3 { animation-delay: 0.2s; }
+.slide-delay-4 { animation-delay: 0.27s; }
+.slide-delay-5 { animation-delay: 0.34s; }
+.slide-delay-6 { animation-delay: 0.42s; }
+
+@keyframes tickerScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: tickerScroll 30s linear infinite;
+  will-change: transform;
+}
+.ticker:hover .ticker-track {
+  animation-play-state: paused;
+}
+
+@keyframes eqBounce {
+  0%, 100% { transform: scaleY(0.32); }
+  50% { transform: scaleY(1); }
+}
+.live-eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 11px;
+}
+.live-eq span {
+  display: block;
+  width: 2px;
+  height: 100%;
+  border-radius: 2px;
+  background: currentColor;
+  transform-origin: bottom center;
+  animation: eqBounce 0.9s ease-in-out infinite;
+}
+.live-eq span:nth-child(2) { animation-delay: -0.25s; }
+.live-eq span:nth-child(3) { animation-delay: -0.55s; }
+.live-eq span:nth-child(4) { animation-delay: -0.15s; }
+.live-eq span:nth-child(5) { animation-delay: -0.4s; }
+
+@keyframes hoverFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-9px); }
+}
+.float-soft {
+  animation: hoverFloat 7s ease-in-out infinite;
+}
+
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.page-enter {
+  animation: pageIn 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes loadingSweep {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(320%); }
+}
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: #e9f3fb;
+  border-radius: 0.75rem;
+}
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75), transparent);
+  animation: loadingSweep 1.5s ease-in-out infinite;
+}
+
+/* A soft light sweep across primary buttons on hover. */
+.btn-primary,
+.btn-dark,
+.btn-gold {
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::after,
+.btn-dark::after,
+.btn-gold::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-140%) skewX(-18deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: transform 0.7s ease;
+  pointer-events: none;
+}
+.btn-primary:hover::after,
+.btn-dark:hover::after,
+.btn-gold:hover::after {
+  transform: translateX(140%) skewX(-18deg);
+}
+
+/* Premium gradient border that fades in on hover. */
+.card-hover {
+  position: relative;
+}
+.card-hover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(79, 182, 255, 0.7), rgba(79, 182, 255, 0) 45%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.card-hover:hover::before {
+  opacity: 1;
+}
+
+/* Cinematic frame brackets used on media slides. */
+.frame-corner {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-style: solid;
+  border-color: rgba(136, 208, 255, 0.55);
+  pointer-events: none;
+}
+.frame-corner-tl { top: 14px; left: 14px; border-top-width: 1.5px; border-left-width: 1.5px; }
+.frame-corner-tr { top: 14px; right: 14px; border-top-width: 1.5px; border-right-width: 1.5px; }
+.frame-corner-bl { bottom: 14px; left: 14px; border-bottom-width: 1.5px; border-left-width: 1.5px; }
+.frame-corner-br { bottom: 14px; right: 14px; border-bottom-width: 1.5px; border-right-width: 1.5px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track,
+  .live-eq span,
+  .float-soft,
+  .slide-rise,
+  .page-enter {
+    animation: none !important;
+  }
+  .slide-rise {
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

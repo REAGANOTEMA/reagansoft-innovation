@@ -13,10 +13,41 @@ $ALLOWED = [
     'project_deposit', 'registration_open',
 ];
 
+$LOGO_KEYS = ['logo_mark', 'logo_mark_dark', 'logo_real', 'logo_real_dark'];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
     $action = $_POST['action'] ?? '';
     if ($action === 'save_settings') {
+        $logoUpdates = [];
+        $logoErrors = [];
+        $newFiles = [];
+
+        foreach ($LOGO_KEYS as $key) {
+            if (!empty($_POST['remove_' . $key])) {
+                $logoUpdates[$key] = '';
+                continue;
+            }
+            if (empty($_FILES[$key]['name'])) {
+                continue;
+            }
+            $res = upload_image($_FILES[$key], 'branding', 900, false);
+            if (!$res['ok']) {
+                $logoErrors[] = ucfirst(str_replace('_', ' ', $key)) . ': ' . $res['error'];
+            } else {
+                $logoUpdates[$key] = $res['path'];
+                $newFiles[] = $res['path'];
+            }
+        }
+
+        if ($logoErrors) {
+            foreach ($newFiles as $rel) {
+                delete_upload($rel);
+            }
+            set_errors($logoErrors);
+            redirect(app_url('admin/settings.php'));
+        }
+
         $pdo->beginTransaction();
         $up = $pdo->prepare('INSERT INTO settings (setting_key, setting_value) VALUES (?,?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)');
         foreach ($ALLOWED as $key) {
@@ -29,10 +60,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($key === 'registration_open') { $val = isset($_POST['registration_open']) ? '1' : '0'; }
             $up->execute([$key, $val]);
         }
+        foreach ($logoUpdates as $key => $rel) {
+            $old = settings($key, '');
+            if ($old !== $rel) {
+                delete_upload($old);
+            }
+            $up->execute([$key, $rel]);
+        }
         // WhatsApp is a communication number and is independent from the
         // MTN payment number, so the two may differ.
-        // Airtel is calls-only; clear any legacy payment destination.
-        $up->execute(['payment_airtel_number', '']);
         $pdo->commit();
         audit('settings_updated', 'settings', 0, 'Company settings updated by ' . $me['full_name']);
         flash('success', 'Settings saved.');
@@ -44,6 +80,7 @@ $rows = $pdo->query('SELECT setting_key, setting_value FROM settings')->fetchAll
 $cfg = [];
 foreach ($rows as $r) { $cfg[$r['setting_key']] = $r['setting_value']; }
 foreach ($ALLOWED as $key) { $cfg[$key] = $cfg[$key] ?? ''; }
+foreach ($LOGO_KEYS as $key) { $cfg[$key] = $cfg[$key] ?? ''; }
 $currency = $cfg['currency'] ?: 'UGX';
 
 dashboard_head(['title' => 'Settings', 'active' => 'settings', 'crumb' => 'Settings']);
@@ -58,7 +95,7 @@ dashboard_head(['title' => 'Settings', 'active' => 'settings', 'crumb' => 'Setti
 
 <?php render_alerts(); ?>
 
-<form method="post" action="settings.php" novalidate>
+<form method="post" action="settings.php" enctype="multipart/form-data" novalidate>
   <?= csrf_field() ?>
   <input type="hidden" name="action" value="save_settings">
 
@@ -95,6 +132,35 @@ dashboard_head(['title' => 'Settings', 'active' => 'settings', 'crumb' => 'Setti
   </section>
 
   <section class="panel">
+    <div class="panel-head"><h3><?= icon('globe') ?> Brand logos</h3></div>
+    <p class="small muted">Upload replacements for the shipped logos. PNG, JPG, GIF or WebP up to 10 MB. Transparent PNG is recommended. Leave a field empty to keep the current logo.</p>
+    <div class="grid-2">
+      <?php foreach ([
+          'logo_mark'      => 'Mark, light backgrounds',
+          'logo_mark_dark' => 'Mark, dark backgrounds',
+          'logo_real'      => 'Full logo, light backgrounds',
+          'logo_real_dark' => 'Full logo, dark backgrounds',
+      ] as $key => $label): ?>
+        <div class="field">
+          <label for="<?= e($key) ?>"><?= e($label) ?></label>
+          <?php
+            $variant = str_starts_with($key, 'logo_real') ? 'real' : 'new';
+            $dark = str_ends_with($key, '_dark');
+            $preview = $cfg[$key] !== '' ? avatar_url($cfg[$key]) : logo_url($variant, $dark);
+          ?>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;padding:10px;border:1px solid rgba(8,59,102,.12);border-radius:12px;background:#fff">
+            <img src="<?= e($preview) ?>" alt="" style="max-height:52px;max-width:140px;object-fit:contain">
+          </div>
+          <input class="input" id="<?= e($key) ?>" type="file" name="<?= e($key) ?>" accept=".png,.jpg,.jpeg,.gif,.webp">
+          <?php if ($cfg[$key] !== ''): ?>
+            <label class="check" style="display:flex;gap:8px;align-items:center;margin-top:6px"><input type="checkbox" name="remove_<?= e($key) ?>" value="1"><span class="small">Reset to shipped logo</span></label>
+          <?php endif; ?>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  </section>
+
+  <section class="panel">
     <div class="panel-head"><h3><?= icon('money') ?> Currency &amp; invoicing</h3></div>
     <div class="form-row">
       <div class="field"><label for="currency">Currency code</label><input class="input" id="currency" name="currency" maxlength="8" value="<?= e($cfg['currency']) ?>"></div>
@@ -112,7 +178,7 @@ dashboard_head(['title' => 'Settings', 'active' => 'settings', 'crumb' => 'Setti
   <section class="panel">
     <div class="panel-head"><h3><?= icon('settings') ?> Payment details</h3></div>
     <div class="form-row">
-      <div class="field"><label for="payment_mtn_number">MTN MoMo number (also WhatsApp)</label><input class="input" id="payment_mtn_number" name="payment_mtn_number" maxlength="40" value="<?= e($cfg['payment_mtn_number']) ?>"><div class="form-note">Saving this also updates the WhatsApp number to match.</div></div>
+      <div class="field"><label for="payment_mtn_number">MTN MoMo number</label><input class="input" id="payment_mtn_number" name="payment_mtn_number" maxlength="40" value="<?= e($cfg['payment_mtn_number']) ?>"><div class="form-note">Payment destination only. WhatsApp uses its own number above.</div></div>
       <div class="field"><label>Airtel number</label><div class="input" style="display:flex;align-items:center;background:var(--sky-50)"><?= e($cfg['company_phone'] ?: 'Set the company phone above') ?></div><div class="form-note">Phone calls only. Airtel is not a payment destination.</div></div>
     </div>
     <div class="field"><label for="payment_bank_details">Bank details</label><textarea class="textarea" id="payment_bank_details" name="payment_bank_details" rows="3" placeholder="Bank name, account name, account number…"><?= e($cfg['payment_bank_details']) ?></textarea></div>

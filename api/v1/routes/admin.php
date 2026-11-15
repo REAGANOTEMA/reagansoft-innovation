@@ -84,6 +84,10 @@ function handle_admin(string $method, array $seg): bool
         if ($method === 'GET') admin_settings_get();
         if (in_array($method, ['PATCH', 'PUT', 'POST'], true)) admin_settings_update();
     }
+    if ($what === 'branding') {
+        if ($method === 'POST') admin_branding_upload();
+        if ($method === 'DELETE') admin_branding_remove();
+    }
     if ($what === 'audit' && $method === 'GET') {
         admin_audit($user);
     }
@@ -486,6 +490,7 @@ function admin_client_detail(string $id): never
     $client = $st->fetch();
     if (!$client) throw new ApiException('Client not found.', 404);
     unset($client['password_hash']);
+    $client['avatar'] = $client['avatar'] ? avatar_url((string)$client['avatar']) : null;
     $projects = db()->prepare('SELECT id, ref_no, title, status, progress, submitted_at FROM projects WHERE client_id = ? ORDER BY id DESC');
     $projects->execute([(int)$id]);
     $invoices = db()->prepare('SELECT id, invoice_no, total, amount_paid, status, due_date FROM invoices WHERE client_id = ? ORDER BY id DESC');
@@ -1103,9 +1108,13 @@ function admin_users_list(): never
 {
     api_require_admin();
     $rows = db()->query(
-        "SELECT id, full_name, email, phone, role, company, active, last_login_at, created_at
+        "SELECT id, full_name, email, phone, role, company, avatar, active, last_login_at, created_at
          FROM users ORDER BY role, full_name"
     )->fetchAll();
+    foreach ($rows as &$row) {
+        $row['avatar'] = $row['avatar'] ? avatar_url((string)$row['avatar']) : null;
+    }
+    unset($row);
     api_ok($rows);
 }
 
@@ -1310,6 +1319,7 @@ function admin_settings_update(): never
         'registration_open', 'seo_keywords', 'site_announcement', 'support_email',
         'newsletter_enabled', 'payment_mtn_number', 'payment_airtel_number',
         'payment_bank_details', 'payment_gateway_status', 'invoices_due_days', 'tax_percent',
+        'logo_mark', 'logo_mark_dark', 'logo_real', 'logo_real_dark',
     ];
     $st = db()->prepare(
         'INSERT INTO settings (setting_key, setting_value) VALUES (?,?)
@@ -1326,6 +1336,59 @@ function admin_settings_update(): never
     if (!$updated) throw new ApiException('No settings were supplied.', 422);
     audit('settings_updated', 'settings', null, 'Updated: ' . implode(', ', $updated));
     api_ok(['updated' => $updated]);
+}
+
+function admin_branding_slot(): string
+{
+    $key = trim((string)($_POST['key'] ?? ($_GET['key'] ?? '')));
+    if (!in_array($key, ['logo_mark', 'logo_mark_dark', 'logo_real', 'logo_real_dark'], true)) {
+        throw new ApiException('Invalid logo slot.', 422, ['key' => 'Unknown logo slot.']);
+    }
+    return $key;
+}
+
+function admin_branding_upload(): never
+{
+    api_require_admin();
+    api_require_csrf();
+    $key = admin_branding_slot();
+
+    if (empty($_FILES['logo']) || !is_array($_FILES['logo'])) {
+        throw new ApiException('Choose an image to upload.', 422, ['logo' => 'No image selected.']);
+    }
+    $result = upload_image($_FILES['logo'], 'branding', 900, false);
+    if (!$result['ok']) {
+        throw new ApiException($result['error'], 422, ['logo' => $result['error']]);
+    }
+
+    $old = settings($key, '');
+    db()->prepare(
+        'INSERT INTO settings (setting_key, setting_value) VALUES (?,?)
+         ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)'
+    )->execute([$key, $result['path']]);
+    if ($old !== '' && $old !== $result['path']) {
+        delete_upload($old);
+    }
+    audit('branding_updated', 'settings', null, 'Updated ' . str_replace('_', ' ', $key));
+
+    api_ok(['key' => $key, 'path' => $result['path'], 'url' => $result['url']]);
+}
+
+function admin_branding_remove(): never
+{
+    api_require_admin();
+    api_require_csrf();
+    $key = admin_branding_slot();
+
+    $old = settings($key, '');
+    db()->prepare(
+        'INSERT INTO settings (setting_key, setting_value) VALUES (?,?)
+         ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)'
+    )->execute([$key, '']);
+    delete_upload($old);
+    audit('branding_removed', 'settings', null, 'Reset ' . str_replace('_', ' ', $key));
+
+    api_ok(['key' => $key]);
 }
 
 function admin_audit(array $user): never

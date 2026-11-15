@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowRight,
@@ -100,11 +100,33 @@ const slides: Slide[] = [
 
 const DURATION = 4500;
 
+const tickerItems = [
+  'Websites that earn their keep',
+  'Management systems',
+  'Ecommerce & mobile money',
+  'Web and mobile apps',
+  'Billing automation',
+  'Integrations & APIs',
+  'Support after launch',
+  'Jinja · Uganda',
+];
+
 export function LiveShowcase({ services, stats }: { services: Service[]; stats: { projects: number; clients: number; services: number } }) {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
   const [clock, setClock] = useState(() => new Date());
   const timer = useRef<number | null>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  const handlePointerMove = (event: ReactPointerEvent<HTMLElement>) => {
+    if (event.pointerType !== 'mouse') return;
+    const node = sectionRef.current;
+    if (!node) return;
+    const rect = node.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    node.style.setProperty('--spot-x', `${(((event.clientX - rect.left) / rect.width) * 100).toFixed(1)}%`);
+    node.style.setProperty('--spot-y', `${(((event.clientY - rect.top) / rect.height) * 100).toFixed(1)}%`);
+  };
 
   const go = useCallback((next: number) => {
     setActive((current) => (next + slides.length) % slides.length);
@@ -146,11 +168,14 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
 
   return (
     <section
-      className="relative flex min-h-[560px] flex-col overflow-hidden bg-navy-950 text-white sm:min-h-[700px] lg:min-h-[760px]"
+      ref={sectionRef}
+      className="group relative flex min-h-[560px] flex-col overflow-hidden bg-navy-950 text-white sm:min-h-[700px] lg:min-h-[760px]"
       aria-roledescription="carousel"
       aria-label="Reagansoft live showcase"
+      aria-live="polite"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+      onPointerMove={handlePointerMove}
     >
       {slides.map((item, index) => (
         <div
@@ -177,6 +202,11 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
       <div className="screen-scan absolute inset-0" />
       <div className="screen-sheen" />
       <div className="aurora opacity-70" />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-[2]"
+        style={{ background: 'radial-gradient(460px circle at var(--spot-x, 50%) var(--spot-y, 38%), rgba(79,182,255,0.16), transparent 66%)' }}
+      />
       <div aria-hidden="true" className="pointer-events-none absolute -left-24 top-1/3 h-72 w-72 rounded-full bg-brand-500/20 blur-3xl glow-orb" />
       <div aria-hidden="true" className="pointer-events-none absolute -right-24 bottom-10 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl glow-orb" />
 
@@ -185,7 +215,7 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
         <div className="container-x flex h-11 items-center justify-between gap-4 text-[10px] uppercase tracking-[0.2em] text-white/45">
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center gap-1.5 rounded-sm bg-rose-500 px-2 py-1 font-bold tracking-[0.18em] text-white">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" /> Live
+              <span className="live-eq text-white" aria-hidden="true"><span /><span /><span /><span /><span /></span> Live
             </span>
             <span className="hidden font-semibold text-white/75 sm:inline">Reagansoft TV</span>
             <span className="hidden sm:inline">/</span>
@@ -202,10 +232,25 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
         </div>
       </div>
 
+      <div className="ticker relative z-20 overflow-hidden border-b border-white/10 bg-navy-950/25">
+        <div className="ticker-track gap-8 py-1.5 font-mono text-[9px] uppercase tracking-[0.24em] text-white/40">
+          {[0, 1].map((dup) => (
+            <span key={dup} className="flex items-center gap-8" aria-hidden={dup === 1}>
+              {tickerItems.map((item) => (
+                <span key={item} className="inline-flex items-center gap-2 whitespace-nowrap">
+                  <span className="h-1 w-1 rounded-full bg-brand-400/80" />
+                  {item}
+                </span>
+              ))}
+            </span>
+          ))}
+        </div>
+      </div>
+
       <div className="container-x relative z-10 flex flex-1 flex-col justify-center py-10 sm:py-14 lg:py-20">
         <div className="grid items-center gap-12 lg:grid-cols-[1.08fr_0.92fr]">
           <div key={active} className="max-w-2xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-brand-200 backdrop-blur">
+            <span className="slide-rise inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-brand-200 backdrop-blur">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
@@ -213,14 +258,14 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
               {slide.eyebrow}
             </span>
 
-            <h1 className="h1 mt-5 text-white sm:mt-6">
+            <h1 className="slide-rise slide-delay-1 h1 mt-5 text-white sm:mt-6">
               {slide.title}
               <span className="text-gradient">{slide.accent}</span>
             </h1>
 
-            <p className="mt-5 max-w-xl text-[1rem] leading-relaxed text-white/65 sm:mt-6 sm:text-[1.1rem]">{slide.lead}</p>
+            <p className="slide-rise slide-delay-2 mt-5 max-w-xl text-[1rem] leading-relaxed text-white/65 sm:mt-6 sm:text-[1.1rem]">{slide.lead}</p>
 
-            <div className="mt-7 flex flex-col gap-3 min-[420px]:flex-row min-[420px]:flex-wrap min-[420px]:items-center">
+            <div className="slide-rise slide-delay-3 mt-7 flex flex-col gap-3 min-[420px]:flex-row min-[420px]:flex-wrap min-[420px]:items-center">
               <Link to={slide.to} className="btn-primary justify-center">
                 {slide.cta} <ArrowRight className="h-4 w-4" />
               </Link>
@@ -231,7 +276,7 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
 
             <Link
               to={slide.to}
-              className="group mt-7 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.05] p-2.5 backdrop-blur transition hover:border-brand-400/50 hover:bg-white/[0.08] lg:hidden"
+              className="slide-rise slide-delay-4 group mt-7 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.05] p-2.5 backdrop-blur transition hover:border-brand-400/50 hover:bg-white/[0.08] lg:hidden"
             >
               <span className="media-glow relative h-16 w-20 shrink-0 overflow-hidden rounded-xl">
                 <img key={slide.image} src={asset(slide.image)} alt="" className="h-full w-full object-cover" />
@@ -244,7 +289,7 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
               <span className="shrink-0 rounded-full bg-emerald-400/10 px-2 py-1 font-mono text-[8px] uppercase tracking-widest text-emerald-300">on air</span>
             </Link>
 
-            <div className="mt-7 grid max-w-lg grid-cols-3 gap-2.5 border-t border-white/10 pt-5 sm:mt-10 sm:gap-4 sm:pt-6">
+            <div className="slide-rise slide-delay-5 mt-7 grid max-w-lg grid-cols-3 gap-2.5 border-t border-white/10 pt-5 sm:mt-10 sm:gap-4 sm:pt-6">
               {[
                 { label: 'Projects delivered', value: `${stats.projects || 7}+`, to: '/portfolio' },
                 { label: 'Organisations served', value: `${stats.clients || 6}+`, to: '/about' },
@@ -264,12 +309,16 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
                 <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
                   <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/40">Now showing</span>
                   <span className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.16em] text-emerald-300">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> on air
+                    <span className="live-eq text-emerald-300" aria-hidden="true"><span /><span /><span /><span /><span /></span> on air
                   </span>
                 </div>
 
                 <Link to={slide.to} className="media-glow group relative mt-3 block overflow-hidden rounded-xl border border-white/10">
                   <img key={slide.image} src={asset(slide.image)} alt="" className="h-44 w-full object-cover" />
+                  <span className="frame-corner frame-corner-tl" aria-hidden="true" />
+                  <span className="frame-corner frame-corner-tr" aria-hidden="true" />
+                  <span className="frame-corner frame-corner-bl" aria-hidden="true" />
+                  <span className="frame-corner frame-corner-br" aria-hidden="true" />
                   <span className="absolute inset-0 z-[6] grid place-items-center bg-navy-950/25 opacity-0 transition group-hover:opacity-100">
                     <span className="grid h-11 w-11 place-items-center rounded-full border border-white/40 bg-white/15 text-white backdrop-blur">
                       <ArrowUpRight className="h-5 w-5" />
@@ -310,7 +359,7 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
                 </div>
               </div>
 
-              <div className="absolute -bottom-4 -left-5 rounded-xl border border-white/15 bg-navy-900/90 px-4 py-3 shadow-soft backdrop-blur">
+              <div className="float-soft absolute -bottom-4 -left-5 rounded-xl border border-white/15 bg-navy-900/90 px-4 py-3 shadow-soft backdrop-blur">
                 <p className="font-mono text-[8px] uppercase tracking-[0.2em] text-white/35">Uptime</p>
                 <p className="mt-1 font-display text-lg font-semibold text-emerald-300">99.98%</p>
               </div>

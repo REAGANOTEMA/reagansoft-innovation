@@ -333,7 +333,7 @@ public_head([
             <h3>Reagan Otema</h3>
             <p>Reagan leads the design and development on every project himself, and makes sure each one is built to be looked after, not just launched.</p>
             <div class="founder-brand">
-              <img src="<?= app_url('assets/img/real-reagansoft-logo-white.png') ?>" alt="Reagansoft Innovation Limited" width="180" height="124">
+              <img src="<?= e(logo_url('real', true)) ?>" alt="Reagansoft Innovation Limited" width="180" height="124">
             </div>
             <div class="founder-contact">
               <span><?= icon('phone') ?><?= e(settings('company_phone', '+256772514889')) ?><?php $phoneAltHome = settings('company_phone_alt', ''); ?><?= $phoneAltHome !== '' ? ' · ' . e($phoneAltHome) : '' ?></span>

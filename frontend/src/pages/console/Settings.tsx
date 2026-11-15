@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { Building2, CreditCard, Globe2, Save, ShieldCheck, SlidersHorizontal } from 'lucide-react';
+import { Building2, CreditCard, Globe2, Image as ImageIcon, RotateCcw, Save, ShieldCheck, SlidersHorizontal } from 'lucide-react';
 import { api, ApiError } from '../../lib/api';
 import { useApi } from '../../lib/hooks';
 import { useSite } from '../../lib/site';
@@ -7,15 +7,24 @@ import { usePageMeta } from '../../lib/seo';
 import { useToast } from '../../components/Toast';
 import { ErrorBlock, Field, LoadingBlock, PageHeader } from '../../components/UI';
 import { cn } from '../../lib/cn';
+import { APP_BASE, LOGO_NEW, LOGO_NEW_WHITE, LOGO_REAL, LOGO_REAL_WHITE } from '../../lib/env';
 
 type SettingsMap = Record<string, string>;
 
 const sections = [
   { id: 'company', label: 'Company', icon: Building2 },
+  { id: 'branding', label: 'Branding', icon: ImageIcon },
   { id: 'contact', label: 'Contact & social', icon: Globe2 },
   { id: 'operations', label: 'Operations', icon: SlidersHorizontal },
   { id: 'payments', label: 'Payments', icon: CreditCard },
   { id: 'site', label: 'Site & SEO', icon: ShieldCheck },
+] as const;
+
+const logoSlots = [
+  { key: 'logo_mark', label: 'Mark, light backgrounds', fallback: LOGO_NEW, dark: false },
+  { key: 'logo_mark_dark', label: 'Mark, dark backgrounds', fallback: LOGO_NEW_WHITE, dark: true },
+  { key: 'logo_real', label: 'Full logo, light backgrounds', fallback: LOGO_REAL, dark: false },
+  { key: 'logo_real_dark', label: 'Full logo, dark backgrounds', fallback: LOGO_REAL_WHITE, dark: true },
 ] as const;
 
 export function ConsoleSettings() {
@@ -26,6 +35,7 @@ export function ConsoleSettings() {
   const [form, setForm] = useState<SettingsMap>({});
   const [section, setSection] = useState<(typeof sections)[number]['id']>('company');
   const [busy, setBusy] = useState(false);
+  const [logoBusy, setLogoBusy] = useState('');
 
   useEffect(() => {
     if (data) setForm(data);
@@ -47,6 +57,52 @@ export function ConsoleSettings() {
       push('error', err instanceof ApiError ? err.message : 'Could not save settings.');
     } finally {
       setBusy(false);
+    }
+  }
+
+  function logoSrc(key: string, fallback: string): string {
+    const raw = (form[key] ?? '').trim();
+    if (!raw) return fallback;
+    if (/^https?:\/\//i.test(raw)) return raw;
+    return `${APP_BASE}/uploads/${raw.replace(/^\/+/, '')}`;
+  }
+
+  async function uploadLogo(key: string, file: File) {
+    if (!file.type.startsWith('image/')) {
+      push('error', 'Choose a PNG, JPG, GIF or WebP image.');
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      push('error', 'That image is larger than 10 MB.');
+      return;
+    }
+    setLogoBusy(key);
+    try {
+      const body = new FormData();
+      body.append('key', key);
+      body.append('logo', file);
+      const res = await api<{ key: string; path: string; url: string }>('admin/branding', { method: 'POST', body });
+      setForm((current) => ({ ...current, [res.data.key]: res.data.path }));
+      await refreshSite();
+      push('success', 'Logo updated.');
+    } catch (err) {
+      push('error', err instanceof ApiError ? err.message : 'Could not upload the logo.');
+    } finally {
+      setLogoBusy('');
+    }
+  }
+
+  async function resetLogo(key: string) {
+    setLogoBusy(key);
+    try {
+      await api('admin/branding', { method: 'DELETE', query: { key } });
+      setForm((current) => ({ ...current, [key]: '' }));
+      await refreshSite();
+      push('info', 'Logo reset to the shipped version.');
+    } catch (err) {
+      push('error', err instanceof ApiError ? err.message : 'Could not reset the logo.');
+    } finally {
+      setLogoBusy('');
     }
   }
 
@@ -82,6 +138,46 @@ export function ConsoleSettings() {
               <Field label="Founder" ><input className="input" value={form.company_founder ?? ''} onChange={(event) => update('company_founder', event.target.value)} /></Field>
               <Field label="Address"><input className="input" value={form.company_address ?? ''} onChange={(event) => update('company_address', event.target.value)} /></Field>
               <Field label="About the company" className="sm:col-span-2"><textarea className="input min-h-[130px]" value={form.company_about ?? ''} onChange={(event) => update('company_about', event.target.value)} /></Field>
+            </div>
+          )}
+
+          {section === 'branding' && (
+            <div className="space-y-4">
+              <p className="text-[11px] leading-relaxed text-ink-muted">
+                Upload replacements for the shipped logos. Images are cropped to fit and saved immediately. Transparent PNG is recommended; leave the defaults for the current brand.
+              </p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {logoSlots.map((slot) => (
+                  <div key={slot.key} className="rounded-xl border border-brand-100 p-3">
+                    <p className="text-[11px] font-semibold text-navy-900">{slot.label}</p>
+                    <div className={cn('mt-2 grid h-24 place-items-center rounded-lg border border-brand-50 p-2', slot.dark ? 'bg-navy-950' : 'bg-brand-50/40')}>
+                      <img src={logoSrc(slot.key, slot.fallback)} alt="" className="max-h-16 max-w-[180px] object-contain" />
+                    </div>
+                    <div className="mt-2 flex items-center gap-2">
+                      <label className={cn('btn-primary btn-sm inline-flex cursor-pointer items-center justify-center', logoBusy === slot.key && 'pointer-events-none opacity-60')}>
+                        {logoBusy === slot.key ? 'Uploading…' : 'Upload'}
+                        <input
+                          type="file"
+                          accept=".png,.jpg,.jpeg,.gif,.webp"
+                          className="hidden"
+                          onChange={(event) => {
+                            const file = event.target.files?.[0];
+                            if (file) void uploadLogo(slot.key, file);
+                            event.target.value = '';
+                          }}
+                        />
+                      </label>
+                      {form[slot.key] ? (
+                        <button type="button" onClick={() => void resetLogo(slot.key)} disabled={logoBusy === slot.key} className="btn-ghost btn-sm inline-flex items-center gap-1">
+                          <RotateCcw className="h-3 w-3" /> Reset
+                        </button>
+                      ) : (
+                        <span className="text-[10px] text-ink-faint">Shipped logo</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 

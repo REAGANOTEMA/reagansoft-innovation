@@ -1,11 +1,12 @@
-import { useEffect, useState, type FormEvent } from 'react';
-import { KeyRound, Mail, Save, ShieldCheck, UserRound } from 'lucide-react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { Camera, KeyRound, Mail, Save, ShieldCheck, Trash2, UserRound } from 'lucide-react';
 import { api, ApiError } from '../../lib/api';
 import { useAuth } from '../../lib/auth';
 import { usePageMeta } from '../../lib/seo';
 import { useToast } from '../../components/Toast';
+import { Avatar } from '../../components/Avatar';
 import { Field, PageHeader } from '../../components/UI';
-import { formatDate, initials } from '../../lib/format';
+import { formatDate } from '../../lib/format';
 import type { User } from '../../lib/types';
 
 export function PortalProfile({ scope = 'portal' }: { scope?: 'portal' | 'console' }) {
@@ -30,6 +31,9 @@ export function PortalProfile({ scope = 'portal' }: { scope?: 'portal' | 'consol
   const [passwords, setPasswords] = useState({ current_password: '', password: '', confirm: '' });
   const [passwordErrors, setPasswordErrors] = useState<Record<string, string>>({});
   const [savingPassword, setSavingPassword] = useState(false);
+
+  const avatarInput = useRef<HTMLInputElement | null>(null);
+  const [avatarBusy, setAvatarBusy] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -106,6 +110,43 @@ export function PortalProfile({ scope = 'portal' }: { scope?: 'portal' | 'consol
     }
   }
 
+  async function uploadAvatar(file: File) {
+    if (!file.type.startsWith('image/')) {
+      push('error', 'Choose a PNG, JPG, GIF or WebP image.');
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      push('error', 'That image is larger than 10 MB.');
+      return;
+    }
+    setAvatarBusy(true);
+    try {
+      const form = new FormData();
+      form.append('avatar', file);
+      const res = await api<{ user: User }>('auth/avatar', { method: 'POST', body: form });
+      setUser(res.data.user);
+      push('success', 'Profile photo updated.');
+    } catch (err) {
+      push('error', err instanceof ApiError ? err.message : 'Could not upload your photo.');
+    } finally {
+      setAvatarBusy(false);
+      if (avatarInput.current) avatarInput.current.value = '';
+    }
+  }
+
+  async function removeAvatar() {
+    setAvatarBusy(true);
+    try {
+      const res = await api<{ user: User }>('auth/avatar', { method: 'DELETE' });
+      setUser(res.data.user);
+      push('info', 'Profile photo removed.');
+    } catch (err) {
+      push('error', err instanceof ApiError ? err.message : 'Could not remove your photo.');
+    } finally {
+      setAvatarBusy(false);
+    }
+  }
+
   const isBusiness = profile.payer_type !== 'individual';
 
   return (
@@ -115,14 +156,43 @@ export function PortalProfile({ scope = 'portal' }: { scope?: 'portal' | 'consol
       <div className="grid gap-5 lg:grid-cols-[0.7fr_1.3fr]">
         <div className="space-y-4">
           <div className="rounded-2xl border border-brand-100 bg-white p-5 text-center">
-            <div className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-brand-600 font-display text-xl font-semibold text-white">
-              {initials(user.full_name)}
+            <div className="group relative mx-auto h-16 w-16">
+              <Avatar name={user.full_name} src={user.avatar} size={64} />
+              <button
+                type="button"
+                onClick={() => avatarInput.current?.click()}
+                disabled={avatarBusy}
+                className="absolute inset-0 grid place-items-center rounded-xl bg-navy-950/60 text-white opacity-0 transition group-hover:opacity-100 disabled:cursor-wait"
+                aria-label="Change profile photo"
+              >
+                <Camera className="h-5 w-5" />
+              </button>
             </div>
+            <input
+              ref={avatarInput}
+              type="file"
+              accept=".png,.jpg,.jpeg,.gif,.webp"
+              className="hidden"
+              onChange={(event) => {
+                const file = event.target.files?.[0];
+                if (file) void uploadAvatar(file);
+              }}
+            />
             <p className="mt-3 font-display text-sm font-semibold text-navy-900">{user.full_name}</p>
             <p className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-ink-muted"><Mail className="h-3 w-3" /> {user.email}</p>
             <div className="mt-3 flex items-center justify-center gap-2">
               <span className="rounded-full bg-brand-50 px-2.5 py-1 text-[10px] font-semibold capitalize text-brand-700">{user.role}</span>
               {user.company && <span className="rounded-full bg-brand-50 px-2.5 py-1 text-[10px] font-semibold text-brand-700">{user.company}</span>}
+            </div>
+            <div className="mt-3 flex items-center justify-center gap-2">
+              <button type="button" onClick={() => avatarInput.current?.click()} disabled={avatarBusy} className="inline-flex items-center gap-1 rounded-lg border border-brand-100 px-2.5 py-1.5 text-[10.5px] font-semibold text-brand-700 transition hover:bg-brand-50 disabled:opacity-60">
+                <Camera className="h-3 w-3" /> {avatarBusy ? 'Working…' : user.avatar ? 'Change photo' : 'Upload photo'}
+              </button>
+              {user.avatar && (
+                <button type="button" onClick={removeAvatar} disabled={avatarBusy} className="inline-flex items-center gap-1 rounded-lg border border-brand-100 px-2.5 py-1.5 text-[10.5px] font-semibold text-rose-600 transition hover:bg-rose-50 disabled:opacity-60">
+                  <Trash2 className="h-3 w-3" /> Remove
+                </button>
+              )}
             </div>
             <dl className="mt-4 space-y-2 border-t border-brand-50 pt-3 text-left text-[11px]">
               <div className="flex justify-between gap-3"><dt className="text-ink-muted">Member since</dt><dd className="font-medium text-navy-900">{formatDate(user.created_at)}</dd></div>

@@ -99,7 +99,7 @@ public_head([
           <h3>Reagan Otema</h3>
           <p>Reagan founded the company around a simple principle: software that is built properly, priced clearly and kept working long after launch, instead of being built once and abandoned.</p>
           <div class="founder-brand">
-            <img src="<?= app_url('assets/img/real-reagansoft-logo-white.png') ?>" alt="Reagansoft Innovation Limited" width="180" height="124">
+            <img src="<?= e(logo_url('real', true)) ?>" alt="Reagansoft Innovation Limited" width="180" height="124">
           </div>
           <div class="founder-contact">
             <span><?= icon('phone') ?><a href="<?= e(phone_tel($phone)) ?>"><?= e(phone_display($phone, $phone)) ?></a></span>

@@ -33,3 +33,16 @@ createRoot(root).render(
     </ToastProvider>
   </StrictMode>,
 );
+
+/**
+ * The brand splash is painted by the static HTML shell before React boots.
+ * Hold it briefly so the opening feels intentional, then fade it away.
+ */
+const splash = document.getElementById('rsi-splash');
+if (splash) {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  window.setTimeout(() => {
+    splash.classList.add('rsi-splash-out');
+    window.setTimeout(() => splash.remove(), reduced ? 60 : 700);
+  }, reduced ? 250 : 1400);
+}

@@ -20,6 +20,9 @@ function api_user_public(array $u): array
     }
     $out['id'] = (int)$out['id'];
     $out['active'] = (int)$out['active'];
+    if (array_key_exists('avatar', $out)) {
+        $out['avatar'] = $out['avatar'] ? avatar_url((string)$out['avatar']) : null;
+    }
     return $out;
 }
 
@@ -47,6 +50,12 @@ function handle_auth(string $method, array $seg): bool
     }
     if ($what === 'password' && in_array($method, ['PATCH', 'PUT', 'POST'], true)) {
         auth_change_password();
+    }
+    if ($what === 'avatar' && $method === 'POST') {
+        auth_upload_avatar();
+    }
+    if ($what === 'avatar' && $method === 'DELETE') {
+        auth_remove_avatar();
     }
     return false;
 }
@@ -224,6 +233,47 @@ function auth_update_profile(): never
     }
 
     audit('profile_updated', 'users', (int)$user['id'], 'Updated account details');
+    $st = db()->prepare('SELECT * FROM users WHERE id = ? LIMIT 1');
+    $st->execute([(int)$user['id']]);
+    api_ok(['user' => api_user_public($st->fetch())]);
+}
+
+function auth_upload_avatar(): never
+{
+    $user = api_require_login();
+    api_require_csrf();
+
+    if (empty($_FILES['avatar']) || !is_array($_FILES['avatar'])) {
+        throw new ApiException('Choose an image to upload.', 422, ['avatar' => 'No image selected.']);
+    }
+
+    $result = upload_image($_FILES['avatar'], 'avatars', 512, true);
+    if (!$result['ok']) {
+        throw new ApiException($result['error'], 422, ['avatar' => $result['error']]);
+    }
+
+    $old = (string)($user['avatar'] ?? '');
+    db()->prepare('UPDATE users SET avatar = ? WHERE id = ?')
+        ->execute([$result['path'], (int)$user['id']]);
+    if ($old !== '' && $old !== $result['path']) {
+        delete_upload($old);
+    }
+
+    audit('avatar_updated', 'users', (int)$user['id'], 'Updated profile photo');
+    $st = db()->prepare('SELECT * FROM users WHERE id = ? LIMIT 1');
+    $st->execute([(int)$user['id']]);
+    api_ok(['user' => api_user_public($st->fetch()), 'avatar' => $result['url']]);
+}
+
+function auth_remove_avatar(): never
+{
+    $user = api_require_login();
+    api_require_csrf();
+
+    delete_upload((string)($user['avatar'] ?? ''));
+    db()->prepare('UPDATE users SET avatar = NULL WHERE id = ?')->execute([(int)$user['id']]);
+    audit('avatar_removed', 'users', (int)$user['id'], 'Removed profile photo');
+
     $st = db()->prepare('SELECT * FROM users WHERE id = ? LIMIT 1');
     $st->execute([(int)$user['id']]);
     api_ok(['user' => api_user_public($st->fetch())]);

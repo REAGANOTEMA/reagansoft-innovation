@@ -2,9 +2,10 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { Bell, ChevronDown, ExternalLink, LogOut, Menu, Search, X, type LucideIcon } from 'lucide-react';
 import { Logo } from './Logo';
+import { Avatar } from './Avatar';
 import { useAuth } from '../lib/auth';
 import { api } from '../lib/api';
-import { initials, titleCase } from '../lib/format';
+import { titleCase } from '../lib/format';
 import { cn } from '../lib/cn';
 import { useToast } from './Toast';
 
@@ -132,9 +133,7 @@ export function DashboardShell({ variant, items, footerItems = [] }: Props) {
         <div className="relative border-t border-white/10 p-3">
           <div className="rounded-2xl bg-white/[0.06] p-3">
             <div className="flex items-center gap-2.5">
-              <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand-600 text-xs font-bold text-white">
-                {initials(user?.full_name ?? 'RSI')}
-              </span>
+              <Avatar name={user?.full_name} src={user?.avatar} size={36} />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-[13px] font-semibold text-white">{user?.full_name}</p>
                 <p className="truncate text-[10px] uppercase tracking-wider text-white/40">{titleCase(user?.role ?? '')}</p>
@@ -195,7 +194,7 @@ export function DashboardShell({ variant, items, footerItems = [] }: Props) {
                 onClick={() => setMenuOpen((value) => !value)}
                 className="flex items-center gap-2 rounded-xl border border-brand-100 py-1.5 pl-1.5 pr-2.5 text-left transition hover:bg-brand-50"
               >
-                <span className="grid h-7 w-7 place-items-center rounded-lg bg-navy-900 text-[10px] font-bold text-white">{initials(user?.full_name ?? 'RSI')}</span>
+                <Avatar name={user?.full_name} src={user?.avatar} size={28} />
                 <span className="hidden sm:block">
                   <span className="block max-w-[140px] truncate text-[12px] font-semibold leading-tight text-navy-900">{user?.full_name}</span>
                   <span className="block text-[9px] uppercase tracking-wider text-ink-faint">{titleCase(user?.role ?? '')}</span>

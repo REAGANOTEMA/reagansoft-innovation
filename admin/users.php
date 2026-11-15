@@ -59,7 +59,7 @@ if (in_array($roleF, ['admin', 'staff', 'client'], true)) {
 }
 $whereSql = implode(' AND ', $where);
 
-$st = $pdo->prepare("SELECT u.id, u.full_name, u.email, u.phone, u.role, u.company, u.active, u.last_login_at, u.created_at,
+$st = $pdo->prepare("SELECT u.id, u.full_name, u.email, u.phone, u.role, u.company, u.avatar, u.active, u.last_login_at, u.created_at,
     (SELECT COUNT(*) FROM projects p WHERE p.client_id = u.id) AS project_count
     FROM users u WHERE $whereSql ORDER BY u.created_at DESC LIMIT 200");
 $st->execute($params);
@@ -123,7 +123,7 @@ dashboard_head(['title' => 'Users', 'active' => 'users', 'crumb' => 'Users']);
         <tbody>
           <?php foreach ($users as $u): ?>
             <tr>
-              <td><span class="row-title"><?= e($u['full_name']) ?><?= (int)$u['id'] === (int)$me['id'] ? ' <span class="badge blue">You</span>' : '' ?></span><div class="row-sub"><?= e($u['email']) ?></div></td>
+              <td><div style="display:flex;align-items:center;gap:10px"><?php $uAvatar = avatar_url($u['avatar'] ?? null); ?><?php if ($uAvatar !== ''): ?><img src="<?= e($uAvatar) ?>" alt="" width="34" height="34" style="width:34px;height:34px;border-radius:10px;object-fit:cover;border:1px solid rgba(8,59,102,.12)"><?php else: ?><span class="user-avatar" style="width:34px;height:34px;font-size:13px"><?= e(mb_strtoupper(mb_substr($u['full_name'] ?? '?', 0, 1))) ?></span><?php endif; ?><div><span class="row-title"><?= e($u['full_name']) ?><?= (int)$u['id'] === (int)$me['id'] ? ' <span class="badge blue">You</span>' : '' ?></span><div class="row-sub"><?= e($u['email']) ?></div></div></div></td>
               <td><?= $u['role'] === 'admin' ? '<span class="badge violet">Admin</span>' : ($u['role'] === 'staff' ? '<span class="badge sky">Staff</span>' : '<span class="badge gray">Client</span>') ?></td>
               <td class="small"><?php if (!empty($u['phone'])): ?><a href="<?= e(phone_tel($u['phone'])) ?>"><?= e($u['phone']) ?></a><?php else: ?><span class="muted">-</span><?php endif; ?></td>
               <td class="small"><?= e($u['company'] ?? '-') ?></td>

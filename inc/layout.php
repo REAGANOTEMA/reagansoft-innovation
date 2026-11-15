@@ -58,7 +58,7 @@ function public_head(array $page = []): void {
 <header class="topbar" id="topbar">
   <div class="container nav">
     <a class="brand" href="<?= app_url('index.php') ?>" aria-label="Reagansoft Innovation Limited, Home">
-      <img src="<?= app_url('assets/img/reagansoftinnovation-logo-new.png') ?>" alt="" width="48" height="48">
+      <img src="<?= e(logo_url('new')) ?>" alt="" width="48" height="48">
       <span class="brand-text">Reagansoft <b>Innovation</b><small class="brand-tagline"><?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></small></span>
     </a>
     <button class="menu" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav">
@@ -583,7 +583,7 @@ function public_footer(): void {
   <div class="container footer-grid">
     <div class="footer-brand">
       <a class="brand" href="<?= app_url('index.php') ?>">
-        <img src="<?= app_url('assets/img/real-reagansoft-logo-white.png') ?>" alt="Reagansoft Innovation Limited" width="210" height="144">
+        <img src="<?= e(logo_url('real', true)) ?>" alt="Reagansoft Innovation Limited" width="210" height="144">
       </a>
       <p class="footer-tagline"><?= icon('rocket') ?> <?= e(settings('company_tagline', 'Innovating today for a smarter tomorrow.')) ?></p>
       <p><?= e(settings('company_about', 'Software development company based in Jinja, Uganda.')) ?></p>
@@ -718,7 +718,7 @@ function dashboard_head(array $page = []): void {
   <aside class="sidebar" id="sidebar" aria-label="Portal navigation">
     <div class="sidebar-brand">
       <a class="brand" href="<?= $loginUrl ?>">
-        <img src="<?= app_url('assets/img/reagansoftinnovation-logo-new-white.png') ?>" alt="" width="40" height="40">
+        <img src="<?= e(logo_url('new', true)) ?>" alt="" width="40" height="40">
         <span class="brand-text">Reagansoft <b>Innovation</b></span>
       </a>
     </div>
@@ -752,7 +752,12 @@ function dashboard_head(array $page = []): void {
           </a>
         <?php endif; ?>
         <div class="user-chip">
-          <span class="user-avatar"><?= e(mb_strtoupper(mb_substr($user['full_name'] ?? '?', 0, 1))) ?></span>
+          <?php $avatarUrl = avatar_url($user['avatar'] ?? null); ?>
+          <?php if ($avatarUrl !== ''): ?>
+            <img class="user-avatar user-avatar-img" src="<?= e($avatarUrl) ?>" alt="" width="38" height="38">
+          <?php else: ?>
+            <span class="user-avatar"><?= e(mb_strtoupper(mb_substr($user['full_name'] ?? '?', 0, 1))) ?></span>
+          <?php endif; ?>
           <div class="user-meta">
             <strong><?= e($user['full_name'] ?? '') ?></strong>
             <small><?= e(mb_strtoupper($role)) ?></small>

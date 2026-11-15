@@ -37,9 +37,16 @@ export function Spinner({ className }: { className?: string }) {
 
 export function LoadingBlock({ label = 'Loading…', className }: { label?: string; className?: string }) {
   return (
-    <div className={cn('flex min-h-[220px] flex-col items-center justify-center gap-3 rounded-3xl border border-brand-100 bg-white/70 text-ink-muted', className)}>
-      <Spinner className="h-6 w-6" />
+    <div className={cn('flex min-h-[220px] flex-col items-center justify-center gap-4 rounded-3xl border border-brand-100 bg-white/70 text-ink-muted', className)}>
+      <span className="relative grid h-14 w-14 place-items-center" aria-hidden="true">
+        <span className="absolute inset-0 rounded-full border border-brand-100" />
+        <span className="absolute inset-0 animate-spin rounded-full border-2 border-transparent border-r-brand-400 border-t-brand-600" />
+        <span className="h-2 w-2 rounded-full bg-brand-500 shadow-[0_0_16px_rgba(10,123,206,.85)]" />
+      </span>
       <p className="text-sm font-medium">{label}</p>
+      <span className="h-1 w-32 overflow-hidden rounded-full bg-brand-100" aria-hidden="true">
+        <span className="block h-full w-1/2 rounded-full bg-gradient-to-r from-brand-400 to-cyan-300 [animation:loadingSweep_1.4s_ease-in-out_infinite]" />
+      </span>
     </div>
   );
 }

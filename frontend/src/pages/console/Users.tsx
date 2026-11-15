@@ -5,7 +5,8 @@ import { useApi } from '../../lib/hooks';
 import { usePageMeta } from '../../lib/seo';
 import { useToast } from '../../components/Toast';
 import { Badge, EmptyState, ErrorBlock, Field, LoadingBlock, Modal, PageHeader } from '../../components/UI';
-import { formatDate, initials } from '../../lib/format';
+import { Avatar } from '../../components/Avatar';
+import { formatDate } from '../../lib/format';
 import { cn } from '../../lib/cn';
 import type { User } from '../../lib/types';
 
@@ -47,7 +48,7 @@ export function ConsoleUsers() {
           {data.map((user) => (
             <div key={user.id} className={cn('flex flex-wrap items-center justify-between gap-3 rounded-2xl border bg-white p-4', user.active ? 'border-brand-100' : 'border-brand-100 opacity-60')}>
               <div className="flex items-center gap-3">
-                <span className={cn('grid h-10 w-10 place-items-center rounded-xl font-display text-[12px] font-semibold', user.role === 'admin' ? 'bg-navy-900 text-white' : user.role === 'staff' ? 'bg-brand-600 text-white' : 'bg-brand-50 text-brand-700')}>{initials(user.full_name)}</span>
+                <Avatar name={user.full_name} src={user.avatar} size={40} />
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
                     <p className="text-[12.5px] font-semibold text-navy-900">{user.full_name}</p>

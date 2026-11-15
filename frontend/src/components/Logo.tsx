@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { LOGO_NEW, LOGO_NEW_WHITE, LOGO_REAL, LOGO_REAL_WHITE } from '../lib/env';
+import { useSite } from '../lib/site';
 
 type LogoVariant = 'new' | 'real';
 
@@ -12,8 +13,17 @@ export function Logo({
   compact?: boolean;
   variant?: LogoVariant;
 }) {
+  const { settings } = useSite();
   const isReal = variant === 'real';
-  const src = isReal ? (dark ? LOGO_REAL_WHITE : LOGO_REAL) : dark ? LOGO_NEW_WHITE : LOGO_NEW;
+  const configured = isReal
+    ? dark
+      ? settings.logo_real_dark_url
+      : settings.logo_real_url
+    : dark
+      ? settings.logo_mark_dark_url
+      : settings.logo_mark_url;
+  const fallback = isReal ? (dark ? LOGO_REAL_WHITE : LOGO_REAL) : dark ? LOGO_NEW_WHITE : LOGO_NEW;
+  const src = configured || fallback;
 
   return (
     <Link to="/" className="group inline-flex items-center gap-3" aria-label="Reagansoft Innovation Limited, Home">

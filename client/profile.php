@@ -5,6 +5,7 @@ require_client();
 $pdo = db();
 $user = current_user();
 $errors = [];
+$avatarUrl = avatar_url($user['avatar'] ?? null);
 
 // The payment gate reads the same name, email, phone, company and
 // address this page edits, so the two must not disagree about who
@@ -35,11 +36,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $avatarPath = $user['avatar'];
+        if (!empty($_POST['remove_avatar'])) {
+            delete_upload($avatarPath);
+            $avatarPath = null;
+        }
         if (empty($errors) && !empty($_FILES['avatar']['name'])) {
-            $res = upload_file($_FILES['avatar']);
+            $res = upload_image($_FILES['avatar'], 'avatars', 512, true);
             if (!$res['ok']) {
                 $errors[] = 'Avatar: ' . $res['error'];
             } else {
+                delete_upload($avatarPath);
                 $avatarPath = $res['path'];
             }
         }
@@ -115,8 +121,14 @@ dashboard_head(['title' => 'My Profile', 'active' => 'profile', 'crumb' => 'Prof
       <div class="field"><label for="address">Address</label><input class="input" id="address" name="address" maxlength="255" value="<?= e($user['address'] ?? '') ?>"><div class="form-note">Also used on your invoice and for deliveries. <a href="<?= app_url('client/billing.php') ?>">Manage all payment details</a>.</div></div>
       <div class="field">
         <label for="avatar">Profile photo (optional)</label>
+        <?php if ($avatarUrl !== ''): ?>
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:8px">
+            <img src="<?= e($avatarUrl) ?>" alt="Your profile photo" width="64" height="64" style="width:64px;height:64px;border-radius:16px;object-fit:cover;border:1px solid rgba(8,59,102,.12)">
+            <label class="check" style="display:flex;gap:8px;align-items:center"><input type="checkbox" name="remove_avatar" value="1"><span class="small">Remove current photo</span></label>
+          </div>
+        <?php endif; ?>
         <input class="input" id="avatar" type="file" name="avatar" accept=".png,.jpg,.jpeg,.gif,.webp">
-        <div class="form-note">PNG, JPG, GIF or WebP, max 10 MB.</div>
+        <div class="form-note">PNG, JPG, GIF or WebP, max 10 MB. Photos are cropped to a square.</div>
       </div>
       <button class="btn btn-primary" type="submit"><?= icon('check') ?> Save changes</button>
     </form>

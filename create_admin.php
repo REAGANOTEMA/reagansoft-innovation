@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$blocked) {
 </head>
 <body class="auth-page">
 <div class="auth-card">
-  <a class="brand" href="index.php"><img src="assets/img/reagansoftinnovation-logo-new.png" alt="Reagansoft Innovation logo"><span class="brand-text">Reagansoft <b>Innovation</b><small class="brand-tagline">Innovating today for a smarter tomorrow.</small></span></a>
+  <a class="brand" href="index.php"><img src="<?= e(logo_url('new')) ?>" alt="Reagansoft Innovation logo"><span class="brand-text">Reagansoft <b>Innovation</b><small class="brand-tagline">Innovating today for a smarter tomorrow.</small></span></a>
   <h2>Create administrator</h2>
   <p class="auth-sub">One-time setup. This page is disabled once an admin exists.</p>
 

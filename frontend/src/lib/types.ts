@@ -50,6 +50,14 @@ export interface Settings {
   payment_airtel_number?: string;
   payment_bank_details?: string;
   payment_gateway_status?: string;
+  logo_mark?: string;
+  logo_mark_dark?: string;
+  logo_real?: string;
+  logo_real_dark?: string;
+  logo_mark_url?: string;
+  logo_mark_dark_url?: string;
+  logo_real_url?: string;
+  logo_real_dark_url?: string;
 }
 
 export interface Service {

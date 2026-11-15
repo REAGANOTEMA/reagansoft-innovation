@@ -251,6 +251,10 @@ function api_public_settings(): array
     foreach ($keys as $key) {
         $out[$key] = settings($key, '');
     }
+    $out['logo_mark_url'] = logo_url('new', false);
+    $out['logo_mark_dark_url'] = logo_url('new', true);
+    $out['logo_real_url'] = logo_url('real', false);
+    $out['logo_real_dark_url'] = logo_url('real', true);
     return $out;
 }
 
