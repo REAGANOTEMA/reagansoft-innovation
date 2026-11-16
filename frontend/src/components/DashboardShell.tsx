@@ -83,9 +83,11 @@ export function DashboardShell({ variant, items, footerItems = [] }: Props) {
         )}
       >
         <div className="pointer-events-none absolute inset-0 bg-grid-dark opacity-25" />
-        <div className="relative flex h-[72px] items-center justify-between border-b border-white/10 px-5">
-          <Logo dark />
-          <button type="button" className="rounded-lg p-1.5 text-white/60 lg:hidden" onClick={() => setOpen(false)} aria-label="Close menu">
+        <div className="relative flex h-[76px] items-center justify-between border-b border-white/10 px-4">
+          <div className="min-w-0 flex-1 pr-2 [&_a]:min-w-0 [&_img]:h-10 [&_img]:w-auto [&_img]:max-w-[176px] [&_img]:brightness-110 [&_span_span:first-child]:text-[14px]">
+            <Logo dark />
+          </div>
+          <button type="button" className="shrink-0 rounded-lg p-1.5 text-white/70 transition hover:bg-white/10 hover:text-white lg:hidden" onClick={() => setOpen(false)} aria-label="Close menu">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -158,10 +160,16 @@ export function DashboardShell({ variant, items, footerItems = [] }: Props) {
       {open && <div className="fixed inset-0 z-40 bg-navy-950/60 backdrop-blur-sm lg:hidden" onClick={() => setOpen(false)} />}
 
       <div className="lg:pl-[264px]">
-        <header className="sticky top-0 z-30 flex h-[72px] items-center gap-3 border-b border-brand-100 bg-white/105 px-4 backdrop-blur-xl sm:px-6">
+        <header className="sticky top-0 z-30 flex h-[72px] items-center gap-3 border-b border-brand-100 bg-white/95 px-4 backdrop-blur-xl sm:px-6">
           <button type="button" className="grid h-9 w-9 place-items-center rounded-xl border border-brand-100 text-navy-900 lg:hidden" onClick={() => setOpen(true)} aria-label="Open menu">
             <Menu className="h-5 w-5" />
           </button>
+          <div className="flex min-w-0 items-center gap-2 rounded-xl border border-brand-100/80 bg-white px-2 py-1.5 shadow-sm lg:hidden">
+            <div className="[&_img]:h-8 [&_img]:w-auto [&_img]:max-w-[132px] [&_span]:hidden">
+              <Logo compact />
+            </div>
+            <span className="hidden truncate font-display text-[13px] font-semibold text-navy-900 xs:inline sm:inline">Reagansoft</span>
+          </div>
 
           <form onSubmit={submitSearch} className="hidden max-w-sm flex-1 items-center gap-2 rounded-xl border border-brand-100 bg-white px-3 py-2 text-sm text-ink-muted focus-within:border-brand-300 sm:flex">
             <Search className="h-4 w-4 shrink-0" />

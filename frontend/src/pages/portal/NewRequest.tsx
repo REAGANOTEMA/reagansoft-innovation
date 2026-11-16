@@ -110,7 +110,7 @@ export function NewRequest() {
             </Field>
 
             <Field label="What should it do? *" error={errors.description} hint="Describe the problem, who will use it and the outcome you want." className="sm:col-span-2">
-              <textarea className="input min-h-[140px]" value={form.description} onChange={(event) => update('description', event.target.value)} required placeholder="We currently… and we need…" />
+              <textarea className="input min-h-[140px]" value={form.description} onChange={(event) => update('description', event.target.value)} required placeholder="We currently? and we need?" />
             </Field>
 
             <Field label="Specific requirements" error={errors.requirements} hint="Pages, modules, integrations, deadlines, existing systems." className="sm:col-span-2">

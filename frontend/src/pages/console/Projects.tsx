@@ -92,7 +92,7 @@ export function ConsoleProjects() {
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Search by title, reference, client or company…"
           className="w-full bg-transparent text-sm outline-none placeholder:text-ink-faint"
-          aria-label="Search projects"
+          aria-label="Search projects…"
         />
       </div>
 

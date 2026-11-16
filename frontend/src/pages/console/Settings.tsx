@@ -187,7 +187,7 @@ export function ConsoleSettings() {
               <Field label="Support email"><input className="input" type="email" value={form.support_email ?? ''} onChange={(event) => update('support_email', event.target.value)} /></Field>
               <Field label="Phone"><input className="input" value={form.company_phone ?? ''} onChange={(event) => update('company_phone', event.target.value)} /></Field>
               <Field label="WhatsApp"><input className="input" value={form.company_whatsapp ?? ''} onChange={(event) => update('company_whatsapp', event.target.value)} /></Field>
-              <Field label="Working hours" className="sm:col-span-2"><input className="input" value={form.company_hours ?? ''} onChange={(event) => update('company_hours', event.target.value)} /></Field>
+              <Field label="Working…" className="sm:col-span-2"><input className="input" value={form.company_hours ?? ''} onChange={(event) => update('company_hours', event.target.value)} /></Field>
               <Field label="Google Maps embed URL" className="sm:col-span-2"><input className="input" value={form.company_map_url ?? ''} onChange={(event) => update('company_map_url', event.target.value)} /></Field>
               <Field label="Facebook"><input className="input" value={form.company_fb ?? ''} onChange={(event) => update('company_fb', event.target.value)} /></Field>
               <Field label="LinkedIn"><input className="input" value={form.company_linkedin ?? ''} onChange={(event) => update('company_linkedin', event.target.value)} /></Field>

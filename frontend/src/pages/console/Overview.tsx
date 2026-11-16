@@ -168,7 +168,7 @@ export function ConsoleOverview() {
           <section className="rounded-2xl border border-brand-100 bg-white p-5">
             <div className="flex items-center justify-between">
               <h2 className="font-display text-sm font-semibold text-navy-900">Invoices needing attention</h2>
-              <Link to="/console/invoices" className="text-[11px] font-semibold text-brand-700">View all</Link>
+              <Link to="/console/invoices" className="text-[11px] font-semibold text-brand-700">View all →</Link>
             </div>
             <div className="mt-3 space-y-2">
               {pending_invoices.length === 0 ? (

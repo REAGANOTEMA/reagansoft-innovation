@@ -19,6 +19,7 @@ import {
   X,
 } from 'lucide-react';
 import { Logo } from './Logo';
+import { WelcomeVoice } from './WelcomeVoice';
 import { useSite } from '../lib/site';
 import { useAuth } from '../lib/auth';
 import { api } from '../lib/api';

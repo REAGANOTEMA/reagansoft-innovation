@@ -53,7 +53,7 @@ export function PortalProjects() {
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search by title or reference…"
             className="w-full bg-transparent text-sm outline-none placeholder:text-ink-faint"
-            aria-label="Search projects"
+            aria-label="Search projects…"
           />
         </div>
         <select value={status} onChange={(event) => setStatus(event.target.value)} className="rounded-xl border border-brand-100 bg-white px-3 py-2.5 text-sm text-ink-soft outline-none">
