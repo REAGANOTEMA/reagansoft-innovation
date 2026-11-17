@@ -26,6 +26,7 @@ import { api } from '../lib/api';
 import { appUrl } from '../lib/env';
 import { useToast } from './Toast';
 import { ServiceGlyph } from './Graphics';
+import { PremiumProof } from './PremiumProof';
 import { InstallApp } from './InstallApp';
 import { cn } from '../lib/cn';
 
@@ -189,6 +190,7 @@ export function SiteLayout() {
         <Outlet />
       </main>
 
+      <PremiumProof />
       <Footer />
       <InstallApp />
       <FloatingActions />

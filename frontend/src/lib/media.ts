@@ -25,6 +25,9 @@ export const MEDIA = {
   code: 'code.jpg',
   languages: 'the-language-we-use.jpg',
   mobileCore: 'software-core-mobile-1024x1024.png',
+  officeVisitors: 'director-and-aliyah-and-joy-from-america-visiting-at-main-office-in-jinja.jpeg',
+  founderGraduation:
+    'director-in-gown-gradustion-in-idaho-usa-at-byu-university-image-with-bachelor-of-science-in-software-development.jpeg',
 } as const;
 
 export type MediaKey = keyof typeof MEDIA;
@@ -43,6 +46,9 @@ export const MEDIA_ALT: Record<MediaKey, string> = {
   code: 'Clean, well-structured application source code on screen',
   languages: 'The programming languages and frameworks used by the Reagansoft team',
   mobileCore: 'Reagansoft mobile application core running on a smartphone',
+  officeVisitors: 'Reagansoft director with visiting partners at the main office in Jinja, Uganda',
+  founderGraduation:
+    'Reagansoft founder in graduation gown after earning a Bachelor of Science in Software Development at BYU–Idaho, USA',
 };
 
 export function media(key: MediaKey): string {
