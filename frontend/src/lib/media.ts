@@ -35,7 +35,7 @@ export const MEDIA = {
   founder: 'founder.webp',
   team: 'reagansoft-team.jpeg',
   bike: 'company-bike.jpeg',
-  ceoBike: 'ceo-on-the-company-yamaha-bikes.jpeg',
+  ceoBike: 'ceo-on-bike.jpeg',
   ceoIsrael: 'ceo-in-israel-with-his-friend.jpeg',
   funders: 'our funders-with-ceo.jpeg',
   officeVisitors: 'director-and-aliyah-and-joy-from-america-visiting-at-main-office-in-jinja.jpeg',
@@ -108,6 +108,16 @@ export function media(key: MediaKey): string {
 
 export function mediaAlt(key: MediaKey): string {
   return MEDIA_ALT[key];
+}
+
+const FULL_FRAME_FILES = new Set<string>([MEDIA.ceoBike]);
+
+export function isFullFrame(file: string): boolean {
+  return FULL_FRAME_FILES.has(file);
+}
+
+export function frameFit(file: string): 'object-contain' | 'object-cover' {
+  return isFullFrame(file) ? 'object-contain' : 'object-cover';
 }
 
 export interface StudioSlide {
@@ -258,6 +268,7 @@ export const HERO_SLIDES: MediaKey[] = [
 export interface ProofCard {
   image: MediaKey;
   portrait?: boolean;
+  contain?: boolean;
   overline: string;
   caption: string;
   title: string;
@@ -351,6 +362,7 @@ export const PROOF_CARDS: Record<string, ProofCard> = {
   },
   onSite: {
     image: 'ceoBike',
+    contain: true,
     overline: 'On the road with the CEO',
     caption: 'Reagan and the company Yamaha',
     title: 'We come to you, not just to meetings.',

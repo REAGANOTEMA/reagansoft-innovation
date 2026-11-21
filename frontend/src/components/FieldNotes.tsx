@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Quote } from 'lucide-react';
 import { asset } from '../lib/env';
-import { MEDIA, MEDIA_ALT, type MediaKey } from '../lib/media';
+import { frameFit, MEDIA, MEDIA_ALT, type MediaKey } from '../lib/media';
 import { cn } from '../lib/cn';
 
 const notes: { key: MediaKey; label: string; text: string; to: string }[] = [
@@ -69,7 +69,7 @@ export function FieldNotes() {
               key={item.key}
               src={asset(MEDIA[item.key])}
               alt={index === active ? MEDIA_ALT[item.key] : ''}
-              className={cn('absolute inset-0 h-full w-full object-cover transition-opacity duration-700', index === active ? 'opacity-100' : 'opacity-0')}
+              className={cn('absolute inset-0 h-full w-full transition-opacity duration-700', frameFit(MEDIA[item.key]), index === active ? 'opacity-100' : 'opacity-0')}
               loading="lazy"
             />
           ))}

@@ -137,7 +137,7 @@ export function PremiumProof() {
                 <Tilt className="h-full" max={4}>
                   <article className="depth-card relative flex h-full flex-col overflow-hidden rounded-[28px] border border-white/10 p-2.5">
                     <div className="group relative overflow-hidden rounded-[21px] border border-white/10 bg-navy-900">
-                      {card.portrait && (
+                      {(card.portrait || card.contain) && (
                         <img
                           src={media(card.image)}
                           alt=""
@@ -151,8 +151,8 @@ export function PremiumProof() {
                         src={media(card.image)}
                         alt={mediaAlt(card.image)}
                         className={cn(
-                          'relative block w-full transition duration-700 ease-out group-hover:scale-[1.04]',
-                          card.portrait ? 'h-[300px] object-contain object-center sm:h-[340px]' : 'h-[300px] object-cover object-center sm:h-[340px]',
+                          'relative block h-[300px] w-full object-center sm:h-[340px]',
+                          card.portrait || card.contain ? 'object-contain' : 'object-cover transition duration-700 ease-out group-hover:scale-[1.04]',
                         )}
                         loading="lazy"
                         decoding="async"

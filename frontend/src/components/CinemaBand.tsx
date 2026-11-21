@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, ChevronLeft, ChevronRight, Pause, Play, Radio } from 'lucide-react';
 import { asset } from '../lib/env';
 import { cn } from '../lib/cn';
+import { frameFit, isFullFrame } from '../lib/media';
 
 export interface CinemaSlide {
   image: string;
@@ -62,7 +63,7 @@ export function CinemaBand({ eyebrow = 'Studio reel', title, lead, slides, to, c
             <img
               src={asset(item.image)}
               alt={item.alt}
-              className={cn('h-full w-full object-cover contrast-[1.05] saturate-[1.06]', index === active && !paused && 'kenburns')}
+              className={cn('h-full w-full contrast-[1.05] saturate-[1.06]', frameFit(item.image), isFullFrame(item.image) && 'object-right', index === active && !paused && !isFullFrame(item.image) && 'kenburns')}
               loading="lazy"
             />
           </div>
@@ -192,7 +193,7 @@ export function CinemaBand({ eyebrow = 'Studio reel', title, lead, slides, to, c
                <img
                  src={asset(item.image)}
                  alt=""
-                 className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
+                  className={cn('h-full w-full transition duration-500', frameFit(item.image), !isFullFrame(item.image) && 'group-hover:scale-110')}
                  loading="lazy"
                />
                <span className="reel-sheen absolute inset-0" />

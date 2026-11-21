@@ -13,7 +13,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { asset } from '../lib/env';
-import { HERO_SLIDES, MEDIA, MEDIA_ALT } from '../lib/media';
+import { frameFit, HERO_SLIDES, isFullFrame, MEDIA, MEDIA_ALT } from '../lib/media';
 import { cn } from '../lib/cn';
 import type { Service } from '../lib/types';
 
@@ -220,7 +220,7 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
           <img
             src={asset(item.image)}
             alt={item.alt}
-            className={cn('h-full w-full object-cover contrast-[1.06] saturate-[1.08]', index === active && 'kenburns')}
+            className={cn('h-full w-full contrast-[1.06] saturate-[1.08]', frameFit(item.image), isFullFrame(item.image) && 'object-right', index === active && !isFullFrame(item.image) && 'kenburns')}
             loading={index === 0 ? 'eager' : 'lazy'}
             fetchPriority={index === 0 ? 'high' : 'auto'}
           />
@@ -317,7 +317,7 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
               className="slide-rise slide-delay-4 group mt-7 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.05] p-2.5 backdrop-blur transition hover:border-brand-400/50 hover:bg-white/[0.08] lg:hidden"
             >
                 <span className="media-glow reel-frame relative h-16 w-20 shrink-0 overflow-hidden rounded-xl">
-                  <img key={slide.image} src={asset(slide.image)} alt="" className="h-full w-full object-cover" />
+                  <img key={slide.image} src={asset(slide.image)} alt="" className={cn('h-full w-full', frameFit(slide.image))} />
                   <span className="reel-sheen absolute inset-0" />
                 </span>
               <div className="min-w-0 flex-1">
@@ -364,7 +364,7 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
                 </div>
 
                 <Link to={slide.to} className="media-glow reel-frame group relative mt-3 block overflow-hidden rounded-xl border border-white/10">
-                  <img key={slide.image} src={asset(slide.image)} alt="" className="h-44 w-full object-cover" />
+                  <img key={slide.image} src={asset(slide.image)} alt="" className={cn('h-44 w-full', frameFit(slide.image))} />
                   <span className="reel-sheen absolute inset-0 z-[7]" />
                   <span className="frame-corner frame-corner-tl" aria-hidden="true" />
                   <span className="frame-corner frame-corner-tr" aria-hidden="true" />

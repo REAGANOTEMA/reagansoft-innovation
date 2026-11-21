@@ -109,7 +109,7 @@ export function FieldStory() {
                 <img
                   src={media('ceoBike')}
                   alt={mediaAlt('ceoBike')}
-                  className="block aspect-[4/5] w-full object-cover object-center transition duration-700 ease-out group-hover:scale-[1.04] sm:aspect-[5/4] lg:aspect-[4/5]"
+                  className="block aspect-square w-full object-contain object-center"
                   loading="lazy"
                   decoding="async"
                 />
