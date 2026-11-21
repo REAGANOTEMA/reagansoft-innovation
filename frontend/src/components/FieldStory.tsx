@@ -102,12 +102,14 @@ export function FieldStory() {
       <div className="container-x relative grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
         <Reveal>
           <Tilt max={4}>
-            <figure className="depth-card relative overflow-hidden rounded-[30px] border border-white/10 p-2.5">
+            <div className="relative">
+              <div className="pointer-events-none absolute -right-6 -top-6 h-28 w-28 rounded-full border border-brand-300/25 depth-ring sm:h-36 sm:w-36" aria-hidden="true" />
+              <figure className="depth-card relative overflow-hidden rounded-[30px] border border-white/10 p-2.5">
               <div className="group relative overflow-hidden rounded-[23px] border border-white/10 bg-navy-900">
                 <img
-                  src={media('bike')}
-                  alt={mediaAlt('bike')}
-                  className="block aspect-[4/5] w-full object-cover transition duration-700 ease-out group-hover:scale-[1.04] sm:aspect-[5/4] lg:aspect-[4/5]"
+                  src={media('ceoBike')}
+                  alt={mediaAlt('ceoBike')}
+                  className="block aspect-[4/5] w-full object-cover object-center transition duration-700 ease-out group-hover:scale-[1.04] sm:aspect-[5/4] lg:aspect-[4/5]"
                   loading="lazy"
                   decoding="async"
                 />
@@ -135,15 +137,29 @@ export function FieldStory() {
                   </p>
                 </div>
               </div>
-              <figcaption className="flex flex-wrap items-center justify-between gap-2 px-4 pb-3 pt-4">
-                <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-white/45">
-                  {ceo} &amp; the company Yamaha
-                </span>
-                <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-brand-300/80">
-                  Site visits · Training · Support
-                </span>
+              <figcaption className="px-4 pb-3 pt-4">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-white/45">
+                    {ceo} &amp; the company Yamaha
+                  </span>
+                  <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-brand-300/80">
+                    Install · Train · Support
+                  </span>
+                </div>
+                <p className="mt-3 border-t border-white/10 pt-3 text-[12px] leading-relaxed text-white/65">
+                  Our team is willing to reach our clients as far as they are. We will come to install the system,
+                  train the people who will use it, and stay close for whatever comes next.
+                </p>
               </figcaption>
-            </figure>
+              </figure>
+              <div className="float-soft absolute -bottom-5 -left-3 hidden rounded-2xl border border-white/15 bg-navy-900/90 px-4 py-3 shadow-lift backdrop-blur sm:block">
+                <p className="font-mono text-[8px] uppercase tracking-[0.2em] text-brand-300">Field note</p>
+                <p className="mt-1 text-[11px] font-semibold text-white">We come to you</p>
+              </div>
+              <div className="float-soft absolute -right-3 top-1/3 hidden rounded-2xl border border-white/15 bg-navy-900/90 px-3 py-2 font-mono text-[9px] uppercase tracking-[0.16em] text-white/70 shadow-lift backdrop-blur sm:block" style={{ animationDelay: '-3s' }}>
+                Install · Train · Support
+              </div>
+            </div>
           </Tilt>
         </Reveal>
 
@@ -158,9 +174,10 @@ export function FieldStory() {
             {ceo.split(' ')[0]} goes to those places himself.
           </p>
           <p className="mt-4 text-[14px] leading-relaxed text-white/70">
-            The company Yamaha is painted in Reagansoft blue, which is partly practical and partly a promise. When it pulls up for a
-            site survey, a training session or a launch, it means the person who shaped your system is close enough to see it working
-            with your own team.
+            The company Yamaha is painted in Reagansoft blue, which is partly practical and partly a promise. Our teams are willing to
+            reach our clients wherever they are, to install the systems, train the people who use them, and handle all the other little
+            things that make a launch work. When the bike pulls up, it means the person who shaped your system is close enough to see it
+            working with your own team.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-2">
@@ -171,7 +188,7 @@ export function FieldStory() {
               <Route className="mr-1.5 h-3.5 w-3.5 text-brand-300" /> Training on site
             </span>
             <span className="badge border border-white/15 bg-white/5 text-white/75">
-              <Navigation className="mr-1.5 h-3.5 w-3.5 text-brand-300" /> Jinja &amp; beyond
+              <Navigation className="mr-1.5 h-3.5 w-3.5 text-brand-300" /> As far as you are
             </span>
           </div>
 

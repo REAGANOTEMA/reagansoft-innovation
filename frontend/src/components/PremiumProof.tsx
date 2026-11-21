@@ -2,6 +2,7 @@ import { ArrowUpRight, BadgeCheck, Building2, Clock3, GraduationCap, ShieldCheck
 import { Link, useLocation } from 'react-router-dom';
 import { Reveal } from './Reveal';
 import { Tilt } from './Tilt';
+import { FieldNotes } from './FieldNotes';
 import { SectionHeading } from './UI';
 import { media, mediaAlt, proofForPath, type ProofCard } from '../lib/media';
 import { cn } from '../lib/cn';
@@ -77,6 +78,7 @@ const PROOF_ART: Record<string, { icon: typeof GraduationCap; art: ArtVariant }>
   developerClassroom: { icon: GraduationCap, art: 'degree' },
   workspace: { icon: Building2, art: 'studio' },
   bike: { icon: Building2, art: 'studio' },
+  ceoBike: { icon: Building2, art: 'studio' },
   computerPortrait: { icon: Building2, art: 'studio' },
 };
 
@@ -200,6 +202,8 @@ export function PremiumProof() {
             );
           })}
         </div>
+
+        <FieldNotes />
 
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           {assurances.map((item, index) => {

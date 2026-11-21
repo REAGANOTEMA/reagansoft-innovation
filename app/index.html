@@ -207,10 +207,65 @@
         opacity: 0;
         animation: rsiPiece 0.72s cubic-bezier(0.2, 0.7, 0.2, 1) forwards, rsiPieceOut 2.4s ease-in-out forwards;
       }
-      .rsi-splash-piece-1 { clip-path: inset(0 50% 50% 0); animation-delay: 0.08s, 1.75s; }
-      .rsi-splash-piece-2 { clip-path: inset(0 0 50% 50%); animation-delay: 0.36s, 1.75s; }
-      .rsi-splash-piece-3 { clip-path: inset(50% 50% 0 0); animation-delay: 0.64s, 1.75s; }
-      .rsi-splash-piece-4 { clip-path: inset(50% 0 0 50%); animation-delay: 0.92s, 1.75s; }
+        /* Real jigsaw edges: each tile carries one tab and one socket. */
+        .rsi-splash-piece-1 {
+          clip-path: polygon(0 0, 50% 0, 50% 38%, 58% 38%, 58% 50%, 50% 50%, 38% 50%, 38% 42%, 26% 42%, 26% 50%, 0 50%);
+          animation-delay: 0.08s, 1.75s;
+        }
+        .rsi-splash-piece-2 {
+          clip-path: polygon(50% 0, 100% 0, 100% 50%, 62% 50%, 62% 58%, 50% 58%, 50% 50%, 42% 50%, 42% 38%, 50% 38%);
+          animation-delay: 0.36s, 1.75s;
+        }
+        .rsi-splash-piece-3 {
+          clip-path: polygon(0 50%, 26% 50%, 26% 58%, 38% 58%, 38% 50%, 50% 50%, 50% 62%, 58% 62%, 58% 70%, 50% 70%, 50% 100%, 0 100%);
+          animation-delay: 0.64s, 1.75s;
+        }
+        .rsi-splash-piece-4 {
+          clip-path: polygon(50% 50%, 62% 50%, 62% 42%, 74% 42%, 74% 50%, 100% 50%, 100% 100%, 50% 100%, 50% 70%, 42% 70%, 42% 62%, 50% 62%);
+          animation-delay: 0.92s, 1.75s;
+        }
+        .rsi-splash-knob {
+          position: absolute;
+          width: 15px;
+          height: 15px;
+          border-radius: 50%;
+          border: 1px solid rgba(165, 228, 255, 0.7);
+          background: rgba(10, 123, 206, 0.55);
+          box-shadow: 0 0 14px rgba(79, 182, 255, 0.8);
+          opacity: 0;
+          animation: rsiKnob 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards, rsiPieceOut 2.4s ease-in-out forwards;
+          pointer-events: none;
+        }
+        .rsi-splash-knob-a { left: 50%; top: 39%; animation-delay: 0.5s, 1.75s; }
+        .rsi-splash-knob-b { left: 31%; top: 50%; animation-delay: 0.74s, 1.75s; }
+        .rsi-splash-knob-c { left: 60%; top: 56%; animation-delay: 0.98s, 1.75s; }
+        .rsi-splash-knob-d { left: 50%; top: 71%; animation-delay: 1.2s, 1.75s; }
+        .rsi-splash-lock {
+          position: absolute;
+          inset: 10%;
+          border-radius: 50%;
+          border: 2px solid rgba(165, 228, 255, 0.8);
+          opacity: 0;
+          animation: rsiLock 2.4s ease-out 1.35s forwards;
+          pointer-events: none;
+        }
+        .rsi-splash-stage {
+          position: relative;
+          height: 13px;
+          font-family: 'JetBrains Mono', ui-monospace, monospace;
+          font-size: 9px;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          color: rgba(165, 228, 255, 0.8);
+        }
+        .rsi-splash-stage span {
+          position: absolute;
+          inset: 0;
+          opacity: 0;
+          animation: rsiStage 2.6s ease-in-out forwards;
+        }
+        .rsi-splash-stage span:nth-child(2) { animation-delay: 0.85s; }
+        .rsi-splash-stage span:nth-child(3) { animation-delay: 1.7s; }
       .rsi-splash-complete {
         opacity: 0;
         animation: rsiComplete 2.6s ease-in-out forwards;
@@ -379,8 +434,23 @@
         from { transform: translateY(-120%); }
         to { transform: translateY(760%); }
       }
-      @keyframes rsiRing {
-        0% { transform: scale(0.62); opacity: 0; }
+        @keyframes rsiKnob {
+          0% { opacity: 0; transform: scale(0.2) rotate(-90deg); }
+          65% { opacity: 1; transform: scale(1.35) rotate(10deg); }
+          100% { opacity: 1; transform: scale(1) rotate(0); }
+        }
+        @keyframes rsiLock {
+          0% { opacity: 0.9; transform: scale(0.7); }
+          55% { opacity: 0.5; }
+          100% { opacity: 0; transform: scale(1.25); }
+        }
+        @keyframes rsiStage {
+          0%, 28% { opacity: 0; transform: translateY(5px); }
+          38%, 62% { opacity: 1; transform: translateY(0); }
+          72%, 100% { opacity: 0; transform: translateY(-5px); }
+        }
+        @keyframes rsiRing {
+          0% { transform: scale(0.62); opacity: 0; }
         22% { opacity: 0.85; }
         100% { transform: scale(1.45); opacity: 0; }
       }
@@ -449,13 +519,17 @@
         #rsi-splash .rsi-splash-piece-2,
         #rsi-splash .rsi-splash-piece-3,
         #rsi-splash .rsi-splash-piece-4,
-        #rsi-splash .rsi-splash-sweep { display: none; }
+        #rsi-splash .rsi-splash-sweep,
+        #rsi-splash .rsi-splash-knob,
+        #rsi-splash .rsi-splash-lock { display: none; }
+        #rsi-splash .rsi-splash-stage span { opacity: 0; }
+        #rsi-splash .rsi-splash-stage span:last-child { opacity: 1; }
       }
     </style>
-    <script type="module" crossorigin src="./assets/index-Bg0ITw6w.js"></script>
+    <script type="module" crossorigin src="./assets/index-BRPDz7v3.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/vendor-DTqo3bJO.js">
-    <link rel="modulepreload" crossorigin href="./assets/icons-BtL7Qy2G.js">
-    <link rel="stylesheet" crossorigin href="./assets/index-CYXAwXaA.css">
+    <link rel="modulepreload" crossorigin href="./assets/icons-ClBge6LC.js">
+    <link rel="stylesheet" crossorigin href="./assets/index-DnaFuL2f.css">
   </head>
   <body>
     <div id="rsi-splash" role="status" aria-live="polite" aria-label="Loading Reagansoft Innovation">
@@ -485,12 +559,22 @@
             <img class="rsi-splash-piece rsi-splash-piece-3" data-rsi-img="real-reagansoft-logo.png" alt="" />
             <img class="rsi-splash-piece rsi-splash-piece-4" data-rsi-img="real-reagansoft-logo.png" alt="" />
             <img class="rsi-splash-complete" data-rsi-img="real-reagansoft-logo.png" alt="" />
+            <span class="rsi-splash-knob rsi-splash-knob-a"></span>
+            <span class="rsi-splash-knob rsi-splash-knob-b"></span>
+            <span class="rsi-splash-knob rsi-splash-knob-c"></span>
+            <span class="rsi-splash-knob rsi-splash-knob-d"></span>
+            <span class="rsi-splash-lock"></span>
             <span class="rsi-splash-sweep"></span>
           </div>
         </div>
         <p class="rsi-splash-tag">Reagansoft Innovation &middot; Jinja, Uganda</p>
 
         <div class="rsi-splash-bar"><span></span></div>
+        <div class="rsi-splash-stage" aria-hidden="true">
+          <span>Assembling the identity</span>
+          <span>Booting the live studio</span>
+          <span>Ready when you are</span>
+        </div>
         <p class="rsi-splash-status">Booting the live studio<span class="rsi-splash-ellipsis"></span></p>
       </div>
 

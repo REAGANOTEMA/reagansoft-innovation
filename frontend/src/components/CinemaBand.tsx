@@ -62,16 +62,26 @@ export function CinemaBand({ eyebrow = 'Studio reel', title, lead, slides, to, c
             <img
               src={asset(item.image)}
               alt={item.alt}
-              className={cn('h-full w-full object-cover', index === active && !paused && 'kenburns')}
+              className={cn('h-full w-full object-cover contrast-[1.05] saturate-[1.06]', index === active && !paused && 'kenburns')}
               loading="lazy"
             />
           </div>
         ))}
-        <div className="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/85 to-navy-950/35" />
-        <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/25 to-navy-950/50" />
+        <div className="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/72 to-navy-950/25" />
+        <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/15 to-navy-950/40" />
         <div className="pointer-events-none absolute inset-0 bg-grid-dark opacity-20" />
         <div className="cine-grain pointer-events-none absolute inset-0" />
         <div className="cine-bars pointer-events-none absolute inset-0" />
+        <svg viewBox="0 0 600 420" className="pointer-events-none absolute -right-24 -top-16 h-[130%] w-[65%] opacity-70" fill="none" aria-hidden="true">
+          <g className="orbit-spin" style={{ transformOrigin: '50% 50%' }}>
+            <circle cx="300" cy="210" r="172" stroke="#7dd3fc" strokeOpacity="0.16" strokeDasharray="4 14" />
+            <circle cx="300" cy="38" r="5" fill="#a5e4ff" fillOpacity="0.8" />
+          </g>
+          <g className="orbit-reverse" style={{ transformOrigin: '50% 50%' }}>
+            <circle cx="300" cy="210" r="120" stroke="#4fb6ff" strokeOpacity="0.14" strokeDasharray="16 24" />
+            <circle cx="420" cy="210" r="3" fill="#7dd3fc" fillOpacity="0.75" />
+          </g>
+        </svg>
         <div className="lens-flare pointer-events-none absolute -right-14 top-10 h-56 w-56 rounded-full" aria-hidden="true" />
         <div className="screen-scan absolute inset-0" />
         <div className="screen-sheen" />

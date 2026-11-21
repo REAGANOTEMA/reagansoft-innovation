@@ -8,6 +8,7 @@ import { useToast } from '../components/Toast';
 import { Field } from '../components/UI';
 import { ServiceGlyph } from '../components/Graphics';
 import { CinemaBand } from '../components/CinemaBand';
+import { FieldStory } from '../components/FieldStory';
 import { media, MEDIA_ALT, REELS } from '../lib/media';
 
 export function Contact() {
@@ -127,6 +128,8 @@ export function Contact() {
         to="/about"
         cta="More about the studio"
       />
+
+      <FieldStory />
 
       <section className="py-14 sm:py-20">
         <div className="container-x grid gap-10 lg:grid-cols-[1.25fr_0.75fr]">

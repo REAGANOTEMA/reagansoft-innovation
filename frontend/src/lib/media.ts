@@ -35,6 +35,7 @@ export const MEDIA = {
   founder: 'founder.webp',
   team: 'reagansoft-team.jpeg',
   bike: 'company-bike.jpeg',
+  ceoBike: 'ceo-on-the-company-yamaha-bike.jpeg',
   ceoIsrael: 'ceo-in-israel-with-his-friend.jpeg',
   funders: 'our funders-with-ceo.jpeg',
   officeVisitors: 'director-and-aliyah-and-joy-from-america-visiting-at-main-office-in-jinja.jpeg',
@@ -80,6 +81,7 @@ export const MEDIA_ALT: Record<MediaKey, string> = {
   founder: 'Reagansoft founder, CEO and lead developer Reagan Otema',
   team: 'The Reagansoft Innovation team at the Jinja studio',
   bike: 'The Reagansoft company motorcycle finished in the company brand colours',
+  ceoBike: 'Reagansoft CEO Reagan Otema with the company Yamaha, ready for a client site visit',
   ceoIsrael: 'Reagansoft founder and CEO with a technology friend during a visit to Israel',
   funders: 'Reagansoft funders and partners photographed together with the CEO',
   officeVisitors: 'The Reagansoft director with visiting friends from America at the main office in Jinja',
@@ -170,7 +172,7 @@ export const REELS: Record<
     slide('cover', 'Start here', 'A conversation about your operation, not a sales script.'),
     slide('team', 'Meet the team', 'The people who scope, build and support your project.'),
     slide('officeVisitors', 'Visit the studio', 'Come and see the team and workspace before you commit.'),
-    slide('bike', 'We come to you', 'Client visits and site work across Jinja and beyond.'),
+    slide('ceoBike', 'We come to you', 'Client visits and site work across Jinja and beyond.'),
     slide('funders', 'Backed well', 'Partners who invest in long-term local engineering.'),
   ],
   faq: [
@@ -341,12 +343,12 @@ export const PROOF_CARDS: Record<string, ProofCard> = {
     link: 'Visit the studio',
   },
   onSite: {
-    image: 'bike',
+    image: 'ceoBike',
     overline: 'On the road with the CEO',
     caption: 'Reagan and the company Yamaha',
     title: 'We come to you, not just to meetings.',
-    body: 'Some things only make sense when you see them in person: the queue at the counter, the stockroom, the way a team actually works. Reagan takes the company Yamaha out for site visits, training and support, so the system gets built around the real place it has to serve.',
-    proof: 'Site visits · Training · Local support',
+    body: 'Our team is willing to reach our clients wherever they are. If a system needs installing, a team needs training, or something needs fixing on site, we get on the bike and go. We would rather stand in your shop, school or office and see how the work really happens than guess from a video call.',
+    proof: 'We travel to you · Install · Train · Support',
     to: '/contact',
     link: 'Talk to us',
   },
@@ -363,7 +365,7 @@ export const PROOF_CARDS: Record<string, ProofCard> = {
 };
 
 const PROOF_BY_ROUTE: Record<string, [keyof typeof PROOF_CARDS, keyof typeof PROOF_CARDS]> = {
-  '/': ['team', 'founderPortrait'],
+  '/': ['onSite', 'founderPortrait'],
   '/about': ['founderPortrait', 'director'],
   '/services': ['funders', 'workshop'],
   '/portfolio': ['onSite', 'founderPortrait'],

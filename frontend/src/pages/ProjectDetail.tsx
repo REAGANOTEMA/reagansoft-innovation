@@ -6,6 +6,8 @@ import { usePageMeta } from '../lib/seo';
 import { Reveal } from '../components/Reveal';
 import { Badge, ErrorBlock, LoadingBlock } from '../components/UI';
 import { ProjectCover } from '../components/Graphics';
+import { CinemaBand } from '../components/CinemaBand';
+import { REELS } from '../lib/media';
 import { formatDate } from '../lib/format';
 import type { Project } from '../lib/types';
 
@@ -92,6 +94,15 @@ export function ProjectDetail() {
           </div>
         </div>
       </section>
+
+      <CinemaBand
+        eyebrow="Studio reel · Case study"
+        title="The people and process behind this work."
+        lead="Every delivery comes with the same senior team, the same checks and the same care after launch."
+        slides={REELS.portfolio}
+        to="/process"
+        cta="See how we work"
+      />
 
       <section className="py-16">
         <div className="container-x grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">

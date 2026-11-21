@@ -26,6 +26,7 @@ interface Slide {
   lead: string;
   to: string;
   cta: string;
+  note: string;
   alt: string;
 }
 
@@ -39,6 +40,7 @@ const slides: Slide[] = [
     lead: 'A fast, secure website built around your business, designed to look right on every screen and still working properly years after launch.',
     to: '/services/business-website',
     cta: 'Explore website development',
+    note: 'From the first sketch to the last button, built by the same senior team.',
     alt: MEDIA_ALT.remoteWork,
   },
   {
@@ -50,6 +52,7 @@ const slides: Slide[] = [
     lead: 'Client portals, management dashboards and workflow automation, scoped module by module and approved by you before we write a line of code.',
     to: '/services/business-systems',
     cta: 'See business systems',
+    note: 'We sit with your team, learn the real workflow, then build around it.',
     alt: MEDIA_ALT.hireDevelopers,
   },
   {
@@ -61,6 +64,7 @@ const slides: Slide[] = [
     lead: 'Business apps delivered for the browser, Android and iOS together, prepared, tested and published with your team.',
     to: '/services/web-mobile-apps',
     cta: 'View app development',
+    note: 'One product that feels at home on a laptop, a tablet and a phone.',
     alt: MEDIA_ALT.workspace,
   },
   {
@@ -72,6 +76,7 @@ const slides: Slide[] = [
     lead: 'Your shop, school or clinic sends a professional receipt the moment a client pays, with every payment recorded and easy to find again.',
     to: '/services/receipt-billing',
     cta: 'See billing automation',
+    note: 'Less paperwork, cleaner records and receipts your clients can trust.',
     alt: MEDIA_ALT.codingHome,
   },
   {
@@ -83,6 +88,7 @@ const slides: Slide[] = [
     lead: 'Product catalogues, cart, checkout and mobile money flows designed to turn visitors into paying customers.',
     to: '/services/ecommerce',
     cta: 'Explore ecommerce',
+    note: 'A storefront designed around how your customers actually pay.',
     alt: MEDIA_ALT.everything,
   },
   {
@@ -94,6 +100,7 @@ const slides: Slide[] = [
     lead: 'Your first payment is 75% of the written quote, credited in full. The remaining 25% is due at handover, with no hidden charges.',
     to: '/process',
     cta: 'How a project runs',
+    note: 'Clear terms from day one, so you always know where you stand.',
     alt: MEDIA_ALT.homepageHero,
   },
 ];
@@ -126,6 +133,17 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
     if (!rect.width || !rect.height) return;
     node.style.setProperty('--spot-x', `${(((event.clientX - rect.left) / rect.width) * 100).toFixed(1)}%`);
     node.style.setProperty('--spot-y', `${(((event.clientY - rect.top) / rect.height) * 100).toFixed(1)}%`);
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+    node.style.setProperty('--tilt-x', `${(x * 9).toFixed(2)}deg`);
+    node.style.setProperty('--tilt-y', `${(-y * 7).toFixed(2)}deg`);
+  };
+
+  const resetPointer = () => {
+    const node = sectionRef.current;
+    if (!node) return;
+    node.style.setProperty('--tilt-x', '0deg');
+    node.style.setProperty('--tilt-y', '0deg');
   };
 
   const go = useCallback((next: number) => {
@@ -176,6 +194,7 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onPointerMove={handlePointerMove}
+      onPointerLeave={resetPointer}
     >
       {slides.map((item, index) => (
         <div
@@ -189,12 +208,12 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
           <img
             src={asset(item.image)}
             alt={item.alt}
-            className={cn('h-full w-full object-cover', index === active && 'kenburns')}
+            className={cn('h-full w-full object-cover contrast-[1.06] saturate-[1.08]', index === active && 'kenburns')}
             loading={index === 0 ? 'eager' : 'lazy'}
             fetchPriority={index === 0 ? 'high' : 'auto'}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/85 to-navy-950/30" />
-          <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/20 to-navy-950/55" />
+          <div className="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/70 to-navy-950/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/10 to-navy-950/45" />
         </div>
       ))}
 
@@ -266,7 +285,11 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
               <span className="text-gradient">{slide.accent}</span>
             </h1>
 
-            <p className="slide-rise slide-delay-2 mt-5 max-w-xl text-[1rem] leading-relaxed text-white/65 sm:mt-6 sm:text-[1.1rem]">{slide.lead}</p>
+            <p className="slide-rise slide-delay-2 mt-5 max-w-xl text-[1rem] leading-relaxed text-white/75 sm:mt-6 sm:text-[1.1rem]">{slide.lead}</p>
+            <p className="slide-rise slide-delay-3 mt-4 flex items-start gap-2 border-l-2 border-brand-400/70 pl-3 font-mono text-[10px] uppercase leading-relaxed tracking-[0.12em] text-brand-200/80 sm:text-[11px]">
+              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-300 orbit-pulse" />
+              <span className="caption-type">{slide.note}</span>
+            </p>
 
             <div className="slide-rise slide-delay-3 mt-7 flex flex-col gap-3 min-[420px]:flex-row min-[420px]:flex-wrap min-[420px]:items-center">
               <Link to={slide.to} className="btn-primary justify-center">
@@ -308,8 +331,19 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
           </div>
 
           <div className="relative hidden lg:block">
-            <div className="relative ml-auto w-full max-w-[420px]">
-              <div className="rounded-2xl border border-white/15 bg-navy-950/55 p-3 shadow-[0_50px_120px_-40px_rgba(3,26,46,.95)] backdrop-blur-xl">
+            <div className="hero-parallax relative ml-auto w-full max-w-[420px]">
+              <svg viewBox="0 0 420 460" className="pointer-events-none absolute -inset-10 h-[calc(100%+80px)] w-[calc(100%+80px)]" fill="none" aria-hidden="true">
+                <g className="orbit-spin" style={{ transformOrigin: '50% 50%' }}>
+                  <circle cx="210" cy="230" r="184" stroke="#7dd3fc" strokeOpacity="0.18" strokeDasharray="3 12" />
+                  <circle cx="210" cy="46" r="5" fill="#a5e4ff" fillOpacity="0.9" />
+                  <circle cx="394" cy="230" r="3" fill="#4fb6ff" fillOpacity="0.7" />
+                </g>
+                <g className="orbit-reverse" style={{ transformOrigin: '50% 50%' }}>
+                  <circle cx="210" cy="230" r="150" stroke="#4fb6ff" strokeOpacity="0.14" strokeDasharray="18 26" />
+                  <circle cx="60" cy="230" r="3.5" fill="#7dd3fc" fillOpacity="0.8" />
+                </g>
+              </svg>
+              <div className="hero-depth rounded-2xl border border-white/15 bg-navy-950/55 p-3 shadow-[0_50px_120px_-40px_rgba(3,26,46,.95)] backdrop-blur-xl">
                 <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
                   <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/40">Now showing</span>
                   <span className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.16em] text-emerald-300">

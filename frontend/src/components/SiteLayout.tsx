@@ -28,6 +28,7 @@ import { useToast } from './Toast';
 import { ServiceGlyph } from './Graphics';
 import { PremiumProof } from './PremiumProof';
 import { InstallApp } from './InstallApp';
+import { PuzzleMark } from './PuzzleMark';
 import { cn } from '../lib/cn';
 
 const navLinks = [
@@ -112,11 +113,64 @@ function FloatingActions() {
   );
 }
 
+/** Every photograph gets a soft shimmer while it loads, then settles into focus. */
+function useImageLoading() {
+  useEffect(() => {
+    const mark = (image: HTMLImageElement) => {
+      if (image.dataset.rsiImage === 'ready') return;
+      image.dataset.rsiImage = 'ready';
+      if (image.complete && image.naturalWidth > 0) {
+        image.classList.add('img-loaded');
+        return;
+      }
+      image.classList.add('img-loading');
+      const settle = () => {
+        image.classList.remove('img-loading');
+        image.classList.add('img-loaded');
+      };
+      image.addEventListener('load', settle, { once: true });
+      image.addEventListener('error', settle, { once: true });
+    };
+
+    document.querySelectorAll('img').forEach((image) => mark(image as HTMLImageElement));
+    const observer = new MutationObserver((records) => {
+      records.forEach((record) => {
+        record.addedNodes.forEach((node) => {
+          if (node instanceof HTMLImageElement) mark(node);
+          else if (node instanceof HTMLElement) node.querySelectorAll('img').forEach((image) => mark(image as HTMLImageElement));
+        });
+      });
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, []);
+}
+
+/** A brief puzzle-logo rail while a new page settles in. */
+function RouteLoader({ pathname }: { pathname: string }) {
+  const [visible, setVisible] = useState(true);
+  useEffect(() => {
+    setVisible(true);
+    const timer = window.setTimeout(() => setVisible(false), 620);
+    return () => window.clearTimeout(timer);
+  }, [pathname]);
+  if (!visible) return null;
+  return (
+    <div className="no-print pointer-events-none fixed inset-x-0 top-0 z-[90]">
+      <div key={pathname} className="route-loader" />
+      <div className="absolute right-4 top-4 rounded-full border border-brand-200/60 bg-white/90 px-3 py-1.5 shadow-soft backdrop-blur">
+        <PuzzleMark />
+      </div>
+    </div>
+  );
+}
+
 export function SiteLayout() {
   const [scrolled, setScrolled] = useState(false);
   const { settings, services } = useSite();
   const { user } = useAuth();
   const location = useLocation();
+  useImageLoading();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -132,6 +186,7 @@ export function SiteLayout() {
     <div className="flex min-h-screen flex-col bg-white">
       <ScrollToTop />
       <ScrollProgress />
+      <RouteLoader pathname={location.pathname} />
 
       <div className="hidden border-b border-white/10 bg-navy-950 text-white/60 lg:block">
         <div className="container-x flex h-9 items-center justify-between text-[11px]">
