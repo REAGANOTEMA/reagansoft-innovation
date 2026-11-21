@@ -29,6 +29,9 @@ $loginUrl = app_url('login.php?redirect=' . urlencode($continueTarget));
 $registerUrl = app_url('register.php?redirect=' . urlencode($continueTarget));
 
 $deposit = deposit_amount();
+if ($service && (float)($service['price_min'] ?? 0) > 0) {
+    $deposit = first_payment_amount((float)$service['price_min']);
+}
 $errors = [];
 $values = ['title' => '', 'description' => '', 'requirements' => '', 'method' => 'mtn_momo', 'reference' => ''];
 
@@ -56,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         } else {
-            flash('success', 'Payment details saved. Complete your deposit below.');
+            flash('success', 'Payment details saved. Complete your 75% first payment below.');
             redirect($backUrl);
         }
     }
@@ -126,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 notify_staff('New project + deposit', $user['full_name'] . ' started "' . $values['title'] . '" (' . $ref . ') and submitted a deposit of ' . money($deposit, $currency) . '.', 'project', $projectId);
 
                 $pdo->commit();
-                flash('success', 'Project ' . $ref . ' created. Your deposit payment has been submitted for confirmation, and we will start as soon as it is verified.');
+                flash('success', 'Project ' . $ref . ' created. Your 75% first payment has been submitted for confirmation, and we will start as soon as it is verified.');
                 clear_old();
                 redirect(app_url('client/project.php?id=' . $projectId . '&tab=invoice'));
             } catch (Throwable $e) {
@@ -141,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 public_head([
     'title'     => 'Start Your Project | Reagansoft Innovation Limited',
-    'desc'      => 'Choose a program, secure your project with a one time deposit and get your software built by Reagansoft Innovation Limited in Jinja, Uganda.',
+    'desc'      => 'Choose a program, start with 75% of the quoted price and get your software built by Reagansoft Innovation Limited in Jinja, Uganda.',
     'active'    => 'checkout',
     'robots'    => false,
 ]);
@@ -150,10 +153,10 @@ public_head([
   <div class="container">
     <div class="pi-copy">
       <span class="eyebrow">Checkout · <?= e($service['name'] ?? 'Your project') ?></span>
-      <h1>Secure your project with a one time deposit.</h1>
-      <p class="lead">Every project starts with a fixed deposit of <strong style="color:var(--navy)"><?= money($deposit, $currency) ?></strong>, which holds your slot, gets your requirements reviewed and is credited against your final quotation. The remaining cost is agreed in writing before development begins.</p>
+      <h1>Start your project with 75% of the quoted price.</h1>
+      <p class="lead">Your first payment is <strong style="color:var(--navy)">75% of the real project price</strong>, credited in full against your written quotation. For <?= e($service['name'] ?? 'your project') ?> that starts at <strong style="color:var(--navy)"><?= money($deposit, $currency) ?></strong>. The remaining 25% is due only after you approve the quoted scope.</p>
     </div>
-    <?= page_image('assets/img/hero6.webp', 6, 'One time deposit, credited against your final quotation'); ?>
+    <?= page_image('assets/img/hero6.webp', 6, 'First payment credited against your written quotation'); ?>
   </div>
 </section>
 
@@ -170,18 +173,18 @@ public_head([
         <?php if ($detailsDone): ?>
           <div class="cs-step done"><span class="cs-dot"><?= icon('check') ?></span><div><b>Your details</b><small>Ready to pay</small></div></div>
           <div class="cs-line"></div>
-          <div class="cs-step current"><span class="cs-dot"><?= icon('money') ?></span><div><b>Pay deposit</b><small><?= money($deposit, $currency) ?></small></div></div>
+          <div class="cs-step current"><span class="cs-dot"><?= icon('money') ?></span><div><b>Pay 75% first payment</b><small><?= money($deposit, $currency) ?></small></div></div>
         <?php else: ?>
           <div class="cs-step current"><span class="cs-dot"><?= icon('user') ?></span><div><b>Your details</b><small>Needed before you can pay</small></div></div>
           <div class="cs-line"></div>
-          <div class="cs-step next"><span class="cs-dot"><?= icon('money') ?></span><div><b>Pay deposit</b><small><?= money($deposit, $currency) ?></small></div></div>
+          <div class="cs-step next"><span class="cs-dot"><?= icon('money') ?></span><div><b>Pay 75% first payment</b><small><?= money($deposit, $currency) ?></small></div></div>
         <?php endif; ?>
       <?php else: ?>
         <div class="cs-step current"><span class="cs-dot"><?= icon('user') ?></span><div><b>Sign in / register</b><small>Create a free client account</small></div></div>
         <div class="cs-line"></div>
         <div class="cs-step next"><span class="cs-dot"><?= icon('name') ?></span><div><b>Your details</b><small>Who is paying</small></div></div>
         <div class="cs-line"></div>
-        <div class="cs-step next"><span class="cs-dot"><?= icon('money') ?></span><div><b>Pay deposit</b><small><?= money($deposit, $currency) ?></small></div></div>
+        <div class="cs-step next"><span class="cs-dot"><?= icon('money') ?></span><div><b>Pay 75% first payment</b><small><?= money($deposit, $currency) ?></small></div></div>
       <?php endif; ?>
     </div>
 
@@ -222,22 +225,22 @@ public_head([
                 <p class="pc-note">Tell us what you want to build</p>
               </div>
             </div>
-            <p class="pc-desc">Start a general software project. After your deposit you will be guided through the requirements so our team can prepare an accurate quotation.</p>
+            <p class="pc-desc">Start a general software project. After your 75% first payment you will be guided through the requirements so our team can prepare an accurate quotation.</p>
           </section>
         <?php endif; ?>
 
         <section class="deposit-box">
           <div class="db-amount">
-            <span class="db-label">Project deposit <small>(one time, credited to your quote)</small></span>
+            <span class="db-label">First payment <small>(75% of the quoted price, credited to your quote)</small></span>
             <strong data-deposit="<?= (float)$deposit ?>"><?= money($deposit, $currency) ?></strong>
           </div>
-          <p class="db-note"><?= icon('lock') ?> Your deposit is not an extra cost. It is applied to your project. The balance is fixed in a written quotation you approve before development begins.</p>
+          <p class="db-note"><?= icon('lock') ?> This is not an extra cost. It is 75% of the real project price and is applied in full. The remaining 25% is fixed in a written quotation you approve before development begins.</p>
         </section>
 
         <?php $payHtml = payment_instructions_html(); ?>
         <?php if ($payHtml !== ''): ?>
           <section class="panel pay-panel">
-            <div class="panel-head"><h3><?= icon('money') ?> How to pay your deposit</h3></div>
+            <div class="panel-head"><h3><?= icon('money') ?> How to pay your first payment</h3></div>
             <?= $payHtml ?>
             <p class="small muted mb-0">After sending the amount, come back and complete the form with your transaction reference so our team can confirm it quickly.</p>
           </section>
@@ -249,27 +252,27 @@ public_head([
         <?php if (!$loggedIn): ?>
           <section class="panel checkout-auth">
             <div class="panel-head"><h3><?= icon('user') ?> One more step: sign in</h3></div>
-            <p>You chose <strong><?= e($service['name'] ?? 'a custom software project') ?></strong>. To submit your deposit and start your project, sign back in or create a free client account, it only takes a minute.</p>
+            <p>You chose <strong><?= e($service['name'] ?? 'a custom software project') ?></strong>. To submit your 75% first payment and start your project, sign back in or create a free client account, it only takes a minute.</p>
             <a class="btn btn-primary btn-block" href="<?= e($loginUrl) ?>"><?= icon('lock') ?> Sign in &amp; continue</a>
             <a class="btn btn-outline btn-block" href="<?= e($registerUrl) ?>"><?= icon('plus') ?> Create a client account</a>
-            <p class="small muted center mt-2 mb-0">You will land back on this exact step, ready to pay your <strong><?= money($deposit, $currency) ?></strong> deposit.</p>
+            <p class="small muted center mt-2 mb-0">You will land back on this exact step, ready to pay your <strong><?= money($deposit, $currency) ?></strong> first payment.</p>
           </section>
         <?php elseif (!$detailsDone): ?>
         <section class="panel checkout-form billing-step-panel">
           <div class="panel-head"><h3><?= icon('name') ?> Step 3, confirm your payment details</h3></div>
-          <p class="small muted">We cannot take your deposit until we know who is paying. This takes about a minute, it is asked once, and you will come straight back here to finish your deposit.</p>
+          <p class="small muted">We cannot take your first payment until we know who is paying. This takes about a minute, it is asked once, and you will come straight back here to finish payment.</p>
           <?php
           billing_form_html(
               $user,
               $errors,
-              'Save and continue to my deposit',
+              'Save and continue to my first payment',
               $continueTarget
           );
           ?>
         </section>
         <?php else: ?>
         <section class="panel checkout-form">
-          <div class="panel-head"><h3><?= icon('send') ?> Step 4, submit deposit &amp; start</h3></div>
+          <div class="panel-head"><h3><?= icon('send') ?> Step 4, submit 75% first payment &amp; start</h3></div>
           <?php billing_summary_html($user); ?>
           <form method="post" novalidate>
             <?= csrf_field() ?>
@@ -289,11 +292,11 @@ public_head([
             <div class="field"><label for="cs_reference">Transaction reference <span class="req">*</span></label><input class="input" id="cs_reference" name="reference" maxlength="120" required placeholder="e.g. MoMo reference / sender name" value="<?= old('reference', $values['reference']) ?>"><div class="form-note">The number or reference you sent the deposit with.</div></div>
 
             <div class="checkout-total">
-              <span>One time project deposit</span>
+              <span>First payment (75% of quoted price)</span>
               <strong><?= money($deposit, $currency) ?></strong>
             </div>
 
-            <button class="btn btn-primary btn-block" type="submit"><?= icon('lock') ?> Pay deposit &amp; start project</button>
+            <button class="btn btn-primary btn-block" type="submit"><?= icon('lock') ?> Pay 75% &amp; start project</button>
             <p class="small muted center mt-2 mb-0">By starting you agree to our <a href="<?= app_url('terms.php') ?>" target="_blank" rel="noopener">Terms &amp; Conditions</a>.</p>
           </form>
         </section>

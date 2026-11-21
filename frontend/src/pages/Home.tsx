@@ -496,7 +496,7 @@ export function Home() {
             />
             <div className="mt-8 space-y-3">
               {[
-                { icon: CircleDollarSign, title: 'Transparent pricing', text: `Project deposits from ${moneyBoth(settings.project_deposit ?? 1000000, settings.currency, rate)}, with a written scope before work starts.` },
+                { icon: CircleDollarSign, title: 'Transparent pricing', text: 'Your first payment is 75% of the written quote, with the remaining 25% due at handover. No hidden fees.' },
                 { icon: BadgeCheck, title: 'Quality gates', text: 'Peer review, responsive checks and a launch checklist on every release.' },
                 { icon: HeartHandshake, title: 'Local support', text: 'A team in Jinja you can call, meet or WhatsApp during working hours.' },
               ].map((item) => (

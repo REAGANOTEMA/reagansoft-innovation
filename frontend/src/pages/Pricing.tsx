@@ -61,12 +61,11 @@ const factors = [
 export function Pricing() {
   usePageMeta(
     'Pricing, Transparent software project costs | Reagansoft Innovation',
-    'Understand Reagansoft Innovation pricing: website packages, business systems, custom software, deposits, payment milestones and maintenance.',
+    'Understand Reagansoft Innovation pricing: website packages, business systems, custom software, a 75% first payment and 25% on handover.',
   );
 
   const { services, settings } = useSite();
   const rate = usdRate(settings.usd_rate);
-  const deposit = moneyBoth(settings.project_deposit ?? 1000000, settings.currency, rate);
   const maintenance = moneyBoth(150000, settings.currency, rate);
 
   return (
@@ -82,9 +81,9 @@ export function Pricing() {
             exactly how we get from them to a fixed, itemised quote.
           </p>
           <div className="mt-7 flex flex-wrap gap-2">
-            <Badge tone="blue">Deposit from {deposit}</Badge>
+            <Badge tone="blue">75% first payment</Badge>
             <Badge tone="green">Fixed scope before build</Badge>
-            <Badge tone="violet">Milestone payments</Badge>
+            <Badge tone="violet">25% on handover</Badge>
           </div>
         </div>
       </section>
@@ -251,10 +250,10 @@ export function Pricing() {
               </div>
               <ol className="mt-5 space-y-4">
                 {[
-                  ['Deposit', `${deposit} to reserve the slot and begin discovery.`, 'Due on acceptance'],
-                  ['Milestone 1', 'Design or first working module accepted.', 'Typically 30-40%'],
-                  ['Milestone 2', 'Core build complete and tested.', 'Typically 30%'],
-                  ['Handover', 'Training, documentation and go-live.', 'Balance on launch'],
+                  ['First payment', '75% of your written quote. It reserves your slot and begins discovery.', 'Due on acceptance'],
+                  ['Build', 'Design and development happen with weekly demos and shared progress.', 'Included'],
+                  ['Review', 'You test each agreed module and approve the final scope.', 'Included'],
+                  ['Handover', 'Training, documentation and go-live, with the remaining 25% due.', '25% on launch'],
                 ].map(([title, text, meta], index) => (
                   <li key={title} className="flex gap-3">
                     <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-brand-50 font-mono text-[10px] font-bold text-brand-700">{index + 1}</span>

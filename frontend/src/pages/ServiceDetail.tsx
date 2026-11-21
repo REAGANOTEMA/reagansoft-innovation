@@ -100,8 +100,8 @@ export function ServiceDetail() {
                     </div>
                   )}
                   <div className="flex items-center justify-between gap-3">
-                    <span className="text-ink-muted">Deposit</span>
-                    <span className="font-semibold">{moneyBoth(settings.project_deposit ?? 1000000, settings.currency, rate)}</span>
+                    <span className="text-ink-muted">First payment</span>
+                    <span className="font-semibold">75% of your written quote</span>
                   </div>
                 </div>
 

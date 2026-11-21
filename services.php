@@ -57,7 +57,7 @@ public_head([
         <div class="hero-actions" style="margin-top:20px">
           <a class="btn btn-primary" href="<?= app_url('checkout.php?service=' . (int)$s['id']) ?>">Choose this program <?= icon('arrow') ?></a>
         </div>
-        <p class="small muted" style="margin-top:14px"><?= icon('lock') ?> Secured with a fixed one time deposit of <?= money(deposit_amount(), settings('currency')) ?>, credited against your final quotation.</p>
+        <p class="small muted" style="margin-top:14px"><?= icon('lock') ?> Starts with 75% of your written quote, credited in full. The remaining 25% is due at handover.</p>
       </div>
       <div class="price-card svc-card" style="<?= $i % 2 === 0 ? '' : 'border-color:var(--line);box-shadow:var(--shadow-sm)' ?>">
         <?php $srvPrice = service_price_display($s, settings('currency')); $srvNote = trim((string)$s['price_note']); ?>
@@ -84,7 +84,7 @@ public_head([
       <div>
         <span class="eyebrow">Not sure where to start?</span>
         <h2>Choose a program and we will guide you.</h2>
-        <p>Start with a fixed deposit, describe your project, and we will review your requirements and recommend the right approach, or a simpler and cheaper alternative if one exists.</p>
+        <p>Start with 75% of your written quote, describe your project, and we will review your requirements and recommend the right approach, or a simpler and cheaper alternative if one exists.</p>
       </div>
       <div style="display:flex;gap:12px;flex-wrap:wrap">
         <a class="btn btn-light" href="<?= app_url('checkout.php') ?>">Start a project <?= icon('arrow') ?></a>

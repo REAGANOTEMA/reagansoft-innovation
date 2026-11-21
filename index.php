@@ -60,7 +60,7 @@ public_head([
           ['assets/img/hero3.webp', 'Web & Mobile Apps', 'One app, ', 'every screen', 'Business apps delivered for the browser, Android and iOS together, prepared and published to the App Store and Google Play.', 'web-mobile-apps', 'View app pricing', 'pricing.php'],
           ['assets/img/hero4.webp', 'Receipt & Billing Automation', 'Receipts that ', 'issue themselves', 'Your shop, school or clinic sends a professional receipt the moment a client pays, with every payment recorded and easy to find again.', 'receipt-billing', 'See how billing works', 'process.php'],
           ['assets/img/hero5.webp', 'Ecommerce', 'Online stores that ', 'actually sell', 'Product catalogues, cart, checkout and mobile money payment flows, designed to turn visitors into paying customers.', 'ecommerce', 'View store pricing', 'pricing.php'],
-          ['assets/img/hero6.webp', 'Fixed One-Time Deposit', 'Start with a fixed, ', 'one-time deposit', 'Your deposit is credited in full against your written quotation. The scope is agreed before the work begins, and there are no hidden charges.', '', 'How a project runs', 'process.php'],
+          ['assets/img/hero6.webp', '75% First Payment', 'Start with ', '75% of the quote', 'Your first payment is credited in full against your written quotation. The remaining 25% is due at handover, with no hidden charges.', '', 'How a project runs', 'process.php'],
       ];
       ?>
       <?php foreach ($heroSlides as $si => $hs):

@@ -22,8 +22,8 @@ const faqs = [
   {
     category: 'Pricing & payment',
     items: [
-      { q: 'How much does a project cost?', a: 'Websites start at UGX 5,000,000 (≈ $1,316); management systems start at UGX 40,000,000 (≈ $10,526). Every quote is itemised after discovery. See the pricing page for current service rates.' },
-      { q: 'What is the deposit?', a: 'Projects begin with a deposit from UGX 1,000,000 (≈ $263), which reserves the delivery slot and covers discovery. The balance is staged across milestones and handover.' },
+      { q: 'How much does a project cost?', a: 'Every service has its own starting price on the pricing page. Each quote is itemised after discovery, so the figure you approve is the figure you pay.' },
+      { q: 'What is the first payment?', a: 'Projects begin with a first payment equal to 75% of the real quoted price. It reserves your delivery slot and covers discovery, and it is credited in full. The remaining 25% is due at handover.' },
       { q: 'How do I pay?', a: 'Bank transfer, MTN Mobile Money or Airtel Money. Official receipts are issued for every confirmed payment, and invoices are due within 14 days unless agreed otherwise.' },
       { q: 'Do you charge for changes?', a: 'Changes inside the agreed scope are included. New requirements are quoted before work starts, so you always approve the cost first.' },
     ],

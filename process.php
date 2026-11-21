@@ -15,7 +15,7 @@ public_head([
     <div class="pi-copy">
       <span class="eyebrow">Our process</span>
       <h1>A clear path from idea to delivery.</h1>
-      <p class="lead">Every project follows the same structured lifecycle: choose your program, create your account, secure it with a <?= money($deposit, settings('currency')) ?> deposit, and track everything until handover.</p>
+      <p class="lead">Every project follows the same structured lifecycle: choose your program, create your account, pay 75% of your written quote, and track everything until handover.</p>
       <div class="hero-actions" style="margin-top:24px">
         <a class="btn btn-primary" href="<?= app_url('checkout.php') ?>"><?= icon('rocket') ?> Start a project now</a>
         <a class="btn btn-ghost" href="<?= app_url('pricing.php') ?>">See programs &amp; pricing</a>
@@ -45,8 +45,8 @@ public_head([
       <div class="pf-step">
         <span class="pf-num">03</span>
         <div class="pf-body">
-          <h3>Pay your project deposit</h3>
-          <p>A fixed one time deposit of <?= money($deposit, settings('currency')) ?> secures your project and is <strong>credited against your final quotation</strong>. Pay by MTN MoMo, Airtel Money, bank transfer or cash, and we confirm it within the day.</p>
+          <h3>Pay your 75% first payment</h3>
+          <p>Your first payment is <strong>75% of the real quoted price</strong> and is credited in full. Pay by MTN MoMo, Airtel Money, bank transfer or cash, and we confirm it within the day.</p>
         </div>
       </div>
       <div class="pf-step">
@@ -67,7 +67,7 @@ public_head([
         <span class="pf-num">06</span>
         <div class="pf-body">
           <h3>Quotation &amp; approval</h3>
-          <p>You receive a written quotation with line items, pricing (minus your deposit) and terms, which you approve in your portal.</p>
+          <p>You receive a written quotation with line items, pricing (minus your 75% first payment) and terms, which you approve in your portal.</p>
         </div>
       </div>
       <div class="pf-step">
@@ -107,7 +107,7 @@ public_head([
     <div class="section-head"><div><span class="eyebrow">Project lifecycle</span><h2>Real statuses, transparently tracked.</h2></div></div>
     <div class="panel">
       <div class="timeline">
-        <div class="tl-item done"><b>Deposit Received</b><span>Your deposit is confirmed and your project is activated.</span></div>
+        <div class="tl-item done"><b>First Payment Received</b><span>Your 75% first payment is confirmed and your project is activated.</span></div>
         <div class="tl-item"><b>Requirement Review</b><span>Scope and requirements are confirmed.</span></div>
         <div class="tl-item"><b>Quotation</b><span>A written quotation is prepared for your approval.</span></div>
         <div class="tl-item"><b>Approval</b><span>You approve the quotation and development begins.</span></div>
@@ -126,7 +126,7 @@ public_head([
       <div>
         <span class="eyebrow" style="color:#7fd0ff">Ready when you are</span>
         <h2>Start your project today.</h2>
-        <p>Choose a program, create your account and pay your <?= money($deposit, settings('currency')) ?> deposit. It takes less than five minutes to begin.</p>
+        <p>Choose a program, create your account and start with 75% of your written quote. It takes less than five minutes to begin.</p>
       </div>
       <a class="btn btn-light" href="<?= app_url('checkout.php') ?>">Start a project <?= icon('arrow') ?></a>
     </div>

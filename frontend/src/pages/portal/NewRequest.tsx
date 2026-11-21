@@ -7,7 +7,6 @@ import { useSite } from '../../lib/site';
 import { usePageMeta } from '../../lib/seo';
 import { useToast } from '../../components/Toast';
 import { Field, PageHeader } from '../../components/UI';
-import { money } from '../../lib/format';
 import type { Project } from '../../lib/types';
 
 export function NewRequest() {
@@ -136,7 +135,7 @@ export function NewRequest() {
                 'We acknowledge the request and review the detail.',
                 'We may ask a few clarifying questions.',
                 'You receive a quotation and proposed timeline.',
-                'Work starts after approval and deposit.',
+                'Work starts after approval and your 75% first payment.',
               ].map((item, index) => (
                 <li key={item} className="flex gap-2.5 text-[11.5px] text-ink-soft">
                   <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-white font-mono text-[9px] font-bold text-brand-700">{index + 1}</span>
@@ -150,8 +149,7 @@ export function NewRequest() {
             <Sparkles className="h-4 w-4 text-brand-600" />
             <p className="mt-2 text-[12px] font-semibold text-navy-900">Not sure what to budget?</p>
             <p className="mt-1 text-[11px] leading-relaxed text-ink-muted">
-              Most projects begin with a deposit of {money(settings.project_deposit ?? 200000, settings.currency)}. We will give you a
-              realistic range after a short call.
+              Your first payment is 75% of the written quote, credited in full. We will give you a realistic range after a short call.
             </p>
             <Link to="/pricing" className="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-brand-700">
               See pricing guidance <ArrowRight className="h-3 w-3" />

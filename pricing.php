@@ -24,7 +24,7 @@ public_head([
     <div class="pi-copy">
       <span class="eyebrow">Pricing</span>
       <h1>Honest ranges, agreed before we start.</h1>
-      <p class="lead">We work in clear pricing starting points: professional websites and ecommerce, automatic receipt and billing systems, apps for both web and mobile app stores, and larger custom business systems. Every project is secured with a fixed one time deposit of <strong style="color:var(--navy)"><?= money_both($deposit, $currency) ?></strong> (credited against your quotation). The final figure depends entirely on your requirements, and it is always written into a quotation that you approve before any development begins.</p>
+      <p class="lead">We work in clear pricing starting points: professional websites and ecommerce, automatic receipt and billing systems, apps for both web and mobile app stores, and larger custom business systems. Every project begins with a first payment of <strong style="color:var(--navy)">75% of the written quote</strong>, credited in full. The final figure depends entirely on your requirements, and it is always written into a quotation that you approve before any development begins.</p>
     </div>
     <?= page_image('assets/img/hero3.webp', 3, 'Fixed starting prices, written quotation before we build'); ?>
   </div>
@@ -34,8 +34,8 @@ public_head([
   <div class="container">
     <span class="dr-icon"><?= icon('shield') ?></span>
     <div>
-      <b>How it works: choose a program → create your account → pay the <?= money_both($deposit, $currency) ?> deposit.</b>
-      <p>Your deposit secures your slot and is credited to your project. You only pay the balance after approving your written quotation, never before.</p>
+      <b>How it works: choose a program → create your account → pay 75% of your written quote.</b>
+      <p>Your first payment secures your slot and is credited to your project. You only pay the remaining 25% at handover, never before.</p>
     </div>
     <a class="btn btn-ghost btn-sm" href="<?= app_url('checkout.php') ?>">Start now <?= icon('arrow') ?></a>
   </div>

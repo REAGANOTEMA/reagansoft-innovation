@@ -267,15 +267,16 @@ function next_doc_no(PDO $pdo, string $table, string $column, string $prefix): s
 /* ------------------------------------------------------------------
  * Project deposit / first payment.
  *
- * The first payment is always half of the original project price:
+ * The first payment is always three quarters (75%) of the original
+ * project price:
  *   - the approved quotation total, or
  *   - the project budget when no quotation has been approved yet.
  *
- * Before a price exists (a brand-new request), the configurable fixed
- * deposit is used as a booking fee. Configurable under Admin -> Settings.
+ * Before a price exists (a brand-new request), the configured booking
+ * amount is used, or 75% of the selected service's starting price.
  * ------------------------------------------------------------------ */
 const DEPOSIT_DEFAULT = 1000000;
-const FIRST_PAYMENT_PERCENT = 50;
+const FIRST_PAYMENT_PERCENT = 75;
 
 function deposit_amount(): float {
     $v = (float)settings('project_deposit', (string)DEPOSIT_DEFAULT);
@@ -283,8 +284,8 @@ function deposit_amount(): float {
 }
 
 /**
- * The first payment for a known original price (half of it). Falls back
- * to the configured fixed deposit while the project has not been priced.
+ * The first payment for a known original price (75% of it). Falls back
+ * to the configured booking amount while the project has not been priced.
  */
 function first_payment_amount(?float $originalPrice): float {
     if ($originalPrice !== null && $originalPrice > 0) {
@@ -324,7 +325,7 @@ function project_original_price(PDO $pdo, int $projectId): ?float {
 
 /**
  * Create or re-price a project's deposit invoice so the first payment is
- * half of the original price. Invoices that already have a payment
+ * 75% of the original price. Invoices that already have a payment
  * (pending or confirmed) are never changed, so submitted receipts stay
  * valid. Returns the deposit invoice id, or null when no price exists.
  */
@@ -378,7 +379,7 @@ function sync_first_payment_invoice(PDO $pdo, int $projectId, int $clientId, ?fl
     $pdo->prepare('INSERT INTO invoice_items (invoice_id, description, quantity, unit_price) VALUES (?,?,1,?)')
         ->execute([$invId, 'First payment (' . FIRST_PAYMENT_PERCENT . '%), ' . ($label !== '' ? trim($label) : 'project price'), $target]);
 
-    audit('first_payment_priced', 'invoices', $invId, 'First payment set to ' . money($target, settings('currency')) . ' (half of ' . money($price, settings('currency')) . ')');
+    audit('first_payment_priced', 'invoices', $invId, 'First payment set to ' . money($target, settings('currency')) . ' (' . FIRST_PAYMENT_PERCENT . '% of ' . money($price, settings('currency')) . ')');
 
     return $invId;
 }
