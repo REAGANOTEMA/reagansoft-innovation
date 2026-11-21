@@ -7,6 +7,7 @@ import { useSite } from '../lib/site';
 import { appUrl } from '../lib/env';
 import { ApiError } from '../lib/api';
 import { Logo } from '../components/Logo';
+import { HeroVisual } from '../components/Graphics';
 import { Field, Spinner } from '../components/UI';
 
 export function Register() {
@@ -97,7 +98,7 @@ export function Register() {
           </Link>
         </div>
 
-        <div className="relative mt-20 max-w-md">
+        <div className="relative mt-14 max-w-md">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-white/55">
             <ShieldCheck className="h-3 w-3" /> Client accounts
           </span>
@@ -123,12 +124,17 @@ export function Register() {
           </div>
         </div>
 
-        <div className="relative mt-auto rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-          <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-white/35">A note on data</p>
-          <p className="mt-2 text-[11.5px] leading-relaxed text-white/50">
-            We only ask for what we need to serve you. Your details are never sold, and billing information is used solely to process
-            invoices and payments.
-          </p>
+        <div className="relative mt-auto pt-10">
+          <div className="origin-left scale-[0.72]">
+            <HeroVisual />
+          </div>
+          <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.04] p-5">
+            <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-white/35">A note on data</p>
+            <p className="mt-2 text-[11.5px] leading-relaxed text-white/50">
+              We only ask for what we need to serve you. Your details are never sold, and billing information is used solely to process
+              invoices and payments.
+            </p>
+          </div>
         </div>
       </div>
 

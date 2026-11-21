@@ -35,7 +35,7 @@ export const MEDIA = {
   founder: 'founder.webp',
   team: 'reagansoft-team.jpeg',
   bike: 'company-bike.jpeg',
-  ceoBike: 'ceo-on-the-company-yamaha-bike.jpeg',
+  ceoBike: 'ceo-on-the-company-yamaha-bikes.jpeg',
   ceoIsrael: 'ceo-in-israel-with-his-friend.jpeg',
   funders: 'our funders-with-ceo.jpeg',
   officeVisitors: 'director-and-aliyah-and-joy-from-america-visiting-at-main-office-in-jinja.jpeg',
@@ -127,7 +127,7 @@ function slide(key: MediaKey, label: string, caption: string): StudioSlide {
  * curated to the subject of each page and never repeat an image within a set.
  */
 export const REELS: Record<
-  'about' | 'services' | 'service' | 'portfolio' | 'pricing' | 'process' | 'contact' | 'faq',
+  'about' | 'services' | 'service' | 'portfolio' | 'project' | 'pricing' | 'process' | 'contact' | 'faq',
   StudioSlide[]
 > = {
   about: [
@@ -152,6 +152,12 @@ export const REELS: Record<
   ],
   portfolio: [
     slide('topDevelopers', 'The people', 'The developers behind the case studies you are reading.'),
+    slide('codesBanner', 'The build', 'Clean, maintainable work that teams can take ownership of.'),
+    slide('heroCommerce', 'The outcome', 'Commerce systems designed around real customers and payments.'),
+    slide('crossPlatform', 'The reach', 'Products that look right and work well on every screen.'),
+  ],
+  project: [
+    slide('ceoBike', 'On site', 'We go to the client, see the workflow and install where it is used.'),
     slide('codesBanner', 'The build', 'Clean, maintainable work that teams can take ownership of.'),
     slide('heroCommerce', 'The outcome', 'Commerce systems designed around real customers and payments.'),
     slide('crossPlatform', 'The reach', 'Products that look right and work well on every screen.'),
@@ -246,6 +252,7 @@ export const HERO_SLIDES: MediaKey[] = [
   'codingHome',
   'everything',
   'homepageHero',
+  'ceoBike',
 ];
 
 export interface ProofCard {
@@ -377,7 +384,7 @@ const PROOF_BY_ROUTE: Record<string, [keyof typeof PROOF_CARDS, keyof typeof PRO
 
 export function proofForPath(pathname: string): ProofCard[] {
   if (pathname.startsWith('/services/')) return ['graduation', 'visitors'].map((key) => PROOF_CARDS[key]);
-  const exact = PROOF_BY_ROUTE[pathname.replace(/\/$/, '') || '/'];
-  const keys = exact ?? PROOF_BY_ROUTE['/'];
-  return keys.map((key) => PROOF_CARDS[key]);
+  if (pathname.startsWith('/portfolio/')) return ['onSite', 'team'].map((key) => PROOF_CARDS[key]);
+  const keys = PROOF_BY_ROUTE[pathname.replace(/\/$/, '') || '/'];
+  return keys ? keys.map((key) => PROOF_CARDS[key]) : [];
 }

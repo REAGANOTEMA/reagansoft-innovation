@@ -1,8 +1,7 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, ArrowUpRight, Check, Compass, GraduationCap, HeartHandshake, Mail, MapPin, ShieldCheck, Sparkles, Target, Users, Wrench } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Compass, GraduationCap, HeartHandshake, Mail, MapPin, ShieldCheck, Sparkles, Target, Users, Wrench } from 'lucide-react';
 import { useSite } from '../lib/site';
 import { usePageMeta } from '../lib/seo';
-import { asset } from '../lib/env';
 import { media, MEDIA_ALT, REELS } from '../lib/media';
 import { Reveal } from '../components/Reveal';
 import { CinemaBand } from '../components/CinemaBand';
@@ -64,7 +63,7 @@ export function About() {
             <div className="relative">
               <div className="overflow-hidden rounded-[28px] border border-white/15 bg-white/5 p-2 backdrop-blur">
                 <div className="media-glow overflow-hidden rounded-[22px]">
-                  <img src={asset('founder.webp')} alt={`${settings.company_founder}, founder, CEO and lead developer of Reagansoft Innovation`} className="h-[380px] w-full object-cover object-top" />
+                  <img src={media('founder')} alt={MEDIA_ALT.founder} className="h-[380px] w-full object-cover object-top" />
                 </div>
               </div>
               <div className="absolute -bottom-5 left-5 right-5 rounded-2xl border border-white/15 bg-white/95 p-4 text-navy-900 shadow-lift">

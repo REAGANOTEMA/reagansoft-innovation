@@ -103,6 +103,18 @@ const slides: Slide[] = [
     note: 'Clear terms from day one, so you always know where you stand.',
     alt: MEDIA_ALT.homepageHero,
   },
+  {
+    image: MEDIA[HERO_SLIDES[6]],
+    channel: 'On-site support',
+    eyebrow: 'Channel 07 · Field work',
+    title: 'We come ',
+    accent: 'to your doorstep',
+    lead: 'From Jinja to your shop, school or office, we travel to see how the work really happens, then install, train and support the system where it is used.',
+    to: '/contact',
+    cta: 'Bring us to your team',
+    note: 'Real visits, real training and support after the launch.',
+    alt: MEDIA_ALT.ceoBike,
+  },
 ];
 
 const DURATION = 4500;

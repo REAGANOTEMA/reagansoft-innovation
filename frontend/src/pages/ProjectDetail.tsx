@@ -99,7 +99,7 @@ export function ProjectDetail() {
         eyebrow="Studio reel · Case study"
         title="The people and process behind this work."
         lead="Every delivery comes with the same senior team, the same checks and the same care after launch."
-        slides={REELS.portfolio}
+        slides={REELS.project}
         to="/process"
         cta="See how we work"
       />

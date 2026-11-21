@@ -109,6 +109,8 @@ export function PremiumProof() {
   const location = useLocation();
   const proofCards = proofForPath(location.pathname);
 
+  if (!proofCards.length) return null;
+
   return (
     <section className="relative isolate overflow-hidden bg-navy-950 py-20 sm:py-24">
       <div className="aurora" aria-hidden="true" />

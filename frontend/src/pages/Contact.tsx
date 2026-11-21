@@ -252,16 +252,16 @@ export function Contact() {
             <figure className="overflow-hidden rounded-3xl border border-brand-100 bg-white">
               <div className="media-glow overflow-hidden">
                 <img
-                  src={media('officeVisitors')}
-                  alt={MEDIA_ALT.officeVisitors}
+                  src={media('team')}
+                  alt={MEDIA_ALT.team}
                   className="aspect-[4/3] w-full object-cover"
                   loading="lazy"
                   decoding="async"
                 />
               </div>
               <figcaption className="p-5">
-                  <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-brand-600">Visit us in Jinja</p>
-                  <p className="mt-1 text-[12.5px] font-semibold text-navy-900">The director with Aliyah and Joy at our main office.</p>
+                  <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-brand-600">The team in Jinja</p>
+                  <p className="mt-1 text-[12.5px] font-semibold text-navy-900">The people who will scope, build and support your project.</p>
                   <p className="mt-1 text-[11.5px] leading-relaxed text-ink-muted">
                     Prefer to talk in person? Arrange a studio visit and we will walk you through similar work.
                   </p>
