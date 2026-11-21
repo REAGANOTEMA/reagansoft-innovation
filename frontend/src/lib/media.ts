@@ -77,14 +77,14 @@ export const MEDIA_ALT: Record<MediaKey, string> = {
   cover: 'Reagansoft Innovation studio cover artwork',
   codesBanner: 'Clean application source code reviewed by the Reagansoft engineering team',
   computerPortrait: 'A developer at a workstation in the Reagansoft studio',
-  founder: 'Reagansoft founder and lead developer Reagan Otema',
+  founder: 'Reagansoft founder, CEO and lead developer Reagan Otema',
   team: 'The Reagansoft Innovation team at the Jinja studio',
   bike: 'The Reagansoft company motorcycle finished in the company brand colours',
   ceoIsrael: 'Reagansoft founder and CEO with a technology friend during a visit to Israel',
   funders: 'Reagansoft funders and partners photographed together with the CEO',
   officeVisitors: 'The Reagansoft director with visiting friends from America at the main office in Jinja',
   founderGraduation:
-    'Reagansoft founder in graduation gown after earning a Bachelor of Science in Software Development at BYU–Idaho, USA',
+    'Reagansoft CEO Reagan Otema in graduation gown after earning a Bachelor of Science in Software Development at Brigham Young University in Idaho, USA',
   remoteWork: 'A lamp and laptop arranged for focused remote software development work',
   hireDevelopers: 'A professional team hiring and working with web developers',
   workspace: 'A bright, modern workspace where the engineering team plans and builds software',
@@ -270,6 +270,26 @@ export const PROOF_CARDS: Record<string, ProofCard> = {
     to: '/about',
     link: 'Our story',
   },
+  graduation: {
+    image: 'founderGraduation',
+    overline: 'Founder & engineer',
+    caption: 'CEO Reagan Otema at his Brigham Young University graduation',
+    title: 'The technical foundation is real.',
+    body: 'Reagan studied software development at Brigham Young University in Idaho, USA, and still works close to the code. That training shapes how we design systems, review decisions and explain the work in plain language.',
+    proof: 'BSc Software Development / BYU in Idaho, USA',
+    to: '/about',
+    link: 'Our story',
+  },
+  visitors: {
+    image: 'officeVisitors',
+    overline: 'Visiting our Jinja studio',
+    caption: 'The director with Aliyah and Joy',
+    title: 'Visitors meet the people doing the work.',
+    body: 'Guests sit with the designers, developers and project leads who build the system. Questions are answered in the room, decisions are made together, and the team you meet is the team that stays with the project.',
+    proof: 'Open studio / Direct conversations',
+    to: '/contact',
+    link: 'Plan a visit',
+  },
   director: {
     image: 'ceoIsrael',
     overline: 'Learning beyond borders',
@@ -354,7 +374,7 @@ const PROOF_BY_ROUTE: Record<string, [keyof typeof PROOF_CARDS, keyof typeof PRO
 };
 
 export function proofForPath(pathname: string): ProofCard[] {
-  if (pathname.startsWith('/services/')) return ['studio', 'director'].map((key) => PROOF_CARDS[key]);
+  if (pathname.startsWith('/services/')) return ['graduation', 'visitors'].map((key) => PROOF_CARDS[key]);
   const exact = PROOF_BY_ROUTE[pathname.replace(/\/$/, '') || '/'];
   const keys = exact ?? PROOF_BY_ROUTE['/'];
   return keys.map((key) => PROOF_CARDS[key]);

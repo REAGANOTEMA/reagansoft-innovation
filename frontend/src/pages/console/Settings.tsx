@@ -184,6 +184,7 @@ export function ConsoleSettings() {
           {section === 'contact' && (
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Company email"><input className="input" type="email" value={form.company_email ?? ''} onChange={(event) => update('company_email', event.target.value)} /></Field>
+              <Field label="CEO email"><input className="input" type="email" value={form.company_ceo_email ?? ''} onChange={(event) => update('company_ceo_email', event.target.value)} /></Field>
               <Field label="Support email"><input className="input" type="email" value={form.support_email ?? ''} onChange={(event) => update('support_email', event.target.value)} /></Field>
               <Field label="Phone"><input className="input" value={form.company_phone ?? ''} onChange={(event) => update('company_phone', event.target.value)} /></Field>
               <Field label="WhatsApp"><input className="input" value={form.company_whatsapp ?? ''} onChange={(event) => update('company_whatsapp', event.target.value)} /></Field>

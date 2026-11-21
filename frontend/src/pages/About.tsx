@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, ArrowUpRight, Check, Compass, HeartHandshake, MapPin, ShieldCheck, Sparkles, Target, Users, Wrench } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Check, Compass, GraduationCap, HeartHandshake, Mail, MapPin, ShieldCheck, Sparkles, Target, Users, Wrench } from 'lucide-react';
 import { useSite } from '../lib/site';
 import { usePageMeta } from '../lib/seo';
 import { asset } from '../lib/env';
@@ -63,13 +63,16 @@ export function About() {
             <div className="relative">
               <div className="overflow-hidden rounded-[28px] border border-white/15 bg-white/5 p-2 backdrop-blur">
                 <div className="media-glow overflow-hidden rounded-[22px]">
-                  <img src={asset('founder.webp')} alt={`${settings.company_founder}, founder of Reagansoft Innovation`} className="h-[380px] w-full object-cover object-top" />
+                  <img src={asset('founder.webp')} alt={`${settings.company_founder}, founder, CEO and lead developer of Reagansoft Innovation`} className="h-[380px] w-full object-cover object-top" />
                 </div>
               </div>
               <div className="absolute -bottom-5 left-5 right-5 rounded-2xl border border-white/15 bg-white/95 p-4 text-navy-900 shadow-lift">
                 <p className="font-display text-sm font-semibold">{settings.company_founder}</p>
-                <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-ink-faint">Founder · Reagansoft Innovation</p>
+                <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-ink-faint">Founder, CEO & Lead Engineer</p>
                 <p className="mt-2 text-[12px] leading-relaxed text-ink-muted">“Technology should make the work lighter, not add another layer of confusion.”</p>
+                <a href={`mailto:${settings.company_ceo_email || 'ceo@reagansoftinnovation.com'}`} className="mt-2 block text-[11px] font-semibold text-brand-700 hover:underline">
+                  {settings.company_ceo_email || 'ceo@reagansoftinnovation.com'}
+                </a>
               </div>
             </div>
           </Reveal>
@@ -84,6 +87,91 @@ export function About() {
         to="/portfolio"
         cta="See the delivered work"
       />
+
+      <section className="relative overflow-hidden bg-navy-950 py-20 sm:py-24">
+        <div className="aurora" aria-hidden="true" />
+        <div className="pointer-events-none absolute inset-0 bg-grid-dark opacity-30" aria-hidden="true" />
+        <div className="container-x relative grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+          <Reveal>
+            <div className="space-y-4">
+              <Tilt className="h-full" max={4}>
+                <figure className="depth-card relative overflow-hidden rounded-[28px] border border-white/10 p-2.5">
+                  <div className="group relative overflow-hidden rounded-[21px] border border-white/10 bg-navy-900">
+                    <img
+                      src={media('founderGraduation')}
+                      alt={MEDIA_ALT.founderGraduation}
+                      className="block h-[240px] w-full object-cover object-center transition duration-700 group-hover:scale-[1.04] sm:h-[280px]"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/10 to-transparent" />
+                    <div className="frame-corner frame-corner-tl" aria-hidden="true" />
+                    <div className="frame-corner frame-corner-tr" aria-hidden="true" />
+                    <div className="frame-corner frame-corner-bl" aria-hidden="true" />
+                    <div className="frame-corner frame-corner-br" aria-hidden="true" />
+                  </div>
+                  <figcaption className="px-4 pb-3 pt-4 text-white">
+                    <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-brand-300">Graduation</p>
+                    <p className="mt-1 text-[12.5px] leading-relaxed text-white/70">
+                      CEO Reagan Otema after graduating from Brigham Young University in Idaho, USA, with a Bachelor of Science in Software Development.
+                    </p>
+                  </figcaption>
+                </figure>
+              </Tilt>
+
+              <Tilt className="h-full" max={4}>
+                <figure className="depth-card relative overflow-hidden rounded-[28px] border border-white/10 p-2.5">
+                  <div className="group relative overflow-hidden rounded-[21px] border border-white/10 bg-navy-900">
+                    <img
+                      src={media('officeVisitors')}
+                      alt={MEDIA_ALT.officeVisitors}
+                      className="block h-[200px] w-full object-cover object-center transition duration-700 group-hover:scale-[1.04] sm:h-[230px]"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/10 to-transparent" />
+                    <div className="frame-corner frame-corner-tl" aria-hidden="true" />
+                    <div className="frame-corner frame-corner-tr" aria-hidden="true" />
+                    <div className="frame-corner frame-corner-bl" aria-hidden="true" />
+                    <div className="frame-corner frame-corner-br" aria-hidden="true" />
+                  </div>
+                  <figcaption className="px-4 pb-3 pt-4 text-white">
+                    <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-brand-300">With Aliyah and Joy</p>
+                    <p className="mt-1 text-[12.5px] leading-relaxed text-white/70">
+                      CEO Reagan Otema with friends visiting our Jinja office. Clients see the real team, the workspace and the work before they commit.
+                    </p>
+                  </figcaption>
+                </figure>
+              </Tilt>
+            </div>
+          </Reveal>
+
+          <Reveal delay={100}>
+            <span className="eyebrow text-brand-300">The person behind the standard</span>
+            <h2 className="h2 mt-3 text-balance text-white">A CEO who understands the code, the client and the craft.</h2>
+            <p className="mt-5 max-w-xl text-[14px] leading-relaxed text-white/65">
+              Reagan Otema founded Reagansoft Innovation and leads it as CEO. He studied software development at Brigham Young University in Idaho, USA, graduating with a Bachelor of Science degree. That training is not a line on a wall. It shapes every architecture decision, code review and plain-language conversation with the people who own the business.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Badge tone="cyan"><GraduationCap className="mr-1 h-3.5 w-3.5" /> BSc Software Development</Badge>
+              <Badge tone="blue">Brigham Young University in Idaho, USA</Badge>
+            </div>
+            <div className="mt-7 rounded-2xl border border-white/10 bg-white/5 p-5">
+              <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-brand-300">Direct line to the CEO</p>
+              <a
+                href={`mailto:${settings.company_ceo_email || 'ceo@reagansoftinnovation.com'}`}
+                className="mt-2 inline-flex items-center gap-2 font-display text-[15px] font-semibold text-white transition hover:text-brand-200"
+              >
+                <Mail className="h-4 w-4 text-brand-300" />
+                {settings.company_ceo_email || 'ceo@reagansoftinnovation.com'}
+              </a>
+              <p className="mt-2 text-[11.5px] leading-relaxed text-white/50">
+                For partnerships, technical direction or a serious project conversation, write to Reagan directly.
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
 
       <section className="border-b border-brand-100 bg-white py-10">
         <div className="container-x grid grid-cols-2 gap-6 sm:grid-cols-4">

@@ -1342,7 +1342,7 @@ function admin_settings_update(): never
     api_require_csrf();
     $data = api_body();
     $allowed = [
-        'company_name', 'company_tagline', 'company_about', 'company_email', 'company_phone',
+        'company_name', 'company_tagline', 'company_about', 'company_email', 'company_ceo_email', 'company_phone',
         'company_phone_alt', 'company_whatsapp', 'company_address', 'company_founder', 'company_hours', 'company_map_url',
         'company_fb', 'company_linkedin', 'company_x', 'currency', 'project_deposit',
         'company_legal_name', 'company_registration_no', 'company_registration_country', 'usd_rate',
