@@ -39,6 +39,12 @@ function handle_client(string $method, array $seg): bool
             client_send_message($user, $seg[2]);
         }
     }
+    if ($what === 'quotations' && isset($seg[2]) && ($seg[3] ?? '') === 'decision' && $method === 'POST') {
+        client_quotation_decision($user, $seg[2]);
+    }
+    if ($what === 'messages' && $method === 'GET') {
+        client_messages($user);
+    }
     if ($what === 'invoices' && $method === 'GET') {
         client_invoices($user);
     }
@@ -353,6 +359,9 @@ function client_submit_payment(array $user): never
             'billing' => array_map(static fn($m) => $m['label'], $missing),
         ]);
     }
+    if (!billing_schema_ready()) {
+        throw new ApiException('Billing setup is not ready. Please contact support.', 503);
+    }
 
     $balance = max(0, (float)$invoice['total'] - (float)$invoice['amount_paid']);
     $amount = api_decimal($data, 'amount', $balance);
@@ -435,4 +444,57 @@ function client_billing(array $user): never
         'schema_ready' => billing_schema_ready(),
         'user' => api_user_public($user),
     ]);
+}
+
+function client_quotation_decision(array $user, string $id): never
+{
+    api_require_csrf();
+    if (!ctype_digit($id)) throw new ApiException('Invalid quotation.', 400);
+    $data = api_body();
+    $decision = strtolower((string)($data['decision'] ?? ''));
+    if (!in_array($decision, ['accepted', 'rejected'], true)) {
+        throw new ApiException('Choose accept or decline.', 422);
+    }
+
+    $pdo = db();
+    $st = $pdo->prepare(
+        'SELECT q.*, p.ref_no FROM quotations q
+         JOIN projects p ON p.id = q.project_id
+         WHERE q.id = ? AND q.client_id = ? AND p.client_id = ? LIMIT 1'
+    );
+    $st->execute([(int)$id, (int)$user['id'], (int)$user['id']]);
+    $quote = $st->fetch();
+    if (!$quote) throw new ApiException('Quotation not found.', 404);
+    if (in_array((string)$quote['status'], ['accepted', 'rejected', 'cancelled', 'expired'], true)) {
+        throw new ApiException('This quotation has already been responded to.', 409);
+    }
+
+    $pdo->prepare('UPDATE quotations SET status = ? WHERE id = ?')->execute([$decision, (int)$id]);
+    if ($decision === 'accepted') {
+        sync_first_payment_invoice(
+            $pdo,
+            (int)$quote['project_id'],
+            (int)$quote['client_id'],
+            (float)$quote['total'],
+            (string)$quote['quotation_no']
+        );
+    }
+    audit('quotation_' . $decision, 'quotations', (int)$id, 'Client ' . $decision . ' ' . $quote['quotation_no']);
+    notify_staff('Quotation ' . $decision, 'Client ' . $decision . ' quotation ' . $quote['quotation_no'] . ' for ' . $quote['ref_no'], 'quotation', (int)$quote['project_id']);
+    notify((int)$user['id'], 'Quotation ' . $decision, 'You ' . $decision . ' quotation ' . $quote['quotation_no'] . '.', 'quotation', (int)$quote['project_id']);
+    api_ok(['updated' => true, 'status' => $decision]);
+}
+
+function client_messages(array $user): never
+{
+    $st = db()->prepare(
+        'SELECT m.*, p.ref_no, p.title AS project_title, u.full_name AS sender
+         FROM project_messages m
+         JOIN projects p ON p.id = m.project_id
+         LEFT JOIN users u ON u.id = m.sender_id
+         WHERE p.client_id = ? AND m.is_internal = 0
+         ORDER BY m.created_at DESC LIMIT 250'
+    );
+    $st->execute([(int)$user['id']]);
+    api_ok(['messages' => $st->fetchAll()]);
 }

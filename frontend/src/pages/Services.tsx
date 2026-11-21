@@ -6,7 +6,7 @@ import { usePageMeta } from '../lib/seo';
 import { Reveal } from '../components/Reveal';
 import { SectionHeading } from '../components/UI';
 import { CloudInfraArt, ServiceGlyph } from '../components/Graphics';
-import { serviceMedia, media, MEDIA_ALT, STUDIO_REEL } from '../lib/media';
+import { serviceMedia, media, MEDIA_ALT, REELS } from '../lib/media';
 import { CinemaBand } from '../components/CinemaBand';
 import { cn } from '../lib/cn';
 
@@ -73,7 +73,7 @@ export function Services() {
         eyebrow="Studio reel · Services"
         title="From a single website to the system that runs the whole operation."
         lead="See the kind of work behind each service line: engineering, management systems, integrations and long-term support."
-        slides={STUDIO_REEL}
+        slides={REELS.services}
         to="/pricing"
         cta="Compare starting prices"
       />

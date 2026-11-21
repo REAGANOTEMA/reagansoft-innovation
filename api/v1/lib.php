@@ -245,6 +245,7 @@ function api_public_settings(): array
         'company_phone', 'company_phone_alt', 'company_whatsapp', 'company_address', 'company_founder',
         'company_hours', 'company_map_url', 'company_fb', 'company_linkedin',
         'company_x', 'currency', 'project_deposit', 'registration_open',
+        'company_legal_name', 'company_registration_no', 'company_registration_country', 'usd_rate',
         'seo_keywords', 'site_announcement', 'support_email', 'newsletter_enabled',
     ];
     $out = [];

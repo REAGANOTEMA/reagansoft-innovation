@@ -31,8 +31,9 @@ function handle_public(string $method, array $seg): bool
         public_newsletter();
     }
     if ($what === 'session' && $method === 'GET') {
+        $sessionUser = api_user();
         api_ok([
-            'user' => api_user(),
+            'user' => $sessionUser ? api_user_public($sessionUser) : null,
             'csrf' => api_csrf_token(),
         ]);
     }
@@ -70,7 +71,7 @@ function public_site(): never
         'portfolio' => $portfolio,
         'stats' => $stats,
         'csrf' => api_csrf_token(),
-        'user' => api_user(),
+        'user' => api_user() ? api_user_public(api_user()) : null,
         'server_time' => date('c'),
     ]);
 }

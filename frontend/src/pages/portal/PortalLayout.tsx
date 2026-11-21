@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Bell, FolderKanban, LayoutDashboard, LifeBuoy, PlusCircle, ReceiptText, UserCog, Wallet } from 'lucide-react';
+import { Bell, FolderKanban, LayoutDashboard, LifeBuoy, MessageSquare, PlusCircle, ReceiptText, UserCog, Wallet } from 'lucide-react';
 import { DashboardShell, type NavItem } from '../../components/DashboardShell';
 
 const items: NavItem[] = [
@@ -7,6 +7,7 @@ const items: NavItem[] = [
   { to: '/portal/projects', label: 'My projects', icon: FolderKanban },
   { to: '/portal/request', label: 'New request', icon: PlusCircle },
   { to: '/portal/invoices', label: 'Invoices', icon: ReceiptText },
+  { to: '/portal/messages', label: 'Messages', icon: MessageSquare },
   { to: '/portal/notifications', label: 'Notifications', icon: Bell },
   { to: '/portal/billing', label: 'Billing details', icon: Wallet },
   { to: '/portal/profile', label: 'Account settings', icon: UserCog },

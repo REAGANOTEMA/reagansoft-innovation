@@ -16,6 +16,7 @@ export function PortalProfile({ scope = 'portal' }: { scope?: 'portal' | 'consol
 
   const [profile, setProfile] = useState({
     full_name: '',
+    email: '',
     phone: '',
     company: '',
     address: '',
@@ -39,6 +40,7 @@ export function PortalProfile({ scope = 'portal' }: { scope?: 'portal' | 'consol
     if (!user) return;
     setProfile({
       full_name: user.full_name ?? '',
+      email: user.email ?? '',
       phone: user.phone ?? '',
       company: user.company ?? '',
       address: user.address ?? '',
@@ -217,11 +219,11 @@ export function PortalProfile({ scope = 'portal' }: { scope?: 'portal' | 'consol
               <Field label="Full name *" error={profileErrors.full_name} className="sm:col-span-2">
                 <input className="input" value={profile.full_name} onChange={(event) => update('full_name', event.target.value)} required />
               </Field>
-              <Field label="Email address" hint="Contact support to change your sign-in email.">
-                <input className="input bg-brand-50/50" value={user.email} readOnly />
+              <Field label="Email address *" error={profileErrors.email} hint="This is also your sign-in email.">
+                <input className="input" type="email" value={profile.email} onChange={(event) => update('email', event.target.value)} required autoComplete="email" />
               </Field>
-              <Field label="Phone" error={profileErrors.phone}>
-                <input className="input" type="tel" value={profile.phone} onChange={(event) => update('phone', event.target.value)} placeholder="e.g. 0772 123 456" />
+              <Field label="Phone *" error={profileErrors.phone}>
+                <input className="input" type="tel" value={profile.phone} onChange={(event) => update('phone', event.target.value)} placeholder="e.g. 0772 123 456" required />
               </Field>
               <Field label="Paying as" error={profileErrors.payer_type}>
                 <select className="input" value={profile.payer_type} onChange={(event) => update('payer_type', event.target.value)}>
@@ -230,7 +232,7 @@ export function PortalProfile({ scope = 'portal' }: { scope?: 'portal' | 'consol
                 </select>
               </Field>
               <Field label="Company" error={profileErrors.company}>
-                <input className="input" value={profile.company} onChange={(event) => update('company', event.target.value)} disabled={!isBusiness} placeholder="Registered business name" />
+                <input className="input" value={profile.company} onChange={(event) => update('company', event.target.value)} disabled={!isBusiness} placeholder="Registered business name" required={isBusiness} />
               </Field>
               {isBusiness && (
                 <Field label="TIN" error={profileErrors.tax_id}>
@@ -241,13 +243,13 @@ export function PortalProfile({ scope = 'portal' }: { scope?: 'portal' | 'consol
                 <input className="input" value={profile.national_id} onChange={(event) => update('national_id', event.target.value)} placeholder="Optional" />
               </Field>
               <Field label="Address" error={profileErrors.address} className="sm:col-span-2">
-                <input className="input" value={profile.address} onChange={(event) => update('address', event.target.value)} placeholder="Street, plot or village" />
+                <input className="input" value={profile.address} onChange={(event) => update('address', event.target.value)} placeholder="Street, plot or village" required />
               </Field>
               <Field label="City / district" error={profileErrors.city}>
-                <input className="input" value={profile.city} onChange={(event) => update('city', event.target.value)} />
+                <input className="input" value={profile.city} onChange={(event) => update('city', event.target.value)} required />
               </Field>
               <Field label="Country" error={profileErrors.country}>
-                <input className="input" value={profile.country} onChange={(event) => update('country', event.target.value)} />
+                <input className="input" value={profile.country} onChange={(event) => update('country', event.target.value)} required />
               </Field>
             </div>
             <div className="mt-4 flex justify-end">

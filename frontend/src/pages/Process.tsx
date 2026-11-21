@@ -4,7 +4,7 @@ import { usePageMeta } from '../lib/seo';
 import { Reveal } from '../components/Reveal';
 import { SectionHeading, Badge } from '../components/UI';
 import { CinemaBand } from '../components/CinemaBand';
-import { STUDIO_REEL } from '../lib/media';
+import { REELS } from '../lib/media';
 
 const steps = [
   {
@@ -86,7 +86,7 @@ export function Process() {
         eyebrow="Studio reel · Process"
         title="The work is visible while it is being built."
         lead="Weekly demos, shared boards and documented handover, the same rhythm on every project, whatever the size."
-        slides={STUDIO_REEL}
+        slides={REELS.process}
         to="/contact"
         cta="Book a discovery call"
       />

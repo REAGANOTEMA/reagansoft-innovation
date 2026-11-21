@@ -6,7 +6,7 @@ import { useSite } from '../lib/site';
 import { Reveal } from '../components/Reveal';
 import { SectionHeading } from '../components/UI';
 import { CinemaBand } from '../components/CinemaBand';
-import { STUDIO_REEL } from '../lib/media';
+import { REELS } from '../lib/media';
 import { cn } from '../lib/cn';
 
 const faqs = [
@@ -80,7 +80,7 @@ export function Faq() {
         eyebrow="Studio reel · FAQ"
         title="Still deciding? See how the studio actually works."
         lead="The same team, tools and delivery rhythm behind every answer on this page."
-        slides={STUDIO_REEL}
+        slides={REELS.faq}
         to="/contact"
         cta="Ask us directly"
       />

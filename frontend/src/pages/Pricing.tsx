@@ -5,7 +5,7 @@ import { usePageMeta } from '../lib/seo';
 import { Reveal } from '../components/Reveal';
 import { Badge, SectionHeading } from '../components/UI';
 import { CinemaBand } from '../components/CinemaBand';
-import { STUDIO_REEL } from '../lib/media';
+import { REELS } from '../lib/media';
 import { moneyBoth, usdRate } from '../lib/format';
 import { cn } from '../lib/cn';
 
@@ -92,7 +92,7 @@ export function Pricing() {
         eyebrow="Studio reel · Pricing"
         title="Premium delivery without vague invoices."
         lead="The reel shows what the investment pays for: a real team, working systems and support after launch."
-        slides={STUDIO_REEL}
+        slides={REELS.pricing}
         to="/services"
         cta="Explore the service lines"
       />

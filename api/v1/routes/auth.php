@@ -210,6 +210,15 @@ function auth_update_profile(): never
     $data = api_body();
 
     $fullName = api_string($data, 'full_name', 'Full name', 150, true);
+    $email = strtolower(api_string($data, 'email', 'Email', 190, true));
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        throw new ApiException('Please enter a valid email address.', 422, ['email' => 'Invalid email address.']);
+    }
+    $st = db()->prepare('SELECT id FROM users WHERE email = ? AND id <> ? LIMIT 1');
+    $st->execute([$email, (int)$user['id']]);
+    if ($st->fetch()) {
+        throw new ApiException('An account with this email already exists.', 409, ['email' => 'Email already registered.']);
+    }
     $phone = api_string($data, 'phone', 'Phone', 40);
     $company = api_string($data, 'company', 'Company', 190);
     $address = api_string($data, 'address', 'Address', 255);
@@ -220,10 +229,10 @@ function auth_update_profile(): never
     $nationalId = api_string($data, 'national_id', 'National ID', 60);
 
     db()->prepare(
-        'UPDATE users SET full_name = ?, phone = ?, company = ?, address = ?, city = ?, country = ?,
+        'UPDATE users SET full_name = ?, email = ?, phone = ?, company = ?, address = ?, city = ?, country = ?,
                           payer_type = ?, tax_id = ?, national_id = ? WHERE id = ?'
     )->execute([
-        $fullName, $phone ?: null, $company ?: null, $address ?: null, $city ?: null,
+        $fullName, $email, $phone ?: null, $company ?: null, $address ?: null, $city ?: null,
         $country, $payerType, $taxId ?: null, $nationalId ?: null, (int)$user['id'],
     ]);
 

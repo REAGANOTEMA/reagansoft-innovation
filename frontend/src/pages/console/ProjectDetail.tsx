@@ -55,6 +55,7 @@ export function ConsoleProjectDetail() {
   const [editOpen, setEditOpen] = useState(false);
   const [taskOpen, setTaskOpen] = useState(false);
   const [message, setMessage] = useState('');
+  const [internal, setInternal] = useState(false);
   const [sending, setSending] = useState(false);
   const [uploading, setUploading] = useState(false);
 
@@ -73,9 +74,10 @@ export function ConsoleProjectDetail() {
     if (!message.trim()) return;
     setSending(true);
     try {
-      await api(`admin/projects/${project.id}/messages`, { method: 'POST', body: { message } });
+      await api(`admin/projects/${project.id}/messages`, { method: 'POST', body: { message, is_internal: internal ? 1 : 0 } });
       setMessage('');
-      push('success', 'Message sent to the client.');
+      setInternal(false);
+      push('success', internal ? 'Internal note saved.' : 'Message sent to the client.');
       reload();
     } catch (err) {
       push('error', err instanceof ApiError ? err.message : 'Could not send the message.');
@@ -250,12 +252,18 @@ export function ConsoleProjectDetail() {
               ) : (
                 messages.map((item) => {
                   const mine = item.sender_role !== 'client';
+                  const isInternal = Number(item.is_internal) === 1;
                   return (
                     <div key={item.id} className={cn('flex', mine ? 'justify-end' : 'justify-start')}>
-                      <div className={cn('max-w-[82%] rounded-2xl px-3.5 py-2.5', mine ? 'bg-brand-600 text-white' : 'bg-brand-50 text-ink')}>
-                        <p className={cn('text-[9.5px] font-semibold uppercase tracking-wider', mine ? 'text-white/60' : 'text-brand-700')}>{item.sender ?? (mine ? 'Team' : 'Client')}</p>
+                      <div className={cn('max-w-[82%] rounded-2xl px-3.5 py-2.5', isInternal ? 'border border-amber-200 bg-amber-50 text-ink' : mine ? 'bg-brand-600 text-white' : 'bg-brand-50 text-ink')}>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <p className={cn('text-[9.5px] font-semibold uppercase tracking-wider', isInternal ? 'text-amber-700' : mine ? 'text-white/60' : 'text-brand-700')}>
+                            {item.sender ?? (mine ? 'Team' : 'Client')}
+                          </p>
+                          {isInternal && <Badge tone="amber">Internal only</Badge>}
+                        </div>
                         <p className="mt-1 whitespace-pre-line text-[12px] leading-relaxed">{item.message}</p>
-                        <p className={cn('mt-1 text-[9px]', mine ? 'text-white/50' : 'text-ink-faint')}>{formatDate(item.created_at, true)}</p>
+                        <p className={cn('mt-1 text-[9px]', isInternal ? 'text-amber-600' : mine ? 'text-white/50' : 'text-ink-faint')}>{formatDate(item.created_at, true)}</p>
                       </div>
                     </div>
                   );
@@ -264,8 +272,19 @@ export function ConsoleProjectDetail() {
             </div>
             <form onSubmit={sendMessage} className="mt-4 border-t border-brand-50 pt-4">
               <textarea className="input min-h-[80px]" value={message} onChange={(event) => setMessage(event.target.value)} placeholder="Reply to the client…" />
-              <div className="mt-2 flex justify-end">
-                <button type="submit" disabled={sending || !message.trim()} className="btn-primary btn-sm">{sending ? 'Sending…' : 'Send message'} <Send className="h-3.5 w-3.5" /></button>
+              <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+                <label className="flex cursor-pointer items-center gap-2 text-[11px] text-ink-muted">
+                  <input
+                    type="checkbox"
+                    checked={internal}
+                    onChange={(event) => setInternal(event.target.checked)}
+                    className="h-3.5 w-3.5 rounded border-brand-200 text-brand-600 focus:ring-brand-500"
+                  />
+                  Internal note only (client will not see it)
+                </label>
+                <button type="submit" disabled={sending || !message.trim()} className="btn-primary btn-sm">
+                  {sending ? 'Sending…' : internal ? 'Save note' : 'Send message'} <Send className="h-3.5 w-3.5" />
+                </button>
               </div>
             </form>
           </section>

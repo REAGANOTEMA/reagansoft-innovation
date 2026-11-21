@@ -396,15 +396,18 @@ function admin_project_message(array $user, string $id): never
     $project = admin_find_project($id);
     $data = api_body();
     $message = api_string($data, 'message', 'Message', 5000, true);
+    $internal = api_bool($data, 'is_internal') ? 1 : 0;
 
     $pdo = db();
     $pdo->prepare(
-        'INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_internal) VALUES (?,?,?,?,0)'
-    )->execute([(int)$project['id'], (int)$user['id'], $user['role'], $message]);
+        'INSERT INTO project_messages (project_id, sender_id, sender_role, message, is_internal) VALUES (?,?,?,?,?)'
+    )->execute([(int)$project['id'], (int)$user['id'], $user['role'], $message, $internal]);
     $mid = (int)$pdo->lastInsertId();
 
-    audit('message_sent', 'project_messages', $mid, 'Staff message on ' . $project['ref_no']);
-    notify((int)$project['client_id'], 'New message from the team', 'There is a new message on ' . $project['ref_no'] . '.', 'project', (int)$project['id']);
+    audit('message_sent', 'project_messages', $mid, ($internal ? 'Internal note' : 'Staff message') . ' on ' . $project['ref_no']);
+    if (!$internal) {
+        notify((int)$project['client_id'], 'New message from the team', 'There is a new message on ' . $project['ref_no'] . '.', 'project', (int)$project['id']);
+    }
     $st = $pdo->prepare('SELECT * FROM project_messages WHERE id = ?');
     $st->execute([$mid]);
     api_ok($st->fetch(), null, 201);
@@ -507,6 +510,12 @@ function admin_client_create(): never
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) throw new ApiException('Invalid email address.', 422, ['email' => 'Invalid email.']);
     $phone = api_string($data, 'phone', 'Phone', 40);
     $company = api_string($data, 'company', 'Company', 190);
+    $address = api_string($data, 'address', 'Address', 255);
+    $city = api_string($data, 'city', 'City', 90);
+    $country = api_string($data, 'country', 'Country', 80) ?: 'Uganda';
+    $payerType = api_in_enum(api_string($data, 'payer_type', 'Payer type', 20) ?: 'business', ['business', 'individual'], 'payer type');
+    $taxId = api_string($data, 'tax_id', 'TIN', 60);
+    $nationalId = api_string($data, 'national_id', 'National ID', 60);
     $password = (string)($data['password'] ?? '');
     if ($password === '') $password = bin2hex(random_bytes(6)) . 'Aa1!';
     if (strlen($password) < 8) throw new ApiException('Password must be at least 8 characters.', 422);
@@ -515,8 +524,11 @@ function admin_client_create(): never
     $st->execute([$email]);
     if ($st->fetch()) throw new ApiException('An account with this email already exists.', 409);
 
-    db()->prepare("INSERT INTO users (full_name, email, phone, company, password_hash, role, active) VALUES (?,?,?,?,?, 'client', 1)")
-        ->execute([$name, $email, $phone ?: null, $company ?: null, password_hash($password, PASSWORD_DEFAULT)]);
+    db()->prepare("INSERT INTO users (full_name, email, phone, company, address, city, country, payer_type, tax_id, national_id, password_hash, role, active) VALUES (?,?,?,?,?,?,?,?,?,?,?, 'client', 1)")
+        ->execute([
+            $name, $email, $phone ?: null, $company ?: null, $address ?: null, $city ?: null,
+            $country, $payerType, $taxId ?: null, $nationalId ?: null, password_hash($password, PASSWORD_DEFAULT),
+        ]);
     $id = (int)db()->lastInsertId();
     audit('client_created', 'users', $id, 'Admin created client ' . $name);
     notify($id, 'Welcome to Reagansoft Innovation', 'Your client account has been created. You can now track projects and invoices.', 'success');
@@ -530,11 +542,28 @@ function admin_client_update(string $id): never
     $data = api_body();
     $fields = [];
     $params = [];
-    foreach (['full_name' => 150, 'phone' => 40, 'company' => 190, 'address' => 255, 'city' => 90, 'country' => 80] as $key => $max) {
+    if (array_key_exists('email', $data)) {
+        $email = strtolower(api_string($data, 'email', 'Email', 190, true));
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new ApiException('Invalid email address.', 422, ['email' => 'Invalid email.']);
+        }
+        $st = db()->prepare('SELECT id FROM users WHERE email = ? AND id <> ? LIMIT 1');
+        $st->execute([$email, (int)$id]);
+        if ($st->fetch()) {
+            throw new ApiException('An account with this email already exists.', 409, ['email' => 'Email already registered.']);
+        }
+        $fields[] = 'email = ?';
+        $params[] = $email;
+    }
+    foreach (['full_name' => 150, 'phone' => 40, 'company' => 190, 'address' => 255, 'city' => 90, 'country' => 80, 'tax_id' => 60, 'national_id' => 60] as $key => $max) {
         if (array_key_exists($key, $data)) {
             $fields[] = $key . ' = ?';
             $params[] = api_string($data, $key, ucfirst($key), $max) ?: null;
         }
+    }
+    if (array_key_exists('payer_type', $data)) {
+        $fields[] = 'payer_type = ?';
+        $params[] = api_in_enum(api_string($data, 'payer_type', 'Payer type', 20) ?: 'business', ['business', 'individual'], 'payer type');
     }
     if (array_key_exists('active', $data)) {
         $fields[] = 'active = ?';
@@ -1316,6 +1345,7 @@ function admin_settings_update(): never
         'company_name', 'company_tagline', 'company_about', 'company_email', 'company_phone',
         'company_phone_alt', 'company_whatsapp', 'company_address', 'company_founder', 'company_hours', 'company_map_url',
         'company_fb', 'company_linkedin', 'company_x', 'currency', 'project_deposit',
+        'company_legal_name', 'company_registration_no', 'company_registration_country', 'usd_rate',
         'registration_open', 'seo_keywords', 'site_announcement', 'support_email',
         'newsletter_enabled', 'payment_mtn_number', 'payment_airtel_number',
         'payment_bank_details', 'payment_gateway_status', 'invoices_due_days', 'tax_percent',

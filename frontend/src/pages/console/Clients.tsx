@@ -128,7 +128,19 @@ function CreateClientModal({
   onCreated: (info?: { email: string; temporary_password?: string | null }) => void;
 }) {
   const { push } = useToast();
-  const [form, setForm] = useState({ full_name: '', email: '', phone: '', company: '', password: '' });
+  const [form, setForm] = useState({
+    full_name: '',
+    email: '',
+    phone: '',
+    company: '',
+    address: '',
+    city: '',
+    country: 'Uganda',
+    payer_type: 'individual',
+    tax_id: '',
+    national_id: '',
+    password: '',
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
 
@@ -139,7 +151,19 @@ function CreateClientModal({
     try {
       const res = await api<{ id: number; temporary_password: string | null }>('admin/clients', { method: 'POST', body: form });
       push('success', 'Client account created.');
-      setForm({ full_name: '', email: '', phone: '', company: '', password: '' });
+      setForm({
+        full_name: '',
+        email: '',
+        phone: '',
+        company: '',
+        address: '',
+        city: '',
+        country: 'Uganda',
+        payer_type: 'individual',
+        tax_id: '',
+        national_id: '',
+        password: '',
+      });
       onCreated({ email: form.email, temporary_password: res.data.temporary_password });
     } catch (err) {
       if (err instanceof ApiError) {
@@ -164,8 +188,29 @@ function CreateClientModal({
       <form id="create-client" onSubmit={submit} className="grid gap-4 sm:grid-cols-2">
         <Field label="Full name *" error={errors.full_name}><input className="input" value={form.full_name} onChange={(event) => setForm({ ...form, full_name: event.target.value })} required /></Field>
         <Field label="Email *" error={errors.email}><input className="input" type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} required /></Field>
-        <Field label="Phone" error={errors.phone}><input className="input" type="tel" value={form.phone} onChange={(event) => setForm({ ...form, phone: event.target.value })} /></Field>
-        <Field label="Company" error={errors.company}><input className="input" value={form.company} onChange={(event) => setForm({ ...form, company: event.target.value })} /></Field>
+        <Field label="Phone *" error={errors.phone}><input className="input" type="tel" value={form.phone} onChange={(event) => setForm({ ...form, phone: event.target.value })} required /></Field>
+        <Field label="Billing as" error={errors.payer_type}>
+          <select className="input" value={form.payer_type} onChange={(event) => setForm({ ...form, payer_type: event.target.value })}>
+            <option value="individual">Individual</option>
+            <option value="business">Business</option>
+          </select>
+        </Field>
+        <Field label="Company" error={errors.company}>
+          <input
+            className="input"
+            value={form.company}
+            onChange={(event) => setForm({ ...form, company: event.target.value })}
+            required={form.payer_type === 'business'}
+            disabled={form.payer_type !== 'business'}
+          />
+        </Field>
+        <Field label="TIN / tax ID" error={errors.tax_id}>
+          <input className="input" value={form.tax_id} onChange={(event) => setForm({ ...form, tax_id: event.target.value })} disabled={form.payer_type !== 'business'} />
+        </Field>
+        <Field label="National ID" error={errors.national_id}><input className="input" value={form.national_id} onChange={(event) => setForm({ ...form, national_id: event.target.value })} /></Field>
+        <Field label="Address" error={errors.address} className="sm:col-span-2"><input className="input" value={form.address} onChange={(event) => setForm({ ...form, address: event.target.value })} required /></Field>
+        <Field label="City" error={errors.city}><input className="input" value={form.city} onChange={(event) => setForm({ ...form, city: event.target.value })} required /></Field>
+        <Field label="Country" error={errors.country}><input className="input" value={form.country} onChange={(event) => setForm({ ...form, country: event.target.value })} required /></Field>
         <Field label="Temporary password" hint="Minimum 8 characters. Leave blank to auto-generate." className="sm:col-span-2"><input className="input" type="text" value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} /></Field>
       </form>
     </Modal>

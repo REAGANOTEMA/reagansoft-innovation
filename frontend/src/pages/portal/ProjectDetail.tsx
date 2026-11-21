@@ -59,6 +59,7 @@ export function PortalProjectDetail() {
   const [uploading, setUploading] = useState(false);
   const [viewInvoice, setViewInvoice] = useState<Invoice | null>(null);
   const [payInvoice, setPayInvoice] = useState<Invoice | null>(null);
+  const [decidingQuote, setDecidingQuote] = useState<number | null>(null);
 
   usePageMeta(data?.project ? `${data.project.title}, Reagansoft portal` : 'Project, Reagansoft portal');
 
@@ -83,6 +84,19 @@ export function PortalProjectDetail() {
       push('error', err instanceof ApiError ? err.message : 'Could not send the message.');
     } finally {
       setSending(false);
+    }
+  }
+
+  async function decideQuotation(quoteId: number, decision: 'accepted' | 'rejected') {
+    setDecidingQuote(quoteId);
+    try {
+      await api(`client/quotations/${quoteId}/decision`, { method: 'POST', body: { decision } });
+      push('success', decision === 'accepted' ? 'Quotation accepted. Your first payment is ready.' : 'Quotation declined.');
+      reload();
+    } catch (err) {
+      push('error', err instanceof ApiError ? err.message : 'Could not update the quotation.');
+    } finally {
+      setDecidingQuote(null);
     }
   }
 
@@ -412,6 +426,27 @@ export function PortalProjectDetail() {
                         </ul>
                       )}
                       {quote.notes && <p className="mt-2 text-[10.5px] text-ink-muted">{quote.notes}</p>}
+                      {!['accepted', 'rejected', 'cancelled', 'expired'].includes(quote.status) && (
+                        <div className="mt-3 flex flex-wrap gap-2 border-t border-brand-50 pt-2.5">
+                          <button
+                            type="button"
+                            disabled={decidingQuote === quote.id}
+                            onClick={() => void decideQuotation(quote.id, 'accepted')}
+                            className="btn-primary btn-sm"
+                          >
+                            <Check className="mr-1 inline h-3.5 w-3.5" />
+                            {decidingQuote === quote.id ? 'Working…' : 'Accept quotation'}
+                          </button>
+                          <button
+                            type="button"
+                            disabled={decidingQuote === quote.id}
+                            onClick={() => void decideQuotation(quote.id, 'rejected')}
+                            className="btn-ghost btn-sm text-rose-600"
+                          >
+                            Decline
+                          </button>
+                        </div>
+                      )}
                     </div>
                   );
                 })}

@@ -252,13 +252,16 @@ export function Home() {
             <div className="grid gap-4 sm:grid-cols-2 lg:col-span-5">
               <Reveal delay={80}>
                 <figure className="media-glow group relative h-full overflow-hidden rounded-3xl border border-brand-100 bg-brand-50">
-                  <img
-                    src={media('design')}
-                    alt={MEDIA_ALT.design}
-                    className="h-full min-h-[170px] w-full object-cover transition duration-700 group-hover:scale-[1.04]"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  <picture className="block h-full w-full">
+                    <source srcSet={media('designAvif')} type="image/avif" />
+                    <img
+                      src={media('design')}
+                      alt={MEDIA_ALT.design}
+                      className="h-full min-h-[170px] w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </picture>
                   <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-950/90 to-transparent p-4 text-white">
                     <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-brand-300">Product design</p>
                     <p className="mt-0.5 text-[12px] font-semibold">Interfaces before code</p>

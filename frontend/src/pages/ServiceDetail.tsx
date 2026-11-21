@@ -6,7 +6,7 @@ import { usePageMeta } from '../lib/seo';
 import { Reveal } from '../components/Reveal';
 import { Badge, ErrorBlock, LoadingBlock, SectionHeading } from '../components/UI';
 import { ServiceGlyph } from '../components/Graphics';
-import { serviceMedia, STUDIO_REEL } from '../lib/media';
+import { serviceMedia, REELS } from '../lib/media';
 import { CinemaBand } from '../components/CinemaBand';
 import { moneyBoth, usdRate } from '../lib/format';
 import type { Service } from '../lib/types';
@@ -124,7 +124,7 @@ export function ServiceDetail() {
         eyebrow={`Studio reel · ${service.name}`}
         title="A delivery team, not a template."
         lead="See the studio and the operational systems behind the service described on this page."
-        slides={STUDIO_REEL}
+        slides={REELS.service}
         to="/portfolio"
         cta="See delivered projects"
       />

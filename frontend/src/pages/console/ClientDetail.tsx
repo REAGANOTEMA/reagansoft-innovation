@@ -22,11 +22,15 @@ export function ConsoleClientDetail() {
   const { data, loading, error, reload } = useApi<Detail>(`admin/clients/${encodeURIComponent(id)}`);
   const [form, setForm] = useState({
     full_name: '',
+    email: '',
     phone: '',
     company: '',
     address: '',
     city: '',
     country: '',
+    payer_type: 'individual',
+    tax_id: '',
+    national_id: '',
     active: true,
     password: '',
   });
@@ -39,11 +43,15 @@ export function ConsoleClientDetail() {
     if (!data) return;
     setForm({
       full_name: data.client.full_name ?? '',
+      email: data.client.email ?? '',
       phone: data.client.phone ?? '',
       company: data.client.company ?? '',
       address: data.client.address ?? '',
       city: data.client.city ?? '',
       country: data.client.country ?? '',
+      payer_type: data.client.payer_type ?? 'individual',
+      tax_id: data.client.tax_id ?? '',
+      national_id: data.client.national_id ?? '',
       active: Boolean(data.client.active),
       password: '',
     });
@@ -62,11 +70,15 @@ export function ConsoleClientDetail() {
     try {
       const body: Record<string, unknown> = {
         full_name: form.full_name,
+        email: form.email,
         phone: form.phone,
         company: form.company,
         address: form.address,
         city: form.city,
         country: form.country,
+        payer_type: form.payer_type,
+        tax_id: form.tax_id,
+        national_id: form.national_id,
         active: form.active,
       };
       if (form.password) body.password = form.password;
@@ -136,13 +148,31 @@ export function ConsoleClientDetail() {
           <div className="flex items-center gap-2"><UserRound className="h-4 w-4 text-brand-600" /><h2 className="font-display text-sm font-semibold text-navy-900">Client details</h2></div>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <Field label="Full name" error={errors.full_name} className="sm:col-span-2"><input className="input" value={form.full_name} onChange={(event) => setForm({ ...form, full_name: event.target.value })} required /></Field>
-            <Field label="Email" hint="Email changes must be handled by support."><input className="input bg-brand-50/50" value={client.email} readOnly /></Field>
-            <Field label="Phone" error={errors.phone}><input className="input" type="tel" value={form.phone} onChange={(event) => setForm({ ...form, phone: event.target.value })} /></Field>
-            <Field label="Company" error={errors.company}><input className="input" value={form.company} onChange={(event) => setForm({ ...form, company: event.target.value })} /></Field>
-            <Field label="Country" error={errors.country}><input className="input" value={form.country} onChange={(event) => setForm({ ...form, country: event.target.value })} /></Field>
-            <Field label="Address" error={errors.address} className="sm:col-span-2"><input className="input" value={form.address} onChange={(event) => setForm({ ...form, address: event.target.value })} /></Field>
-            <Field label="City / district" error={errors.city}><input className="input" value={form.city} onChange={(event) => setForm({ ...form, city: event.target.value })} /></Field>
-            <Field label="Set new password" error={errors.password} hint="Leave blank to keep the current password."><input className="input" type="text" value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} /></Field>
+            <Field label="Email / login" error={errors.email}><input className="input" type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} required autoComplete="email" /></Field>
+            <Field label="Phone" error={errors.phone}><input className="input" type="tel" value={form.phone} onChange={(event) => setForm({ ...form, phone: event.target.value })} required /></Field>
+            <Field label="Billing as" error={errors.payer_type}>
+              <select className="input" value={form.payer_type} onChange={(event) => setForm({ ...form, payer_type: event.target.value })}>
+                <option value="individual">Individual</option>
+                <option value="business">Business</option>
+              </select>
+            </Field>
+            <Field label="Company" error={errors.company}>
+              <input
+                className="input"
+                value={form.company}
+                onChange={(event) => setForm({ ...form, company: event.target.value })}
+                required={form.payer_type === 'business'}
+                disabled={form.payer_type !== 'business'}
+              />
+            </Field>
+            <Field label="TIN / tax ID" error={errors.tax_id}>
+              <input className="input" value={form.tax_id} onChange={(event) => setForm({ ...form, tax_id: event.target.value })} disabled={form.payer_type !== 'business'} />
+            </Field>
+            <Field label="National ID" error={errors.national_id}><input className="input" value={form.national_id} onChange={(event) => setForm({ ...form, national_id: event.target.value })} /></Field>
+            <Field label="Address" error={errors.address} className="sm:col-span-2"><input className="input" value={form.address} onChange={(event) => setForm({ ...form, address: event.target.value })} required /></Field>
+            <Field label="City / district" error={errors.city}><input className="input" value={form.city} onChange={(event) => setForm({ ...form, city: event.target.value })} required /></Field>
+            <Field label="Country" error={errors.country}><input className="input" value={form.country} onChange={(event) => setForm({ ...form, country: event.target.value })} required /></Field>
+            <Field label="Set new password" error={errors.password} hint="Leave blank to keep the current password." className="sm:col-span-2"><input className="input" type="text" value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} /></Field>
           </div>
           <div className="mt-4 flex items-center justify-between gap-3 border-t border-brand-50 pt-4">
             <label className="flex items-center gap-2 text-[11.5px] text-ink-muted">

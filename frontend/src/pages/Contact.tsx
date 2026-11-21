@@ -8,7 +8,7 @@ import { useToast } from '../components/Toast';
 import { Field } from '../components/UI';
 import { ServiceGlyph } from '../components/Graphics';
 import { CinemaBand } from '../components/CinemaBand';
-import { media, MEDIA_ALT, STUDIO_REEL } from '../lib/media';
+import { media, MEDIA_ALT, REELS } from '../lib/media';
 
 export function Contact() {
   usePageMeta(
@@ -123,7 +123,7 @@ export function Contact() {
         eyebrow="Studio reel · Contact"
         title="Meet the team before the first meeting."
         lead="A quick look at the studio, the people and the work you will be working with."
-        slides={STUDIO_REEL}
+        slides={REELS.contact}
         to="/about"
         cta="More about the studio"
       />

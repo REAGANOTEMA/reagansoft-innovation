@@ -188,3 +188,13 @@ Stack trace:
   IP: ::1  URI: /reagansoft-innovation/api/v1/public/site
 [2026-11-21 13:59:02] DB connection failed (reagansoft_system@localhost/reagansoft_system): SQLSTATE[HY000] [1045] Access denied for user 'reagansoft_system'@'localhost' (using password: YES)
   IP: ::1  URI: /reagansoft-innovation/api/v1/public/site
+[2026-11-21 14:13:20] DB connection failed (reagansoft_system@localhost/reagansoft_system): SQLSTATE[HY000] [1045] Access denied for user 'reagansoft_system'@'localhost' (using password: YES)
+  IP: ::1  URI: /reagansoft-innovation/api/v1/public/site
+[2026-11-21 14:16:24] DB connection failed (reagansoft_system@localhost/reagansoft_system): SQLSTATE[HY000] [1045] Access denied for user 'reagansoft_system'@'localhost' (using password: YES)
+  IP: ::1  URI: /reagansoft-innovation/api/v1/public/site
+[2026-11-21 14:24:23] DB connection failed (reagansoft_system@localhost/reagansoft_system): SQLSTATE[HY000] [1045] Access denied for user 'reagansoft_system'@'localhost' (using password: YES)
+  IP: ::1  URI: /reagansoft-innovation/api/v1/public/site
+[2026-11-21 14:26:09] DB connection failed (reagansoft_system@localhost/reagansoft_system): SQLSTATE[HY000] [1045] Access denied for user 'reagansoft_system'@'localhost' (using password: YES)
+  IP: ::1  URI: /reagansoft-innovation/api/v1/public/site
+[2026-11-21 14:26:26] DB connection failed (reagansoft_system@localhost/reagansoft_system): SQLSTATE[HY000] [1045] Access denied for user 'reagansoft_system'@'localhost' (using password: YES)
+  IP: ::1  URI: /reagansoft-innovation/api/v1/public/site

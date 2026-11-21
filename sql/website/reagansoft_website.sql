@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 14, 2026 at 01:29 PM
--- Server version: 10.11.19-MariaDB
--- PHP Version: 8.4.27
+-- Generation Time: Nov 21, 2026 at 01:09 PM
+-- Server version: 10.11.20-MariaDB
+-- PHP Version: 8.4.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `activity_logs`
 --
 
-CREATE TABLE IF NOT EXISTS `activity_logs` (
+CREATE TABLE `activity_logs` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED DEFAULT NULL,
   `action` varchar(120) NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `activity_logs` (
 -- Table structure for table `contact_messages`
 --
 
-CREATE TABLE IF NOT EXISTS `contact_messages` (
+CREATE TABLE `contact_messages` (
   `id` int(10) UNSIGNED NOT NULL,
   `full_name` varchar(150) NOT NULL,
   `email` varchar(190) NOT NULL,
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `contact_messages` (
 -- Table structure for table `expenses`
 --
 
-CREATE TABLE IF NOT EXISTS `expenses` (
+CREATE TABLE `expenses` (
   `id` int(10) UNSIGNED NOT NULL,
   `category` varchar(80) NOT NULL,
   `description` varchar(255) NOT NULL,
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS `expenses` (
 -- Dumping data for table `expenses`
 --
 
-INSERT IGNORE INTO `expenses` (`id`, `category`, `description`, `amount`, `currency`, `expense_date`, `project_id`, `recorded_by`, `reference`, `notes`, `created_at`, `updated_at`) VALUES
+INSERT INTO `expenses` (`id`, `category`, `description`, `amount`, `currency`, `expense_date`, `project_id`, `recorded_by`, `reference`, `notes`, `created_at`, `updated_at`) VALUES
 (1, 'Internet & hosting', 'Annual hosting and domain renewal', 850000.00, 'UGX', '2026-01-15', NULL, 1, 'HOST-2026-001', 'Paid by bank transfer', '2026-11-05 07:11:08', '2026-11-05 07:11:08'),
 (2, 'Software licences', 'Design and development tools subscription', 420000.00, 'UGX', '2026-02-01', NULL, 1, 'TOOLS-2026-002', 'Monthly team licences', '2026-11-05 07:11:08', '2026-11-05 07:11:08'),
 (3, 'Transport', 'Client site visits in Jinja and Iganga', 180000.00, 'UGX', '2026-03-08', 7, 2, 'TRIP-2026-003', 'Field requirements workshop', '2026-11-05 07:11:08', '2026-11-05 07:11:08');
@@ -93,7 +93,7 @@ INSERT IGNORE INTO `expenses` (`id`, `category`, `description`, `amount`, `curre
 -- Table structure for table `invoices`
 --
 
-CREATE TABLE IF NOT EXISTS `invoices` (
+CREATE TABLE `invoices` (
   `id` int(10) UNSIGNED NOT NULL,
   `invoice_no` varchar(30) NOT NULL,
   `project_id` int(10) UNSIGNED NOT NULL,
@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `invoices` (
 -- Dumping data for table `invoices`
 --
 
-INSERT IGNORE INTO `invoices` (`id`, `invoice_no`, `project_id`, `client_id`, `quotation_id`, `due_date`, `subtotal`, `discount`, `tax_percent`, `total`, `amount_paid`, `status`, `is_deposit`, `notes`, `created_at`, `updated_at`) VALUES
+INSERT INTO `invoices` (`id`, `invoice_no`, `project_id`, `client_id`, `quotation_id`, `due_date`, `subtotal`, `discount`, `tax_percent`, `total`, `amount_paid`, `status`, `is_deposit`, `notes`, `created_at`, `updated_at`) VALUES
 (1, 'INV-2026-0001', 3, 5, 1, '2026-11-19', 4900000.00, 0.00, 0.00, 4900000.00, 0.00, 'sent', 1, 'First payment (50% deposit) for QT-2026-0001. Balance due on delivery.', '2026-10-31 07:13:45', '2026-11-05 07:11:08'),
 (2, 'INV-2026-0002', 1, 3, NULL, '2026-04-24', 8500000.00, 0.00, 0.00, 8500000.00, 8500000.00, 'paid', 0, 'Final payment for the Kireka Farm Supplies website.', '2026-10-31 07:13:45', '2026-10-31 07:13:45');
 
@@ -126,7 +126,7 @@ INSERT IGNORE INTO `invoices` (`id`, `invoice_no`, `project_id`, `client_id`, `q
 -- Table structure for table `invoice_items`
 --
 
-CREATE TABLE IF NOT EXISTS `invoice_items` (
+CREATE TABLE `invoice_items` (
   `id` int(10) UNSIGNED NOT NULL,
   `invoice_id` int(10) UNSIGNED NOT NULL,
   `description` varchar(255) NOT NULL,
@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS `invoice_items` (
 -- Dumping data for table `invoice_items`
 --
 
-INSERT IGNORE INTO `invoice_items` (`id`, `invoice_id`, `description`, `quantity`, `unit_price`) VALUES
+INSERT INTO `invoice_items` (`id`, `invoice_id`, `description`, `quantity`, `unit_price`) VALUES
 (1, 1, 'E-commerce development (50% first payment)', 1.00, 4900000.00),
 (2, 2, 'Company website development', 1.00, 8500000.00);
 
@@ -148,7 +148,7 @@ INSERT IGNORE INTO `invoice_items` (`id`, `invoice_id`, `description`, `quantity
 -- Table structure for table `newsletter_subscribers`
 --
 
-CREATE TABLE IF NOT EXISTS `newsletter_subscribers` (
+CREATE TABLE `newsletter_subscribers` (
   `id` int(10) UNSIGNED NOT NULL,
   `email` varchar(190) NOT NULL,
   `full_name` varchar(150) DEFAULT NULL,
@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `newsletter_subscribers` (
 -- Dumping data for table `newsletter_subscribers`
 --
 
-INSERT IGNORE INTO `newsletter_subscribers` (`id`, `email`, `full_name`, `source`, `is_active`, `created_at`, `updated_at`) VALUES
+INSERT INTO `newsletter_subscribers` (`id`, `email`, `full_name`, `source`, `is_active`, `created_at`, `updated_at`) VALUES
 (1, 'hello@example.com', 'Website Visitor', 'website', 1, '2026-11-05 07:11:08', '2026-11-05 07:11:08');
 
 -- --------------------------------------------------------
@@ -171,7 +171,7 @@ INSERT IGNORE INTO `newsletter_subscribers` (`id`, `email`, `full_name`, `source
 -- Table structure for table `notifications`
 --
 
-CREATE TABLE IF NOT EXISTS `notifications` (
+CREATE TABLE `notifications` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
   `title` varchar(190) NOT NULL,
@@ -186,7 +186,7 @@ CREATE TABLE IF NOT EXISTS `notifications` (
 -- Dumping data for table `notifications`
 --
 
-INSERT IGNORE INTO `notifications` (`id`, `user_id`, `title`, `message`, `type`, `is_read`, `related_project_id`, `created_at`) VALUES
+INSERT INTO `notifications` (`id`, `user_id`, `title`, `message`, `type`, `is_read`, `related_project_id`, `created_at`) VALUES
 (1, 3, 'Project completed', 'Your website project RSI-2026-00001 was completed and launched. Thank you!', 'success', 0, 1, '2026-04-18 09:00:00'),
 (2, 4, 'Task update', 'A task in your project RSI-2026-00002 was updated.', 'task', 0, 2, '2026-09-02 06:00:00'),
 (3, 5, 'Your quotation is ready', 'Your quotation QT-2026-0001 is waiting for your approval.', 'quotation', 0, 3, '2026-09-10 06:30:00'),
@@ -205,7 +205,7 @@ INSERT IGNORE INTO `notifications` (`id`, `user_id`, `title`, `message`, `type`,
 -- Table structure for table `payments`
 --
 
-CREATE TABLE IF NOT EXISTS `payments` (
+CREATE TABLE `payments` (
   `id` int(10) UNSIGNED NOT NULL,
   `invoice_id` int(10) UNSIGNED NOT NULL,
   `amount` decimal(14,2) NOT NULL,
@@ -222,7 +222,7 @@ CREATE TABLE IF NOT EXISTS `payments` (
 -- Dumping data for table `payments`
 --
 
-INSERT IGNORE INTO `payments` (`id`, `invoice_id`, `amount`, `method`, `reference`, `status`, `received_by`, `notes`, `confirmed_at`, `created_at`) VALUES
+INSERT INTO `payments` (`id`, `invoice_id`, `amount`, `method`, `reference`, `status`, `received_by`, `notes`, `confirmed_at`, `created_at`) VALUES
 (1, 2, 8500000.00, 'bank', 'KFS-WEB-0420', 'confirmed', 1, 'Transferred from Kireka Farm Supplies bank account.', '2026-04-24 14:00:00', '2026-04-24 11:00:00');
 
 -- --------------------------------------------------------
@@ -231,7 +231,7 @@ INSERT IGNORE INTO `payments` (`id`, `invoice_id`, `amount`, `method`, `referenc
 -- Table structure for table `projects`
 --
 
-CREATE TABLE IF NOT EXISTS `projects` (
+CREATE TABLE `projects` (
   `id` int(10) UNSIGNED NOT NULL,
   `ref_no` varchar(30) NOT NULL,
   `client_id` int(10) UNSIGNED NOT NULL,
@@ -258,7 +258,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
 -- Dumping data for table `projects`
 --
 
-INSERT IGNORE INTO `projects` (`id`, `ref_no`, `client_id`, `service_id`, `assigned_to`, `title`, `description`, `requirements`, `website_url`, `deliverables`, `cover_art`, `budget`, `priority`, `status`, `progress`, `deadline`, `started_at`, `completed_at`, `submitted_at`, `updated_at`) VALUES
+INSERT INTO `projects` (`id`, `ref_no`, `client_id`, `service_id`, `assigned_to`, `title`, `description`, `requirements`, `website_url`, `deliverables`, `cover_art`, `budget`, `priority`, `status`, `progress`, `deadline`, `started_at`, `completed_at`, `submitted_at`, `updated_at`) VALUES
 (1, 'RSI-2026-00001', 3, 1, 1, 'Company Website - Kireka Farm Supplies Ltd', 'A responsive company website that presents the farm supply catalogue, the company story and the contact details, with a lead-capture enquiry form and the SEO foundations a rural supplier needs to be found on Google.', 'Six information pages, enquiry form, WhatsApp integration, Google Map, photo gallery.', NULL, 'Website', 'agriculture', 8500000.00, 'normal', 'COMPLETED', 100, '2026-04-20', '2026-03-02 00:00:00', '2026-04-18 00:00:00', '2026-02-25 21:00:00', '2026-11-14 09:46:28'),
 (2, 'RSI-2026-00002', 4, 3, 2, 'Sales & Stock Management System - Pearl Holdings Ltd', 'A custom management system for tracking sales, stock levels, suppliers and daily reports across the Pearl Holdings outlets in the Eastern region.', 'User roles for cashier and manager, product and stock modules, purchase tracking, daily sales reports, backup.', NULL, NULL, 'commerce', 14500000.00, 'high', 'IN_PROGRESS', 70, '2026-09-30', '2026-07-06 00:00:00', NULL, '2026-06-30 21:00:00', '2026-11-14 09:46:28'),
 (3, 'RSI-2026-00003', 5, 2, 2, 'Ecommerce Store - Mulumba & Sons Traders', 'An online store for hardware and farm inputs with a product catalogue, cart, order management and mobile money ready payment architecture.', 'Product categories and search, cart and checkout, order dashboard, inventory, mobile money payment ready structure.', NULL, NULL, 'commerce', 9800000.00, 'normal', 'QUOTATION', 0, NULL, NULL, NULL, '2026-09-09 21:00:00', '2026-11-14 09:46:28'),
@@ -273,7 +273,7 @@ INSERT IGNORE INTO `projects` (`id`, `ref_no`, `client_id`, `service_id`, `assig
 -- Table structure for table `project_files`
 --
 
-CREATE TABLE IF NOT EXISTS `project_files` (
+CREATE TABLE `project_files` (
   `id` int(10) UNSIGNED NOT NULL,
   `project_id` int(10) UNSIGNED NOT NULL,
   `uploader_id` int(10) UNSIGNED NOT NULL,
@@ -291,7 +291,7 @@ CREATE TABLE IF NOT EXISTS `project_files` (
 -- Table structure for table `project_messages`
 --
 
-CREATE TABLE IF NOT EXISTS `project_messages` (
+CREATE TABLE `project_messages` (
   `id` int(10) UNSIGNED NOT NULL,
   `project_id` int(10) UNSIGNED NOT NULL,
   `sender_id` int(10) UNSIGNED NOT NULL,
@@ -305,7 +305,7 @@ CREATE TABLE IF NOT EXISTS `project_messages` (
 -- Dumping data for table `project_messages`
 --
 
-INSERT IGNORE INTO `project_messages` (`id`, `project_id`, `sender_id`, `sender_role`, `message`, `is_internal`, `created_at`) VALUES
+INSERT INTO `project_messages` (`id`, `project_id`, `sender_id`, `sender_role`, `message`, `is_internal`, `created_at`) VALUES
 (1, 1, 3, 'client', 'Thank you for the great work on our website. The team at Kireka Farm Supplies is very happy with it.', 0, '2026-04-20 06:30:00'),
 (2, 1, 1, 'admin', 'Thank you Amara! It was a pleasure working with you. We are available any time for maintenance.', 0, '2026-04-20 08:00:00'),
 (3, 2, 4, 'client', 'Please confirm the final layout for the sales dashboard.', 0, '2026-09-01 07:15:00'),
@@ -322,7 +322,7 @@ INSERT IGNORE INTO `project_messages` (`id`, `project_id`, `sender_id`, `sender_
 -- Table structure for table `project_tasks`
 --
 
-CREATE TABLE IF NOT EXISTS `project_tasks` (
+CREATE TABLE `project_tasks` (
   `id` int(10) UNSIGNED NOT NULL,
   `project_id` int(10) UNSIGNED NOT NULL,
   `assigned_to` int(10) UNSIGNED DEFAULT NULL,
@@ -342,7 +342,7 @@ CREATE TABLE IF NOT EXISTS `project_tasks` (
 -- Dumping data for table `project_tasks`
 --
 
-INSERT IGNORE INTO `project_tasks` (`id`, `project_id`, `assigned_to`, `title`, `description`, `status`, `progress`, `priority`, `start_date`, `due_date`, `created_by`, `created_at`, `updated_at`) VALUES
+INSERT INTO `project_tasks` (`id`, `project_id`, `assigned_to`, `title`, `description`, `status`, `progress`, `priority`, `start_date`, `due_date`, `created_by`, `created_at`, `updated_at`) VALUES
 (1, 1, 1, 'Design and structure', 'Plan sitemap, wireframes and page structure for the Kireka site.', 'COMPLETED', 100, 'high', '2026-03-02', '2026-03-08', 1, '2026-10-31 07:13:45', '2026-10-31 07:13:45'),
 (2, 1, 2, 'Home page build', 'Build the responsive home page and header.', 'COMPLETED', 100, 'high', '2026-03-09', '2026-03-16', 1, '2026-10-31 07:13:45', '2026-10-31 07:13:45'),
 (3, 1, 2, 'Content upload & launch', 'Upload all copy and images, test on mobile and launch.', 'COMPLETED', 100, 'medium', '2026-03-20', '2026-04-18', 1, '2026-10-31 07:13:45', '2026-10-31 07:13:45'),
@@ -365,7 +365,7 @@ INSERT IGNORE INTO `project_tasks` (`id`, `project_id`, `assigned_to`, `title`, 
 -- Table structure for table `quotations`
 --
 
-CREATE TABLE IF NOT EXISTS `quotations` (
+CREATE TABLE `quotations` (
   `id` int(10) UNSIGNED NOT NULL,
   `quotation_no` varchar(30) NOT NULL,
   `project_id` int(10) UNSIGNED NOT NULL,
@@ -387,7 +387,7 @@ CREATE TABLE IF NOT EXISTS `quotations` (
 -- Dumping data for table `quotations`
 --
 
-INSERT IGNORE INTO `quotations` (`id`, `quotation_no`, `project_id`, `client_id`, `issued_on`, `expiry_date`, `subtotal`, `discount`, `tax_percent`, `total`, `status`, `notes`, `terms`, `created_at`, `updated_at`) VALUES
+INSERT INTO `quotations` (`id`, `quotation_no`, `project_id`, `client_id`, `issued_on`, `expiry_date`, `subtotal`, `discount`, `tax_percent`, `total`, `status`, `notes`, `terms`, `created_at`, `updated_at`) VALUES
 (1, 'QT-2026-0001', 3, 5, '2026-10-31', '2026-12-05', 9800000.00, 0.00, 0.00, 9800000.00, 'sent', 'E-commerce build for Mulumba & Sons Traders.', '50% deposit to start, balance on delivery. Free support for 30 days after launch.', '2026-10-31 07:13:45', '2026-11-05 07:11:08');
 
 -- --------------------------------------------------------
@@ -396,7 +396,7 @@ INSERT IGNORE INTO `quotations` (`id`, `quotation_no`, `project_id`, `client_id`
 -- Table structure for table `quotation_items`
 --
 
-CREATE TABLE IF NOT EXISTS `quotation_items` (
+CREATE TABLE `quotation_items` (
   `id` int(10) UNSIGNED NOT NULL,
   `quotation_id` int(10) UNSIGNED NOT NULL,
   `description` varchar(255) NOT NULL,
@@ -408,7 +408,7 @@ CREATE TABLE IF NOT EXISTS `quotation_items` (
 -- Dumping data for table `quotation_items`
 --
 
-INSERT IGNORE INTO `quotation_items` (`id`, `quotation_id`, `description`, `quantity`, `unit_price`) VALUES
+INSERT INTO `quotation_items` (`id`, `quotation_id`, `description`, `quantity`, `unit_price`) VALUES
 (1, 1, 'E-commerce design & development', 1.00, 7000000.00),
 (2, 1, 'Mobile money and bank payment ready architecture', 1.00, 2000000.00),
 (3, 1, 'Testing, training & launch support', 1.00, 800000.00);
@@ -419,7 +419,7 @@ INSERT IGNORE INTO `quotation_items` (`id`, `quotation_id`, `description`, `quan
 -- Table structure for table `services`
 --
 
-CREATE TABLE IF NOT EXISTS `services` (
+CREATE TABLE `services` (
   `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(150) NOT NULL,
   `slug` varchar(160) NOT NULL,
@@ -441,21 +441,21 @@ CREATE TABLE IF NOT EXISTS `services` (
 -- Dumping data for table `services`
 --
 
-INSERT IGNORE INTO `services` (`id`, `name`, `slug`, `description`, `price_min`, `price_max`, `currency`, `pricing_type`, `price_note`, `features`, `delivery_days`, `icon`, `status`, `sort_order`, `created_at`) VALUES
-(1, 'Business Website Development', 'business-website', 'A professional, responsive company website with clear structure, contact integration, SEO foundations and a design that represents your brand.', 800000.00, 12000000.00, 'UGX', 'range', 'Professional company websites', 'Custom responsive design for mobile, tablet and desktop\r\nContact & enquiry form\r\nWhatsApp and phone integration\r\nSearch engine friendly structure\r\nGoogle Map & business details\r\nTraining on how to manage content', 14, 'globe', 'active', 1, '2026-10-31 07:13:45'),
-(2, 'Ecommerce Development', 'ecommerce', 'Online stores with product catalogues, order management and a payment architecture ready for mobile money and bank integration.', 1200000.00, 18000000.00, 'UGX', 'range', 'Online stores & checkout', 'Product catalogue and categories\r\nShopping cart and checkout\r\nOrder management dashboard\r\nMobile money and bank payment ready architecture\r\nInventory management\r\nDelivery and order tracking', 30, 'cart', 'active', 2, '2026-10-31 07:13:45'),
-(3, 'Custom Business Systems', 'business-systems', 'Management systems built for schools, hospitals, NGOs, government offices and companies, with client portals, dashboards, workflow automation and database driven tools around your real business processes.', 22000000.00, 55000000.00, 'UGX', 'range', 'Multi-role business systems', 'Role based user access\r\nOnline fees, payments & mobile money\r\nDashboards and reports\r\nWorkflow automation\r\nSMS notifications\r\nUser training and handover', 30, 'cpu', 'active', 3, '2026-10-31 07:13:45'),
-(4, 'Software Development', 'software-dev', 'Custom web applications and internal business systems built with modern PHP/MySQL technology, secure by default and tailored to you.', 15000000.00, 45000000.00, 'UGX', 'range', 'Bespoke web applications', 'Requirements analysis\r\nCustom database design\r\nSecure authentication\r\nAdministration panels\r\nAPI and integration ready\r\nDeployment and support', 30, 'code-s', 'active', 4, '2026-10-31 07:13:45'),
-(5, 'Web & Mobile App Development', 'web-mobile-apps', 'Business apps built to work as a website, an Android app and an iOS app, prepared, tested and published to the Apple App Store and Google Play.', 12000000.00, NULL, 'UGX', 'starting_from', 'App Store & Google Play builds', 'Web, Android & iOS builds\r\nApp Store & Google Play publication\r\nPush and SMS notifications\r\nMobile money & bank payments\r\nDashboards and admin panels\r\nTesting across devices', 30, 'mobile', 'active', 5, '2026-10-31 07:13:45'),
-(6, 'Receipt & Billing Automation', 'receipt-billing', 'Automatic receipt and invoice generation, so every sale prints or sends a professional receipt instantly, with totals, mobile money references and daily reports.', 3500000.00, 9000000.00, 'UGX', 'range', 'Automated receipts & reports', 'Automatic receipt printing and sending\r\nInvoice generation and numbering\r\nMobile money reference capture\r\nDaily cash & sales totals\r\nShop, school and clinic billing\r\nReport formats for daily and monthly use', 14, 'receipt', 'active', 6, '2026-10-31 07:13:45'),
+INSERT INTO `services` (`id`, `name`, `slug`, `description`, `price_min`, `price_max`, `currency`, `pricing_type`, `price_note`, `features`, `delivery_days`, `icon`, `status`, `sort_order`, `created_at`) VALUES
+(1, 'Business Website Development', 'business-website', 'A professional, responsive company website with clear structure, contact integration, SEO foundations and a design that represents your brand.', 500000.00, 10000000.00, 'UGX', 'range', 'Professional websites', 'Custom responsive design for mobile, tablet and desktop\r\nContact & enquiry form\r\nWhatsApp and phone integration\r\nSearch engine friendly structure\r\nGoogle Map & business details\r\nTraining on how to manage content', 14, 'globe', 'active', 1, '2026-10-31 07:13:45'),
+(2, 'Ecommerce Development', 'ecommerce', 'Online stores with product catalogues, order management and a payment architecture ready for mobile money and bank integration.', 500000.00, 10000000.00, 'UGX', 'range', 'Websites & online stores', 'Product catalogue and categories\r\nShopping cart and checkout\r\nOrder management dashboard\r\nMobile money and bank payment ready architecture\r\nInventory management\r\nDelivery and order tracking', 30, 'cart', 'active', 2, '2026-10-31 07:13:45'),
+(3, 'Custom Business Systems', 'business-systems', 'Management systems built for schools, hospitals, NGOs, government offices and companies, with client portals, dashboards, workflow automation and database driven tools around your real business processes.', 20000000.00, 40000000.00, 'UGX', 'range', 'Custom business systems', 'Role based user access\r\nOnline fees, payments & mobile money\r\nDashboards and reports\r\nWorkflow automation\r\nSMS notifications\r\nUser training and handover', 30, 'cpu', 'active', 3, '2026-10-31 07:13:45'),
+(4, 'Software Development', 'software-dev', 'Custom web applications and internal business systems built with modern PHP/MySQL technology, secure by default and tailored to you.', 20000000.00, 40000000.00, 'UGX', 'range', 'Custom software & business systems', 'Requirements analysis\r\nCustom database design\r\nSecure authentication\r\nAdministration panels\r\nAPI and integration ready\r\nDeployment and support', 30, 'code-s', 'active', 4, '2026-10-31 07:13:45'),
+(5, 'Web & Mobile App Development', 'web-mobile-apps', 'Business apps built to work as a website, an Android app and an iOS app, prepared, tested and published to the Apple App Store and Google Play.', 10000000.00, NULL, 'UGX', 'starting_from', 'Apps for the App Store & Google Play', 'Web, Android & iOS builds\r\nApp Store & Google Play publication\r\nPush and SMS notifications\r\nMobile money & bank payments\r\nDashboards and admin panels\r\nTesting across devices', 30, 'mobile', 'active', 5, '2026-10-31 07:13:45'),
+(6, 'Receipt & Billing Automation', 'receipt-billing', 'Automatic receipt and invoice generation, so every sale prints or sends a professional receipt instantly, with totals, mobile money references and daily reports.', 3000000.00, 10000000.00, 'UGX', 'range', 'Automatic receipts & invoices', 'Automatic receipt printing and sending\r\nInvoice generation and numbering\r\nMobile money reference capture\r\nDaily cash & sales totals\r\nShop, school and clinic billing\r\nReport formats for daily and monthly use', 14, 'receipt', 'active', 6, '2026-10-31 07:13:45'),
 (7, 'Custom Digital Solutions', 'custom-solutions', 'A specific business problem that does not fit a ready made package? We design and build the right digital solution for it.', 0.00, NULL, 'UGX', 'contact_for_quote', 'Contact for a quote', 'Consultation and scoping\r\nFeasibility recommendation\r\nBespoke design and build\r\nTesting and quality assurance\r\nDeployment\r\nOngoing support', 21, 'layers', 'active', 7, '2026-10-31 07:13:45'),
-(8, 'Graphic & Branding Design', 'branding', 'Logos, brand guidelines, business cards, posters and digital design that give your company a consistent and professional identity.', 350000.00, NULL, 'UGX', 'starting_from', 'Identity & brand systems', 'Logo design options\r\nBrand colour and typography\r\nBusiness cards and letterheads\r\nSocial media graphics\r\nPrint ready file delivery\r\nUsage guideline document', 7, 'palette', 'active', 8, '2026-10-31 07:13:45'),
-(9, 'Website Maintenance', 'maintenance', 'Security updates, backups, content changes and technical support so your website stays fast, safe and up to date.', 180000.00, NULL, 'UGX', 'starting_from', 'Care plans & support', 'Monthly security checks\r\nRegular backups\r\nContent and image updates\r\nPerformance monitoring\r\nPriority technical support\r\nUptime reporting', 1, 'shield', 'active', 9, '2026-10-31 07:13:45'),
-(10, 'Video Game Development', 'video-games', 'Custom video games and interactive media for mobile, web and PC, covering game design, graphics, scoring, levels and store ready builds.', 14000000.00, NULL, 'UGX', 'starting_from', 'Playable game builds', 'Game design and story development\r\n2D and 3D game graphics\r\nMobile, web and PC builds\r\nLevels, scores and progress saving\r\nMultiplayer and leaderboards\r\nTesting and store publication support', 45, 'gamepad', 'active', 10, '2026-10-31 07:13:45'),
-(11, 'Digital Books & Publications', 'digital-books', 'Professional layout and cover design, editing and ebook formats so your books look great in print and on Kindle, tablets and phones.', 1200000.00, NULL, 'UGX', 'starting_from', 'Print & ebook production', 'Book layout and cover design\r\nEbook formats for common readers\r\nPrint ready file delivery\r\nEditing and proofreading\r\nTables, charts and diagrams\r\nProfessional illustration support', 14, 'book', 'active', 11, '2026-10-31 07:13:45'),
-(12, 'Chatbots & Smart Automation', 'chat-automation', 'Business chatbots and smart automation that answer customer questions, capture leads and handle routine tasks automatically, day and night.', 6000000.00, 16000000.00, 'UGX', 'range', 'Conversational automation', 'Business chatbot built into your site\r\nAutomated replies and FAQs\r\nLead capture and handover\r\nWorkflow automation\r\nSMS and WhatsApp integration\r\nTraining and handover', 21, 'chat', 'active', 12, '2026-10-31 07:13:45'),
-(13, 'System Integration & Payments', 'system-integration', 'Connecting your systems, websites and apps: mobile money and bank payment links, SMS services, APIs and data exchange between the tools you already use.', 4000000.00, 18000000.00, 'UGX', 'range', 'APIs, payments & data links', 'Mobile money & bank payment links\r\nSMS notification services\r\nAPI connections between systems\r\nData import and export\r\nSystem to system linking\r\nTesting and security review', 14, 'link', 'active', 13, '2026-10-31 07:13:45'),
-(14, 'Cybersecurity & Audits', 'cybersecurity', 'Security audits, vulnerability fixes, backups and data protection so your website and systems stay safe from attacks and data loss.', 1400000.00, NULL, 'UGX', 'starting_from', 'Audits & hardening', 'Full security audit of your systems\r\nVulnerability and patch fixes\r\nBackup and recovery setup\r\nUser access and permission review\r\nThreat and activity monitoring\r\nSecurity handover guide', 7, 'lock', 'active', 14, '2026-10-31 07:13:45');
+(8, 'Graphic & Branding Design', 'branding', 'Logos, brand guidelines, business cards, posters and digital design that give your company a consistent and professional identity.', 250000.00, NULL, 'UGX', 'starting_from', 'From', 'Logo design options\r\nBrand colour and typography\r\nBusiness cards and letterheads\r\nSocial media graphics\r\nPrint ready file delivery\r\nUsage guideline document', 7, 'palette', 'active', 8, '2026-10-31 07:13:45'),
+(9, 'Website Maintenance', 'maintenance', 'Security updates, backups, content changes and technical support so your website stays fast, safe and up to date.', 150000.00, NULL, 'UGX', 'starting_from', 'From', 'Monthly security checks\r\nRegular backups\r\nContent and image updates\r\nPerformance monitoring\r\nPriority technical support\r\nUptime reporting', 1, 'shield', 'active', 9, '2026-10-31 07:13:45'),
+(10, 'Video Game Development', 'video-games', 'Custom video games and interactive media for mobile, web and PC, covering game design, graphics, scoring, levels and store ready builds.', 12000000.00, NULL, 'UGX', 'starting_from', 'Custom games & interactive media', 'Game design and story development\r\n2D and 3D game graphics\r\nMobile, web and PC builds\r\nLevels, scores and progress saving\r\nMultiplayer and leaderboards\r\nTesting and store publication support', 45, 'gamepad', 'active', 10, '2026-10-31 07:13:45'),
+(11, 'Digital Books & Publications', 'digital-books', 'Professional layout and cover design, editing and ebook formats so your books look great in print and on Kindle, tablets and phones.', 1000000.00, NULL, 'UGX', 'starting_from', 'Ebooks and print ready books', 'Book layout and cover design\r\nEbook formats for common readers\r\nPrint ready file delivery\r\nEditing and proofreading\r\nTables, charts and diagrams\r\nProfessional illustration support', 14, 'book', 'active', 11, '2026-10-31 07:13:45'),
+(12, 'Chatbots & Smart Automation', 'chat-automation', 'Business chatbots and smart automation that answer customer questions, capture leads and handle routine tasks automatically, day and night.', 5000000.00, 15000000.00, 'UGX', 'range', 'Chatbots & business automation', 'Business chatbot built into your site\r\nAutomated replies and FAQs\r\nLead capture and handover\r\nWorkflow automation\r\nSMS and WhatsApp integration\r\nTraining and handover', 21, 'chat', 'active', 12, '2026-10-31 07:13:45'),
+(13, 'System Integration & Payments', 'system-integration', 'Connecting your systems, websites and apps: mobile money and bank payment links, SMS services, APIs and data exchange between the tools you already use.', 3000000.00, 15000000.00, 'UGX', 'range', 'Payments, SMS, APIs & system links', 'Mobile money & bank payment links\r\nSMS notification services\r\nAPI connections between systems\r\nData import and export\r\nSystem to system linking\r\nTesting and security review', 14, 'link', 'active', 13, '2026-10-31 07:13:45'),
+(14, 'Cybersecurity & Audits', 'cybersecurity', 'Security audits, vulnerability fixes, backups and data protection so your website and systems stay safe from attacks and data loss.', 1000000.00, NULL, 'UGX', 'starting_from', 'Security audits & protection', 'Full security audit of your systems\r\nVulnerability and patch fixes\r\nBackup and recovery setup\r\nUser access and permission review\r\nThreat and activity monitoring\r\nSecurity handover guide', 7, 'lock', 'active', 14, '2026-10-31 07:13:45');
 
 -- --------------------------------------------------------
 
@@ -463,7 +463,7 @@ INSERT IGNORE INTO `services` (`id`, `name`, `slug`, `description`, `price_min`,
 -- Table structure for table `settings`
 --
 
-CREATE TABLE IF NOT EXISTS `settings` (
+CREATE TABLE `settings` (
   `id` int(10) UNSIGNED NOT NULL,
   `setting_key` varchar(120) NOT NULL,
   `setting_value` text DEFAULT NULL
@@ -473,7 +473,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
 -- Dumping data for table `settings`
 --
 
-INSERT IGNORE INTO `settings` (`id`, `setting_key`, `setting_value`) VALUES
+INSERT INTO `settings` (`id`, `setting_key`, `setting_value`) VALUES
 (1, 'company_name', 'Reagansoft Innovation Limited'),
 (2, 'company_tagline', 'Innovating today for a smarter tomorrow.'),
 (3, 'company_founder', 'Reagan Otema'),
@@ -512,7 +512,7 @@ INSERT IGNORE INTO `settings` (`id`, `setting_key`, `setting_value`) VALUES
 -- Table structure for table `users`
 --
 
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE `users` (
   `id` int(10) UNSIGNED NOT NULL,
   `full_name` varchar(150) NOT NULL,
   `email` varchar(190) NOT NULL,
@@ -540,7 +540,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table `users`
 --
 
-INSERT IGNORE INTO `users` (`id`, `full_name`, `email`, `phone`, `password_hash`, `role`, `company`, `address`, `avatar`, `payer_type`, `tax_id`, `national_id`, `country`, `city`, `billing_terms_at`, `active`, `failed_logins`, `locked_until`, `last_login_at`, `created_at`, `updated_at`) VALUES
+INSERT INTO `users` (`id`, `full_name`, `email`, `phone`, `password_hash`, `role`, `company`, `address`, `avatar`, `payer_type`, `tax_id`, `national_id`, `country`, `city`, `billing_terms_at`, `active`, `failed_logins`, `locked_until`, `last_login_at`, `created_at`, `updated_at`) VALUES
 (1, 'Reagan Otema', 'admin@reagansoft.com', '+256730314979', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'admin', 'Reagansoft Innovation Limited', 'Jinja, Uganda', NULL, 'business', NULL, NULL, 'Uganda', NULL, NULL, 1, 0, NULL, NULL, '2026-10-31 07:13:45', '2026-11-14 09:46:28'),
 (2, 'Sarah Namukasa', 'staff@reagansoft.com', '+256772514889', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'staff', NULL, NULL, NULL, 'business', NULL, NULL, 'Uganda', NULL, NULL, 1, 0, NULL, NULL, '2026-10-31 07:13:45', '2026-10-31 07:13:45'),
 (3, 'Amara Kaggwa', 'amara@kirekafarms.com', '+256702456789', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Kireka Farm Supplies Ltd', 'Kireka, Kampala', NULL, 'business', '1002456789', '256754321098', 'Uganda', 'Kampala', '2026-01-12 09:14:00', 1, 0, NULL, NULL, '2026-10-31 07:13:45', '2026-10-31 07:13:45'),
@@ -551,106 +551,164 @@ INSERT IGNORE INTO `users` (`id`, `full_name`, `email`, `phone`, `password_hash`
 (8, 'Iganga School of Nursing and Midwifery', 'info@igangaschoolofnursingandmidwifery.ac.ug', '+256701489236', '$2y$10$yzlD5fteOLtKy0yV4pB/HONLqntQJqYIEOI161ik7Ji0ct8QLbdGu', 'client', 'Iganga School of Nursing and Midwifery', 'Iganga, Uganda', NULL, 'business', '1009988776', NULL, 'Uganda', 'Iganga', '2026-01-14 16:08:00', 1, 0, NULL, NULL, '2026-10-31 07:13:45', '2026-10-31 07:13:45');
 
 --
--- Idempotent schema helpers. Safe to re-import without dropping data.
-SET FOREIGN_KEY_CHECKS=0;
-DROP PROCEDURE IF EXISTS rsi_add_primary;
-DROP PROCEDURE IF EXISTS rsi_add_index;
-DROP PROCEDURE IF EXISTS rsi_add_fk;
-DELIMITER $$
-CREATE PROCEDURE rsi_add_primary(IN p_table VARCHAR(64), IN p_cols TEXT)
-BEGIN
-  IF NOT EXISTS (SELECT 1 FROM information_schema.STATISTICS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = p_table AND INDEX_NAME = 'PRIMARY') THEN
-    SET @s = CONCAT('ALTER TABLE `', p_table, '` ADD PRIMARY KEY (', p_cols, ')');
-    PREPARE st FROM @s; EXECUTE st; DEALLOCATE PREPARE st;
-  END IF;
-END$$
-CREATE PROCEDURE rsi_add_index(IN p_table VARCHAR(64), IN p_index VARCHAR(64), IN p_cols TEXT)
-BEGIN
-  IF NOT EXISTS (SELECT 1 FROM information_schema.STATISTICS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = p_table AND INDEX_NAME = p_index) THEN
-    SET @s = CONCAT('ALTER TABLE `', p_table, '` ADD INDEX `', p_index, '` (', p_cols, ')');
-    PREPARE st FROM @s; EXECUTE st; DEALLOCATE PREPARE st;
-  END IF;
-END$$
-CREATE PROCEDURE rsi_add_fk(IN p_table VARCHAR(64), IN p_name VARCHAR(64), IN p_sql TEXT)
-BEGIN
-  IF NOT EXISTS (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = p_table AND CONSTRAINT_NAME = p_name AND CONSTRAINT_TYPE = 'FOREIGN KEY') THEN
-    SET @s = CONCAT('ALTER TABLE `', p_table, '` ADD CONSTRAINT `', p_name, '` ', p_sql);
-    PREPARE st FROM @s; EXECUTE st; DEALLOCATE PREPARE st;
-  END IF;
-END$$
-DELIMITER ;
--- Idempotent indexes for dumped tables
+-- Indexes for dumped tables
 --
-CALL rsi_add_primary('activity_logs','`id`');
-CALL rsi_add_index('activity_logs','idx_logs_entity','`entity_type`,`entity_id`');
-CALL rsi_add_index('activity_logs','idx_logs_user','`user_id`');
-CALL rsi_add_index('activity_logs','idx_logs_created','`created_at`');
-CALL rsi_add_index('activity_logs','idx_logs_action','`action`');
-CALL rsi_add_primary('contact_messages','`id`');
-CALL rsi_add_index('contact_messages','idx_contact_read','`is_read`');
-CALL rsi_add_index('contact_messages','idx_contact_created','`created_at`');
-CALL rsi_add_primary('expenses','`id`');
-CALL rsi_add_index('expenses','recorded_by','`recorded_by`');
-CALL rsi_add_index('expenses','idx_expenses_date','`expense_date`');
-CALL rsi_add_index('expenses','idx_expenses_category','`category`');
-CALL rsi_add_index('expenses','idx_expenses_project','`project_id`');
-CALL rsi_add_primary('invoices','`id`');
-CALL rsi_add_index('invoices','invoice_no','`invoice_no`');
-CALL rsi_add_index('invoices','quotation_id','`quotation_id`');
-CALL rsi_add_index('invoices','idx_invoices_project','`project_id`');
-CALL rsi_add_index('invoices','idx_invoices_client','`client_id`');
-CALL rsi_add_index('invoices','idx_invoices_status','`status`');
-CALL rsi_add_index('invoices','idx_invoices_due','`due_date`');
-CALL rsi_add_primary('invoice_items','`id`');
-CALL rsi_add_index('invoice_items','idx_ii_invoice','`invoice_id`');
-CALL rsi_add_primary('newsletter_subscribers','`id`');
-CALL rsi_add_index('newsletter_subscribers','email','`email`');
-CALL rsi_add_index('newsletter_subscribers','idx_newsletter_active','`is_active`');
-CALL rsi_add_primary('notifications','`id`');
-CALL rsi_add_index('notifications','related_project_id','`related_project_id`');
-CALL rsi_add_index('notifications','idx_notifications_user','`user_id`,`is_read`');
-CALL rsi_add_primary('payments','`id`');
-CALL rsi_add_index('payments','received_by','`received_by`');
-CALL rsi_add_index('payments','idx_payments_invoice','`invoice_id`');
-CALL rsi_add_index('payments','idx_payments_status','`status`');
-CALL rsi_add_index('payments','idx_payments_created','`created_at`');
-CALL rsi_add_primary('projects','`id`');
-CALL rsi_add_index('projects','ref_no','`ref_no`');
-CALL rsi_add_index('projects','idx_projects_client','`client_id`');
-CALL rsi_add_index('projects','idx_projects_status','`status`');
-CALL rsi_add_index('projects','idx_projects_assigned','`assigned_to`');
-CALL rsi_add_index('projects','idx_projects_service','`service_id`');
-CALL rsi_add_index('projects','idx_projects_updated','`updated_at`');
-CALL rsi_add_index('projects','idx_projects_submitted','`submitted_at`');
-CALL rsi_add_primary('project_files','`id`');
-CALL rsi_add_index('project_files','stored_name','`stored_name`');
-CALL rsi_add_index('project_files','uploader_id','`uploader_id`');
-CALL rsi_add_index('project_files','idx_files_project','`project_id`');
-CALL rsi_add_primary('project_messages','`id`');
-CALL rsi_add_index('project_messages','sender_id','`sender_id`');
-CALL rsi_add_index('project_messages','idx_messages_project','`project_id`');
-CALL rsi_add_primary('project_tasks','`id`');
-CALL rsi_add_index('project_tasks','created_by','`created_by`');
-CALL rsi_add_index('project_tasks','idx_tasks_project','`project_id`');
-CALL rsi_add_index('project_tasks','idx_tasks_status','`status`');
-CALL rsi_add_index('project_tasks','idx_tasks_assigned','`assigned_to`');
-CALL rsi_add_primary('quotations','`id`');
-CALL rsi_add_index('quotations','quotation_no','`quotation_no`');
-CALL rsi_add_index('quotations','idx_quotes_project','`project_id`');
-CALL rsi_add_index('quotations','idx_quotes_client','`client_id`');
-CALL rsi_add_primary('quotation_items','`id`');
-CALL rsi_add_index('quotation_items','idx_qi_quotation','`quotation_id`');
-CALL rsi_add_primary('services','`id`');
-CALL rsi_add_index('services','slug','`slug`');
-CALL rsi_add_index('services','idx_services_status','`status`');
-CALL rsi_add_primary('settings','`id`');
-CALL rsi_add_index('settings','setting_key','`setting_key`');
-CALL rsi_add_primary('users','`id`');
-CALL rsi_add_index('users','email','`email`');
-CALL rsi_add_index('users','idx_users_role','`role`');
-CALL rsi_add_index('users','idx_users_active','`active`');
-CALL rsi_add_index('users','idx_users_created','`created_at`');
 
+--
+-- Indexes for table `activity_logs`
+--
+ALTER TABLE `activity_logs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_logs_entity` (`entity_type`,`entity_id`),
+  ADD KEY `idx_logs_user` (`user_id`),
+  ADD KEY `idx_logs_created` (`created_at`),
+  ADD KEY `idx_logs_action` (`action`);
+
+--
+-- Indexes for table `contact_messages`
+--
+ALTER TABLE `contact_messages`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_contact_read` (`is_read`),
+  ADD KEY `idx_contact_created` (`created_at`);
+
+--
+-- Indexes for table `expenses`
+--
+ALTER TABLE `expenses`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `recorded_by` (`recorded_by`),
+  ADD KEY `idx_expenses_date` (`expense_date`),
+  ADD KEY `idx_expenses_category` (`category`),
+  ADD KEY `idx_expenses_project` (`project_id`);
+
+--
+-- Indexes for table `invoices`
+--
+ALTER TABLE `invoices`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `invoice_no` (`invoice_no`),
+  ADD KEY `quotation_id` (`quotation_id`),
+  ADD KEY `idx_invoices_project` (`project_id`),
+  ADD KEY `idx_invoices_client` (`client_id`),
+  ADD KEY `idx_invoices_status` (`status`),
+  ADD KEY `idx_invoices_due` (`due_date`);
+
+--
+-- Indexes for table `invoice_items`
+--
+ALTER TABLE `invoice_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_ii_invoice` (`invoice_id`);
+
+--
+-- Indexes for table `newsletter_subscribers`
+--
+ALTER TABLE `newsletter_subscribers`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD KEY `idx_newsletter_active` (`is_active`);
+
+--
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `related_project_id` (`related_project_id`),
+  ADD KEY `idx_notifications_user` (`user_id`,`is_read`);
+
+--
+-- Indexes for table `payments`
+--
+ALTER TABLE `payments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `received_by` (`received_by`),
+  ADD KEY `idx_payments_invoice` (`invoice_id`),
+  ADD KEY `idx_payments_status` (`status`),
+  ADD KEY `idx_payments_created` (`created_at`);
+
+--
+-- Indexes for table `projects`
+--
+ALTER TABLE `projects`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `ref_no` (`ref_no`),
+  ADD KEY `idx_projects_client` (`client_id`),
+  ADD KEY `idx_projects_status` (`status`),
+  ADD KEY `idx_projects_assigned` (`assigned_to`),
+  ADD KEY `idx_projects_service` (`service_id`),
+  ADD KEY `idx_projects_updated` (`updated_at`),
+  ADD KEY `idx_projects_submitted` (`submitted_at`);
+
+--
+-- Indexes for table `project_files`
+--
+ALTER TABLE `project_files`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `stored_name` (`stored_name`),
+  ADD KEY `uploader_id` (`uploader_id`),
+  ADD KEY `idx_files_project` (`project_id`);
+
+--
+-- Indexes for table `project_messages`
+--
+ALTER TABLE `project_messages`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sender_id` (`sender_id`),
+  ADD KEY `idx_messages_project` (`project_id`);
+
+--
+-- Indexes for table `project_tasks`
+--
+ALTER TABLE `project_tasks`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `created_by` (`created_by`),
+  ADD KEY `idx_tasks_project` (`project_id`),
+  ADD KEY `idx_tasks_status` (`status`),
+  ADD KEY `idx_tasks_assigned` (`assigned_to`);
+
+--
+-- Indexes for table `quotations`
+--
+ALTER TABLE `quotations`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `quotation_no` (`quotation_no`),
+  ADD KEY `idx_quotes_project` (`project_id`),
+  ADD KEY `idx_quotes_client` (`client_id`);
+
+--
+-- Indexes for table `quotation_items`
+--
+ALTER TABLE `quotation_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_qi_quotation` (`quotation_id`);
+
+--
+-- Indexes for table `services`
+--
+ALTER TABLE `services`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `slug` (`slug`),
+  ADD KEY `idx_services_status` (`status`);
+
+--
+-- Indexes for table `settings`
+--
+ALTER TABLE `settings`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `setting_key` (`setting_key`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD KEY `idx_users_role` (`role`),
+  ADD KEY `idx_users_active` (`active`),
+  ADD KEY `idx_users_created` (`created_at`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -757,37 +815,92 @@ ALTER TABLE `users`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
--- Idempotent constraints for dumped tables
+-- Constraints for dumped tables
 --
-CALL rsi_add_fk('activity_logs','activity_logs_ibfk_1','FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL');
-CALL rsi_add_fk('expenses','expenses_ibfk_1','FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE SET NULL');
-CALL rsi_add_fk('expenses','expenses_ibfk_2','FOREIGN KEY (`recorded_by`) REFERENCES `users` (`id`) ON DELETE SET NULL');
-CALL rsi_add_fk('invoices','invoices_ibfk_1','FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE');
-CALL rsi_add_fk('invoices','invoices_ibfk_2','FOREIGN KEY (`client_id`) REFERENCES `users` (`id`) ON DELETE CASCADE');
-CALL rsi_add_fk('invoices','invoices_ibfk_3','FOREIGN KEY (`quotation_id`) REFERENCES `quotations` (`id`) ON DELETE SET NULL');
-CALL rsi_add_fk('invoice_items','invoice_items_ibfk_1','FOREIGN KEY (`invoice_id`) REFERENCES `invoices` (`id`) ON DELETE CASCADE');
-CALL rsi_add_fk('notifications','notifications_ibfk_1','FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE');
-CALL rsi_add_fk('notifications','notifications_ibfk_2','FOREIGN KEY (`related_project_id`) REFERENCES `projects` (`id`) ON DELETE SET NULL');
-CALL rsi_add_fk('payments','payments_ibfk_1','FOREIGN KEY (`invoice_id`) REFERENCES `invoices` (`id`) ON DELETE CASCADE');
-CALL rsi_add_fk('payments','payments_ibfk_2','FOREIGN KEY (`received_by`) REFERENCES `users` (`id`) ON DELETE SET NULL');
-CALL rsi_add_fk('projects','projects_ibfk_1','FOREIGN KEY (`client_id`) REFERENCES `users` (`id`) ON DELETE CASCADE');
-CALL rsi_add_fk('projects','projects_ibfk_2','FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE SET NULL');
-CALL rsi_add_fk('projects','projects_ibfk_3','FOREIGN KEY (`assigned_to`) REFERENCES `users` (`id`) ON DELETE SET NULL');
-CALL rsi_add_fk('project_files','project_files_ibfk_1','FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE');
-CALL rsi_add_fk('project_files','project_files_ibfk_2','FOREIGN KEY (`uploader_id`) REFERENCES `users` (`id`) ON DELETE CASCADE');
-CALL rsi_add_fk('project_messages','project_messages_ibfk_1','FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE');
-CALL rsi_add_fk('project_messages','project_messages_ibfk_2','FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`) ON DELETE CASCADE');
-CALL rsi_add_fk('project_tasks','project_tasks_ibfk_1','FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE');
-CALL rsi_add_fk('project_tasks','project_tasks_ibfk_2','FOREIGN KEY (`assigned_to`) REFERENCES `users` (`id`) ON DELETE SET NULL');
-CALL rsi_add_fk('project_tasks','project_tasks_ibfk_3','FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL');
-CALL rsi_add_fk('quotations','quotations_ibfk_1','FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE');
-CALL rsi_add_fk('quotations','quotations_ibfk_2','FOREIGN KEY (`client_id`) REFERENCES `users` (`id`) ON DELETE CASCADE');
-CALL rsi_add_fk('quotation_items','quotation_items_ibfk_1','FOREIGN KEY (`quotation_id`) REFERENCES `quotations` (`id`) ON DELETE CASCADE');
-DROP PROCEDURE IF EXISTS rsi_add_primary;
-DROP PROCEDURE IF EXISTS rsi_add_index;
-DROP PROCEDURE IF EXISTS rsi_add_fk;
-SET FOREIGN_KEY_CHECKS=1;
 
+--
+-- Constraints for table `activity_logs`
+--
+ALTER TABLE `activity_logs`
+  ADD CONSTRAINT `activity_logs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `expenses`
+--
+ALTER TABLE `expenses`
+  ADD CONSTRAINT `expenses_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `expenses_ibfk_2` FOREIGN KEY (`recorded_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `invoices`
+--
+ALTER TABLE `invoices`
+  ADD CONSTRAINT `invoices_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `invoices_ibfk_2` FOREIGN KEY (`client_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `invoices_ibfk_3` FOREIGN KEY (`quotation_id`) REFERENCES `quotations` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `invoice_items`
+--
+ALTER TABLE `invoice_items`
+  ADD CONSTRAINT `invoice_items_ibfk_1` FOREIGN KEY (`invoice_id`) REFERENCES `invoices` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `notifications_ibfk_2` FOREIGN KEY (`related_project_id`) REFERENCES `projects` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `payments`
+--
+ALTER TABLE `payments`
+  ADD CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`invoice_id`) REFERENCES `invoices` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `payments_ibfk_2` FOREIGN KEY (`received_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `projects`
+--
+ALTER TABLE `projects`
+  ADD CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`client_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `projects_ibfk_2` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `projects_ibfk_3` FOREIGN KEY (`assigned_to`) REFERENCES `users` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `project_files`
+--
+ALTER TABLE `project_files`
+  ADD CONSTRAINT `project_files_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `project_files_ibfk_2` FOREIGN KEY (`uploader_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `project_messages`
+--
+ALTER TABLE `project_messages`
+  ADD CONSTRAINT `project_messages_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `project_messages_ibfk_2` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `project_tasks`
+--
+ALTER TABLE `project_tasks`
+  ADD CONSTRAINT `project_tasks_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `project_tasks_ibfk_2` FOREIGN KEY (`assigned_to`) REFERENCES `users` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `project_tasks_ibfk_3` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `quotations`
+--
+ALTER TABLE `quotations`
+  ADD CONSTRAINT `quotations_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `quotations_ibfk_2` FOREIGN KEY (`client_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `quotation_items`
+--
+ALTER TABLE `quotation_items`
+  ADD CONSTRAINT `quotation_items_ibfk_1` FOREIGN KEY (`quotation_id`) REFERENCES `quotations` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

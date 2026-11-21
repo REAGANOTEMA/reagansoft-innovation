@@ -23,6 +23,7 @@ import { PortalProjects } from './pages/portal/Projects';
 import { PortalProjectDetail } from './pages/portal/ProjectDetail';
 import { NewRequest } from './pages/portal/NewRequest';
 import { PortalInvoices } from './pages/portal/Invoices';
+import { PortalMessages } from './pages/portal/Messages';
 import { PortalNotifications } from './pages/portal/Notifications';
 import { PortalBilling } from './pages/portal/Billing';
 import { PortalProfile } from './pages/portal/Profile';
@@ -86,6 +87,7 @@ export function App() {
           <Route path="projects/:id" element={<PortalProjectDetail />} />
           <Route path="request" element={<NewRequest />} />
           <Route path="invoices" element={<PortalInvoices />} />
+          <Route path="messages" element={<PortalMessages />} />
           <Route path="notifications" element={<PortalNotifications />} />
           <Route path="billing" element={<PortalBilling />} />
           <Route path="profile" element={<PortalProfile />} />

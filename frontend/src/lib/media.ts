@@ -133,6 +133,8 @@ export const REELS: Record<
     slide('heroCommerce', 'The range', 'From storefronts to operational platforms.'),
     slide('cover', 'The studio', 'A Jinja team working to international standards.'),
     slide('codesBanner', 'The discipline', 'Readable, tested and documented code on every release.'),
+    slide('founderGraduation', 'The foundation', 'Software engineering trained to international standards.'),
+    slide('officeVisitors', 'Open doors', 'Partners and clients are welcome at the Jinja studio.'),
   ],
   services: [
     slide('hireDevelopers', 'Your team, extended', 'Senior developers who join your project, not a rotating helpdesk.'),
@@ -167,6 +169,7 @@ export const REELS: Record<
   contact: [
     slide('cover', 'Start here', 'A conversation about your operation, not a sales script.'),
     slide('team', 'Meet the team', 'The people who scope, build and support your project.'),
+    slide('officeVisitors', 'Visit the studio', 'Come and see the team and workspace before you commit.'),
     slide('bike', 'We come to you', 'Client visits and site work across Jinja and beyond.'),
     slide('funders', 'Backed well', 'Partners who invest in long-term local engineering.'),
   ],
@@ -256,27 +259,6 @@ export interface ProofCard {
 }
 
 export const PROOF_CARDS: Record<string, ProofCard> = {
-  founder: {
-    image: 'founderGraduation',
-    portrait: true,
-    overline: 'Engineer-led · BYU–Idaho',
-    caption: 'Founder & lead developer',
-    title: 'Built by an engineer, not a sales desk.',
-    body: 'Our founder holds a BSc in Software Development from BYU–Idaho. That training shows up in clear architecture, honest timelines and code your team can truly own.',
-    proof: 'Qualified leadership · Hands-on delivery',
-    to: '/about',
-    link: 'Meet the founder',
-  },
-  visitors: {
-    image: 'officeVisitors',
-    overline: 'Jinja studio · In person',
-    caption: 'The director with friends from abroad',
-    title: 'Meet the people who build your system.',
-    body: 'Partners who visit our Jinja office sit with the same designers and developers working on their build. Direct questions, straight answers and a team you can name.',
-    proof: 'One accountable team · No hand-offs',
-    to: '/contact',
-    link: 'Arrange a visit',
-  },
   founderPortrait: {
     image: 'founder',
     portrait: true,
@@ -362,13 +344,13 @@ export const PROOF_CARDS: Record<string, ProofCard> = {
 
 const PROOF_BY_ROUTE: Record<string, [keyof typeof PROOF_CARDS, keyof typeof PROOF_CARDS]> = {
   '/': ['team', 'founderPortrait'],
-  '/about': ['founder', 'director'],
+  '/about': ['founderPortrait', 'director'],
   '/services': ['funders', 'workshop'],
   '/portfolio': ['onSite', 'founderPortrait'],
   '/pricing': ['portrait', 'funders'],
   '/process': ['workshop', 'team'],
   '/contact': ['studio', 'onSite'],
-  '/faq': ['visitors', 'founder'],
+  '/faq': ['portrait', 'studio'],
 };
 
 export function proofForPath(pathname: string): ProofCard[] {
