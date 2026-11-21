@@ -9,6 +9,45 @@ import { CinemaBand } from '../components/CinemaBand';
 import { REELS } from '../lib/media';
 import { cn } from '../lib/cn';
 
+function QuestionArt() {
+  return (
+    <svg viewBox="0 0 320 260" className="h-auto w-full" fill="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="faqOrb" x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor="#7dd3fc" stopOpacity="0.5" />
+          <stop offset="1" stopColor="#2563eb" stopOpacity="0.1" />
+        </linearGradient>
+        <filter id="faqBlur" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="14" />
+        </filter>
+      </defs>
+      <circle cx="160" cy="130" r="86" fill="url(#faqOrb)" filter="url(#faqBlur)" opacity="0.5" />
+      <circle cx="160" cy="130" r="92" stroke="#7dd3fc" strokeOpacity="0.2" />
+      <circle cx="160" cy="130" r="66" stroke="#7dd3fc" strokeOpacity="0.28" strokeDasharray="3 7" />
+      <circle cx="160" cy="130" r="40" fill="#0b3556" fillOpacity="0.6" stroke="#7dd3fc" strokeOpacity="0.45" />
+      <path
+        d="M147 119c0-8 6-14 14-14s14 6 14 14c0 6-4 9-9 12-3 2-4 4-4 8"
+        stroke="#a5e4ff"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+      <circle cx="165" cy="157" r="2.6" fill="#a5e4ff" />
+      {[
+        [160, 38], [252, 130], [160, 222], [68, 130],
+        [225, 65], [225, 195], [95, 195], [95, 65],
+      ].map(([x, y], index) => (
+        <g key={index}>
+          <circle cx={x} cy={y} r={index < 4 ? 5 : 3} fill="#062944" stroke="#4fb6ff" strokeOpacity="0.65" />
+          {index < 4 && <circle cx={x} cy={y} r="1.5" fill="#a5e4ff" />}
+        </g>
+      ))}
+      <text x="160" y="248" textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize="8" letterSpacing="2" fill="#7dd3fc" fillOpacity="0.7">
+        ANSWERS · NOT JARGON
+      </text>
+    </svg>
+  );
+}
+
 const faqs = [
   {
     category: 'Working with us',
@@ -66,13 +105,18 @@ export function Faq() {
       <section className="relative overflow-hidden bg-navy-950 pb-16 pt-16 text-white sm:pt-20">
         <div className="aurora" />
         <div className="pointer-events-none absolute inset-0 bg-grid-dark opacity-35" />
-        <div className="container-x relative">
-          <span className="eyebrow text-brand-300">FAQ</span>
-          <h1 className="h1 mt-4 max-w-3xl text-white">Questions we hear before every project.</h1>
-          <p className="mt-5 max-w-2xl text-[1.02rem] leading-relaxed text-white/65">
-            Clear answers on scope, money, delivery and support. If yours is not here, ask directly, we answer honestly, even when
-            the answer is “not yet”.
-          </p>
+        <div className="container-x relative grid items-center gap-10 lg:grid-cols-[1fr_300px]">
+          <div>
+            <span className="eyebrow text-brand-300">FAQ</span>
+            <h1 className="h1 mt-4 max-w-3xl text-white">Questions we hear before every project.</h1>
+            <p className="mt-5 max-w-2xl text-[1.02rem] leading-relaxed text-white/65">
+              Clear answers on scope, money, delivery and support. If yours is not here, ask directly, we answer honestly, even when
+              the answer is “not yet”.
+            </p>
+          </div>
+          <div className="hidden lg:block">
+            <QuestionArt />
+          </div>
         </div>
       </section>
 

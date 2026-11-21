@@ -6,6 +6,7 @@ import { asset } from '../lib/env';
 import { media, MEDIA_ALT, REELS } from '../lib/media';
 import { Reveal } from '../components/Reveal';
 import { CinemaBand } from '../components/CinemaBand';
+import { FieldStory } from '../components/FieldStory';
 import { Tilt } from '../components/Tilt';
 import { SectionHeading, Badge } from '../components/UI';
 import { CloudInfraArt, IndustryGlyph, SecurityArt } from '../components/Graphics';
@@ -361,53 +362,11 @@ export function About() {
                 </figure>
               </Reveal>
             </div>
-
-            <Reveal delay={100} className="lg:col-span-4">
-              <Tilt className="h-full">
-                <figure className="media-glow group relative h-full overflow-hidden rounded-3xl border border-brand-100 bg-navy-900">
-                  <img
-                    src={media('bike')}
-                    alt={MEDIA_ALT.bike}
-                    className="h-full min-h-[260px] w-full object-cover transition duration-700 group-hover:scale-[1.04]"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-950/95 via-navy-950/30 to-transparent p-5 text-white">
-                    <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-brand-300">On the move</p>
-                    <p className="mt-1 text-[12px] font-semibold">Our Yamaha company motorcycle, finished in the Reagansoft colours.</p>
-                  </figcaption>
-                </figure>
-              </Tilt>
-            </Reveal>
-
-            <Reveal delay={160} className="lg:col-span-8">
-              <div className="flex h-full flex-col justify-center rounded-3xl border border-brand-100 bg-brand-50/50 p-7 sm:p-8">
-                <p className="eyebrow">More than a logo</p>
-                <h3 className="mt-3 font-display text-xl font-semibold text-navy-900 sm:text-2xl">
-                  A brand people meet in the field, not just on a screen.
-                </h3>
-                <p className="mt-3 max-w-2xl text-[13.5px] leading-relaxed text-ink-muted">
-                  Client visits, site surveys and training sessions happen across Jinja and the wider region. Our Yamaha is painted in
-                  the company colours so the team is recognisable on the road, and so the relationships behind the software stay
-                  visible.
-                </p>
-                <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                  {[
-                    ['People first', 'A senior, stable team that clients know by name.'],
-                    ['Backed well', 'Funders and partners who invest in long-term quality.'],
-                    ['Visible locally', 'A studio that shows up in person, not only online.'],
-                  ].map(([title, text]) => (
-                    <div key={title} className="rounded-2xl bg-white p-4">
-                      <p className="text-[12px] font-semibold text-brand-700">{title}</p>
-                      <p className="mt-1 text-[11.5px] leading-relaxed text-ink-muted">{text}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </Reveal>
           </div>
         </div>
       </section>
+
+      <FieldStory />
 
       <section className="relative overflow-hidden bg-brand-50/50 py-20 sm:py-24">
         <div className="container-x">

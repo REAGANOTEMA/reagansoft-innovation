@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, Compass, Home } from 'lucide-react';
 import { usePageMeta } from '../lib/seo';
 import { Logo } from '../components/Logo';
+import { FieldRouteArt } from '../components/FieldStory';
 
 export function NotFound() {
   usePageMeta('Page not found, Reagansoft Innovation');
@@ -9,6 +10,10 @@ export function NotFound() {
     <div className="relative flex min-h-[70vh] items-center justify-center overflow-hidden bg-navy-950 px-6 py-20 text-white">
       <div className="aurora" />
       <div className="pointer-events-none absolute inset-0 bg-grid-dark opacity-30" />
+      <FieldRouteArt
+        idPrefix="not-found-route"
+        className="pointer-events-none absolute left-1/2 top-1/2 w-[min(92vw,760px)] -translate-x-1/2 -translate-y-1/2 opacity-[0.13]"
+      />
       <div className="relative w-full max-w-lg text-center">
         <div className="flex justify-center"><Logo dark /></div>
         <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.24em] text-brand-300">Error 404</p>
