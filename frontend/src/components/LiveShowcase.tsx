@@ -13,7 +13,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { asset } from '../lib/env';
-import { MEDIA } from '../lib/media';
+import { HERO_SLIDES, MEDIA, MEDIA_ALT } from '../lib/media';
 import { cn } from '../lib/cn';
 import type { Service } from '../lib/types';
 
@@ -31,7 +31,7 @@ interface Slide {
 
 const slides: Slide[] = [
   {
-    image: MEDIA.homepageHero,
+    image: MEDIA[HERO_SLIDES[0]],
     channel: 'Web development',
     eyebrow: 'Channel 01 · Websites',
     title: 'Websites that ',
@@ -39,10 +39,10 @@ const slides: Slide[] = [
     lead: 'A fast, secure website built around your business, designed to look right on every screen and still working properly years after launch.',
     to: '/services/business-website',
     cta: 'Explore website development',
-    alt: 'Modern website development at Reagansoft Innovation',
+    alt: MEDIA_ALT.remoteWork,
   },
   {
-    image: 'hero2.webp',
+    image: MEDIA[HERO_SLIDES[1]],
     channel: 'Enterprise systems',
     eyebrow: 'Channel 02 · Systems',
     title: 'Systems built around ',
@@ -50,10 +50,10 @@ const slides: Slide[] = [
     lead: 'Client portals, management dashboards and workflow automation, scoped module by module and approved by you before we write a line of code.',
     to: '/services/business-systems',
     cta: 'See business systems',
-    alt: 'Enterprise management system dashboards',
+    alt: MEDIA_ALT.hireDevelopers,
   },
   {
-    image: 'hero3.webp',
+    image: MEDIA[HERO_SLIDES[2]],
     channel: 'Web & mobile apps',
     eyebrow: 'Channel 03 · Applications',
     title: 'One app, ',
@@ -61,10 +61,10 @@ const slides: Slide[] = [
     lead: 'Business apps delivered for the browser, Android and iOS together, prepared, tested and published with your team.',
     to: '/services/web-mobile-apps',
     cta: 'View app development',
-    alt: 'Web and mobile application engineering',
+    alt: MEDIA_ALT.workspace,
   },
   {
-    image: 'hero4.webp',
+    image: MEDIA[HERO_SLIDES[3]],
     channel: 'Billing automation',
     eyebrow: 'Channel 04 · Finance',
     title: 'Receipts that ',
@@ -72,10 +72,10 @@ const slides: Slide[] = [
     lead: 'Your shop, school or clinic sends a professional receipt the moment a client pays, with every payment recorded and easy to find again.',
     to: '/services/receipt-billing',
     cta: 'See billing automation',
-    alt: 'Receipt and billing automation software',
+    alt: MEDIA_ALT.codingHome,
   },
   {
-    image: 'hero5.webp',
+    image: MEDIA[HERO_SLIDES[4]],
     channel: 'Ecommerce',
     eyebrow: 'Channel 05 · Commerce',
     title: 'Online stores that ',
@@ -83,10 +83,10 @@ const slides: Slide[] = [
     lead: 'Product catalogues, cart, checkout and mobile money flows designed to turn visitors into paying customers.',
     to: '/services/ecommerce',
     cta: 'Explore ecommerce',
-    alt: 'Ecommerce storefront development',
+    alt: MEDIA_ALT.everything,
   },
   {
-    image: 'hero6.webp',
+    image: MEDIA[HERO_SLIDES[5]],
     channel: 'How we start',
     eyebrow: 'Channel 06 · Process',
     title: 'A fixed, ',
@@ -94,7 +94,7 @@ const slides: Slide[] = [
     lead: 'Your deposit is credited in full against a written quotation. Scope is agreed before work begins, with no hidden charges.',
     to: '/process',
     cta: 'How a project runs',
-    alt: 'Reagansoft project process and fixed deposit',
+    alt: MEDIA_ALT.homepageHero,
   },
 ];
 
@@ -199,9 +199,12 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
       ))}
 
       <div className="pointer-events-none absolute inset-0 bg-grid-dark opacity-20" />
+      <div className="cine-grain pointer-events-none absolute inset-0 z-[3]" />
+      <div className="cine-bars pointer-events-none absolute inset-0 z-[6]" />
       <div className="screen-scan absolute inset-0" />
       <div className="screen-sheen" />
       <div className="aurora opacity-70" />
+      <div className="lens-flare pointer-events-none absolute -right-20 top-[18%] h-72 w-72 rounded-full" aria-hidden="true" />
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-[2]"
@@ -278,9 +281,10 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
               to={slide.to}
               className="slide-rise slide-delay-4 group mt-7 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.05] p-2.5 backdrop-blur transition hover:border-brand-400/50 hover:bg-white/[0.08] lg:hidden"
             >
-              <span className="media-glow relative h-16 w-20 shrink-0 overflow-hidden rounded-xl">
-                <img key={slide.image} src={asset(slide.image)} alt="" className="h-full w-full object-cover" />
-              </span>
+                <span className="media-glow reel-frame relative h-16 w-20 shrink-0 overflow-hidden rounded-xl">
+                  <img key={slide.image} src={asset(slide.image)} alt="" className="h-full w-full object-cover" />
+                  <span className="reel-sheen absolute inset-0" />
+                </span>
               <div className="min-w-0 flex-1">
                 <p className="font-mono text-[8px] uppercase tracking-[0.2em] text-brand-300">Now showing</p>
                 <p className="mt-1 truncate font-display text-[13px] font-semibold text-white">{slide.channel}</p>
@@ -313,8 +317,9 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
                   </span>
                 </div>
 
-                <Link to={slide.to} className="media-glow group relative mt-3 block overflow-hidden rounded-xl border border-white/10">
+                <Link to={slide.to} className="media-glow reel-frame group relative mt-3 block overflow-hidden rounded-xl border border-white/10">
                   <img key={slide.image} src={asset(slide.image)} alt="" className="h-44 w-full object-cover" />
+                  <span className="reel-sheen absolute inset-0 z-[7]" />
                   <span className="frame-corner frame-corner-tl" aria-hidden="true" />
                   <span className="frame-corner frame-corner-tr" aria-hidden="true" />
                   <span className="frame-corner frame-corner-bl" aria-hidden="true" />
@@ -366,6 +371,28 @@ export function LiveShowcase({ services, stats }: { services: Service[]; stats: 
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Editorial chapter rail, visible on large cinema screens */}
+      <div className="absolute right-1.5 top-1/2 z-20 hidden -translate-y-1/2 flex-col gap-2 2xl:flex" aria-label="Showcase chapters">
+        {slides.map((item, index) => (
+          <button
+            key={item.channel}
+            type="button"
+            onClick={() => go(index)}
+            className={cn(
+              'hero-chapter group flex items-center gap-2 rounded-full border border-white/10 bg-navy-950/70 px-2 py-1.5 text-left backdrop-blur transition',
+              index === active ? 'hero-chapter-active' : 'text-white/35 hover:text-white/70',
+            )}
+            aria-label={`Go to ${item.channel}`}
+            aria-current={index === active}
+          >
+            <span className="font-mono text-[8px]">{String(index + 1).padStart(2, '0')}</span>
+            <span className="max-w-0 overflow-hidden whitespace-nowrap text-[8px] uppercase tracking-[0.16em] transition-all group-hover:max-w-[120px]">
+              {item.channel}
+            </span>
+          </button>
+        ))}
       </div>
 
       {/* Controls */}

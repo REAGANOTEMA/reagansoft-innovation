@@ -70,6 +70,9 @@ export function CinemaBand({ eyebrow = 'Studio reel', title, lead, slides, to, c
         <div className="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/85 to-navy-950/35" />
         <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/25 to-navy-950/50" />
         <div className="pointer-events-none absolute inset-0 bg-grid-dark opacity-20" />
+        <div className="cine-grain pointer-events-none absolute inset-0" />
+        <div className="cine-bars pointer-events-none absolute inset-0" />
+        <div className="lens-flare pointer-events-none absolute -right-14 top-10 h-56 w-56 rounded-full" aria-hidden="true" />
         <div className="screen-scan absolute inset-0" />
         <div className="screen-sheen" />
         <div aria-hidden="true" className="pointer-events-none absolute -right-16 top-1/4 h-64 w-64 rounded-full bg-brand-500/20 blur-3xl glow-orb" />
@@ -169,20 +172,21 @@ export function CinemaBand({ eyebrow = 'Studio reel', title, lead, slides, to, c
               onClick={() => go(index)}
               aria-label={`Show ${item.label}`}
               aria-current={index === active}
-              className={cn(
-                'group relative h-11 w-16 shrink-0 overflow-hidden rounded-lg border transition duration-300 sm:h-12 sm:w-20',
+                className={cn(
+                  'reel-frame group relative h-11 w-16 shrink-0 overflow-hidden rounded-lg border transition duration-300 sm:h-12 sm:w-20',
                 index === active
                   ? 'border-brand-300 shadow-[0_0_0_2px_rgba(79,182,255,.35)]'
                   : 'border-white/15 opacity-55 hover:opacity-100',
               )}
             >
-              <img
-                src={asset(item.image)}
-                alt=""
-                className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
-                loading="lazy"
-              />
-              <span className="absolute inset-0 bg-gradient-to-t from-navy-950/75 via-transparent to-transparent" />
+               <img
+                 src={asset(item.image)}
+                 alt=""
+                 className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
+                 loading="lazy"
+               />
+               <span className="reel-sheen absolute inset-0" />
+               <span className="absolute inset-0 bg-gradient-to-t from-navy-950/75 via-transparent to-transparent" />
               <span className="absolute bottom-1 left-1.5 font-mono text-[7.5px] uppercase tracking-[0.14em] text-white/80">
                 {String(index + 1).padStart(2, '0')}
               </span>

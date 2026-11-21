@@ -678,6 +678,175 @@ canvas {
   }
 }
 
+/* ------------------------------------------------------------------ */
+/* Cinematic finishing layers: film grain, letterbox and lens flare.    */
+/* ------------------------------------------------------------------ */
+.cine-grain {
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  mix-blend-mode: overlay;
+}
+
+.cine-bars {
+  pointer-events: none;
+}
+.cine-bars::before,
+.cine-bars::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: clamp(14px, 2.2vw, 28px);
+  background: linear-gradient(180deg, rgba(1, 9, 18, 0.88), rgba(1, 9, 18, 0.35));
+  z-index: 6;
+}
+.cine-bars::before { top: 0; }
+.cine-bars::after {
+  bottom: 0;
+  transform: rotate(180deg);
+}
+
+@keyframes lensBreath {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.12); }
+}
+.lens-flare {
+  animation: lensBreath 7s ease-in-out infinite;
+  background: radial-gradient(circle, rgba(165, 228, 255, 0.55), rgba(79, 182, 255, 0.14) 42%, transparent 70%);
+}
+
+.hero-chapter {
+  transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+}
+.hero-chapter-active {
+  color: #fff;
+  border-color: rgba(79, 182, 255, 0.65);
+  background: rgba(79, 182, 255, 0.12);
+}
+
+.reel-sheen {
+  background: linear-gradient(100deg, transparent 25%, rgba(255, 255, 255, 0.22) 48%, transparent 70%);
+  transform: translateX(-130%);
+  transition: transform 0.9s cubic-bezier(0.22, 0.8, 0.25, 1);
+}
+.reel-frame:hover .reel-sheen {
+  transform: translateX(130%);
+}
+
+/* ------------------------------------------------------------------ */
+/* Loading identity: the real logo arrives piece by piece, then locks   */
+/* into the complete mark. Used on the splash and every loading state.  */
+/* ------------------------------------------------------------------ */
+@keyframes logoPieceIn {
+  0% {
+    opacity: 0;
+    filter: brightness(2.4) blur(7px);
+  }
+  60% {
+    opacity: 1;
+    filter: brightness(1.45) blur(0);
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+@keyframes logoAssemblyGlow {
+  0%, 100% { opacity: 0.35; transform: scale(0.92); }
+  50% { opacity: 0.8; transform: scale(1.08); }
+}
+@keyframes logoCompleteIn {
+  0%, 65% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes logoPiecesOut {
+  0%, 68% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes logoScan {
+  from { transform: translateY(-120%); }
+  to { transform: translateY(520%); }
+}
+@keyframes logoHaloSpin {
+  to { transform: rotate(360deg); }
+}
+
+.logo-assembly {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  isolation: isolate;
+  filter: drop-shadow(0 10px 22px rgba(10, 123, 206, 0.35));
+}
+.logo-assembly-halo,
+.logo-assembly-watermark,
+.logo-assembly-piece,
+.logo-assembly-complete,
+.logo-assembly-scan {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+.logo-assembly-halo {
+  border: 1px solid rgba(79, 182, 255, 0.45);
+  border-radius: 50%;
+  transform: scale(0.82);
+  box-shadow: 0 0 24px rgba(79, 182, 255, 0.25), inset 0 0 18px rgba(79, 182, 255, 0.12);
+  animation: logoHaloSpin 12s linear infinite;
+}
+.logo-assembly-watermark {
+  opacity: 0.1;
+  transform: scale(0.82);
+  animation: logoAssemblyGlow 4s ease-in-out infinite;
+}
+.logo-assembly-piece {
+  opacity: 0;
+  animation: logoPieceIn 0.7s cubic-bezier(0.2, 0.75, 0.2, 1) forwards, logoPiecesOut 2.2s ease-in-out forwards;
+}
+.logo-assembly-piece-1 { clip-path: inset(0 50% 50% 0); animation-delay: 0.08s, 1.7s; }
+.logo-assembly-piece-2 { clip-path: inset(0 0 50% 50%); animation-delay: 0.34s, 1.7s; }
+.logo-assembly-piece-3 { clip-path: inset(50% 50% 0 0); animation-delay: 0.6s, 1.7s; }
+.logo-assembly-piece-4 { clip-path: inset(50% 0 0 50%); animation-delay: 0.86s, 1.7s; }
+.logo-assembly-complete {
+  opacity: 0;
+  animation: logoCompleteIn 2.4s ease-in-out forwards;
+}
+.logo-assembly-scan {
+  height: 12%;
+  top: 0;
+  background: linear-gradient(180deg, transparent, rgba(165, 228, 255, 0.65), transparent);
+  mix-blend-mode: screen;
+  animation: logoScan 2.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cine-grain,
+  .lens-flare,
+  .logo-assembly-halo,
+  .logo-assembly-watermark,
+  .logo-assembly-scan {
+    animation: none !important;
+  }
+  .logo-assembly-piece,
+  .logo-assembly-complete {
+    opacity: 1;
+    animation: none !important;
+  }
+  .logo-assembly-piece-2,
+  .logo-assembly-piece-3,
+  .logo-assembly-piece-4 {
+    display: none;
+  }
+  .reel-sheen {
+    display: none;
+  }
+}
+
 @media print {
   .no-print {
     display: none !important;

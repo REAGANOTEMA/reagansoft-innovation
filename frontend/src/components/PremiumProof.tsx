@@ -1,9 +1,9 @@
 import { ArrowUpRight, BadgeCheck, Building2, Clock3, GraduationCap, ShieldCheck } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Reveal } from './Reveal';
 import { Tilt } from './Tilt';
 import { SectionHeading } from './UI';
-import { media, mediaAlt, type MediaKey } from '../lib/media';
+import { media, mediaAlt, proofForPath, type ProofCard } from '../lib/media';
 import { cn } from '../lib/cn';
 
 type ArtVariant = 'degree' | 'studio';
@@ -67,49 +67,22 @@ function DepthArt({ variant, className }: { variant: ArtVariant; className?: str
   );
 }
 
-interface ProofCard {
-  image: MediaKey;
-  portrait?: boolean;
-  overline: string;
-  caption: string;
-  title: string;
-  body: string;
-  proof: string;
-  to: string;
-  link: string;
-  icon: typeof GraduationCap;
-  art: ArtVariant;
-}
+const PROOF_ART: Record<string, { icon: typeof GraduationCap; art: ArtVariant }> = {
+  founderGraduation: { icon: GraduationCap, art: 'degree' },
+  founder: { icon: GraduationCap, art: 'degree' },
+  officeVisitors: { icon: Building2, art: 'studio' },
+  team: { icon: Building2, art: 'studio' },
+  ceoIsrael: { icon: Building2, art: 'studio' },
+  funders: { icon: Building2, art: 'studio' },
+  developerClassroom: { icon: GraduationCap, art: 'degree' },
+  workspace: { icon: Building2, art: 'studio' },
+  bike: { icon: Building2, art: 'studio' },
+  computerPortrait: { icon: Building2, art: 'studio' },
+};
 
-const proofCards: ProofCard[] = [
-  {
-    image: 'founderGraduation',
-    portrait: true,
-    overline: 'Engineer-led · BYU–Idaho',
-    caption: 'Founder & lead developer',
-    title: 'Built by an engineer, not a sales desk.',
-    body:
-      'Our founder holds a BSc in Software Development from BYU–Idaho. That training shows up in the work: clear architecture, honest timelines and code your team can truly own — with no middle layer translating every conversation.',
-    proof: 'Qualified leadership · Hands-on delivery',
-    to: '/about',
-    link: 'Meet the founder',
-    icon: GraduationCap,
-    art: 'degree',
-  },
-  {
-    image: 'officeVisitors',
-    overline: 'Jinja studio · In person',
-    caption: 'Visiting partners at the main office',
-    title: 'Meet the people who build your system.',
-    body:
-      'Partners who visit our Jinja office sit with the same designers, developers and project leads working on their build. You see the studio, ask direct questions and hear from the people responsible — before, during and after launch.',
-    proof: 'One accountable team · No hand-offs',
-    to: '/contact',
-    link: 'Arrange a visit',
-    icon: Building2,
-    art: 'studio',
-  },
-];
+function artFor(card: ProofCard) {
+  return PROOF_ART[card.image] ?? { icon: Building2, art: 'studio' as ArtVariant };
+}
 
 const assurances = [
   {
@@ -129,8 +102,11 @@ const assurances = [
   },
 ];
 
-/** Premium proof band shown on every public page. */
+/** Premium proof band. The photography changes with the route. */
 export function PremiumProof() {
+  const location = useLocation();
+  const proofCards = proofForPath(location.pathname);
+
   return (
     <section className="relative isolate overflow-hidden bg-navy-950 py-20 sm:py-24">
       <div className="aurora" aria-hidden="true" />
@@ -151,7 +127,7 @@ export function PremiumProof() {
 
         <div className="mt-12 grid gap-6 lg:grid-cols-2">
           {proofCards.map((card, index) => {
-            const Icon = card.icon;
+            const { icon: Icon, art } = artFor(card);
             return (
               <Reveal key={card.image} delay={index * 110}>
                 <Tilt className="h-full" max={4}>
@@ -196,7 +172,7 @@ export function PremiumProof() {
                           <div className="depth-floor absolute inset-2" aria-hidden="true" />
                           <div className="depth-ring absolute inset-3 rounded-full" aria-hidden="true" />
                           <div className="float-soft absolute inset-0">
-                            <DepthArt variant={card.art} />
+                            <DepthArt variant={art} />
                           </div>
                         </div>
                       </div>

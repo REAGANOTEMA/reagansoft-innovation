@@ -1,6 +1,7 @@
 import { useEffect, type ReactNode } from 'react';
 import { AlertTriangle, ChevronLeft, ChevronRight, Inbox, Loader2, X } from 'lucide-react';
 import { cn } from '../lib/cn';
+import { LOGO_REAL } from '../lib/env';
 import { toneClasses, type Tone } from '../lib/format';
 
 export function SectionHeading({
@@ -35,16 +36,36 @@ export function Spinner({ className }: { className?: string }) {
   return <Loader2 className={cn('h-5 w-5 animate-spin text-brand-600', className)} aria-hidden="true" />;
 }
 
+/** The real company logo arriving piece by piece, then locking into place. */
+export function LogoAssembly({ width = 116, className }: { width?: number; className?: string }) {
+  return (
+    <span
+      className={cn('logo-assembly', className)}
+      style={{ width, height: Math.round(width * 0.69) }}
+      aria-hidden="true"
+    >
+      <span className="logo-assembly-halo" />
+      <img className="logo-assembly-watermark" src={LOGO_REAL} alt="" />
+      {[1, 2, 3, 4].map((piece) => (
+        <img key={piece} className={`logo-assembly-piece logo-assembly-piece-${piece}`} src={LOGO_REAL} alt="" />
+      ))}
+      <img className="logo-assembly-complete" src={LOGO_REAL} alt="" />
+      <span className="logo-assembly-scan" />
+    </span>
+  );
+}
+
 export function LoadingBlock({ label = 'Loading…', className }: { label?: string; className?: string }) {
   return (
-    <div className={cn('flex min-h-[220px] flex-col items-center justify-center gap-4 rounded-3xl border border-brand-100 bg-white/70 text-ink-muted', className)}>
-      <span className="relative grid h-14 w-14 place-items-center" aria-hidden="true">
-        <span className="absolute inset-0 rounded-full border border-brand-100" />
-        <span className="absolute inset-0 animate-spin rounded-full border-2 border-transparent border-r-brand-400 border-t-brand-600" />
-        <span className="h-2 w-2 rounded-full bg-brand-500 shadow-[0_0_16px_rgba(10,123,206,.85)]" />
-      </span>
-      <p className="text-sm font-medium">{label}</p>
-      <span className="h-1 w-32 overflow-hidden rounded-full bg-brand-100" aria-hidden="true">
+    <div className={cn('relative flex min-h-[240px] flex-col items-center justify-center gap-5 overflow-hidden rounded-3xl border border-brand-100 bg-gradient-to-b from-white via-brand-50/50 to-white px-6 text-ink-muted shadow-soft', className)}>
+      <span className="pointer-events-none absolute inset-0 bg-grid opacity-30" aria-hidden="true" />
+      <span className="lens-flare pointer-events-none absolute -top-16 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full" aria-hidden="true" />
+      <LogoAssembly width={128} />
+      <div className="relative text-center">
+        <p className="text-sm font-semibold text-navy-900">{label}</p>
+        <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.22em] text-brand-500">Assembling your workspace</p>
+      </div>
+      <span className="relative h-1 w-36 overflow-hidden rounded-full bg-brand-100" aria-hidden="true">
         <span className="block h-full w-1/2 rounded-full bg-gradient-to-r from-brand-400 to-cyan-300 [animation:loadingSweep_1.4s_ease-in-out_infinite]" />
       </span>
     </div>
